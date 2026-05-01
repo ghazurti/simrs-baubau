@@ -1237,7 +1237,7 @@ public class frmUtama extends javax.swing.JFrame {
         //this.setSize(screen.width,screen.height);
         edAdmin.setDocument(new batasInput((byte)100).getKata(edAdmin));
         edPwd.setDocument(new batasInput((byte)100).getKata(edPwd));
-        DlgLogin.setSize(299,180);
+        initLoginDialogBesar();
         DlgLogin.setLocationRelativeTo(null);
         jMenu1.setOpaque(false);
         jMenu5.setOpaque(false);
@@ -44516,6 +44516,68 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
                 Panelmenu.add(btnRuangOperasi);
                 jmlmenu++;
             }                
+        }
+    }
+
+    private void initLoginDialogBesar() {
+        // Perbesar dialog login
+        DlgLogin.setSize(450, 295);
+
+        // Perbesar frame container
+        internalFrame2.setBounds(0, 0, 450, 275);
+        internalFrame3.setBounds(2, 12, 446, 260);
+
+        // Sembunyikan gambar dekoratif gembok lama
+        jLabel6.setVisible(false);
+
+        // Logo label (kiri atas)
+        javax.swing.JLabel lblLogoLogin = new javax.swing.JLabel();
+        lblLogoLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblLogoLogin.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+        lblLogoLogin.setBounds(8, 5, 72, 72);
+        internalFrame3.add(lblLogoLogin);
+
+        // Nama rumah sakit (kanan logo)
+        javax.swing.JLabel lblNamaRSLogin = new javax.swing.JLabel("<html><center>RSUD KOTA BAUBAU</center></html>");
+        lblNamaRSLogin.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 14));
+        lblNamaRSLogin.setForeground(new java.awt.Color(0, 80, 0));
+        lblNamaRSLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNamaRSLogin.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+        lblNamaRSLogin.setBounds(85, 5, 358, 70);
+        internalFrame3.add(lblNamaRSLogin);
+
+        // Perlebar panel form input
+        panelGlass1.setBounds(-1, 82, 448, 76);
+        jLabel4.setBounds(8, 12, 82, 25);
+        edAdmin.setBounds(93, 12, 295, 25);
+        jLabel5.setBounds(8, 42, 82, 25);
+        edPwd.setBounds(93, 42, 295, 25);
+
+        // Geser tombol login dan batal
+        BtnLogin.setBounds(60, 174, 145, 38);
+        BtnCancel.setBounds(240, 174, 145, 38);
+
+        // Muat logo dan nama RS dari database
+        try {
+            java.sql.PreparedStatement psLogo = koneksi.prepareStatement("select nama_instansi, logo from setting limit 1");
+            java.sql.ResultSet rsLogo = psLogo.executeQuery();
+            if (rsLogo.next()) {
+                String namaRS = rsLogo.getString("nama_instansi");
+                if (namaRS != null && !namaRS.isEmpty()) {
+                    lblNamaRSLogin.setText("<html><center>" + namaRS + "</center></html>");
+                }
+                java.sql.Blob blob = rsLogo.getBlob("logo");
+                if (blob != null && blob.length() > 0) {
+                    byte[] imgBytes = blob.getBytes(1, (int) blob.length());
+                    java.awt.Image img = new javax.swing.ImageIcon(imgBytes).getImage()
+                        .getScaledInstance(68, 68, java.awt.Image.SCALE_SMOOTH);
+                    lblLogoLogin.setIcon(new javax.swing.ImageIcon(img));
+                }
+            }
+            rsLogo.close();
+            psLogo.close();
+        } catch (Exception e) {
+            System.out.println("Logo login: " + e);
         }
     }
 
