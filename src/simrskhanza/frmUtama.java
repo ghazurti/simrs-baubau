@@ -44567,7 +44567,6 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
                 java.awt.Image img = javax.imageio.ImageIO.read(fLogo)
                     .getScaledInstance(116, 116, java.awt.Image.SCALE_SMOOTH);
                 lblLogoLogin.setIcon(new javax.swing.ImageIcon(img));
-                System.out.println("Logo loaded from: " + fLogo.getAbsolutePath());
             } else {
                 // fallback ke classpath resource
                 java.io.InputStream is = getClass().getResourceAsStream("/picture/logo_rs.png");
