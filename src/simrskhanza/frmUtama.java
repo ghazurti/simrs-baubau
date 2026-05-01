@@ -44525,14 +44525,7 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         internalFrame3.setBounds(2, 12, 446, 355);
         jLabel6.setVisible(false);
 
-        // Logo di tengah atas — ditambah di z-order 0 agar tampil paling depan
-        javax.swing.JLabel lblLogoLogin = new javax.swing.JLabel();
-        lblLogoLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblLogoLogin.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
-        lblLogoLogin.setBounds(163, 5, 120, 120);
-        internalFrame3.add(lblLogoLogin, 0);
-
-        // Nama RS di bawah logo, full width, centered
+        // Nama RS di atas, full width, centered
         javax.swing.JLabel lblNamaRSLogin = new javax.swing.JLabel("<html><center>RSUD KOTA BAUBAU</center></html>");
         lblNamaRSLogin.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 14));
         lblNamaRSLogin.setForeground(new java.awt.Color(0, 80, 0));
@@ -44540,6 +44533,20 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         lblNamaRSLogin.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
         lblNamaRSLogin.setBounds(0, 130, 446, 50);
         internalFrame3.add(lblNamaRSLogin, 0);
+
+        // Logo di tengah atas — pakai JPanel agar pasti tampil
+        javax.swing.JPanel pnlLogo = new javax.swing.JPanel(new java.awt.BorderLayout()) {
+            @Override protected void paintComponent(java.awt.Graphics g) {
+                // transparan, tidak hapus background
+            }
+        };
+        pnlLogo.setOpaque(false);
+        pnlLogo.setBounds(163, 5, 120, 120);
+        javax.swing.JLabel lblLogoLogin = new javax.swing.JLabel();
+        lblLogoLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblLogoLogin.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
+        pnlLogo.add(lblLogoLogin, java.awt.BorderLayout.CENTER);
+        internalFrame3.add(pnlLogo, 0);
 
         // Panel input di bawah nama RS
         panelGlass1.setBounds(-1, 188, 448, 76);
@@ -44552,16 +44559,30 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         BtnLogin.setBounds(60, 280, 145, 38);
         BtnCancel.setBounds(240, 280, 145, 38);
 
-        // Load logo dari file resource terlebih dahulu
+        // Load logo dari file setting/logo_rs.png
         try {
-            java.net.URL logoUrl = getClass().getResource("/picture/logo_rs.png");
-            if (logoUrl != null) {
-                java.awt.Image img = new javax.swing.ImageIcon(logoUrl).getImage()
+            java.io.File fLogo = new java.io.File("setting/logo_rs.png");
+            if (!fLogo.exists()) fLogo = new java.io.File("./setting/logo_rs.png");
+            if (fLogo.exists()) {
+                java.awt.Image img = javax.imageio.ImageIO.read(fLogo)
                     .getScaledInstance(116, 116, java.awt.Image.SCALE_SMOOTH);
                 lblLogoLogin.setIcon(new javax.swing.ImageIcon(img));
+                System.out.println("Logo loaded from: " + fLogo.getAbsolutePath());
+            } else {
+                // fallback ke classpath resource
+                java.io.InputStream is = getClass().getResourceAsStream("/picture/logo_rs.png");
+                if (is != null) {
+                    java.awt.Image img = javax.imageio.ImageIO.read(is)
+                        .getScaledInstance(116, 116, java.awt.Image.SCALE_SMOOTH);
+                    lblLogoLogin.setIcon(new javax.swing.ImageIcon(img));
+                    is.close();
+                    System.out.println("Logo loaded from classpath");
+                } else {
+                    System.out.println("Logo NOT found di setting/ maupun classpath");
+                }
             }
         } catch (Exception e) {
-            System.out.println("Logo file: " + e);
+            System.out.println("Error load logo: " + e);
         }
 
         // Muat nama RS dari database
