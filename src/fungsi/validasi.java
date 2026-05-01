@@ -41,6 +41,7 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import net.sf.jasperreports.engine.JRResultSetDataSource;
+import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -631,6 +632,10 @@ public final class validasi {
                 try {
                     
                     String namafile="./"+reportDirName+"/"+reportName;
+                    if (!new File(namafile).exists()) {
+                        System.setProperty("net.sf.jasperreports.compiler.java","net.sf.jasperreports.engine.design.JRJavacCompiler");
+                        JasperCompileManager.compileReportToFile(namafile.replace(".jasper",".jrxml"), namafile);
+                    }
                     JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect);
                     
                     JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
@@ -677,6 +682,10 @@ public final class validasi {
                 try {
                     File f = new File("./"+reportDirName+"/"+reportName.replaceAll("jasper","pdf")); 
                     String namafile="./"+reportDirName+"/"+reportName;
+                    if (!new File(namafile).exists()) {
+                        System.setProperty("net.sf.jasperreports.compiler.java","net.sf.jasperreports.engine.design.JRJavacCompiler");
+                        JasperCompileManager.compileReportToFile(namafile.replace(".jasper",".jrxml"), namafile);
+                    }
                     JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect);
                     JasperExportManager.exportReportToPdfFile(jasperPrint,"./"+reportDirName+"/"+reportName.replaceAll("jasper","pdf"));
                     Desktop.getDesktop().open(f);
@@ -717,6 +726,10 @@ public final class validasi {
                 try {
                     File f = new File("./"+reportDirName+"/"+reportName.replaceAll("jasper","pdf")); 
                     String namafile="./"+reportDirName+"/"+reportName;
+                    if (!new File(namafile).exists()) {
+                        System.setProperty("net.sf.jasperreports.compiler.java","net.sf.jasperreports.engine.design.JRJavacCompiler");
+                        JasperCompileManager.compileReportToFile(namafile.replace(".jasper",".jrxml"), namafile);
+                    }
                     JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect);
                     JasperExportManager.exportReportToPdfFile(jasperPrint,"./"+reportDirName+"/"+reportName.replaceAll("jasper","pdf"));
                 } catch (Exception rptexcpt) {
@@ -756,6 +769,10 @@ public final class validasi {
                 try {
                     
                     String namafile="./"+reportDirName+"/"+reportName;
+                    if (!new File(namafile).exists()) {
+                        System.setProperty("net.sf.jasperreports.compiler.java","net.sf.jasperreports.engine.design.JRJavacCompiler");
+                        JasperCompileManager.compileReportToFile(namafile.replace(".jasper",".jrxml"), namafile);
+                    }
                     JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect);
                     
                     JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
@@ -800,9 +817,13 @@ public final class validasi {
             ps=connect.prepareStatement(qry);
             try {
                 String namafile="./"+reportDirName+"/"+reportName;
+                if (!new File(namafile).exists()) {
+                    System.setProperty("net.sf.jasperreports.compiler.java","net.sf.jasperreports.engine.design.JRJavacCompiler");
+                    JasperCompileManager.compileReportToFile(namafile.replace(".jasper",".jrxml"), namafile);
+                }
                 rs=ps.executeQuery();
                 JRResultSetDataSource rsdt = new JRResultSetDataSource(rs);
-                
+
                 JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters,rsdt);
 
                 JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
@@ -853,7 +874,11 @@ public final class validasi {
             ps=connect.prepareStatement(qry);
             try {
                 String namafile="./"+reportDirName+"/"+reportName;
-                File f = new File("./"+reportDirName+"/"+reportName.replaceAll("jasper","pdf")); 
+                if (!new File(namafile).exists()) {
+                    System.setProperty("net.sf.jasperreports.compiler.java","net.sf.jasperreports.engine.design.JRJavacCompiler");
+                    JasperCompileManager.compileReportToFile(namafile.replace(".jasper",".jrxml"), namafile);
+                }
+                File f = new File("./"+reportDirName+"/"+reportName.replaceAll("jasper","pdf"));
                 rs=ps.executeQuery();
                 JRResultSetDataSource rsdt = new JRResultSetDataSource(rs);
                 JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters,rsdt);

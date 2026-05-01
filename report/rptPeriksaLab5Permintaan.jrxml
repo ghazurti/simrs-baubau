@@ -89,7 +89,7 @@
 	<title>
 		<band height="257" splitType="Stretch">
 			<textField>
-				<reportElement x="2" y="14" width="445" height="25" forecolor="#000000" backcolor="#00FF00" uuid="6e58ac39-9e42-4d4c-8304-a5dfb20f1bc9"/>
+				<reportElement x="70" y="14" width="377" height="25" forecolor="#000000" backcolor="#FFFFFF" uuid="6e58ac39-9e42-4d4c-8304-a5dfb20f1bc9"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="20" isBold="false" isItalic="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -396,7 +396,7 @@
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="135" y="1" width="81" height="13" forecolor="#0000FF" uuid="55c08c50-57a8-4bdf-b313-b0b022e52328">
-					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().equals("l") ? 
+					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("l") ? 
   Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -407,7 +407,7 @@
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="135" y="1" width="81" height="13" forecolor="#FF0000" uuid="ac621512-81a5-4b06-b745-229253226d9d">
-					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().equals("h") ? 
+					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("h") ? 
   Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -423,8 +423,8 @@
 				</graphicElement>
 			</line>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="135" y="1" width="81" height="13" forecolor="#000000" uuid="ad388805-2026-4dea-818f-7ede9e2f5446">
-					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().equals("t") ? 
+				<reportElement stretchType="RelativeToBandHeight" x="135" y="1" width="81" height="13" forecolor="#FF0000" uuid="ad388805-2026-4dea-818f-7ede9e2f5446">
+					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("t") ? 
   Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -432,6 +432,36 @@
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{temp2}.replaceAll("`","'")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="449" y="1" width="71" height="13" forecolor="#0000FF" uuid="aaaa0001-0000-0000-0000-000000000015">
+					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("l") ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{temp5}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="449" y="1" width="71" height="13" forecolor="#FF0000" uuid="aaaa0002-0000-0000-0000-000000000015">
+					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("h") ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{temp5}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="449" y="1" width="71" height="13" forecolor="#FF0000" uuid="aaaa0003-0000-0000-0000-000000000015">
+					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("t") ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{temp5}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

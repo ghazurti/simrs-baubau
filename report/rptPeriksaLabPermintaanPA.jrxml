@@ -415,7 +415,7 @@
 				<text><![CDATA[Kepada Yth.]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" x="0" y="3" width="520" height="25" forecolor="#000000" backcolor="#00FF00" uuid="16a0bce6-e97e-451d-98db-b179363e9d1b"/>
+				<reportElement positionType="Float" x="70" y="3" width="450" height="25" forecolor="#000000" backcolor="#FFFFFF" uuid="16a0bce6-e97e-451d-98db-b179363e9d1b"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="20" isBold="false" isItalic="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -589,6 +589,36 @@
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{temp2}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="449" y="1" width="71" height="13" forecolor="#0000FF" uuid="aaaa0001-0000-0000-0000-000000000029">
+					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("l") ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{temp5}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="449" y="1" width="71" height="13" forecolor="#FF0000" uuid="aaaa0002-0000-0000-0000-000000000029">
+					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("h") ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{temp5}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="449" y="1" width="71" height="13" forecolor="#FF0000" uuid="aaaa0003-0000-0000-0000-000000000029">
+					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("t") ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{temp5}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
