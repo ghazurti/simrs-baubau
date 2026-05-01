@@ -1,0 +1,38 @@
+# Build output
+dist/
+build/
+
+# NetBeans private config
+nbproject/private/
+
+# Compiled Java
+*.class
+*.jar
+
+# Generated report files (HTML, PDF, CSV, WPS)
+*.html
+*.pdf
+*.csv
+*.wps
+
+# Patient images & radiologi
+gambar/
+gambarradiologi/
+resumepasien/
+
+# Cache
+cache/
+
+# DB/app settings (koneksi database rumah sakit)
+setting/
+
+# Log
+*.log
+log4j.properties
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Config dengan IP internal
+KhanzaUpdater/settingupdate/config.xml
