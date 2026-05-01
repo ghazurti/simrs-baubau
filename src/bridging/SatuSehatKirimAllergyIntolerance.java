@@ -543,11 +543,19 @@ public final class SatuSehatKirimAllergyIntolerance extends javax.swing.JDialog 
     }//GEN-LAST:event_BtnCariKeyPressed
 
     private void BtnKirimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnKirimActionPerformed
-        for(i=0;i<tbObat.getRowCount();i++){
-            if(tbObat.getValueAt(i,0).toString().equals("true")&&(!tbObat.getValueAt(i,5).toString().equals(""))&&(!tbObat.getValueAt(i,6).toString().equals(""))&&(!tbObat.getValueAt(i,9).toString().equals(""))&&tbObat.getValueAt(i,11).toString().equals("")){
+        runBackground(() -> {
+            int berhasil=0, dilewati=0, tidakDikenali=0;
+            for(int idx=0;idx<tbObat.getRowCount();idx++){
+                Object val0=tbObat.getValueAt(idx,0);
+                Object val5=tbObat.getValueAt(idx,5);
+                Object val6=tbObat.getValueAt(idx,6);
+                Object val9=tbObat.getValueAt(idx,9);
+                Object val11=tbObat.getValueAt(idx,11);
+                if(val0==null||val5==null||val6==null||val9==null||val11==null) continue;
+                if(!val0.toString().equals("true")||val5.toString().equals("")||val6.toString().equals("")||val9.toString().equals("")||!val11.toString().equals("")) continue;
                 FileReader myObj=null;
                 try {
-                    String dicari=tbObat.getValueAt(i,7).toString().replaceAll("(\r\n|\r|\n|\n\r)","").replaceAll("\t", ""),
+                    String dicari=tbObat.getValueAt(idx,7).toString().replaceAll("(\r\n|\r|\n|\n\r)","").replaceAll("\t", "").toLowerCase(),
                            category="",coding_system="",coding_code="",coding_display="",text="";
                     myObj = new FileReader("./cache/alergisatusehat.iyem");
                     root = mapper.readTree(myObj);
@@ -565,8 +573,8 @@ public final class SatuSehatKirimAllergyIntolerance extends javax.swing.JDialog 
                         }
                     }
                     if(!category.equals("")){
-                        idpraktisi=cekViaSatuSehat.tampilIDParktisi(tbObat.getValueAt(i,9).toString());
-                        idpasien=cekViaSatuSehat.tampilIDPasien(tbObat.getValueAt(i,5).toString());
+                        idpraktisi=cekViaSatuSehat.tampilIDParktisi(tbObat.getValueAt(idx,9).toString());
+                        idpasien=cekViaSatuSehat.tampilIDPasien(tbObat.getValueAt(idx,5).toString());
                         try{
                             headers = new HttpHeaders();
                             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -576,7 +584,7 @@ public final class SatuSehatKirimAllergyIntolerance extends javax.swing.JDialog 
                                         "\"identifier\": [" +
                                             "{" +
                                                 "\"system\": \"http://sys-ids.kemkes.go.id/allergy/"+koneksiDB.IDSATUSEHAT()+"\"," +
-                                                "\"value\" : \""+tbObat.getValueAt(i,2).toString()+"\"" +
+                                                "\"value\" : \""+tbObat.getValueAt(idx,2).toString()+"\"" +
                                             "}" +
                                         "]," +
                                         "\"clinicalStatus\": {" +
@@ -612,16 +620,16 @@ public final class SatuSehatKirimAllergyIntolerance extends javax.swing.JDialog 
                                         "},"+
                                         "\"patient\": {" +
                                             "\"reference\" : \"Patient/"+idpasien+"\"," +
-                                            "\"display\" : \""+tbObat.getValueAt(i,4).toString()+"\"" +
+                                            "\"display\" : \""+tbObat.getValueAt(idx,4).toString()+"\"" +
                                         "}," +
                                         "\"encounter\" : {" +
-                                            "\"reference\" : \"Encounter/"+tbObat.getValueAt(i,6).toString()+"\","+
-                                            "\"display\" : \"Kunjungan "+tbObat.getValueAt(i,4).toString()+" pada tanggal "+tbObat.getValueAt(i,1).toString()+" dengan nomor kunjungan "+tbObat.getValueAt(i,2).toString()+"\""+
+                                            "\"reference\" : \"Encounter/"+tbObat.getValueAt(idx,6).toString()+"\","+
+                                            "\"display\" : \"Kunjungan "+tbObat.getValueAt(idx,4).toString()+" pada tanggal "+tbObat.getValueAt(idx,1).toString()+" dengan nomor kunjungan "+tbObat.getValueAt(idx,2).toString()+"\""+
                                         "}," +
-                                        "\"recordedDate\": \""+tbObat.getValueAt(i,10).toString().replaceAll(" ","T")+"+07:00\"," +
+                                        "\"recordedDate\": \""+tbObat.getValueAt(idx,10).toString().replaceAll(" ","T")+"+07:00\"," +
                                         "\"recorder\": {" +
                                             "\"reference\" : \"Practitioner/"+idpraktisi+"\"," +
-                                            "\"display\" : \""+tbObat.getValueAt(i,8).toString()+"\"" +
+                                            "\"display\" : \""+tbObat.getValueAt(idx,8).toString()+"\"" +
                                         "}" +
                                     "}";
                             System.out.println("URL : "+link+"/AllergyIntolerance");
@@ -632,27 +640,41 @@ public final class SatuSehatKirimAllergyIntolerance extends javax.swing.JDialog 
                             root = mapper.readTree(json);
                             response = root.path("id");
                             if(!response.asText().equals("")){
+                                final int finalIdx=idx;
+                                final String idResult=response.asText();
                                 if(Sequel.menyimpantf2("satu_sehat_allergy_intolerance","?,?,?,?,?","Rencana Perawatan",5,new String[]{
-                                    tbObat.getValueAt(i,2).toString(),tbObat.getValueAt(i,10).toString().substring(0,10),tbObat.getValueAt(i,10).toString().substring(11,19),tbObat.getValueAt(i,12).toString(),response.asText()
+                                    tbObat.getValueAt(finalIdx,2).toString(),tbObat.getValueAt(finalIdx,10).toString().substring(0,10),tbObat.getValueAt(finalIdx,10).toString().substring(11,19),tbObat.getValueAt(finalIdx,12).toString(),idResult
                                 })==true){
-                                    tbObat.setValueAt(response.asText(),i,11);
-                                    tbObat.setValueAt(false,i,0);
+                                    SwingUtilities.invokeLater(()->{
+                                        tbObat.setValueAt(idResult,finalIdx,11);
+                                        tbObat.setValueAt(false,finalIdx,0);
+                                    });
+                                    berhasil++;
                                 }
-                            }
+                            }else{ dilewati++; }
                         }catch(Exception e){
                             System.out.println("Notifikasi Bridging : "+e);
+                            dilewati++;
                         }
-                    }
+                    }else{ tidakDikenali++; }
                     myObj.close();
                 } catch (Exception e) {
                     System.out.println("Notifikasi : "+e);
                 }finally {
-                    if (myObj != null) try { myObj.close(); } catch (Exception e) {}
+                    if (myObj != null) try { myObj.close(); } catch (Exception ex) {}
                     response = null;
                     root = null;
                 }
             }
-        }
+            final int b=berhasil,d=dilewati,t=tidakDikenali;
+            SwingUtilities.invokeLater(()->{
+                String pesan="Pengiriman selesai.\n"+
+                    "Berhasil dikirim : "+b+" data\n"+
+                    (d>0?"Gagal/tidak ada ID : "+d+" data\n":"")+
+                    (t>0?"Alergi tidak dikenali (dilewati) : "+t+" data\n":"");
+                javax.swing.JOptionPane.showMessageDialog(null,pesan,"Informasi",javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            });
+        });
     }//GEN-LAST:event_BtnKirimActionPerformed
 
     private void ppPilihSemuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppPilihSemuaActionPerformed
