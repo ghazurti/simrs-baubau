@@ -2665,7 +2665,6 @@ public final class RMPenilaianAwalMedisRalanGeriatri extends javax.swing.JDialog
                 rs=ps.executeQuery();
                 if(rs.next()){
                     if(TD.getText().trim().isEmpty()) TD.setText(rs.getString("tensi"));
-                    if(BB.getText().trim().isEmpty()) BB.setText(rs.getString("berat"));
                     if(Nadi.getText().trim().isEmpty()) Nadi.setText(rs.getString("nadi"));
                     if(Suhu.getText().trim().isEmpty()) Suhu.setText(rs.getString("suhu_tubuh"));
                     if(RR.getText().trim().isEmpty()) RR.setText(rs.getString("respirasi"));
