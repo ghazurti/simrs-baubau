@@ -44525,12 +44525,12 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         internalFrame3.setBounds(2, 12, 446, 355);
         jLabel6.setVisible(false);
 
-        // Logo di tengah atas
+        // Logo di tengah atas — ditambah di z-order 0 agar tampil paling depan
         javax.swing.JLabel lblLogoLogin = new javax.swing.JLabel();
         lblLogoLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblLogoLogin.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
         lblLogoLogin.setBounds(163, 5, 120, 120);
-        internalFrame3.add(lblLogoLogin);
+        internalFrame3.add(lblLogoLogin, 0);
 
         // Nama RS di bawah logo, full width, centered
         javax.swing.JLabel lblNamaRSLogin = new javax.swing.JLabel("<html><center>RSUD KOTA BAUBAU</center></html>");
@@ -44539,7 +44539,7 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         lblNamaRSLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblNamaRSLogin.setVerticalAlignment(javax.swing.SwingConstants.CENTER);
         lblNamaRSLogin.setBounds(0, 130, 446, 50);
-        internalFrame3.add(lblNamaRSLogin);
+        internalFrame3.add(lblNamaRSLogin, 0);
 
         // Panel input di bawah nama RS
         panelGlass1.setBounds(-1, 188, 448, 76);
