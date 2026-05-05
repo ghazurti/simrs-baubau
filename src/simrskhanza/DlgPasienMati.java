@@ -29,6 +29,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
@@ -139,6 +141,7 @@ public class DlgPasienMati extends javax.swing.JDialog {
         MnCetakSuratMati = new javax.swing.JMenuItem();
         MnCetakSuratMati1 = new javax.swing.JMenuItem();
         MnAngkutJenazah = new javax.swing.JMenuItem();
+        MnSuratKeteranganKematian = new javax.swing.JMenuItem();
         internalFrame1 = new widget.InternalFrame();
         Scroll = new widget.ScrollPane();
         tbMati = new widget.Table();
@@ -230,6 +233,20 @@ public class DlgPasienMati extends javax.swing.JDialog {
             }
         });
         jPopupMenu1.add(MnAngkutJenazah);
+
+        MnSuratKeteranganKematian.setBackground(new java.awt.Color(255, 255, 254));
+        MnSuratKeteranganKematian.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        MnSuratKeteranganKematian.setForeground(java.awt.Color.darkGray);
+        MnSuratKeteranganKematian.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
+        MnSuratKeteranganKematian.setText("Surat Keterangan Kematian");
+        MnSuratKeteranganKematian.setName("MnSuratKeteranganKematian"); // NOI18N
+        MnSuratKeteranganKematian.setPreferredSize(new java.awt.Dimension(190, 28));
+        MnSuratKeteranganKematian.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MnSuratKeteranganKematianActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(MnSuratKeteranganKematian);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -989,6 +1006,35 @@ private void MnCetakSuratMatiActionPerformed(java.awt.event.ActionEvent evt) {//
         }
     }//GEN-LAST:event_MnAngkutJenazahActionPerformed
 
+    private void MnSuratKeteranganKematianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnSuratKeteranganKematianActionPerformed
+        if(TPasien.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu pasien...!!!");
+        }else{
+            String nomorSurat = JOptionPane.showInputDialog(this, "Nomor Surat Keterangan Kematian :", "Input Nomor Surat", JOptionPane.PLAIN_MESSAGE);
+            if(nomorSurat == null) return;
+            Map<String, Object> param = new HashMap<>();
+            param.put("namars", akses.getnamars());
+            param.put("alamatrs", akses.getalamatrs());
+            param.put("kotars", akses.getkabupatenrs());
+            param.put("propinsirs", akses.getpropinsirs());
+            param.put("kontakrs", akses.getkontakrs());
+            param.put("emailrs", akses.getemailrs());
+            param.put("logo", Sequel.cariGambar("select setting.logo from setting"));
+            try { param.put("logo2", new FileInputStream(new File("report/logo_rsud.jpg"))); } catch(Exception ex){ param.put("logo2", null); }
+            param.put("nomor_surat", nomorSurat);
+            Valid.MyReportqry("rptSuratKeteranganKematian.jasper","report","::[ Surat Keterangan Kematian ]::",
+                "select date_format(pasien_mati.tanggal,'%d-%m-%Y') as tanggal, "+
+                "ELT(DAYOFWEEK(pasien_mati.tanggal),'Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu') as hari, "+
+                "time_format(pasien_mati.jam,'%H:%i') as jam, "+
+                "pasien_mati.no_rkm_medis, pasien.nm_pasien, pasien.jk, pasien.umur, "+
+                "pasien.agama, pasien.alamat, pasien.pekerjaan, pasien.no_peserta, "+
+                "pasien_mati.keterangan, pasien_mati.temp_meninggal, pasien_mati.icd1, dokter.nm_dokter "+
+                "from pasien_mati inner join pasien on pasien_mati.no_rkm_medis=pasien.no_rkm_medis "+
+                "inner join dokter on pasien_mati.kd_dokter=dokter.kd_dokter "+
+                "where pasien_mati.no_rkm_medis='"+TNoRM.getText()+"' ", param);
+        }
+    }//GEN-LAST:event_MnSuratKeteranganKematianActionPerformed
+
     private void TNoRMKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TNoRMKeyPressed
         if(evt.getKeyCode()==KeyEvent.VK_PAGE_DOWN){
             Sequel.cariIsi("select pasien.nm_pasien from pasien where pasien.no_rkm_medis=? ",TPasien,TNoRM.getText());
@@ -1134,6 +1180,7 @@ private void MnCetakSuratMatiActionPerformed(java.awt.event.ActionEvent evt) {//
     private javax.swing.JMenuItem MnAngkutJenazah;
     private javax.swing.JMenuItem MnCetakSuratMati;
     private javax.swing.JMenuItem MnCetakSuratMati1;
+    private javax.swing.JMenuItem MnSuratKeteranganKematian;
     private widget.TextBox NmDokter;
     private javax.swing.JPanel PanelInput;
     private widget.ScrollPane Scroll;
