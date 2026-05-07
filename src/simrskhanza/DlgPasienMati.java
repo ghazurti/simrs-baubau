@@ -1010,8 +1010,20 @@ private void MnCetakSuratMatiActionPerformed(java.awt.event.ActionEvent evt) {//
         if(TPasien.getText().trim().equals("")){
             JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu pasien...!!!");
         }else{
-            String nomorSurat = JOptionPane.showInputDialog(this, "Nomor Surat Keterangan Kematian :", "Input Nomor Surat", JOptionPane.PLAIN_MESSAGE);
+            // Cek nomor surat yang sudah tersimpan
+            String noSuketLama = Sequel.cariString("select no_suket from pasien_mati where no_rkm_medis='"+TNoRM.getText()+"'");
+            String nomorSurat;
+            if(noSuketLama != null && !noSuketLama.trim().isEmpty()){
+                // Sudah ada: tampilkan pre-filled, user bisa ubah atau langsung OK
+                nomorSurat = (String) JOptionPane.showInputDialog(this,
+                    "Nomor Surat Keterangan Kematian :", "Input Nomor Surat",
+                    JOptionPane.PLAIN_MESSAGE, null, null, noSuketLama);
+            } else {
+                nomorSurat = JOptionPane.showInputDialog(this, "Nomor Surat Keterangan Kematian :", "Input Nomor Surat", JOptionPane.PLAIN_MESSAGE);
+            }
             if(nomorSurat == null) return;
+            // Simpan nomor surat ke DB untuk print ulang berikutnya
+            Sequel.mengedit("pasien_mati","no_rkm_medis='"+TNoRM.getText()+"'","no_suket='"+nomorSurat+"'");
             Map<String, Object> param = new HashMap<>();
             param.put("namars", akses.getnamars());
             param.put("alamatrs", akses.getalamatrs());

@@ -1263,6 +1263,17 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         LingkarPerut = new widget.TextBox();
         Btn5Soap = new widget.Button();
         BtnTemplatePemeriksaan = new widget.Button();
+        BtnAksiInputResep = new javax.swing.JButton();
+        BtnAksiBuatResume = new javax.swing.JButton();
+        BtnAksiCopyResep = new javax.swing.JButton();
+        BtnAksiStatusSOAP = new javax.swing.JButton();
+        BtnAksiOrderLab = new javax.swing.JButton();
+        BtnAksiRiwayatSOAP = new javax.swing.JButton();
+        BtnAksiOrderRad = new javax.swing.JButton();
+        BtnAksiRiwayatPenunjang = new javax.swing.JButton();
+        BtnAksiInputDiagnosa = new javax.swing.JButton();
+        BtnAksiRiwayatDiagnosa = new javax.swing.JButton();
+        PanelAksiDokter = new javax.swing.JPanel();
         internalFrame6 = new widget.InternalFrame();
         Scroll4 = new widget.ScrollPane();
         tbPemeriksaanObstetri = new widget.Table();
@@ -2102,7 +2113,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
 
         PanelInput.setName("PanelInput"); 
         PanelInput.setOpaque(false);
-        PanelInput.setPreferredSize(new java.awt.Dimension(192, 273));
+        PanelInput.setPreferredSize(new java.awt.Dimension(192, 335));
         PanelInput.setLayout(new java.awt.BorderLayout(1, 1));
 
         ChkInput.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/143.png"))); 
@@ -2495,6 +2506,186 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         });
         panelGlass12.add(BtnTemplatePemeriksaan);
         BtnTemplatePemeriksaan.setBounds(405, 40, 28, 23);
+
+        // Panel aksi dokter - header biru + 8 tombol 2 kolom x 4 baris dengan warna kategori
+        PanelAksiDokter.setLayout(new java.awt.BorderLayout());
+        PanelAksiDokter.setBackground(new java.awt.Color(25, 65, 140));
+        PanelAksiDokter.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(15, 45, 110), 2),
+            javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0)
+        ));
+
+        javax.swing.JLabel lblAksiHeader = new javax.swing.JLabel("AKSI CEPAT DOKTER");
+        lblAksiHeader.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 11));
+        lblAksiHeader.setForeground(java.awt.Color.WHITE);
+        lblAksiHeader.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblAksiHeader.setBackground(new java.awt.Color(25, 65, 140));
+        lblAksiHeader.setOpaque(true);
+        lblAksiHeader.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 4, 5, 4));
+        PanelAksiDokter.add(lblAksiHeader, java.awt.BorderLayout.NORTH);
+
+        javax.swing.JPanel PanelAksiGrid = new javax.swing.JPanel(new java.awt.GridLayout(5, 2, 4, 4));
+        PanelAksiGrid.setBackground(new java.awt.Color(235, 240, 252));
+        PanelAksiGrid.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        PanelAksiDokter.add(PanelAksiGrid, java.awt.BorderLayout.CENTER);
+
+        // Baris 1 - Biru (Resep)
+        BtnAksiInputResep.setText("Input Resep");
+        BtnAksiInputResep.setFont(new java.awt.Font("Tahoma", 1, 11));
+        BtnAksiInputResep.setBackground(new java.awt.Color(65, 120, 210));
+        BtnAksiInputResep.setForeground(java.awt.Color.WHITE);
+        BtnAksiInputResep.setOpaque(true);
+        BtnAksiInputResep.setBorderPainted(false);
+        BtnAksiInputResep.setFocusPainted(false);
+        BtnAksiInputResep.setName("BtnAksiInputResep");
+        BtnAksiInputResep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnResepObatActionPerformed(evt);
+            }
+        });
+        PanelAksiGrid.add(BtnAksiInputResep);
+
+        BtnAksiBuatResume.setText("Buat Resume");
+        BtnAksiBuatResume.setFont(new java.awt.Font("Tahoma", 1, 11));
+        BtnAksiBuatResume.setBackground(new java.awt.Color(65, 120, 210));
+        BtnAksiBuatResume.setForeground(java.awt.Color.WHITE);
+        BtnAksiBuatResume.setOpaque(true);
+        BtnAksiBuatResume.setBorderPainted(false);
+        BtnAksiBuatResume.setFocusPainted(false);
+        BtnAksiBuatResume.setName("BtnAksiBuatResume");
+        BtnAksiBuatResume.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnResumeActionPerformed(evt);
+            }
+        });
+        PanelAksiGrid.add(BtnAksiBuatResume);
+
+        // Baris 2 - Teal (Copy & SOAP)
+        BtnAksiCopyResep.setText("Copy Resep");
+        BtnAksiCopyResep.setFont(new java.awt.Font("Tahoma", 1, 11));
+        BtnAksiCopyResep.setBackground(new java.awt.Color(20, 155, 145));
+        BtnAksiCopyResep.setForeground(java.awt.Color.WHITE);
+        BtnAksiCopyResep.setOpaque(true);
+        BtnAksiCopyResep.setBorderPainted(false);
+        BtnAksiCopyResep.setFocusPainted(false);
+        BtnAksiCopyResep.setName("BtnAksiCopyResep");
+        BtnAksiCopyResep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnCopyResepActionPerformed(evt);
+            }
+        });
+        PanelAksiGrid.add(BtnAksiCopyResep);
+
+        BtnAksiStatusSOAP.setText("Status SOAP");
+        BtnAksiStatusSOAP.setFont(new java.awt.Font("Tahoma", 1, 11));
+        BtnAksiStatusSOAP.setBackground(new java.awt.Color(20, 155, 145));
+        BtnAksiStatusSOAP.setForeground(java.awt.Color.WHITE);
+        BtnAksiStatusSOAP.setOpaque(true);
+        BtnAksiStatusSOAP.setBorderPainted(false);
+        BtnAksiStatusSOAP.setFocusPainted(false);
+        BtnAksiStatusSOAP.setName("BtnAksiStatusSOAP");
+        BtnAksiStatusSOAP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Btn5SoapActionPerformed(evt);
+            }
+        });
+        PanelAksiGrid.add(BtnAksiStatusSOAP);
+
+        // Baris 3 - Oranye (Lab)
+        BtnAksiOrderLab.setText("Order Lab");
+        BtnAksiOrderLab.setFont(new java.awt.Font("Tahoma", 1, 11));
+        BtnAksiOrderLab.setBackground(new java.awt.Color(200, 100, 30));
+        BtnAksiOrderLab.setForeground(java.awt.Color.WHITE);
+        BtnAksiOrderLab.setOpaque(true);
+        BtnAksiOrderLab.setBorderPainted(false);
+        BtnAksiOrderLab.setFocusPainted(false);
+        BtnAksiOrderLab.setName("BtnAksiOrderLab");
+        BtnAksiOrderLab.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnPermintaanLabActionPerformed(evt);
+            }
+        });
+        PanelAksiGrid.add(BtnAksiOrderLab);
+
+        BtnAksiRiwayatSOAP.setText("Riwayat SOAP");
+        BtnAksiRiwayatSOAP.setFont(new java.awt.Font("Tahoma", 1, 11));
+        BtnAksiRiwayatSOAP.setBackground(new java.awt.Color(200, 100, 30));
+        BtnAksiRiwayatSOAP.setForeground(java.awt.Color.WHITE);
+        BtnAksiRiwayatSOAP.setOpaque(true);
+        BtnAksiRiwayatSOAP.setBorderPainted(false);
+        BtnAksiRiwayatSOAP.setFocusPainted(false);
+        BtnAksiRiwayatSOAP.setName("BtnAksiRiwayatSOAP");
+        BtnAksiRiwayatSOAP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnRiwayatActionPerformed(evt);
+            }
+        });
+        PanelAksiGrid.add(BtnAksiRiwayatSOAP);
+
+        // Baris 4 - Ungu (Radiologi)
+        BtnAksiOrderRad.setText("Order Rad");
+        BtnAksiOrderRad.setFont(new java.awt.Font("Tahoma", 1, 11));
+        BtnAksiOrderRad.setBackground(new java.awt.Color(120, 60, 185));
+        BtnAksiOrderRad.setForeground(java.awt.Color.WHITE);
+        BtnAksiOrderRad.setOpaque(true);
+        BtnAksiOrderRad.setBorderPainted(false);
+        BtnAksiOrderRad.setFocusPainted(false);
+        BtnAksiOrderRad.setName("BtnAksiOrderRad");
+        BtnAksiOrderRad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnPermintaanRadActionPerformed(evt);
+            }
+        });
+        PanelAksiGrid.add(BtnAksiOrderRad);
+
+        BtnAksiRiwayatPenunjang.setText("Riwayat Penunjang");
+        BtnAksiRiwayatPenunjang.setFont(new java.awt.Font("Tahoma", 1, 11));
+        BtnAksiRiwayatPenunjang.setBackground(new java.awt.Color(120, 60, 185));
+        BtnAksiRiwayatPenunjang.setForeground(java.awt.Color.WHITE);
+        BtnAksiRiwayatPenunjang.setOpaque(true);
+        BtnAksiRiwayatPenunjang.setBorderPainted(false);
+        BtnAksiRiwayatPenunjang.setFocusPainted(false);
+        BtnAksiRiwayatPenunjang.setName("BtnAksiRiwayatPenunjang");
+        BtnAksiRiwayatPenunjang.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAksiRiwayatPenunjangActionPerformed(evt);
+            }
+        });
+        PanelAksiGrid.add(BtnAksiRiwayatPenunjang);
+
+        // Baris 5 - Hijau (Diagnosa)
+        BtnAksiInputDiagnosa.setText("Input Diagnosa");
+        BtnAksiInputDiagnosa.setFont(new java.awt.Font("Tahoma", 1, 11));
+        BtnAksiInputDiagnosa.setBackground(new java.awt.Color(40, 150, 60));
+        BtnAksiInputDiagnosa.setForeground(java.awt.Color.WHITE);
+        BtnAksiInputDiagnosa.setOpaque(true);
+        BtnAksiInputDiagnosa.setBorderPainted(false);
+        BtnAksiInputDiagnosa.setFocusPainted(false);
+        BtnAksiInputDiagnosa.setName("BtnAksiInputDiagnosa");
+        BtnAksiInputDiagnosa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAksiInputDiagnosaActionPerformed(evt);
+            }
+        });
+        PanelAksiGrid.add(BtnAksiInputDiagnosa);
+
+        BtnAksiRiwayatDiagnosa.setText("Riwayat Diagnosa");
+        BtnAksiRiwayatDiagnosa.setFont(new java.awt.Font("Tahoma", 1, 11));
+        BtnAksiRiwayatDiagnosa.setBackground(new java.awt.Color(40, 150, 60));
+        BtnAksiRiwayatDiagnosa.setForeground(java.awt.Color.WHITE);
+        BtnAksiRiwayatDiagnosa.setOpaque(true);
+        BtnAksiRiwayatDiagnosa.setBorderPainted(false);
+        BtnAksiRiwayatDiagnosa.setFocusPainted(false);
+        BtnAksiRiwayatDiagnosa.setName("BtnAksiRiwayatDiagnosa");
+        BtnAksiRiwayatDiagnosa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAksiRiwayatDiagnosaActionPerformed(evt);
+            }
+        });
+        PanelAksiGrid.add(BtnAksiRiwayatDiagnosa);
+
+        panelGlass12.add(PanelAksiDokter);
+        PanelAksiDokter.setBounds(912, 5, 290, 330);
 
         PanelInput.add(panelGlass12, java.awt.BorderLayout.CENTER);
 
@@ -6139,10 +6330,11 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
                 BtnHapus.setEnabled(akses.gettindakan_ralan());
                 BtnEdit.setEnabled(akses.gettindakan_ralan());
                 BtnPrint.setEnabled(akses.gettindakan_ralan());
-                BtnTambahTindakan.setVisible(false); 
+                BtnTambahTindakan.setVisible(false);
                 TCari.setPreferredSize(new Dimension(240,23));
                 TCariPasien.setText(TNoRM.getText());
                 runBackground(() ->tampilPemeriksaan());
+                autoFillTTVFromNurse();
                 break;
             case 4:
                 BtnSimpan.setEnabled(akses.gettindakan_ralan());
@@ -7797,6 +7989,42 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             this.setCursor(Cursor.getDefaultCursor());
         }
     }//GEN-LAST:event_BtnRiwayatActionPerformed
+
+    private void BtnAksiRiwayatPenunjangActionPerformed(java.awt.event.ActionEvent evt) {
+        if(TPasien.getText().trim().equals("")||TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            TCari.requestFocus();
+        }else{
+            DlgCariPeriksaLab dlg = new DlgCariPeriksaLab(null, false);
+            dlg.setSize(internalFrame1.getWidth(), internalFrame1.getHeight());
+            dlg.setLocationRelativeTo(internalFrame1);
+            dlg.setNoRawat(TNoRw.getText());
+            dlg.setVisible(true);
+        }
+    }
+
+    private void BtnAksiInputDiagnosaActionPerformed(java.awt.event.ActionEvent evt) {
+        if(TPasien.getText().trim().equals("")||TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            TCari.requestFocus();
+        }else{
+            TabRawat.setSelectedIndex(6);
+            TabRawatMouseClicked(null);
+            panelDiagnosa1.TabRawat.setSelectedIndex(0);
+            javax.swing.SwingUtilities.invokeLater(() -> panelDiagnosa1.Diagnosa.requestFocus());
+        }
+    }
+
+    private void BtnAksiRiwayatDiagnosaActionPerformed(java.awt.event.ActionEvent evt) {
+        if(TPasien.getText().trim().equals("")||TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            TCari.requestFocus();
+        }else{
+            TabRawat.setSelectedIndex(6);
+            TabRawatMouseClicked(null);
+            panelDiagnosa1.TabRawat.setSelectedIndex(1);
+        }
+    }
 
     private void BtnAwalMedisKandunganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAwalMedisKandunganActionPerformed
         if(TPasien.getText().trim().equals("")||TNoRw.getText().trim().equals("")){
@@ -10497,6 +10725,17 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnAksiInputResep;
+    private javax.swing.JButton BtnAksiBuatResume;
+    private javax.swing.JButton BtnAksiCopyResep;
+    private javax.swing.JButton BtnAksiStatusSOAP;
+    private javax.swing.JButton BtnAksiOrderLab;
+    private javax.swing.JButton BtnAksiRiwayatSOAP;
+    private javax.swing.JButton BtnAksiOrderRad;
+    private javax.swing.JButton BtnAksiRiwayatPenunjang;
+    private javax.swing.JButton BtnAksiInputDiagnosa;
+    private javax.swing.JButton BtnAksiRiwayatDiagnosa;
+    private javax.swing.JPanel PanelAksiDokter;
     private widget.Button Btn5Soap;
     private widget.Button BtnAll;
     private widget.Button BtnAsuhanGizi;
@@ -10896,6 +11135,59 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         LCount.setText(""+tabModeDr.getRowCount());
     }
     
+    private void updateTabsGender() {
+        String jk = Sequel.cariIsi("select jk from pasien where no_rkm_medis=?", TNoRM.getText());
+        boolean perempuan = "P".equalsIgnoreCase(jk);
+        TabRawat.setEnabledAt(4, perempuan);
+        TabRawat.setEnabledAt(5, perempuan);
+    }
+
+    private void autoFillTTVFromNurse() {
+        if(TNoRw.getText().trim().isEmpty() || TNoRM.getText().trim().isEmpty()) return;
+        if(!TSuhu.getText().trim().isEmpty()) return;
+        try {
+            // Ambil TTV dari SOAP perawat kunjungan ini
+            java.sql.PreparedStatement psn = koneksi.prepareStatement(
+                "select td,nadi,rr,suhu,gcs,bb,tb from penilaian_awal_keperawatan_ralan where no_rawat=? limit 1");
+            psn.setString(1, TNoRw.getText().trim());
+            java.sql.ResultSet rsn = psn.executeQuery();
+            if(rsn.next() && rsn.getString("suhu") != null && !rsn.getString("suhu").trim().isEmpty()) {
+                TTensi.setText(rsn.getString("td") != null ? rsn.getString("td") : "");
+                TNadi.setText(rsn.getString("nadi") != null ? rsn.getString("nadi") : "");
+                TRespirasi.setText(rsn.getString("rr") != null ? rsn.getString("rr") : "");
+                TSuhu.setText(rsn.getString("suhu"));
+                TGCS.setText(rsn.getString("gcs") != null ? rsn.getString("gcs") : "");
+                TBerat.setText(rsn.getString("bb") != null ? rsn.getString("bb") : "");
+                TTinggi.setText(rsn.getString("tb") != null ? rsn.getString("tb") : "");
+                rsn.close(); psn.close();
+                return;
+            }
+            rsn.close(); psn.close();
+            // Fallback: kunjungan sebelumnya
+            java.sql.PreparedStatement psp = koneksi.prepareStatement(
+                "select suhu_tubuh,tensi,nadi,respirasi,tinggi,berat,spo2,gcs,kesadaran,lingkar_perut " +
+                "from pemeriksaan_ralan inner join reg_periksa on pemeriksaan_ralan.no_rawat=reg_periksa.no_rawat " +
+                "where reg_periksa.no_rkm_medis=? and pemeriksaan_ralan.no_rawat!=? " +
+                "order by pemeriksaan_ralan.tgl_perawatan desc, pemeriksaan_ralan.jam_rawat desc limit 1");
+            psp.setString(1, TNoRM.getText().trim());
+            psp.setString(2, TNoRw.getText().trim());
+            java.sql.ResultSet rsp = psp.executeQuery();
+            if(rsp.next()) {
+                TSuhu.setText(rsp.getString("suhu_tubuh") != null ? rsp.getString("suhu_tubuh") : "");
+                TTensi.setText(rsp.getString("tensi") != null ? rsp.getString("tensi") : "");
+                TNadi.setText(rsp.getString("nadi") != null ? rsp.getString("nadi") : "");
+                TRespirasi.setText(rsp.getString("respirasi") != null ? rsp.getString("respirasi") : "");
+                TTinggi.setText(rsp.getString("tinggi") != null ? rsp.getString("tinggi") : "");
+                TBerat.setText(rsp.getString("berat") != null ? rsp.getString("berat") : "");
+                SpO2.setText(rsp.getString("spo2") != null ? rsp.getString("spo2") : "");
+                TGCS.setText(rsp.getString("gcs") != null ? rsp.getString("gcs") : "");
+                if(rsp.getString("kesadaran") != null) cmbKesadaran.setSelectedItem(rsp.getString("kesadaran"));
+                LingkarPerut.setText(rsp.getString("lingkar_perut") != null ? rsp.getString("lingkar_perut") : "");
+            }
+            rsp.close(); psp.close();
+        } catch(Exception e) { /* silently ignore */ }
+    }
+
     private void getDataDr() {
         if(tbRawatDr.getSelectedRow()!= -1){
             TNoRw.setText(tbRawatDr.getValueAt(tbRawatDr.getSelectedRow(),1).toString());
@@ -10907,6 +11199,7 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             cmbMnt.setSelectedItem(tbRawatDr.getValueAt(tbRawatDr.getSelectedRow(),8).toString().substring(3,5));
             cmbDtk.setSelectedItem(tbRawatDr.getValueAt(tbRawatDr.getSelectedRow(),8).toString().substring(6,8));
             Valid.SetTgl(DTPTgl,tbRawatDr.getValueAt(tbRawatDr.getSelectedRow(),7).toString());
+            updateTabsGender();
         }
     }
 
@@ -10975,6 +11268,7 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             cmbMnt.setSelectedItem(tbRawatPr.getValueAt(tbRawatPr.getSelectedRow(),8).toString().substring(3,5));
             cmbDtk.setSelectedItem(tbRawatPr.getValueAt(tbRawatPr.getSelectedRow(),8).toString().substring(6,8));
             Valid.SetTgl(DTPTgl,tbRawatPr.getValueAt(tbRawatPr.getSelectedRow(),7).toString());
+            updateTabsGender();
         }
     }
     
@@ -11047,9 +11341,10 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             cmbMnt.setSelectedItem(tbRawatDrPr.getValueAt(tbRawatDrPr.getSelectedRow(),10).toString().substring(3,5));
             cmbDtk.setSelectedItem(tbRawatDrPr.getValueAt(tbRawatDrPr.getSelectedRow(),10).toString().substring(6,8));
             Valid.SetTgl(DTPTgl,tbRawatDrPr.getValueAt(tbRawatDrPr.getSelectedRow(),9).toString());
+            updateTabsGender();
         }
     }
-    
+
     private void isRawat(){
         try {
             ps=koneksi.prepareStatement(
@@ -11065,6 +11360,7 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     KdDok.setText(rs.getString("kd_dokter"));
                     TDokter.setText(Sequel.CariDokter(KdDok.getText()));
                     TanggalRegistrasi.setText(rs.getString("tgl_registrasi")+" "+rs.getString("jam_reg"));
+                    updateTabsGender();
                 }
             } catch (Exception e) {
                 System.out.println("Notif : "+e);
@@ -11105,11 +11401,11 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void isForm(){
         if(ChkInput.isSelected()==true){
             ChkInput.setVisible(false);
-            PanelInput.setPreferredSize(new Dimension(WIDTH,273));
-            panelGlass12.setVisible(true);      
+            PanelInput.setPreferredSize(new Dimension(WIDTH,335));
+            panelGlass12.setVisible(true);
             ChkInput.setVisible(true);
-        }else if(ChkInput.isSelected()==false){           
-            ChkInput.setVisible(false);            
+        }else if(ChkInput.isSelected()==false){
+            ChkInput.setVisible(false);
             PanelInput.setPreferredSize(new Dimension(WIDTH,20));
             panelGlass12.setVisible(false);      
             ChkInput.setVisible(true);
@@ -11977,9 +12273,10 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             cmbMnt.setSelectedItem(tbPemeriksaan.getValueAt(tbPemeriksaan.getSelectedRow(),5).toString().substring(3,5));
             cmbDtk.setSelectedItem(tbPemeriksaan.getValueAt(tbPemeriksaan.getSelectedRow(),5).toString().substring(6,8));
             Valid.SetTgl(DTPTgl,tbPemeriksaan.getValueAt(tbPemeriksaan.getSelectedRow(),4).toString());
+            updateTabsGender();
         }
     }
-    
+
     private void getDataCatatan() {
         if(tbCatatan.getSelectedRow()!= -1){
             TNoRw.setText(tbCatatan.getValueAt(tbCatatan.getSelectedRow(),1).toString());

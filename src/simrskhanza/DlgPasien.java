@@ -63,6 +63,20 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
+import bridging.ApiSatuSehat;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 
 /**
@@ -110,6 +124,7 @@ public class DlgPasien extends javax.swing.JDialog {
     private Date lahir;
     private LocalDate today=LocalDate.now();
     private LocalDate birthday;
+    private ApiSatuSehat api=new ApiSatuSehat();
     private Period p;
     private boolean ceksukses=false;
 
@@ -664,6 +679,7 @@ public class DlgPasien extends javax.swing.JDialog {
         ppCatatanPasien = new javax.swing.JMenuItem();
         ppGabungRM = new javax.swing.JMenuItem();
         ppPasienCorona = new javax.swing.JMenuItem();
+        ppCreateIHSPasien = new javax.swing.JMenuItem();
         buttonGroup1 = new javax.swing.ButtonGroup();
         Kd2 = new widget.TextBox();
         DlgDemografi = new javax.swing.JDialog();
@@ -1722,6 +1738,21 @@ public class DlgPasien extends javax.swing.JDialog {
             }
         });
         jPopupMenu1.add(ppPasienCorona);
+
+        ppCreateIHSPasien.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        ppCreateIHSPasien.setForeground(new java.awt.Color(50, 50, 50));
+        ppCreateIHSPasien.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
+        ppCreateIHSPasien.setText("Create IHS Pasien Satu Sehat");
+        ppCreateIHSPasien.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ppCreateIHSPasien.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        ppCreateIHSPasien.setName("ppCreateIHSPasien"); // NOI18N
+        ppCreateIHSPasien.setPreferredSize(new java.awt.Dimension(220, 26));
+        ppCreateIHSPasien.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ppCreateIHSPasienActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(ppCreateIHSPasien);
 
         Kd2.setName("Kd2"); // NOI18N
         Kd2.setPreferredSize(new java.awt.Dimension(207, 23));
@@ -8984,6 +9015,7 @@ private void KabupatenMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
     private javax.swing.JMenuItem ppGrafikjkbayi;
     private javax.swing.JMenuItem ppKelahiranBayi;
     private javax.swing.JMenuItem ppPasienCorona;
+    private javax.swing.JMenuItem ppCreateIHSPasien;
     private javax.swing.JMenuItem ppRegistrasi;
     private javax.swing.JMenuItem ppRegistrasi1;
     private javax.swing.JMenuItem ppRegistrasi2;
@@ -10144,7 +10176,395 @@ private void KabupatenMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:eve
                 }
             } catch (Exception e) {
                 System.out.println("Notif : "+e);
-            } 
+            }
+        }
+    }
+
+    private void ppCreateIHSPasienActionPerformed(java.awt.event.ActionEvent evt) {
+        String noRM = null;
+        int activeTab = TabRawat.getSelectedIndex();
+        switch (activeTab) {
+            case 1:
+                if (tbPasien.getSelectedRow() != -1) noRM = tbPasien.getValueAt(tbPasien.getSelectedRow(), 1).toString();
+                break;
+            case 2:
+                if (tbPasien2.getSelectedRow() != -1) noRM = tbPasien2.getValueAt(tbPasien2.getSelectedRow(), 1).toString();
+                break;
+            case 3:
+                if (tbPasien3.getSelectedRow() != -1) noRM = tbPasien3.getValueAt(tbPasien3.getSelectedRow(), 1).toString();
+                break;
+            default:
+                if (!TNo.getText().trim().isEmpty()) noRM = TNo.getText().trim();
+                break;
+        }
+        if (noRM == null) {
+            JOptionPane.showMessageDialog(this, "Silakan pilih data pasien terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        Map<String, String> patientData = getPatientDataIHS(noRM);
+        String nik = patientData.getOrDefault("no_ktp", "");
+        if (nik.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "NIK pasien kosong, tidak dapat membuat IHS Patient.", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // Step 1: search by NIK — if patient already exists in IHS, save ID directly
+        String existingIhs = searchIHSByNIK(nik);
+        if (existingIhs != null) {
+            Sequel.menyimpan("satu_sehat_ihs_patient", "?,?", "IHS Pasien", 2, new String[]{nik, existingIhs});
+            JOptionPane.showMessageDialog(this, "Pasien sudah terdaftar di IHS.\nIHS Patient ID: " + existingIhs + "\nData disimpan.", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        // Step 2: patient not in IHS yet — build FHIR JSON and confirm with user before POST
+        String fhirJson;
+        try {
+            fhirJson = buildSatuSehatPatientJson(patientData);
+        } catch (Exception e) {
+            System.out.println("Notifikasi: " + e);
+            return;
+        }
+        JTextArea textArea = new JTextArea(fhirJson);
+        textArea.setEditable(false);
+        textArea.setRows(20);
+        textArea.setColumns(80);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        int result = JOptionPane.showConfirmDialog(this, scrollPane,
+                "FHIR Patient JSON - Konfirmasi Kirim",
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        if (result == JOptionPane.OK_OPTION) {
+            boolean success = sendToSatuSehatPatient(fhirJson);
+            if (success) {
+                JOptionPane.showMessageDialog(this, "Berhasil membuat dan menyimpan IHS Pasien!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                // POST failed — offer manual IHS ID entry
+                javax.swing.JTextField ihsInput = new javax.swing.JTextField(30);
+                Object[] msg = {
+                    "Gagal membuat IHS Patient otomatis (alamat tidak sesuai DUKCAPIL).",
+                    "Jika IHS Patient ID sudah tersedia (dari BPJS/JKN Mobile/Kartu Keluarga),",
+                    "masukkan di sini untuk disimpan secara manual:",
+                    ihsInput
+                };
+                int manualResult = JOptionPane.showConfirmDialog(this, msg,
+                        "Input IHS Patient ID Manual", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (manualResult == JOptionPane.OK_OPTION) {
+                    String manualIhs = ihsInput.getText().trim();
+                    if (!manualIhs.isEmpty()) {
+                        Sequel.menyimpan("satu_sehat_ihs_patient", "?,?", "IHS Pasien", 2, new String[]{nik, manualIhs});
+                        JOptionPane.showMessageDialog(this, "IHS Patient ID disimpan: " + manualIhs, "Sukses", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+        }
+    }
+
+    private Map<String, String> parseAddressIHS(String fullAddress) {
+        Map<String, String> result = new HashMap<>();
+        result.put("addressLine", fullAddress == null ? "" : fullAddress);
+        result.put("rt", "");
+        result.put("rw", "");
+        if (fullAddress == null || fullAddress.length() < 14) return result;
+        String suffix = fullAddress.substring(fullAddress.length() - 14);
+        Pattern pattern = Pattern.compile("RT\\s+(\\d{3})\\s+RW\\s+(\\d{3})", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(suffix);
+        if (matcher.find()) {
+            result.put("rt", matcher.group(1));
+            result.put("rw", matcher.group(2));
+            result.put("addressLine", fullAddress.substring(0, fullAddress.length() - 14));
+        }
+        return result;
+    }
+
+    private Map<String, String> getPatientDataIHS(String noRm) {
+        Map<String, String> data = new HashMap<>();
+        try {
+            PreparedStatement psihs = koneksi.prepareStatement(
+                "SELECT p.no_rkm_medis, p.nm_pasien, p.no_ktp, p.jk, p.tmp_lahir, p.tgl_lahir, " +
+                "p.nm_ibu, p.alamat, p.no_tlp, p.stts_nikah, " +
+                "p.kd_prop, propinsi.nm_prop, p.kd_kab, kabupaten.nm_kab, p.kd_kec, kecamatan.nm_kec, " +
+                "p.kd_kel, kelurahan.nm_kel, p.namakeluarga " +
+                "FROM pasien p " +
+                "INNER JOIN propinsi ON p.kd_prop = propinsi.kd_prop " +
+                "INNER JOIN kabupaten ON p.kd_kab = kabupaten.kd_kab " +
+                "INNER JOIN kecamatan ON p.kd_kec = kecamatan.kd_kec " +
+                "INNER JOIN kelurahan ON p.kd_kel = kelurahan.kd_kel " +
+                "WHERE p.no_rkm_medis = ?");
+            psihs.setString(1, noRm);
+            ResultSet rsihs = psihs.executeQuery();
+            if (rsihs.next()) {
+                data.put("no_rkm_medis", rsihs.getString("no_rkm_medis"));
+                data.put("nm_pasien", rsihs.getString("nm_pasien"));
+                data.put("no_ktp", rsihs.getString("no_ktp"));
+                data.put("jk", rsihs.getString("jk"));
+                data.put("tmp_lahir", rsihs.getString("tmp_lahir"));
+                data.put("tgl_lahir", rsihs.getString("tgl_lahir"));
+                data.put("nm_ibu", rsihs.getString("nm_ibu"));
+                data.put("alamat", rsihs.getString("alamat"));
+                data.put("no_tlp", rsihs.getString("no_tlp"));
+                data.put("stts_nikah", rsihs.getString("stts_nikah"));
+                data.put("kd_prop", rsihs.getString("kd_prop"));
+                data.put("nm_prop", rsihs.getString("nm_prop"));
+                data.put("kd_kab", rsihs.getString("kd_kab"));
+                data.put("nm_kab", rsihs.getString("nm_kab"));
+                data.put("kd_kec", rsihs.getString("kd_kec"));
+                data.put("nm_kec", rsihs.getString("nm_kec"));
+                data.put("kd_kel", rsihs.getString("kd_kel"));
+                data.put("nm_kel", rsihs.getString("nm_kel"));
+                data.put("namakeluarga", rsihs.getString("namakeluarga"));
+            }
+            rsihs.close();
+            psihs.close();
+        } catch (Exception e) {
+            System.out.println("Notifikasi: " + e);
+        }
+        return data;
+    }
+
+    private String buildSatuSehatPatientJson(Map<String, String> patient) throws JSONException {
+        JSONObject resource = new JSONObject();
+        resource.put("resourceType", "Patient");
+        JSONObject meta = new JSONObject();
+        meta.put("profile", new JSONArray().put("https://fhir.kemkes.go.id/r4/StructureDefinition/Patient"));
+        resource.put("meta", meta);
+        JSONObject identifier = new JSONObject();
+        identifier.put("use", "official");
+        identifier.put("system", "https://fhir.kemkes.go.id/id/nik");
+        identifier.put("value", patient.getOrDefault("no_ktp", ""));
+        resource.put("identifier", new JSONArray().put(identifier));
+        resource.put("active", true);
+        JSONObject name = new JSONObject();
+        name.put("use", "official");
+        name.put("text", patient.getOrDefault("nm_pasien", ""));
+        resource.put("name", new JSONArray().put(name));
+        String gender = "P".equalsIgnoreCase(patient.get("jk")) ? "female" : "male";
+        resource.put("gender", gender);
+        String tglLahir = patient.getOrDefault("tgl_lahir", "");
+        if (tglLahir.contains(" ")) tglLahir = tglLahir.split(" ")[0];
+        resource.put("birthDate", tglLahir);
+        resource.put("deceasedBoolean", false);
+        String rawAddress = patient.getOrDefault("alamat", "");
+        Map<String, String> parsed = parseAddressIHS(rawAddress);
+        JSONObject address = new JSONObject();
+        address.put("use", "home");
+        address.put("line", new JSONArray().put(parsed.get("addressLine")));
+        address.put("city", patient.getOrDefault("nm_kab", ""));
+        address.put("country", "ID");
+        // Derive BPS codes from NIK (province=2 digits, city=4 digits, district=6 digits)
+        String nik = patient.getOrDefault("no_ktp", "");
+        String bpsProvince = nik.length() >= 2 ? nik.substring(0, 2) : fungsi.koneksiDB.PROPINSISATUSEHAT();
+        String bpsCity     = nik.length() >= 4 ? nik.substring(0, 4) : fungsi.koneksiDB.KABUPATENSATUSEHAT();
+        String bpsDistrict = nik.length() >= 6 ? nik.substring(0, 6) : fungsi.koneksiDB.KECAMATANSATUSEHAT();
+        // Village: lookup from BPS kelurahan cache file by name + district
+        String nmKel = patient.getOrDefault("nm_kel", "");
+        String bpsVillage = lookupBpsVillageCode(nmKel, bpsDistrict);
+        System.out.println("[SatuSehat] NIK=" + nik + " nmKel=" + nmKel);
+        System.out.println("[SatuSehat] province=" + bpsProvince + " city=" + bpsCity + " district=" + bpsDistrict + " village=" + bpsVillage);
+        if (bpsVillage == null) bpsVillage = fungsi.koneksiDB.KELURAHANSATUSEHAT();
+        JSONObject extension = new JSONObject();
+        extension.put("url", "https://fhir.kemkes.go.id/r4/StructureDefinition/administrativeCode");
+        JSONArray extArray = new JSONArray();
+        addIHSExtensionPair(extArray, "province", bpsProvince);
+        addIHSExtensionPair(extArray, "city", bpsCity);
+        addIHSExtensionPair(extArray, "district", bpsDistrict);
+        addIHSExtensionPair(extArray, "village", bpsVillage);
+        String rt = parsed.get("rt");
+        String rw = parsed.get("rw");
+        if (!rt.isEmpty()) addIHSExtensionPair(extArray, "rt", rt);
+        if (!rw.isEmpty()) addIHSExtensionPair(extArray, "rw", rw);
+        extension.put("extension", extArray);
+        address.put("extension", new JSONArray().put(extension));
+        resource.put("address", new JSONArray().put(address));
+        JSONObject maritalStatus = new JSONObject();
+        JSONObject maritalCoding = new JSONObject();
+        maritalCoding.put("system", "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus");
+        maritalCoding.put("code", mapIHSMaritalStatus(patient.getOrDefault("stts_nikah", "")));
+        maritalCoding.put("display", patient.getOrDefault("stts_nikah", ""));
+        maritalStatus.put("coding", new JSONArray().put(maritalCoding));
+        maritalStatus.put("text", patient.getOrDefault("stts_nikah", ""));
+        resource.put("maritalStatus", maritalStatus);
+        resource.put("multipleBirthInteger", 0);
+        JSONObject contact = new JSONObject();
+        JSONObject relCoding = new JSONObject();
+        relCoding.put("system", "http://terminology.hl7.org/CodeSystem/v2-0131");
+        relCoding.put("code", "C");
+        JSONObject relObj = new JSONObject();
+        relObj.put("coding", new JSONArray().put(relCoding));
+        contact.put("relationship", new JSONArray().put(relObj));
+        JSONObject contactName = new JSONObject();
+        contactName.put("use", "official");
+        contactName.put("text", patient.getOrDefault("namakeluarga", ""));
+        contact.put("name", contactName);
+        JSONObject telecom = new JSONObject();
+        telecom.put("system", "phone");
+        telecom.put("value", patient.getOrDefault("no_tlp", ""));
+        telecom.put("use", "mobile");
+        contact.put("telecom", new JSONArray().put(telecom));
+        resource.put("contact", new JSONArray().put(contact));
+        JSONObject communication = new JSONObject();
+        JSONObject language = new JSONObject();
+        JSONObject langCoding = new JSONObject();
+        langCoding.put("system", "urn:ietf:bcp:47");
+        langCoding.put("code", "id-ID");
+        langCoding.put("display", "Indonesian");
+        language.put("coding", new JSONArray().put(langCoding));
+        language.put("text", "Indonesian");
+        communication.put("language", language);
+        communication.put("preferred", true);
+        resource.put("communication", new JSONArray().put(communication));
+        return resource.toString(2);
+    }
+
+    private void addIHSExtensionPair(JSONArray extArray, String urlSuffix, String valueCode) throws JSONException {
+        if (valueCode != null && !valueCode.trim().isEmpty()) {
+            JSONObject ext = new JSONObject();
+            ext.put("url", urlSuffix);
+            ext.put("valueCode", valueCode);
+            extArray.put(ext);
+        }
+    }
+
+    private String mapIHSMaritalStatus(String sttsNikah) {
+        if (sttsNikah == null) return "U";
+        switch (sttsNikah.toUpperCase()) {
+            case "MENIKAH": return "M";
+            case "BELUM MENIKAH": return "U";
+            case "JANDA": return "D";
+            case "DUDA": return "W";
+            default: return "U";
+        }
+    }
+
+    private static java.util.Map<String, String> bpsKelurahanMap = null;
+
+    private String lookupBpsVillageCode(String nmKel, String district6) {
+        if (bpsKelurahanMap == null) {
+            bpsKelurahanMap = new java.util.HashMap<>();
+            try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader("./cache/bps_kelurahan.iyem"))) {
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null) sb.append(line);
+                JSONArray arr = new JSONObject(sb.toString()).getJSONArray("kelurahan");
+                for (int i = 0; i < arr.length(); i++) {
+                    JSONObject item = arr.getJSONObject(i);
+                    String id = item.getString("id");
+                    String nama = item.getString("nama").toUpperCase().trim();
+                    String idKec = item.getString("id_kecamatan");
+                    String kec6 = idKec.length() >= 6 ? idKec.substring(0, 6) : idKec;
+                    bpsKelurahanMap.put(nama + "|" + kec6, id);
+                }
+            } catch (Exception e) {
+                System.out.println("Warning: gagal load kelurahan.iyem: " + e);
+            }
+        }
+        String normalized = nmKel.toUpperCase().trim()
+            .replaceAll("^(DESA |KELURAHAN |KEL\\. |DS\\. )", "").trim();
+        String result = bpsKelurahanMap.get(normalized + "|" + district6);
+        if (result == null) {
+            // Fallback: ambil kelurahan pertama di kecamatan tersebut
+            for (java.util.Map.Entry<String, String> entry : bpsKelurahanMap.entrySet()) {
+                if (entry.getKey().endsWith("|" + district6)) return entry.getValue();
+            }
+        }
+        return result;
+    }
+
+    /** Returns the IHS Patient ID if the NIK is already registered in Satu Sehat, or null if not found. */
+    private String searchIHSByNIK(String nik) {
+        try {
+            String token = api.TokenSatuSehat();
+            if (token == null || token.isEmpty()) {
+                System.out.println("[SatuSehat] Token kosong, skip pencarian NIK.");
+                return null;
+            }
+            String endpoint = "https://api-satusehat.kemkes.go.id/fhir-r4/v1/Patient"
+                    + "?identifier=https://fhir.kemkes.go.id/id/nik%7C" + nik;
+            URL url = new URL(endpoint);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Bearer " + token);
+            int code = conn.getResponseCode();
+            System.out.println("[SatuSehat] GET Patient NIK=" + nik + " → HTTP " + code);
+            if (code == 200) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) sb.append(line);
+                    JSONObject bundle = new JSONObject(sb.toString());
+                    int total = bundle.optInt("total", 0);
+                    if (total > 0) {
+                        JSONArray entries = bundle.optJSONArray("entry");
+                        if (entries != null && entries.length() > 0) {
+                            JSONObject resource = entries.getJSONObject(0).optJSONObject("resource");
+                            if (resource != null) {
+                                String ihsId = resource.optString("id");
+                                System.out.println("[SatuSehat] Pasien ditemukan, IHS ID=" + ihsId);
+                                return ihsId.isEmpty() ? null : ihsId;
+                            }
+                        }
+                    }
+                    System.out.println("[SatuSehat] Pasien tidak ditemukan di IHS, lanjut POST.");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("[SatuSehat] Error saat cari NIK: " + e);
+        }
+        return null;
+    }
+
+    private boolean sendToSatuSehatPatient(String jsonBody) {
+        try {
+            String endpoint = "https://api-satusehat.kemkes.go.id/fhir-r4/v1/Patient";
+            URL url = new URL(endpoint);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Authorization", "Bearer " + api.TokenSatuSehat());
+            conn.setDoOutput(true);
+            System.out.println("URL: " + endpoint);
+            System.out.println("Request JSON: " + jsonBody);
+            try (OutputStream os = conn.getOutputStream()) {
+                byte[] input = jsonBody.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+            int responseCode = conn.getResponseCode();
+            if (responseCode == 201 || responseCode == 200) {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) sb.append(line);
+                    String responseBody = sb.toString();
+                    System.out.println("Result JSON: " + responseBody);
+                    JSONObject jsonResponse = new JSONObject(responseBody);
+                    String patientId = jsonResponse.optString("id");
+                    String nik = null;
+                    JSONArray identifiers = jsonResponse.optJSONArray("identifier");
+                    if (identifiers != null) {
+                        for (int i = 0; i < identifiers.length(); i++) {
+                            JSONObject idObj = identifiers.getJSONObject(i);
+                            if ("https://fhir.kemkes.go.id/id/nik".equals(idObj.optString("system"))) {
+                                nik = idObj.optString("value");
+                                break;
+                            }
+                        }
+                    }
+                    if (patientId != null && !patientId.isEmpty() && nik != null && !nik.isEmpty()) {
+                        Sequel.menyimpan("satu_sehat_ihs_patient", "?,?", "IHS Pasien", 2, new String[]{nik, patientId});
+                        System.out.println("Berhasil menyimpan ke database: NIK=" + nik + ", IHS Patient ID=" + patientId);
+                        return true;
+                    }
+                    System.out.println("Error: id atau NIK tidak ditemukan di response.");
+                    return false;
+                }
+            } else {
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getErrorStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) sb.append(line);
+                    System.out.println("Error response:\n" + sb.toString());
+                }
+                return false;
+            }
+        } catch (Exception e) {
+            System.out.println("Notifikasi Bridging: " + e);
+            return false;
         }
     }
 }

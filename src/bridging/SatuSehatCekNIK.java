@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fungsi.koneksiDB;
 import java.io.FileReader;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -247,6 +249,25 @@ public class SatuSehatCekNIK {
     
     public String tampilIDPasien(String cari) {
         idpasien="";
+        // Cek cache lokal dulu
+        try {
+            PreparedStatement ps = koneksiDB.condb().prepareStatement(
+                "SELECT ihspasien FROM satu_sehat_ihs_patient WHERE nikpasien=?");
+            ps.setString(1, cari);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                idpasien = rs.getString("ihspasien");
+                rs.close(); ps.close();
+                if (idpasien != null && !idpasien.isEmpty()) {
+                    System.out.println("[IHS Cache] NIK=" + cari + " → " + idpasien);
+                    return idpasien;
+                }
+            }
+            rs.close(); ps.close();
+        } catch (Exception e) {
+            System.out.println("[IHS Cache] Skip: " + e.getMessage());
+        }
+        // Tidak ada di cache — panggil API
         try{
             headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -258,6 +279,20 @@ public class SatuSehatCekNIK {
             root = mapper.readTree(json);
             for(JsonNode list:root.path("entry")){
                 idpasien=list.path("resource").path("id").asText();
+            }
+            // Simpan ke cache jika berhasil
+            if (idpasien != null && !idpasien.isEmpty()) {
+                try {
+                    PreparedStatement ps = koneksiDB.condb().prepareStatement(
+                        "INSERT IGNORE INTO satu_sehat_ihs_patient (nikpasien, ihspasien) VALUES (?,?)");
+                    ps.setString(1, cari);
+                    ps.setString(2, idpasien);
+                    ps.executeUpdate();
+                    ps.close();
+                    System.out.println("[IHS Cache] Disimpan: NIK=" + cari + " → " + idpasien);
+                } catch (Exception e) {
+                    System.out.println("[IHS Cache] Gagal simpan: " + e.getMessage());
+                }
             }
         }catch(Exception e){
             idpasien="";

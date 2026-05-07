@@ -6075,6 +6075,10 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         } 
     }//GEN-LAST:event_formWindowOpened
 
+    public void setNoRawat(String noRawat) {
+        NoRawat.setText(noRawat);
+    }
+
     /**
     * @param args the command line arguments
     */
