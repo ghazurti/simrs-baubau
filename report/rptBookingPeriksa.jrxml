@@ -89,7 +89,7 @@ booking_periksa.tanggal_booking from booking_periksa inner join poliklinik on bo
 				<text><![CDATA[Data Pasien Booking Periksa]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="56fa4d7b-b138-45bb-850e-181f8ae26a22"/>
+				<reportElement x="50" y="25" width="702" height="14" uuid="56fa4d7b-b138-45bb-850e-181f8ae26a22"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -97,7 +97,7 @@ booking_periksa.tanggal_booking from booking_periksa inner join poliklinik on bo
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="2a991d2e-fd65-4f37-943c-bcd7410d81e3"/>
+				<reportElement x="50" y="0" width="702" height="17" uuid="2a991d2e-fd65-4f37-943c-bcd7410d81e3"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -105,7 +105,7 @@ booking_periksa.tanggal_booking from booking_periksa inner join poliklinik on bo
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="9fb32a30-de31-462e-9e03-25c48f8a7d10"/>
+				<reportElement x="50" y="35" width="702" height="14" uuid="9fb32a30-de31-462e-9e03-25c48f8a7d10"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -119,7 +119,7 @@ booking_periksa.tanggal_booking from booking_periksa inner join poliklinik on bo
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="7c2d4cae-f999-4dde-88c8-1a2726994bd3"/>
+				<reportElement x="50" y="14" width="702" height="14" uuid="7c2d4cae-f999-4dde-88c8-1a2726994bd3"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -130,6 +130,10 @@ booking_periksa.tanggal_booking from booking_periksa inner join poliklinik on bo
 				<reportElement x="0" y="2" width="48" height="45" uuid="e9ea9c07-72ec-4135-9175-8de22b552029"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

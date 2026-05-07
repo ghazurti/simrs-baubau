@@ -73,7 +73,7 @@
 				<text><![CDATA[TRANSAKSI PENERIMAAN BARANG DAPUR KERING & BASAH]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="d06629f8-0d8b-4e21-a96d-9e76c4208ed4"/>
+				<reportElement x="50" y="14" width="702" height="14" uuid="d06629f8-0d8b-4e21-a96d-9e76c4208ed4"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -87,7 +87,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="8f89de97-240f-482b-baea-55bd8f439efa"/>
+				<reportElement x="50" y="0" width="702" height="17" uuid="8f89de97-240f-482b-baea-55bd8f439efa"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -95,7 +95,7 @@
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="820045c5-3db0-4d16-8543-e6f10aa9f858"/>
+				<reportElement x="50" y="25" width="702" height="14" uuid="820045c5-3db0-4d16-8543-e6f10aa9f858"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -103,7 +103,7 @@
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="06a031d2-e9da-4561-bf9d-d5b2f0fe3005"/>
+				<reportElement x="50" y="35" width="702" height="14" uuid="06a031d2-e9da-4561-bf9d-d5b2f0fe3005"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -114,6 +114,10 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="1646c007-d074-46e0-93fa-854885c3d876"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

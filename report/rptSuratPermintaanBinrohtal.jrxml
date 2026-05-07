@@ -64,29 +64,33 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="e9ed4e44-35d2-4774-9f2f-0c5003476eaf"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="507" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="0" width="553" height="17" uuid="64753ca6-2ae8-425f-b11d-1d7a3734c318"/>
+				<reportElement x="50" y="0" width="455" height="17" uuid="64753ca6-2ae8-425f-b11d-1d7a3734c318"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="553" height="14" uuid="8fc6db80-ce94-4669-8899-dad8f2da616c"/>
+				<reportElement x="50" y="14" width="455" height="14" uuid="8fc6db80-ce94-4669-8899-dad8f2da616c"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="553" height="14" uuid="04d5f8c5-21ef-4f20-8f08-4e8749535927"/>
+				<reportElement x="50" y="25" width="455" height="14" uuid="04d5f8c5-21ef-4f20-8f08-4e8749535927"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="553" height="14" uuid="40fd00b9-8f99-4d11-9f04-780f0d6ed9d8"/>
+				<reportElement x="50" y="35" width="455" height="14" uuid="40fd00b9-8f99-4d11-9f04-780f0d6ed9d8"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 				</textElement>

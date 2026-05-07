@@ -106,7 +106,7 @@ select laborat_kesling_parameter_pengujian.kode_parameter,laborat_kesling_parame
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="799" height="14" uuid="98b1ec36-e84e-4dbc-9af4-144166dbe2f8"/>
+				<reportElement x="50" y="14" width="701" height="14" uuid="98b1ec36-e84e-4dbc-9af4-144166dbe2f8"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -114,7 +114,7 @@ select laborat_kesling_parameter_pengujian.kode_parameter,laborat_kesling_parame
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="799" height="14" uuid="d4530797-ae3f-4395-9224-c17ff9dc0c2b"/>
+				<reportElement x="50" y="35" width="701" height="14" uuid="d4530797-ae3f-4395-9224-c17ff9dc0c2b"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -122,7 +122,7 @@ select laborat_kesling_parameter_pengujian.kode_parameter,laborat_kesling_parame
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="799" height="14" uuid="2a87a232-8208-4d04-8550-06544acf51d0"/>
+				<reportElement x="50" y="25" width="701" height="14" uuid="2a87a232-8208-4d04-8550-06544acf51d0"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -130,7 +130,7 @@ select laborat_kesling_parameter_pengujian.kode_parameter,laborat_kesling_parame
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="799" height="17" uuid="c357b252-3dda-4bd8-8073-2a6fb5780ded"/>
+				<reportElement x="50" y="0" width="701" height="17" uuid="c357b252-3dda-4bd8-8073-2a6fb5780ded"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -141,6 +141,10 @@ select laborat_kesling_parameter_pengujian.kode_parameter,laborat_kesling_parame
 				<reportElement x="0" y="2" width="48" height="45" uuid="93b53ec9-a612-4942-88f3-24457ed934c7"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="753" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<line>
 				<reportElement x="0" y="48" width="801" height="1" uuid="98268673-5d51-4da7-af30-abd5c5db9e7c"/>
 				<graphicElement>

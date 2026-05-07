@@ -96,7 +96,7 @@
 				<text><![CDATA[Data Rekap Mutasi Berkas]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="e54df92d-14ec-4104-87cd-e813f199bf58">
+				<reportElement x="50" y="25" width="702" height="14" uuid="e54df92d-14ec-4104-87cd-e813f199bf58">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -106,7 +106,7 @@
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="a7ccd94b-81a8-45d2-b615-7ca7b45ca7a1">
+				<reportElement x="50" y="0" width="702" height="17" uuid="a7ccd94b-81a8-45d2-b615-7ca7b45ca7a1">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -116,7 +116,7 @@
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="031d42fb-31e5-4f67-8a04-fabd7fed6b09">
+				<reportElement x="50" y="35" width="702" height="14" uuid="031d42fb-31e5-4f67-8a04-fabd7fed6b09">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -132,7 +132,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="b86e9bfa-74b4-43ee-85d1-f7dfc197115b">
+				<reportElement x="50" y="14" width="702" height="14" uuid="b86e9bfa-74b4-43ee-85d1-f7dfc197115b">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -145,6 +145,10 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="118f292e-d38a-40c3-ae3d-5bf1f7b2bff1"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

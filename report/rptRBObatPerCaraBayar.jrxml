@@ -74,7 +74,7 @@
 				<text><![CDATA[REKAP PENGGUNAAN OBAT PER CARA BAYAR]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="35" width="553" height="14"/>
+				<reportElement x="50" y="35" width="455" height="14"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="9"/>
 				</textElement>
@@ -87,14 +87,14 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="553" height="14"/>
+				<reportElement x="50" y="14" width="455" height="14"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="553" height="17"/>
+				<reportElement x="50" y="0" width="455" height="17"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="12"/>
 				</textElement>
@@ -104,8 +104,12 @@
 				<reportElement x="0" y="2" width="48" height="45"/>
 				<imageExpression class="java.io.InputStream"><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="507" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="25" width="553" height="14"/>
+				<reportElement x="50" y="25" width="455" height="14"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="9"/>
 				</textElement>

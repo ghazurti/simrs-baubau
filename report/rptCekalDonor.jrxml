@@ -80,7 +80,7 @@ inner join petugas on utd_cekal_darah.petugas_pemusnahan=petugas.nip]]>
 				<text><![CDATA[DATA PENCEKALAN DARAH]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="daf80d5a-1eca-4666-80d8-73dfaf92c3d3"/>
+				<reportElement x="50" y="14" width="702" height="14" uuid="daf80d5a-1eca-4666-80d8-73dfaf92c3d3"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -88,7 +88,7 @@ inner join petugas on utd_cekal_darah.petugas_pemusnahan=petugas.nip]]>
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="bc057702-cabd-4833-9651-534b585e45e6"/>
+				<reportElement x="50" y="35" width="702" height="14" uuid="bc057702-cabd-4833-9651-534b585e45e6"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -96,7 +96,7 @@ inner join petugas on utd_cekal_darah.petugas_pemusnahan=petugas.nip]]>
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="5d2d0890-1db6-459d-90b2-454288aa3ca1"/>
+				<reportElement x="50" y="25" width="702" height="14" uuid="5d2d0890-1db6-459d-90b2-454288aa3ca1"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -113,8 +113,12 @@ inner join petugas on utd_cekal_darah.petugas_pemusnahan=petugas.nip]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="b3947d0e-00be-4423-8c13-dd0e09b63f0d"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="ffcb876b-5642-45b0-bb55-dcb15a8f049c"/>
+				<reportElement x="50" y="0" width="702" height="17" uuid="ffcb876b-5642-45b0-bb55-dcb15a8f049c"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>

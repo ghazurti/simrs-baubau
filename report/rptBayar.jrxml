@@ -125,6 +125,10 @@ bayar_piutang.catatan, bayar_piutang.no_rawat from bayar_piutang inner join pasi
 				<reportElement x="0" y="2" width="48" height="45" uuid="9d8b6c3d-5be8-4480-8e24-9c120884b1f8"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<line>
 				<reportElement x="0" y="48" width="802" height="1" uuid="4c7b2b56-9e9b-4c00-a86b-0c5997e783f7"/>
 				<graphicElement>

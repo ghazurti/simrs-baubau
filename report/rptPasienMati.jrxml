@@ -154,7 +154,7 @@ inner join dokter on pasien_mati.kd_dokter=dokter.kd_dokter]]>
 				<text><![CDATA[ DATA PASIEN MENINGGAL]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="0" width="958" height="17" uuid="d1705260-213d-46b9-a421-57570c44ae76"/>
+				<reportElement x="50" y="0" width="860" height="17" uuid="d1705260-213d-46b9-a421-57570c44ae76"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -162,7 +162,7 @@ inner join dokter on pasien_mati.kd_dokter=dokter.kd_dokter]]>
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="958" height="14" uuid="892d99e0-c43a-4793-b629-fca737492b28"/>
+				<reportElement x="50" y="25" width="860" height="14" uuid="892d99e0-c43a-4793-b629-fca737492b28"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -170,7 +170,7 @@ inner join dokter on pasien_mati.kd_dokter=dokter.kd_dokter]]>
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="958" height="14" uuid="495348e3-5782-4a3e-bd6e-5c3a0653580c"/>
+				<reportElement x="50" y="14" width="860" height="14" uuid="495348e3-5782-4a3e-bd6e-5c3a0653580c"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -184,7 +184,7 @@ inner join dokter on pasien_mati.kd_dokter=dokter.kd_dokter]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="35" width="958" height="14" uuid="31b2d318-e8cf-42fb-96fc-a8b70365c68d"/>
+				<reportElement x="50" y="35" width="860" height="14" uuid="31b2d318-e8cf-42fb-96fc-a8b70365c68d"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -195,6 +195,10 @@ inner join dokter on pasien_mati.kd_dokter=dokter.kd_dokter]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="88c10de6-ab9f-44a7-8d59-5c42c2e6d2b0"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="912" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

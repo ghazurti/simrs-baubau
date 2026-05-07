@@ -66,7 +66,7 @@ and returpasien.kode_brng=databarang.kode_brng]]>
 				<text><![CDATA[DATA PEMBERIAN STOK OBAT, ALKES & BHP MEDIS DI RANAP]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="b02c86aa-a0ca-406c-83a4-6ad2f38c426f"/>
+				<reportElement x="50" y="0" width="702" height="17" uuid="b02c86aa-a0ca-406c-83a4-6ad2f38c426f"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -74,7 +74,7 @@ and returpasien.kode_brng=databarang.kode_brng]]>
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="cef74345-6b40-4065-99c1-860b6c21239a"/>
+				<reportElement x="50" y="35" width="702" height="14" uuid="cef74345-6b40-4065-99c1-860b6c21239a"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -82,7 +82,7 @@ and returpasien.kode_brng=databarang.kode_brng]]>
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="0b39754d-167b-43e2-b0ea-0a0a7ade7834"/>
+				<reportElement x="50" y="25" width="702" height="14" uuid="0b39754d-167b-43e2-b0ea-0a0a7ade7834"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -96,7 +96,7 @@ and returpasien.kode_brng=databarang.kode_brng]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="68d778ee-3992-446b-bbf2-63fca2c349a3"/>
+				<reportElement x="50" y="14" width="702" height="14" uuid="68d778ee-3992-446b-bbf2-63fca2c349a3"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -107,6 +107,10 @@ and returpasien.kode_brng=databarang.kode_brng]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="7df298f4-12c2-4c00-bbf2-c64a03d1a6a6"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

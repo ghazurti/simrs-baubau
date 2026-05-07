@@ -249,7 +249,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="798" height="14" uuid="00e72a34-c7a0-4294-9cf9-f5791d119cbc"/>
+				<reportElement x="50" y="14" width="700" height="14" uuid="00e72a34-c7a0-4294-9cf9-f5791d119cbc"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -257,7 +257,7 @@
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="798" height="14" uuid="ebaae671-55f5-4ac8-9445-0c5121f8e8a2"/>
+				<reportElement x="50" y="35" width="700" height="14" uuid="ebaae671-55f5-4ac8-9445-0c5121f8e8a2"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -265,7 +265,7 @@
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="798" height="17" uuid="ecc8b95f-613e-4d08-8c24-485f338996a9"/>
+				<reportElement x="50" y="0" width="700" height="17" uuid="ecc8b95f-613e-4d08-8c24-485f338996a9"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -273,7 +273,7 @@
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="798" height="14" uuid="d05aa3a2-fb21-44ba-8416-a2eec03bbb4f"/>
+				<reportElement x="50" y="25" width="700" height="14" uuid="d05aa3a2-fb21-44ba-8416-a2eec03bbb4f"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -284,6 +284,10 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="4dbeae4b-ea72-4cef-a0cc-59bf3802c830"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="752" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<staticText>
 				<reportElement mode="Opaque" x="0" y="83" width="88" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="c055c364-7427-4dc5-9cb9-8915f8359854"/>
 				<textElement verticalAlignment="Middle">

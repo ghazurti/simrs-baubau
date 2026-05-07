@@ -88,7 +88,7 @@
 				<text><![CDATA[TRANSAKSI PIUTANG]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="14" width="958" height="14" uuid="f40ff456-7f0d-4be9-9c12-67d554109db9"/>
+				<reportElement x="50" y="14" width="860" height="14" uuid="f40ff456-7f0d-4be9-9c12-67d554109db9"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -96,7 +96,7 @@
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="958" height="14" uuid="2327c584-581d-4f93-b71b-9e21c9bdc668"/>
+				<reportElement x="50" y="25" width="860" height="14" uuid="2327c584-581d-4f93-b71b-9e21c9bdc668"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -104,7 +104,7 @@
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="958" height="14" uuid="1623a7a0-83ff-4f48-b78e-9231344b7ef0"/>
+				<reportElement x="50" y="35" width="860" height="14" uuid="1623a7a0-83ff-4f48-b78e-9231344b7ef0"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -115,8 +115,12 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="8eea6b18-45e6-43b6-adda-4fde6291836c"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="912" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="0" width="958" height="17" uuid="48a9b79d-d400-4911-a009-2111c6bae430"/>
+				<reportElement x="50" y="0" width="860" height="17" uuid="48a9b79d-d400-4911-a009-2111c6bae430"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>

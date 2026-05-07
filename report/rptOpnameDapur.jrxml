@@ -119,7 +119,7 @@
 				<text><![CDATA[TRANSAKSI STOK OPNAME BARANG DAPUR KERING & BASAH]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="7ac685ae-0122-430f-b2b5-a29967342c54"/>
+				<reportElement x="50" y="0" width="702" height="17" uuid="7ac685ae-0122-430f-b2b5-a29967342c54"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -127,7 +127,7 @@
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="35ffff80-cbc9-481c-9ed4-1d0eb39bd953"/>
+				<reportElement x="50" y="35" width="702" height="14" uuid="35ffff80-cbc9-481c-9ed4-1d0eb39bd953"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -135,7 +135,7 @@
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="2c71d98a-5d96-4b53-9228-ecaa6db447df"/>
+				<reportElement x="50" y="25" width="702" height="14" uuid="2c71d98a-5d96-4b53-9228-ecaa6db447df"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -149,7 +149,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="82f67366-55c1-48ec-8d29-f1d06c5f3a31"/>
+				<reportElement x="50" y="14" width="702" height="14" uuid="82f67366-55c1-48ec-8d29-f1d06c5f3a31"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -160,6 +160,10 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="02db4376-0530-4e3b-8fd1-d1ba02cd7939"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

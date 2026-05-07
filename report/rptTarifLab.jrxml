@@ -64,14 +64,14 @@ from jns_perawatan_lab inner join penjab on penjab.kd_pj=jns_perawatan_lab.kd_pj
 				<text><![CDATA[ DATA TARIF LABORATORIUM]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14"/>
+				<reportElement x="50" y="25" width="702" height="14"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14"/>
+				<reportElement x="50" y="35" width="702" height="14"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="9"/>
 				</textElement>
@@ -81,8 +81,12 @@ from jns_perawatan_lab inner join penjab on penjab.kd_pj=jns_perawatan_lab.kd_pj
 				<reportElement x="0" y="2" width="48" height="45"/>
 				<imageExpression class="java.io.InputStream"><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14"/>
+				<reportElement x="50" y="14" width="702" height="14"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="9"/>
 				</textElement>
@@ -95,7 +99,7 @@ from jns_perawatan_lab inner join penjab on penjab.kd_pj=jns_perawatan_lab.kd_pj
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17"/>
+				<reportElement x="50" y="0" width="702" height="17"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="12"/>
 				</textElement>

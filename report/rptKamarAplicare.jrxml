@@ -72,8 +72,12 @@ order by aplicare_ketersediaan_kamar.kode_kelas_aplicare]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="2ef44ace-89af-4866-b1d0-72316133a22e"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="506" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="0" width="552" height="17" uuid="cfc8c5c0-aa66-49cf-9963-c99d8862512f"/>
+				<reportElement x="50" y="0" width="454" height="17" uuid="cfc8c5c0-aa66-49cf-9963-c99d8862512f"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -81,7 +85,7 @@ order by aplicare_ketersediaan_kamar.kode_kelas_aplicare]]>
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="552" height="14" uuid="a6835396-7692-4f68-906f-829299a19cda"/>
+				<reportElement x="50" y="14" width="454" height="14" uuid="a6835396-7692-4f68-906f-829299a19cda"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -89,7 +93,7 @@ order by aplicare_ketersediaan_kamar.kode_kelas_aplicare]]>
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="552" height="14" uuid="b0640b7a-be32-481a-a7a2-6c9b40cb259f"/>
+				<reportElement x="50" y="35" width="454" height="14" uuid="b0640b7a-be32-481a-a7a2-6c9b40cb259f"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -97,7 +101,7 @@ order by aplicare_ketersediaan_kamar.kode_kelas_aplicare]]>
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="552" height="14" uuid="233cf517-0fd4-48c8-93ac-468568efa009"/>
+				<reportElement x="50" y="25" width="454" height="14" uuid="233cf517-0fd4-48c8-93ac-468568efa009"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>

@@ -198,7 +198,7 @@ and insiden_keselamatan_pasien.rtl like $P{parameter} order by insiden_keselamat
 				<text><![CDATA[ DATA INSIDEN KESELAMATAN PASIEN]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="14" width="2091" height="14" uuid="551380eb-2703-45e2-ac40-fb4c8a4c71da"/>
+				<reportElement x="50" y="14" width="1993" height="14" uuid="551380eb-2703-45e2-ac40-fb4c8a4c71da"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -206,7 +206,7 @@ and insiden_keselamatan_pasien.rtl like $P{parameter} order by insiden_keselamat
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="2091" height="14" uuid="5bf76188-75e3-41ba-9b05-3049ddb38853"/>
+				<reportElement x="50" y="35" width="1993" height="14" uuid="5bf76188-75e3-41ba-9b05-3049ddb38853"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -214,7 +214,7 @@ and insiden_keselamatan_pasien.rtl like $P{parameter} order by insiden_keselamat
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="2091" height="14" uuid="56b9e834-b121-4c98-8ea5-19cf6f8304e8"/>
+				<reportElement x="50" y="25" width="1993" height="14" uuid="56b9e834-b121-4c98-8ea5-19cf6f8304e8"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -231,8 +231,12 @@ and insiden_keselamatan_pasien.rtl like $P{parameter} order by insiden_keselamat
 				<reportElement x="0" y="2" width="48" height="45" uuid="3ac14a70-1eec-4a53-8712-9583b868d916"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="2045" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="0" width="2091" height="17" uuid="5dcd0b40-e8cc-40b3-a633-116bfe4f6b52"/>
+				<reportElement x="50" y="0" width="1993" height="17" uuid="5dcd0b40-e8cc-40b3-a633-116bfe4f6b52"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>

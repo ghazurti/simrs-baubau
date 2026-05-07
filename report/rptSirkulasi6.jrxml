@@ -163,6 +163,10 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="e2742d1a-a4a6-4d75-9b45-59158a6a94ce"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="2103" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<line>
 				<reportElement x="0" y="48" width="2151" height="1" uuid="7d969bfb-f225-4643-9684-cd68dbd1a304"/>
 				<graphicElement>

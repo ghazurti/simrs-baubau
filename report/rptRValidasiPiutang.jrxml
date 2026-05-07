@@ -81,7 +81,7 @@ inner join detail_penagihan_piutang on detail_penagihan_piutang.no_tagihan=penag
 				<text><![CDATA[REKAP TAGIHAN PIUTANG]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="f2bed61b-37d5-4e6a-9264-6529eabc96cf"/>
+				<reportElement x="50" y="25" width="702" height="14" uuid="f2bed61b-37d5-4e6a-9264-6529eabc96cf"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -95,7 +95,7 @@ inner join detail_penagihan_piutang on detail_penagihan_piutang.no_tagihan=penag
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="6b21609b-83e5-4480-9b96-cd2d0e216cb7"/>
+				<reportElement x="50" y="35" width="702" height="14" uuid="6b21609b-83e5-4480-9b96-cd2d0e216cb7"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -103,7 +103,7 @@ inner join detail_penagihan_piutang on detail_penagihan_piutang.no_tagihan=penag
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="cab5a14c-3763-4ab7-9283-6b38a6e0c70f"/>
+				<reportElement x="50" y="0" width="702" height="17" uuid="cab5a14c-3763-4ab7-9283-6b38a6e0c70f"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -111,7 +111,7 @@ inner join detail_penagihan_piutang on detail_penagihan_piutang.no_tagihan=penag
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="ab794811-9a77-4059-a01e-abc125d262bb"/>
+				<reportElement x="50" y="14" width="702" height="14" uuid="ab794811-9a77-4059-a01e-abc125d262bb"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -122,6 +122,10 @@ inner join detail_penagihan_piutang on detail_penagihan_piutang.no_tagihan=penag
 				<reportElement x="0" y="2" width="48" height="45" uuid="5069c420-ffab-46eb-bc34-fa5722512606"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

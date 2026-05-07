@@ -146,8 +146,12 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="51ad9a93-76ca-49d2-b7a1-3e03f405c669"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="507" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="14" width="553" height="14" uuid="26e5951c-a75d-4a8f-8273-c5d2952a41b6"/>
+				<reportElement x="50" y="14" width="455" height="14" uuid="26e5951c-a75d-4a8f-8273-c5d2952a41b6"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -155,7 +159,7 @@
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="553" height="14" uuid="65261bd1-54f7-4a00-a5e6-676b33812562"/>
+				<reportElement x="50" y="25" width="455" height="14" uuid="65261bd1-54f7-4a00-a5e6-676b33812562"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -169,7 +173,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="35" width="553" height="14" uuid="ae82855b-57fa-439b-a0b2-bb5b2063010d"/>
+				<reportElement x="50" y="35" width="455" height="14" uuid="ae82855b-57fa-439b-a0b2-bb5b2063010d"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -177,7 +181,7 @@
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="553" height="17" uuid="ebe96734-0b51-44f1-b340-32f80b869c78"/>
+				<reportElement x="50" y="0" width="455" height="17" uuid="ebe96734-0b51-44f1-b340-32f80b869c78"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>

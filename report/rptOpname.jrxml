@@ -124,7 +124,7 @@ on opname.kode_brng=databarang.kode_brng and opname.kd_bangsal=bangsal.kd_bangsa
 				<text><![CDATA[TRANSAKSI STOK OPNAME]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="0" width="958" height="17" uuid="5389231d-a388-46cc-9877-3719e0f1003b"/>
+				<reportElement x="50" y="0" width="860" height="17" uuid="5389231d-a388-46cc-9877-3719e0f1003b"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -132,7 +132,7 @@ on opname.kode_brng=databarang.kode_brng and opname.kd_bangsal=bangsal.kd_bangsa
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="958" height="14" uuid="5e3cff3f-5eba-4c9a-8a8f-dfbf6f601cf9"/>
+				<reportElement x="50" y="35" width="860" height="14" uuid="5e3cff3f-5eba-4c9a-8a8f-dfbf6f601cf9"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -140,7 +140,7 @@ on opname.kode_brng=databarang.kode_brng and opname.kd_bangsal=bangsal.kd_bangsa
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="958" height="14" uuid="091cbd56-7ce1-495e-a741-0a135810c190"/>
+				<reportElement x="50" y="25" width="860" height="14" uuid="091cbd56-7ce1-495e-a741-0a135810c190"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -154,7 +154,7 @@ on opname.kode_brng=databarang.kode_brng and opname.kd_bangsal=bangsal.kd_bangsa
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="958" height="14" uuid="5c793076-3178-4042-aa3e-b56af3b1fe29"/>
+				<reportElement x="50" y="14" width="860" height="14" uuid="5c793076-3178-4042-aa3e-b56af3b1fe29"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -165,6 +165,10 @@ on opname.kode_brng=databarang.kode_brng and opname.kd_bangsal=bangsal.kd_bangsa
 				<reportElement x="0" y="2" width="48" height="45" uuid="2b174138-c92d-4556-9057-f36676455fb9"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="912" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

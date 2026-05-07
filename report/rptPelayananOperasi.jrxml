@@ -101,7 +101,7 @@ inner join paket_operasi on paket_operasi.kode_paket=operasi.kode_paket]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="d60c020b-9e24-4595-848b-a77bd6383f16"/>
+				<reportElement x="50" y="14" width="702" height="14" uuid="d60c020b-9e24-4595-848b-a77bd6383f16"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -109,7 +109,7 @@ inner join paket_operasi on paket_operasi.kode_paket=operasi.kode_paket]]>
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="24cf3d15-6ff3-4c0f-92f1-00c70994094e"/>
+				<reportElement x="50" y="35" width="702" height="14" uuid="24cf3d15-6ff3-4c0f-92f1-00c70994094e"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -117,7 +117,7 @@ inner join paket_operasi on paket_operasi.kode_paket=operasi.kode_paket]]>
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="8944bcb4-3ee7-45aa-8e33-02f6df7192f9"/>
+				<reportElement x="50" y="25" width="702" height="14" uuid="8944bcb4-3ee7-45aa-8e33-02f6df7192f9"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -125,7 +125,7 @@ inner join paket_operasi on paket_operasi.kode_paket=operasi.kode_paket]]>
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="3ad7a13a-a98a-49da-9c29-8156e8b655c4"/>
+				<reportElement x="50" y="0" width="702" height="17" uuid="3ad7a13a-a98a-49da-9c29-8156e8b655c4"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -136,6 +136,10 @@ inner join paket_operasi on paket_operasi.kode_paket=operasi.kode_paket]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="6d1d6e96-93c8-423d-87cb-fd5bd747fba3"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<line>
 				<reportElement x="0" y="48" width="802" height="1" uuid="487fa14a-53a8-4b69-ad56-954911e72086"/>
 				<graphicElement>

@@ -86,7 +86,7 @@
 				<text><![CDATA[SURAT PEMESANAN BARANG]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="14" width="553" height="14" uuid="b504dfee-7b7d-41f6-9db6-acd14d353d6c"/>
+				<reportElement x="50" y="14" width="455" height="14" uuid="b504dfee-7b7d-41f6-9db6-acd14d353d6c"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -100,7 +100,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="0" width="553" height="17" uuid="71c6c395-7f7c-4eb7-bbed-570af052bddd"/>
+				<reportElement x="50" y="0" width="455" height="17" uuid="71c6c395-7f7c-4eb7-bbed-570af052bddd"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -108,7 +108,7 @@
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="553" height="14" uuid="c948db0c-49fd-4a99-ad1e-0fd7976b566e"/>
+				<reportElement x="50" y="25" width="455" height="14" uuid="c948db0c-49fd-4a99-ad1e-0fd7976b566e"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -116,7 +116,7 @@
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="553" height="14" uuid="015eae42-2eff-41fa-a109-4fb712de44fd"/>
+				<reportElement x="50" y="35" width="455" height="14" uuid="015eae42-2eff-41fa-a109-4fb712de44fd"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -127,6 +127,10 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="6a859a5c-7b76-4d8a-add5-19202d6aedfe"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="507" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<staticText>
 				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="2" y="73" width="62" height="13" forecolor="#000000" backcolor="#F0F0DC" uuid="8c5f07b1-fe33-4ec0-9666-83e73a1006db"/>
 				<textElement verticalAlignment="Middle">

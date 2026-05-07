@@ -589,7 +589,7 @@
 				<text><![CDATA[:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="14" width="530" height="14" uuid="84631a03-b051-49d4-8d0a-4c3f84aa5da1"/>
+				<reportElement x="50" y="14" width="432" height="14" uuid="84631a03-b051-49d4-8d0a-4c3f84aa5da1"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -597,7 +597,7 @@
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="530" height="14" uuid="bd0d5ccd-dab6-49c3-9e99-140a0395b8da"/>
+				<reportElement x="50" y="35" width="432" height="14" uuid="bd0d5ccd-dab6-49c3-9e99-140a0395b8da"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -605,7 +605,7 @@
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="530" height="14" uuid="cf2111aa-26c4-43aa-9c6e-a4a4967eb713"/>
+				<reportElement x="50" y="25" width="432" height="14" uuid="cf2111aa-26c4-43aa-9c6e-a4a4967eb713"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -613,7 +613,7 @@
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="530" height="17" uuid="971db487-3b91-4e3a-9f43-be0f13b3476c"/>
+				<reportElement x="50" y="0" width="432" height="17" uuid="971db487-3b91-4e3a-9f43-be0f13b3476c"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -624,6 +624,10 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="5e218046-6cde-4c9c-b9b3-d4f1babfd341"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="484" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<line>
 				<reportElement x="0" y="48" width="532" height="1" uuid="f18e19b1-3031-4a25-a878-4f86db3e0267"/>
 				<graphicElement>

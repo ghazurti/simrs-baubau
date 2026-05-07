@@ -126,7 +126,7 @@ on bridging_srb_bpjs.no_sep=bridging_sep.no_sep]]>
 				<text><![CDATA[DATA PROGRAM PRB DI VCLAIM]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="0" width="1058" height="17" uuid="4e09921b-05a1-41cf-980b-ec43c6bdfec3"/>
+				<reportElement x="50" y="0" width="960" height="17" uuid="4e09921b-05a1-41cf-980b-ec43c6bdfec3"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -143,8 +143,12 @@ on bridging_srb_bpjs.no_sep=bridging_sep.no_sep]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="b9d6c797-a686-4d7d-a09f-a753beb1f49d"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="1012" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="14" width="1058" height="14" uuid="fb990a07-f5c6-4d4a-ba7b-56260b47ed90"/>
+				<reportElement x="50" y="14" width="960" height="14" uuid="fb990a07-f5c6-4d4a-ba7b-56260b47ed90"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -152,7 +156,7 @@ on bridging_srb_bpjs.no_sep=bridging_sep.no_sep]]>
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="1058" height="14" uuid="3a7a0a4c-bb95-48d0-8914-d35867958ca2"/>
+				<reportElement x="50" y="25" width="960" height="14" uuid="3a7a0a4c-bb95-48d0-8914-d35867958ca2"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -160,7 +164,7 @@ on bridging_srb_bpjs.no_sep=bridging_sep.no_sep]]>
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="1058" height="14" uuid="952ab167-27aa-4f07-b1b9-380090c38936"/>
+				<reportElement x="50" y="35" width="960" height="14" uuid="952ab167-27aa-4f07-b1b9-380090c38936"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>

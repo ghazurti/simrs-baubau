@@ -93,7 +93,7 @@ inner join ipsrsbarang on ipsrs_riwayat_barang.kode_brng=ipsrsbarang.kode_brng]]
 				<text><![CDATA[Riwayat Barang Dapur Kering & Basah]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="35" width="798" height="14" uuid="25346a84-dd62-4db9-85a0-934bf889e815"/>
+				<reportElement x="50" y="35" width="700" height="14" uuid="25346a84-dd62-4db9-85a0-934bf889e815"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -104,6 +104,10 @@ inner join ipsrsbarang on ipsrs_riwayat_barang.kode_brng=ipsrsbarang.kode_brng]]
 				<reportElement x="0" y="2" width="48" height="45" uuid="e1b87413-deec-49e6-ac4d-4604b9981b5d"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="752" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<line>
 				<reportElement x="0" y="48" width="800" height="1" uuid="1cc7145f-4cb5-4718-ab9f-19f95450d6b9"/>
 				<graphicElement>
@@ -111,7 +115,7 @@ inner join ipsrsbarang on ipsrs_riwayat_barang.kode_brng=ipsrsbarang.kode_brng]]
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="0" width="798" height="17" uuid="295d1646-5587-4bbf-9f5b-edc02f6815d0"/>
+				<reportElement x="50" y="0" width="700" height="17" uuid="295d1646-5587-4bbf-9f5b-edc02f6815d0"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -119,7 +123,7 @@ inner join ipsrsbarang on ipsrs_riwayat_barang.kode_brng=ipsrsbarang.kode_brng]]
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="798" height="14" uuid="608f3ff4-c507-4b78-b9cb-21c872c10ccf"/>
+				<reportElement x="50" y="25" width="700" height="14" uuid="608f3ff4-c507-4b78-b9cb-21c872c10ccf"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -127,7 +131,7 @@ inner join ipsrsbarang on ipsrs_riwayat_barang.kode_brng=ipsrsbarang.kode_brng]]
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="798" height="14" uuid="0b4c29e8-92be-498a-9d0a-b10e08de0db0"/>
+				<reportElement x="50" y="14" width="700" height="14" uuid="0b4c29e8-92be-498a-9d0a-b10e08de0db0"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>

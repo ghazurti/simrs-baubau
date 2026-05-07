@@ -64,7 +64,7 @@ group by ipsrsbarang.kode_brng order by ipsrsbarang.kode_brng]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="553" height="14" uuid="a91465f6-e382-471c-87cc-d0694b59708e"/>
+				<reportElement x="50" y="14" width="455" height="14" uuid="a91465f6-e382-471c-87cc-d0694b59708e"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -72,7 +72,7 @@ group by ipsrsbarang.kode_brng order by ipsrsbarang.kode_brng]]>
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="553" height="14" uuid="6c5153ae-f716-40f8-afd4-b9261de5aef2"/>
+				<reportElement x="50" y="35" width="455" height="14" uuid="6c5153ae-f716-40f8-afd4-b9261de5aef2"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -80,7 +80,7 @@ group by ipsrsbarang.kode_brng order by ipsrsbarang.kode_brng]]>
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="553" height="14" uuid="bd87862c-6322-49e6-8466-899b82a7be11"/>
+				<reportElement x="50" y="25" width="455" height="14" uuid="bd87862c-6322-49e6-8466-899b82a7be11"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -88,7 +88,7 @@ group by ipsrsbarang.kode_brng order by ipsrsbarang.kode_brng]]>
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="553" height="17" uuid="fc1c4284-886a-40ea-b796-c5d5138021ae"/>
+				<reportElement x="50" y="0" width="455" height="17" uuid="fc1c4284-886a-40ea-b796-c5d5138021ae"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -99,6 +99,10 @@ group by ipsrsbarang.kode_brng order by ipsrsbarang.kode_brng]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="ba372c40-e4da-448f-b900-a836be202567"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="507" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<line>
 				<reportElement x="0" y="48" width="555" height="1" uuid="cf552d39-d7e7-416b-aaf0-2c8bd8125a13"/>
 				<graphicElement>

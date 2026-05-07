@@ -137,7 +137,7 @@ from pemesanan inner join datasuplier inner join petugas inner join bangsal
 				<text><![CDATA[REKAP PENERIMAAN BARANG]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="14" width="1303" height="14" uuid="1ef6ba8b-cafa-4a05-8272-01631b0ff7a4"/>
+				<reportElement x="50" y="14" width="1205" height="14" uuid="1ef6ba8b-cafa-4a05-8272-01631b0ff7a4"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -151,7 +151,7 @@ from pemesanan inner join datasuplier inner join petugas inner join bangsal
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="0" width="1303" height="17" uuid="1f768145-64e4-4520-81f4-c7e4e2e10b28"/>
+				<reportElement x="50" y="0" width="1205" height="17" uuid="1f768145-64e4-4520-81f4-c7e4e2e10b28"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -159,7 +159,7 @@ from pemesanan inner join datasuplier inner join petugas inner join bangsal
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="1303" height="14" uuid="4fa9d6d1-b460-4f39-bf32-e2286f0144cd"/>
+				<reportElement x="50" y="25" width="1205" height="14" uuid="4fa9d6d1-b460-4f39-bf32-e2286f0144cd"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -167,7 +167,7 @@ from pemesanan inner join datasuplier inner join petugas inner join bangsal
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="1303" height="14" uuid="5823c51d-e882-4c22-a65c-ba7ba77b4afb"/>
+				<reportElement x="50" y="35" width="1205" height="14" uuid="5823c51d-e882-4c22-a65c-ba7ba77b4afb"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -178,6 +178,10 @@ from pemesanan inner join datasuplier inner join petugas inner join bangsal
 				<reportElement x="0" y="2" width="48" height="45" uuid="c56c998f-3997-4c16-bae3-c704014f8689"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="1257" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

@@ -85,7 +85,7 @@ inner join detail_nota_jalan on detail_nota_jalan.no_rawat=reg_periksa.no_rawat]
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="35" width="553" height="14" uuid="ea53ddcb-c344-4ec6-8415-81032793f2b1"/>
+				<reportElement x="50" y="35" width="455" height="14" uuid="ea53ddcb-c344-4ec6-8415-81032793f2b1"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -93,7 +93,7 @@ inner join detail_nota_jalan on detail_nota_jalan.no_rawat=reg_periksa.no_rawat]
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="553" height="17" uuid="ded8e136-8bb9-4ee7-88b9-a5a362e2bbe1"/>
+				<reportElement x="50" y="0" width="455" height="17" uuid="ded8e136-8bb9-4ee7-88b9-a5a362e2bbe1"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -101,7 +101,7 @@ inner join detail_nota_jalan on detail_nota_jalan.no_rawat=reg_periksa.no_rawat]
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="553" height="14" uuid="09d749fe-4244-464f-926a-fd90c96778d1"/>
+				<reportElement x="50" y="14" width="455" height="14" uuid="09d749fe-4244-464f-926a-fd90c96778d1"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -112,8 +112,12 @@ inner join detail_nota_jalan on detail_nota_jalan.no_rawat=reg_periksa.no_rawat]
 				<reportElement x="0" y="2" width="48" height="45" uuid="93744411-f252-4ca3-a116-d5570b3235e2"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="507" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="25" width="553" height="14" uuid="e34dc67e-0124-4a2b-b511-063b2e04d17a"/>
+				<reportElement x="50" y="25" width="455" height="14" uuid="e34dc67e-0124-4a2b-b511-063b2e04d17a"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>

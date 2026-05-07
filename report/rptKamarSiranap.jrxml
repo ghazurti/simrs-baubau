@@ -71,8 +71,12 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="8538e4cd-2615-4086-8605-da0c9c00ba95"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="1cb6ed17-15ff-4eb0-adb5-d3c19b163d06"/>
+				<reportElement x="50" y="0" width="702" height="17" uuid="1cb6ed17-15ff-4eb0-adb5-d3c19b163d06"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -80,7 +84,7 @@
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="0e81eedd-73f1-40f5-bbb5-4ae8e34e478a"/>
+				<reportElement x="50" y="14" width="702" height="14" uuid="0e81eedd-73f1-40f5-bbb5-4ae8e34e478a"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -88,7 +92,7 @@
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="1a643150-e3e2-4f47-ab59-430f520cb295"/>
+				<reportElement x="50" y="35" width="702" height="14" uuid="1a643150-e3e2-4f47-ab59-430f520cb295"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -96,7 +100,7 @@
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="dc03f812-b80f-4d8f-8032-0d9d0abb7b89"/>
+				<reportElement x="50" y="25" width="702" height="14" uuid="dc03f812-b80f-4d8f-8032-0d9d0abb7b89"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>

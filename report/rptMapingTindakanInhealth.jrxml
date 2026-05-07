@@ -71,7 +71,7 @@ like $P{parameter} order by jns_perawatan.nm_perawatan]]>
 				<text><![CDATA[MAPPING TARIF TINDAKAN RAWAT JALAN RS & INHEALTH]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="0" width="798" height="17" uuid="be2d25a7-d909-4743-b67e-1112c4c8ec42"/>
+				<reportElement x="50" y="0" width="700" height="17" uuid="be2d25a7-d909-4743-b67e-1112c4c8ec42"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -79,7 +79,7 @@ like $P{parameter} order by jns_perawatan.nm_perawatan]]>
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="798" height="14" uuid="e2a7b8cc-71a5-4f89-b962-d93981316272"/>
+				<reportElement x="50" y="14" width="700" height="14" uuid="e2a7b8cc-71a5-4f89-b962-d93981316272"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -87,7 +87,7 @@ like $P{parameter} order by jns_perawatan.nm_perawatan]]>
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="798" height="14" uuid="49182953-b90f-42bc-8464-8a9ee341fa94"/>
+				<reportElement x="50" y="25" width="700" height="14" uuid="49182953-b90f-42bc-8464-8a9ee341fa94"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -101,7 +101,7 @@ like $P{parameter} order by jns_perawatan.nm_perawatan]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="35" width="798" height="14" uuid="6f46eb49-97e3-412c-8e88-5bfaf4fff441"/>
+				<reportElement x="50" y="35" width="700" height="14" uuid="6f46eb49-97e3-412c-8e88-5bfaf4fff441"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -112,6 +112,10 @@ like $P{parameter} order by jns_perawatan.nm_perawatan]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="3d02543f-f022-47a7-8f90-306a0cfd00c5"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="752" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

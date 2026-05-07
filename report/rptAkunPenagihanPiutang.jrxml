@@ -55,7 +55,7 @@ on akun_penagihan_piutang.kd_rek=rekening.kd_rek ]]>
 				<text><![CDATA[DATA AKUN PENAGIHAN PIUTANG]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="25" width="553" height="14" uuid="26a269da-a6de-4e25-9828-a52a6be4e468"/>
+				<reportElement x="50" y="25" width="455" height="14" uuid="26a269da-a6de-4e25-9828-a52a6be4e468"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -63,7 +63,7 @@ on akun_penagihan_piutang.kd_rek=rekening.kd_rek ]]>
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="553" height="17" uuid="1a3f68a8-0852-4c56-8649-ecf519489c74"/>
+				<reportElement x="50" y="0" width="455" height="17" uuid="1a3f68a8-0852-4c56-8649-ecf519489c74"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -71,7 +71,7 @@ on akun_penagihan_piutang.kd_rek=rekening.kd_rek ]]>
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="553" height="14" uuid="3ba7f4bf-7986-4def-b44f-950485812d53"/>
+				<reportElement x="50" y="35" width="455" height="14" uuid="3ba7f4bf-7986-4def-b44f-950485812d53"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -85,7 +85,7 @@ on akun_penagihan_piutang.kd_rek=rekening.kd_rek ]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="553" height="14" uuid="358bb5c1-2245-4fb6-ac73-5d11e072b45d"/>
+				<reportElement x="50" y="14" width="455" height="14" uuid="358bb5c1-2245-4fb6-ac73-5d11e072b45d"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -96,6 +96,10 @@ on akun_penagihan_piutang.kd_rek=rekening.kd_rek ]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="8806f9aa-f4f5-41aa-8813-737290cf2b68"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="507" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

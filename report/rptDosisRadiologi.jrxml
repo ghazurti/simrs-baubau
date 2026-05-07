@@ -165,6 +165,10 @@ inner join jns_perawatan_radiologi on periksa_radiologi.kd_jenis_prw=jns_perawat
 				<reportElement x="0" y="2" width="48" height="45" uuid="0b5ac850-d047-49b2-9a74-6249b9e226e8"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="915" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
 				<reportElement x="2" y="0" width="963" height="17" uuid="dace3819-932a-480b-b0b1-f5f7e8b4be00"/>
 				<textElement textAlignment="Center">

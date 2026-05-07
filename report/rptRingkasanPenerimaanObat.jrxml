@@ -98,7 +98,7 @@ and databarang.kode_industri=industrifarmasi.kode_industri
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="553" height="14" uuid="5c9dbeb7-703c-4c44-b102-2fa74528c819"/>
+				<reportElement x="50" y="14" width="455" height="14" uuid="5c9dbeb7-703c-4c44-b102-2fa74528c819"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -106,7 +106,7 @@ and databarang.kode_industri=industrifarmasi.kode_industri
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="553" height="14" uuid="275ac47b-b588-4a38-b939-f38dd41adc03"/>
+				<reportElement x="50" y="35" width="455" height="14" uuid="275ac47b-b588-4a38-b939-f38dd41adc03"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -114,7 +114,7 @@ and databarang.kode_industri=industrifarmasi.kode_industri
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="553" height="14" uuid="7c1edb41-bf73-41b0-9a13-67f88d814a8a"/>
+				<reportElement x="50" y="25" width="455" height="14" uuid="7c1edb41-bf73-41b0-9a13-67f88d814a8a"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -122,7 +122,7 @@ and databarang.kode_industri=industrifarmasi.kode_industri
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="553" height="17" uuid="d7751b36-4d9c-40c4-887e-42fa93a335d5"/>
+				<reportElement x="50" y="0" width="455" height="17" uuid="d7751b36-4d9c-40c4-887e-42fa93a335d5"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -133,6 +133,10 @@ and databarang.kode_industri=industrifarmasi.kode_industri
 				<reportElement x="0" y="2" width="48" height="45" uuid="69dc3268-634b-4d09-acd9-1affd9551086"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="507" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<line>
 				<reportElement x="0" y="48" width="555" height="1" uuid="082c1f56-ed25-4bc3-8109-e49b9e7af4b8"/>
 				<graphicElement>

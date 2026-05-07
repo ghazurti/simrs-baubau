@@ -73,7 +73,7 @@
 				<text><![CDATA[OBAT/ALKES/BHP TIDAK BERGERAK]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="35" width="553" height="14" uuid="e8eb224c-2bf1-4375-ba78-a38d41957434"/>
+				<reportElement x="50" y="35" width="455" height="14" uuid="e8eb224c-2bf1-4375-ba78-a38d41957434"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -84,6 +84,10 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="51dc49f4-c61d-4de3-bf7e-464e49b24e68"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="507" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<line>
 				<reportElement x="0" y="48" width="555" height="1" uuid="5a6a86ac-42df-44e5-86e7-ffabd9aaf357"/>
 				<graphicElement>
@@ -91,7 +95,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="0" width="553" height="17" uuid="606936a8-d8ef-41bb-a2bd-0cf9cc77ada2"/>
+				<reportElement x="50" y="0" width="455" height="17" uuid="606936a8-d8ef-41bb-a2bd-0cf9cc77ada2"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -99,7 +103,7 @@
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="553" height="14" uuid="090a30f7-cae9-40de-8fbb-1a99d2225018"/>
+				<reportElement x="50" y="25" width="455" height="14" uuid="090a30f7-cae9-40de-8fbb-1a99d2225018"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -107,7 +111,7 @@
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="553" height="14" uuid="ea34d863-b217-4d83-828b-c1c93d4a748e"/>
+				<reportElement x="50" y="14" width="455" height="14" uuid="ea34d863-b217-4d83-828b-c1c93d4a748e"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>

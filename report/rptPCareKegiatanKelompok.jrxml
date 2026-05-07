@@ -78,7 +78,7 @@
 				<text><![CDATA[DATA KEGIATAN KELOMPOK PCARE]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="47d08fd8-9bf3-4528-a3da-304dfaa643ab"/>
+				<reportElement x="50" y="0" width="702" height="17" uuid="47d08fd8-9bf3-4528-a3da-304dfaa643ab"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -86,7 +86,7 @@
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="a1cb1e5f-545b-4e1d-97c5-da1b8afe46d9"/>
+				<reportElement x="50" y="14" width="702" height="14" uuid="a1cb1e5f-545b-4e1d-97c5-da1b8afe46d9"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -94,7 +94,7 @@
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="254f8001-f753-44b2-8dab-246b74d770c0"/>
+				<reportElement x="50" y="25" width="702" height="14" uuid="254f8001-f753-44b2-8dab-246b74d770c0"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -108,7 +108,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="234e45c8-f4a8-4a7b-b5fd-2e96b14d48f9"/>
+				<reportElement x="50" y="35" width="702" height="14" uuid="234e45c8-f4a8-4a7b-b5fd-2e96b14d48f9"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -119,6 +119,10 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="a161135b-f655-4e47-bb8e-599493011009"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

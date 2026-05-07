@@ -127,8 +127,12 @@ on pasien.no_rkm_medis=pasien_bayi.no_rkm_medis and pasien_bayi.penolong=pegawai
 				<reportElement x="0" y="2" width="48" height="45" uuid="8c046d89-db97-426b-8d5b-8e53735ec461"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="507" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="0" width="553" height="17" uuid="e1acb534-9283-43cf-bf1e-ca685c5b78f9"/>
+				<reportElement x="50" y="0" width="455" height="17" uuid="e1acb534-9283-43cf-bf1e-ca685c5b78f9"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -136,7 +140,7 @@ on pasien.no_rkm_medis=pasien_bayi.no_rkm_medis and pasien_bayi.penolong=pegawai
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="553" height="14" uuid="6f69fce7-e38b-4aa5-b7a8-278805291aa4"/>
+				<reportElement x="50" y="25" width="455" height="14" uuid="6f69fce7-e38b-4aa5-b7a8-278805291aa4"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -144,7 +148,7 @@ on pasien.no_rkm_medis=pasien_bayi.no_rkm_medis and pasien_bayi.penolong=pegawai
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="553" height="14" uuid="0186622a-f23f-4c85-81f3-b8b4d1dba10e"/>
+				<reportElement x="50" y="14" width="455" height="14" uuid="0186622a-f23f-4c85-81f3-b8b4d1dba10e"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -152,7 +156,7 @@ on pasien.no_rkm_medis=pasien_bayi.no_rkm_medis and pasien_bayi.penolong=pegawai
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="553" height="14" uuid="9c66e2ce-170e-43f8-a65b-860f3da72e1f"/>
+				<reportElement x="50" y="35" width="455" height="14" uuid="9c66e2ce-170e-43f8-a65b-860f3da72e1f"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>

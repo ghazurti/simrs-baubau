@@ -150,7 +150,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="35" width="1205" height="14" uuid="b80411e8-9f97-4b18-a9b0-8f303d0e3c00">
+				<reportElement x="50" y="35" width="1107" height="14" uuid="b80411e8-9f97-4b18-a9b0-8f303d0e3c00">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -160,7 +160,7 @@
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="1205" height="17" uuid="d6fb1ca2-5459-4301-b7b0-4b0e18a6a4fe">
+				<reportElement x="50" y="0" width="1107" height="17" uuid="d6fb1ca2-5459-4301-b7b0-4b0e18a6a4fe">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -170,7 +170,7 @@
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="1205" height="14" uuid="3c8c34b2-2768-4e57-8115-dbfb0d57cff0">
+				<reportElement x="50" y="25" width="1107" height="14" uuid="3c8c34b2-2768-4e57-8115-dbfb0d57cff0">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -183,8 +183,12 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="dbf1a8de-f33c-45f1-ac36-a1aecf0d8019"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="1159" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="14" width="1205" height="14" uuid="1cde569c-1f8e-42f8-94f7-42b7ff678bd8">
+				<reportElement x="50" y="14" width="1107" height="14" uuid="1cde569c-1f8e-42f8-94f7-42b7ff678bd8">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">

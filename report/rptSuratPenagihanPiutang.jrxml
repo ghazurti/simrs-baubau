@@ -94,7 +94,7 @@
 				<text><![CDATA[INVOICE]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="14" width="553" height="14" uuid="f4e2edf9-6460-48f2-b07a-53492c2c8336"/>
+				<reportElement x="50" y="14" width="455" height="14" uuid="f4e2edf9-6460-48f2-b07a-53492c2c8336"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -108,7 +108,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="0" width="553" height="17" uuid="a9a8fe65-8113-4fa2-9d86-12b0a4f5dcd1"/>
+				<reportElement x="50" y="0" width="455" height="17" uuid="a9a8fe65-8113-4fa2-9d86-12b0a4f5dcd1"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -116,7 +116,7 @@
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="553" height="14" uuid="d226ddc0-bb1d-4910-b7bf-0eaf0c0ef44a"/>
+				<reportElement x="50" y="25" width="455" height="14" uuid="d226ddc0-bb1d-4910-b7bf-0eaf0c0ef44a"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -124,7 +124,7 @@
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="553" height="14" uuid="d76686ff-3c09-4a99-b087-57d5a07ba27e"/>
+				<reportElement x="50" y="35" width="455" height="14" uuid="d76686ff-3c09-4a99-b087-57d5a07ba27e"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -135,6 +135,10 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="f0e1a7f3-d9bd-4fee-8916-a8992395adab"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="507" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" x="1" y="64" width="329" height="11" uuid="a472723b-033b-4f06-b178-ed981802da5f"/>
 				<textElement verticalAlignment="Middle">

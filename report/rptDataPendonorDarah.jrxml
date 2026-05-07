@@ -103,7 +103,7 @@ order by utd_pendonor.no_pendonor desc]]>
 	<title>
 		<band height="84" splitType="Stretch">
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="6563be9c-caca-4e1b-aaec-63b3a84c379b"/>
+				<reportElement x="50" y="35" width="702" height="14" uuid="6563be9c-caca-4e1b-aaec-63b3a84c379b"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -111,7 +111,7 @@ order by utd_pendonor.no_pendonor desc]]>
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="fd9bf289-7ef0-44e2-b222-36892279002d"/>
+				<reportElement x="50" y="0" width="702" height="17" uuid="fd9bf289-7ef0-44e2-b222-36892279002d"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -119,7 +119,7 @@ order by utd_pendonor.no_pendonor desc]]>
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="3ec2c053-a1e0-4c5e-9802-966271e6cfca"/>
+				<reportElement x="50" y="25" width="702" height="14" uuid="3ec2c053-a1e0-4c5e-9802-966271e6cfca"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -127,7 +127,7 @@ order by utd_pendonor.no_pendonor desc]]>
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="8a4f01f2-9f19-4cbc-9058-c4c559a10b32"/>
+				<reportElement x="50" y="14" width="702" height="14" uuid="8a4f01f2-9f19-4cbc-9058-c4c559a10b32"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -152,6 +152,10 @@ order by utd_pendonor.no_pendonor desc]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="3ae302ce-ec44-452a-9c98-9af8a5c02895"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

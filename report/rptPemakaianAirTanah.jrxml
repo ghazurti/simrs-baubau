@@ -59,7 +59,7 @@ from kesling_pemakaian_air_tanah inner join petugas on kesling_pemakaian_air_tan
 				<text><![CDATA[DATA PEMAKAIAN AIR TANAH]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="14" width="553" height="14" uuid="2521781a-3cf6-4397-943f-02785209e376"/>
+				<reportElement x="50" y="14" width="455" height="14" uuid="2521781a-3cf6-4397-943f-02785209e376"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -67,7 +67,7 @@ from kesling_pemakaian_air_tanah inner join petugas on kesling_pemakaian_air_tan
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="553" height="14" uuid="97a604ec-9f10-4cce-a219-f81da5e1253a"/>
+				<reportElement x="50" y="35" width="455" height="14" uuid="97a604ec-9f10-4cce-a219-f81da5e1253a"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -75,7 +75,7 @@ from kesling_pemakaian_air_tanah inner join petugas on kesling_pemakaian_air_tan
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="553" height="14" uuid="9deb14a5-f73a-4d1b-b9ba-3cf5fa8166a7"/>
+				<reportElement x="50" y="25" width="455" height="14" uuid="9deb14a5-f73a-4d1b-b9ba-3cf5fa8166a7"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -92,8 +92,12 @@ from kesling_pemakaian_air_tanah inner join petugas on kesling_pemakaian_air_tan
 				<reportElement x="0" y="2" width="48" height="45" uuid="9cfb8678-91d7-4d95-b54b-100ff601af91"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="507" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="0" width="553" height="17" uuid="46fac298-d1e7-4be1-9f0c-625f372f53f2"/>
+				<reportElement x="50" y="0" width="455" height="17" uuid="46fac298-d1e7-4be1-9f0c-625f372f53f2"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>

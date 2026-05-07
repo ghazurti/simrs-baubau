@@ -173,7 +173,7 @@ booking_registrasi.kd_dokter=dokter.kd_dokter and booking_registrasi.kd_poli=pol
 				<text><![CDATA[DATA BOOKING REGISTRASI]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="0" width="958" height="17" uuid="c259c9e9-d03b-4c33-a272-d43120c69ad8"/>
+				<reportElement x="50" y="0" width="860" height="17" uuid="c259c9e9-d03b-4c33-a272-d43120c69ad8"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -181,7 +181,7 @@ booking_registrasi.kd_dokter=dokter.kd_dokter and booking_registrasi.kd_poli=pol
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="958" height="14" uuid="452df2ec-390b-405b-b9ce-6ff1bae74efa"/>
+				<reportElement x="50" y="25" width="860" height="14" uuid="452df2ec-390b-405b-b9ce-6ff1bae74efa"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -189,7 +189,7 @@ booking_registrasi.kd_dokter=dokter.kd_dokter and booking_registrasi.kd_poli=pol
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="958" height="14" uuid="ba13d6aa-b588-440a-83c8-dcbcd822adf8"/>
+				<reportElement x="50" y="14" width="860" height="14" uuid="ba13d6aa-b588-440a-83c8-dcbcd822adf8"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -203,7 +203,7 @@ booking_registrasi.kd_dokter=dokter.kd_dokter and booking_registrasi.kd_poli=pol
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="35" width="958" height="14" uuid="c6fb27a7-4a6e-4180-9915-9ed1b9777590"/>
+				<reportElement x="50" y="35" width="860" height="14" uuid="c6fb27a7-4a6e-4180-9915-9ed1b9777590"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -214,6 +214,10 @@ booking_registrasi.kd_dokter=dokter.kd_dokter and booking_registrasi.kd_poli=pol
 				<reportElement x="0" y="2" width="48" height="45" uuid="8190e05c-3cb4-4cde-8c3c-6eeaf118f378"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="912" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

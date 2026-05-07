@@ -127,7 +127,7 @@ and skrining_rawat_jalan.nip=petugas.nip]]>
 				<text><![CDATA[DATA SKRINING RAWAT JALAN]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="14" width="965" height="14" uuid="f546dce4-2e1e-484c-9f37-567eb2ef7b25">
+				<reportElement x="50" y="14" width="867" height="14" uuid="f546dce4-2e1e-484c-9f37-567eb2ef7b25">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -137,7 +137,7 @@ and skrining_rawat_jalan.nip=petugas.nip]]>
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="965" height="14" uuid="a7b9530a-b0f0-463c-ac47-4bfa90f9d6f8"/>
+				<reportElement x="50" y="35" width="867" height="14" uuid="a7b9530a-b0f0-463c-ac47-4bfa90f9d6f8"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -145,7 +145,7 @@ and skrining_rawat_jalan.nip=petugas.nip]]>
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="965" height="14" uuid="eb81626e-c753-469e-bd7f-48de62812d02">
+				<reportElement x="50" y="25" width="867" height="14" uuid="eb81626e-c753-469e-bd7f-48de62812d02">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -164,8 +164,12 @@ and skrining_rawat_jalan.nip=petugas.nip]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="db47d6e9-176e-48c3-b8a6-1269c7c78caf"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="919" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="0" width="965" height="17" uuid="920829f5-38b3-4562-82ec-37eae600ca7d">
+				<reportElement x="50" y="0" width="867" height="17" uuid="920829f5-38b3-4562-82ec-37eae600ca7d">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">

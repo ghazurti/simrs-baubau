@@ -222,6 +222,10 @@ inner join propinsi on pasien.kd_prop=propinsi.kd_prop]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="652b608f-63de-4d76-9e4c-10de151605f9"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="1202" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

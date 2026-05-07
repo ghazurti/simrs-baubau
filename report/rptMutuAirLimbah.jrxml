@@ -125,7 +125,7 @@ from kesling_mutu_air_limbah inner join petugas on kesling_mutu_air_limbah.nip=p
 				<text><![CDATA[DATA MUTU AIR LIMBAH]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="14" width="798" height="14" uuid="57550a95-9bb1-42dc-9593-735ea2832aeb"/>
+				<reportElement x="50" y="14" width="700" height="14" uuid="57550a95-9bb1-42dc-9593-735ea2832aeb"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -133,7 +133,7 @@ from kesling_mutu_air_limbah inner join petugas on kesling_mutu_air_limbah.nip=p
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="798" height="14" uuid="7f6ed2ed-9339-4c4a-a440-6750b19ec564"/>
+				<reportElement x="50" y="35" width="700" height="14" uuid="7f6ed2ed-9339-4c4a-a440-6750b19ec564"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -141,7 +141,7 @@ from kesling_mutu_air_limbah inner join petugas on kesling_mutu_air_limbah.nip=p
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="798" height="14" uuid="5b910803-9601-434b-8907-291f66b8b2ed"/>
+				<reportElement x="50" y="25" width="700" height="14" uuid="5b910803-9601-434b-8907-291f66b8b2ed"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -158,8 +158,12 @@ from kesling_mutu_air_limbah inner join petugas on kesling_mutu_air_limbah.nip=p
 				<reportElement x="0" y="2" width="48" height="45" uuid="8b5028b4-ca39-426c-9f2a-f38d190bf10c"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="752" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="0" width="798" height="17" uuid="23824d61-fed3-44ea-aaf5-fc77b1258d47"/>
+				<reportElement x="50" y="0" width="700" height="17" uuid="23824d61-fed3-44ea-aaf5-fc77b1258d47"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>

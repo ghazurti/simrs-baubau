@@ -142,7 +142,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="35" width="1686" height="14" uuid="45127029-6204-472f-99c5-369091566222"/>
+				<reportElement x="50" y="35" width="1588" height="14" uuid="45127029-6204-472f-99c5-369091566222"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -150,7 +150,7 @@
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="1686" height="17" uuid="f33c9125-7f32-4cf7-902a-884a00f7a4aa"/>
+				<reportElement x="50" y="0" width="1588" height="17" uuid="f33c9125-7f32-4cf7-902a-884a00f7a4aa"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -158,7 +158,7 @@
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="1686" height="14" uuid="e8892c42-c38b-4db8-9ab8-0b6d6277dcb1"/>
+				<reportElement x="50" y="25" width="1588" height="14" uuid="e8892c42-c38b-4db8-9ab8-0b6d6277dcb1"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -169,8 +169,12 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="f4703377-4432-435d-8a82-b2c903837cf3"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="1640" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="14" width="1686" height="14" uuid="7d608833-c87a-488e-9341-da85ad16e8fd"/>
+				<reportElement x="50" y="14" width="1588" height="14" uuid="7d608833-c87a-488e-9341-da85ad16e8fd"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>

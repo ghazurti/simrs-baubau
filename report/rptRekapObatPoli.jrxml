@@ -76,7 +76,7 @@
 				<text><![CDATA[REKAP PENGGUNAAN OBAT PER POLI]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="35" width="553" height="14" uuid="7a8909bd-b568-4fa6-8571-7f6b143cd3e4"/>
+				<reportElement x="50" y="35" width="455" height="14" uuid="7a8909bd-b568-4fa6-8571-7f6b143cd3e4"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -90,7 +90,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="553" height="14" uuid="158b8e99-e301-4ea7-ad6e-f2d182a02789"/>
+				<reportElement x="50" y="14" width="455" height="14" uuid="158b8e99-e301-4ea7-ad6e-f2d182a02789"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -98,7 +98,7 @@
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="553" height="17" uuid="ac5bdf1c-b347-4f23-b151-13f3534b73d8"/>
+				<reportElement x="50" y="0" width="455" height="17" uuid="ac5bdf1c-b347-4f23-b151-13f3534b73d8"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -109,8 +109,12 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="eab40a09-245e-4116-8851-b61a2f689bfa"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="507" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="25" width="553" height="14" uuid="248da512-5330-46d3-9b9e-2fa922d93554"/>
+				<reportElement x="50" y="25" width="455" height="14" uuid="248da512-5330-46d3-9b9e-2fa922d93554"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>

@@ -246,7 +246,7 @@ inner join bangsal on stok_obat_pasien.kd_bangsal=bangsal.kd_bangsal]]>
 				<text><![CDATA[DATA PEMBERIAN STOK OBAT, ALKES & BHP MEDIS PASIEN RANAP]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="0" width="1318" height="17" uuid="f8a43708-72cd-43fc-a611-3c9061cebac2"/>
+				<reportElement x="50" y="0" width="1220" height="17" uuid="f8a43708-72cd-43fc-a611-3c9061cebac2"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -254,7 +254,7 @@ inner join bangsal on stok_obat_pasien.kd_bangsal=bangsal.kd_bangsal]]>
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="1318" height="14" uuid="1e4149eb-892f-44bf-a7fc-2a45b4c0e797"/>
+				<reportElement x="50" y="35" width="1220" height="14" uuid="1e4149eb-892f-44bf-a7fc-2a45b4c0e797"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -262,7 +262,7 @@ inner join bangsal on stok_obat_pasien.kd_bangsal=bangsal.kd_bangsal]]>
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="1318" height="14" uuid="370db41d-3fe7-42fa-8618-acec52dc33da"/>
+				<reportElement x="50" y="25" width="1220" height="14" uuid="370db41d-3fe7-42fa-8618-acec52dc33da"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -276,7 +276,7 @@ inner join bangsal on stok_obat_pasien.kd_bangsal=bangsal.kd_bangsal]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="1318" height="14" uuid="e85503c5-1156-4dc4-9e63-5b4688b71729"/>
+				<reportElement x="50" y="14" width="1220" height="14" uuid="e85503c5-1156-4dc4-9e63-5b4688b71729"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -287,6 +287,10 @@ inner join bangsal on stok_obat_pasien.kd_bangsal=bangsal.kd_bangsal]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="d8013287-f74f-44ff-83c5-a514c3255363"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="1272" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

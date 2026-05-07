@@ -111,7 +111,7 @@ order by reg_periksa.tgl_registrasi,reg_periksa.jam_reg]]>
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="4345e865-38cb-42a1-b065-bd73ea59d8b1"/>
+				<reportElement x="50" y="14" width="702" height="14" uuid="4345e865-38cb-42a1-b065-bd73ea59d8b1"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -119,7 +119,7 @@ order by reg_periksa.tgl_registrasi,reg_periksa.jam_reg]]>
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="2bea3167-a707-477b-9280-ba5cae30fe72"/>
+				<reportElement x="50" y="35" width="702" height="14" uuid="2bea3167-a707-477b-9280-ba5cae30fe72"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -127,7 +127,7 @@ order by reg_periksa.tgl_registrasi,reg_periksa.jam_reg]]>
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="720416a2-5d45-42e2-ad67-94f0a1ba0086"/>
+				<reportElement x="50" y="25" width="702" height="14" uuid="720416a2-5d45-42e2-ad67-94f0a1ba0086"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -135,7 +135,7 @@ order by reg_periksa.tgl_registrasi,reg_periksa.jam_reg]]>
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="ebdbb80e-05a2-4267-9a45-47d4a88e8a59"/>
+				<reportElement x="50" y="0" width="702" height="17" uuid="ebdbb80e-05a2-4267-9a45-47d4a88e8a59"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -146,6 +146,10 @@ order by reg_periksa.tgl_registrasi,reg_periksa.jam_reg]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="5417d3a9-8ee5-4bfc-ae40-5a2872127f78"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<line>
 				<reportElement x="0" y="48" width="802" height="1" uuid="8cc619b8-ec99-451c-8585-b143a3db4b1c"/>
 				<graphicElement>

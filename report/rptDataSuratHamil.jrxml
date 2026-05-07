@@ -71,7 +71,7 @@ inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis]]>
 				<text><![CDATA[DATA SURAT KETERANGAN HAMIL/ TIDAK HAMIL]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="14" width="552" height="14" uuid="6b2cb1f1-e487-41ae-b640-59a5b2ef91ea"/>
+				<reportElement x="50" y="14" width="454" height="14" uuid="6b2cb1f1-e487-41ae-b640-59a5b2ef91ea"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -79,7 +79,7 @@ inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis]]>
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="552" height="14" uuid="65db79cf-cba3-4fb7-b2fd-0e63fda69c24"/>
+				<reportElement x="50" y="35" width="454" height="14" uuid="65db79cf-cba3-4fb7-b2fd-0e63fda69c24"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -87,7 +87,7 @@ inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis]]>
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="552" height="14" uuid="db8be3a4-2d13-4768-b782-299104bc3024"/>
+				<reportElement x="50" y="25" width="454" height="14" uuid="db8be3a4-2d13-4768-b782-299104bc3024"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -104,8 +104,12 @@ inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis]]>
 				<reportElement x="0" y="2" width="48" height="45" uuid="ce3070cf-4a33-4dc9-93ec-03298d6eb0f6"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="506" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="0" width="552" height="17" uuid="a84bcbf9-da7d-4fc8-bae7-fe255abf8a64"/>
+				<reportElement x="50" y="0" width="454" height="17" uuid="a84bcbf9-da7d-4fc8-bae7-fe255abf8a64"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>

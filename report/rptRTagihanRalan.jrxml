@@ -151,7 +151,7 @@
 				<text><![CDATA[DATA PEMBAYARAN PASIEN RALAN PER TANGGAL REGISTRASI]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="14" width="958" height="14" uuid="7704b975-31a0-493e-b7d9-99d9a6c99200"/>
+				<reportElement x="50" y="14" width="860" height="14" uuid="7704b975-31a0-493e-b7d9-99d9a6c99200"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -159,7 +159,7 @@
 				<textFieldExpression><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="958" height="14" uuid="34cb290b-02a6-4d4f-a7fe-b817ca12bef1"/>
+				<reportElement x="50" y="25" width="860" height="14" uuid="34cb290b-02a6-4d4f-a7fe-b817ca12bef1"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -167,7 +167,7 @@
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="958" height="14" uuid="cb60a651-94a9-4791-a094-918492e66cbc"/>
+				<reportElement x="50" y="35" width="860" height="14" uuid="cb60a651-94a9-4791-a094-918492e66cbc"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -175,7 +175,7 @@
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="958" height="17" uuid="2f2ad453-2002-49e9-8707-880fec3d16ee"/>
+				<reportElement x="50" y="0" width="860" height="17" uuid="2f2ad453-2002-49e9-8707-880fec3d16ee"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -192,6 +192,10 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="d192de38-46ed-48c2-8f5b-89543a472444"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="912" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

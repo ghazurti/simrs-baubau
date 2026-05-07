@@ -135,7 +135,7 @@ inner join bahasa_pasien on bahasa_pasien.id=pasien.bahasa_pasien inner join suk
 				<text><![CDATA[DATA PASIEN]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="7f0daedd-9fe6-4742-a1be-45d6bc9a33ee"/>
+				<reportElement x="50" y="0" width="702" height="17" uuid="7f0daedd-9fe6-4742-a1be-45d6bc9a33ee"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -143,7 +143,7 @@ inner join bahasa_pasien on bahasa_pasien.id=pasien.bahasa_pasien inner join suk
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="f13da290-9ece-4155-812c-919aa40152ad"/>
+				<reportElement x="50" y="25" width="702" height="14" uuid="f13da290-9ece-4155-812c-919aa40152ad"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -151,7 +151,7 @@ inner join bahasa_pasien on bahasa_pasien.id=pasien.bahasa_pasien inner join suk
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="b5f9ce8f-f791-48b2-8d99-54f12ca73cda"/>
+				<reportElement x="50" y="14" width="702" height="14" uuid="b5f9ce8f-f791-48b2-8d99-54f12ca73cda"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -165,7 +165,7 @@ inner join bahasa_pasien on bahasa_pasien.id=pasien.bahasa_pasien inner join suk
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="c1fbbb6f-cd14-4f5f-88d5-8442e22290c1"/>
+				<reportElement x="50" y="35" width="702" height="14" uuid="c1fbbb6f-cd14-4f5f-88d5-8442e22290c1"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -176,6 +176,10 @@ inner join bahasa_pasien on bahasa_pasien.id=pasien.bahasa_pasien inner join suk
 				<reportElement x="0" y="2" width="48" height="45" uuid="beb84e7e-be42-4d35-85d7-35ac1345ecde"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 		</band>
 	</title>
 	<pageHeader>

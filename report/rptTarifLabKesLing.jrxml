@@ -122,7 +122,7 @@
 				<text><![CDATA[Tarif & Parameter Pengujian Laboratorium Kesehatan Lingkungan]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="2" y="25" width="963" height="14" uuid="faeecbda-11a9-47a7-944d-18690ec17229"/>
+				<reportElement x="50" y="25" width="865" height="14" uuid="faeecbda-11a9-47a7-944d-18690ec17229"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -130,7 +130,7 @@
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="35" width="963" height="14" uuid="6ee830d4-953a-4d47-ba68-1dc3e954c224"/>
+				<reportElement x="50" y="35" width="865" height="14" uuid="6ee830d4-953a-4d47-ba68-1dc3e954c224"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -141,8 +141,12 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="24a5756d-2db0-45a0-96c0-9fdea06dc328"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="917" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="14" width="963" height="14" uuid="7f1949b1-c39f-4c81-9894-6553de186b16"/>
+				<reportElement x="50" y="14" width="865" height="14" uuid="7f1949b1-c39f-4c81-9894-6553de186b16"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -156,7 +160,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="0" width="963" height="17" uuid="5ef30773-8ceb-4007-b4e4-fdde5def8cea">
+				<reportElement x="50" y="0" width="865" height="17" uuid="5ef30773-8ceb-4007-b4e4-fdde5def8cea">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Center">

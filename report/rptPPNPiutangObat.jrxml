@@ -98,7 +98,7 @@
 				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="2" y="35" width="800" height="14" uuid="ad9d72df-9beb-49c7-95cc-7eea2554d588"/>
+				<reportElement x="50" y="35" width="702" height="14" uuid="ad9d72df-9beb-49c7-95cc-7eea2554d588"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -106,7 +106,7 @@
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="0" width="800" height="17" uuid="02548bb4-6064-4ff8-bae7-ef2ac1be2c8c"/>
+				<reportElement x="50" y="0" width="702" height="17" uuid="02548bb4-6064-4ff8-bae7-ef2ac1be2c8c"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="12"/>
 					<paragraph lineSpacing="Single"/>
@@ -114,7 +114,7 @@
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="14" width="800" height="14" uuid="93117361-c6d7-4c3c-9860-d18b5407c5f0"/>
+				<reportElement x="50" y="14" width="702" height="14" uuid="93117361-c6d7-4c3c-9860-d18b5407c5f0"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -125,8 +125,12 @@
 				<reportElement x="0" y="2" width="48" height="45" uuid="ad7a668b-819c-49dd-87bd-69bfe797d05a"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
+				<image scaleImage="RetainShape" onErrorType="Blank">
+					<reportElement x="754" y="2" width="48" height="45"/>
+					<imageExpression><![CDATA[new java.io.FileInputStream("./report/logo2.jpg")]]></imageExpression>
+				</image>
 			<textField>
-				<reportElement x="2" y="25" width="800" height="14" uuid="65abfc94-702d-4adb-920f-62b46edc2748"/>
+				<reportElement x="50" y="25" width="702" height="14" uuid="65abfc94-702d-4adb-920f-62b46edc2748"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
