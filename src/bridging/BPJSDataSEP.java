@@ -6525,9 +6525,9 @@ public final class BPJSDataSEP extends javax.swing.JDialog {
     
     public void isCek(){
         BtnSimpan.setEnabled(akses.getbpjs_sep());
-        BtnHapus.setEnabled(akses.gethapus_edit_sep_bpjs());
+        BtnHapus.setEnabled(akses.getkode().equals("Admin Utama"));
         BtnPrint.setEnabled(akses.getbpjs_sep());
-        BtnEdit.setEnabled(akses.gethapus_edit_sep_bpjs());      
+        BtnEdit.setEnabled(akses.getbpjs_sep());
         ppDetailSEPPeserta.setEnabled(akses.getbpjs_sep());
         ppPengajuan.setEnabled(akses.getbpjs_sep());
         ppPengajuan1.setEnabled(akses.getbpjs_sep());

@@ -385,6 +385,7 @@ import laporan.DlgRL4ASebab;
 import laporan.DlgRL4B;
 import laporan.DlgRL4BSebab;
 import laporan.DlgRl32;
+import laporan.DlgRujukanMasuk;
 import laporan.DlgRl33;
 import laporan.DlgRl34;
 import laporan.DlgRl36;
@@ -24187,7 +24188,7 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
             btnPCRAICRALokasiKelompokRisiko,btnPCRAICRAKelasRisikoPencegahan,btnPCRAICRATindakanPengendalian,btnPCRAICRAIdentifikasiRisikoInfeksi,btnPCRAICRAIdentifikasiRisikoKeselamatan,
             btnPCRAICRAIdentifikasiRisikoKebakaran,btnPCRAICRAIdentifikasiRisikoUtilitas,btnBPJSResepObatApotek,btnObatApolApotekBPJS,btnPermintaanResepIterasiApotekBPJS,btnPCRAICRAPengkajianRisikoPraKonstruksi,
             btnPCRAICRAPersyaratanHarusDipenuhi,btnKirimQRTelaahFarmasiSatuSehat,btnKirimAllergiSatuSehat,btnKonsultasiPerawat,btnMappingProsedurSmartKlaimBPJS,btnMappingPenyakitSmartKlaimBPJS,btnKirimFHIRSmartKlaimBPJS,
-            btnSuratPermintaanBinrohtal;
+            btnSuratPermintaanBinrohtal,btnRujukanMasukWilayah;
     
     public void isWall(){
         try{            
@@ -29143,7 +29144,10 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
                 Panelmenu.add(btnGrafikPerPerujuk);
                 jmlmenu++;
             }
-            
+
+            Panelmenu.add(btnRujukanMasukWilayah);
+            jmlmenu++;
+
             if(akses.getgrafik_lab_ralanbulan()==true){
                 Panelmenu.add(btnGrafikLabRalanPerBulan);
                 jmlmenu++;
@@ -35084,7 +35088,10 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
             Panelmenu.add(btnGrafikPerPerujuk);
             jmlmenu++;
         }
-        
+
+        Panelmenu.add(btnRujukanMasukWilayah);
+        jmlmenu++;
+
         if(akses.getgrafik_lab_ralanbulan()==true){
             Panelmenu.add(btnGrafikLabRalanPerBulan);
             jmlmenu++;
@@ -42942,7 +42949,12 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
             if(btnGrafikPerPerujuk.getText().toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())){
                 Panelmenu.add(btnGrafikPerPerujuk);
                 jmlmenu++;
-            }                
+            }
+        }
+
+        if(btnRujukanMasukWilayah.getText().toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())){
+            Panelmenu.add(btnRujukanMasukWilayah);
+            jmlmenu++;
         }
         
         if(akses.getgrafik_lab_ralanbulan()==true){
@@ -50446,11 +50458,30 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         btnKirimAllergiSatuSehat.addActionListener(this::btnKirimAllergiSatuSehatActionPerformed);
         
         btnKonsultasiPerawat = new widget.ButtonBig();
-        btnKonsultasiPerawat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/discuss_12922995.png"))); 
+        btnKonsultasiPerawat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/discuss_12922995.png")));
         btnKonsultasiPerawat.setText("Konsultasi Perawat");
         btnKonsultasiPerawat.setIconTextGap(0);
-        btnKonsultasiPerawat.setName("btnKonsultasiPerawat"); 
+        btnKonsultasiPerawat.setName("btnKonsultasiPerawat");
         btnKonsultasiPerawat.setPreferredSize(new java.awt.Dimension(200, 90));
         btnKonsultasiPerawat.addActionListener(this::btnKonsultasiPerawatActionPerformed);
+
+        btnRujukanMasukWilayah = new widget.ButtonBig();
+        btnRujukanMasukWilayah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/iconfinder_analysis_60159.png")));
+        btnRujukanMasukWilayah.setText("Rujukan Masuk per Wilayah");
+        btnRujukanMasukWilayah.setIconTextGap(0);
+        btnRujukanMasukWilayah.setName("btnRujukanMasukWilayah");
+        btnRujukanMasukWilayah.setPreferredSize(new java.awt.Dimension(200, 90));
+        btnRujukanMasukWilayah.addActionListener(this::btnRujukanMasukWilayahActionPerformed);
+    }
+
+    private void btnRujukanMasukWilayahActionPerformed(java.awt.event.ActionEvent evt) {
+        isTutup();
+        DlgHome.dispose();
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        DlgRujukanMasuk aplikasi = new DlgRujukanMasuk(this, false);
+        aplikasi.setSize(PanelUtama.getWidth(), PanelUtama.getHeight());
+        aplikasi.setLocationRelativeTo(PanelUtama);
+        aplikasi.setVisible(true);
+        this.setCursor(Cursor.getDefaultCursor());
     }
 }

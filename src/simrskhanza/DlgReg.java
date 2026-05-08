@@ -282,6 +282,13 @@ import permintaan.DlgPermintaanKonsultasiPerawat;
 import rekammedis.RMDataSkriningGiziKehamilan;
 import surat.SuratPermintaanBinrohtal;
 import surat.SuratSerahTerimaBarangAnggotaTubuh;
+import bridging.ApiMobileJKN;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 /**
  *
  * @author dosen
@@ -365,6 +372,8 @@ public final class DlgReg extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         initRegistrasi();
+        initCheckinJKNButton();
+        initBatalJKNButton();
 
         this.setLocation(8,1);
         setSize(885,674);
@@ -16577,6 +16586,101 @@ private void MnLaporanRekapKunjunganBulananPoliActionPerformed(java.awt.event.Ac
             });
             dialog.setVisible(true);
         });
+    }
+
+    private widget.Button BtnCheckinMobileJKN;
+
+    private void initCheckinJKNButton() {
+        BtnCheckinMobileJKN = new widget.Button();
+        BtnCheckinMobileJKN.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/accept.png")));
+        BtnCheckinMobileJKN.setText("Checkin JKN");
+        BtnCheckinMobileJKN.setToolTipText("Checkin Mobile JKN");
+        BtnCheckinMobileJKN.setName("BtnCheckinMobileJKN");
+        BtnCheckinMobileJKN.setPreferredSize(new java.awt.Dimension(115, 30));
+        BtnCheckinMobileJKN.addActionListener(evt -> BtnCheckinMobileJKNActionPerformed(evt));
+        panelGlass6.add(BtnCheckinMobileJKN, panelGlass6.getComponentCount() - 1);
+    }
+
+    private void BtnCheckinMobileJKNActionPerformed(java.awt.event.ActionEvent evt) {
+        if (tbPetugas.getSelectedRow() == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Pilih data pasien terlebih dahulu", "Perhatian", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String norawat = tbPetugas.getValueAt(tbPetugas.getSelectedRow(), 2).toString();
+        String nobooking = Sequel.cariIsi("select nobooking from referensi_mobilejkn_bpjs where no_rawat=? and status='Belum'", norawat);
+        if (nobooking == null || nobooking.trim().equals("")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Tidak ada booking Mobile JKN yang perlu di-checkin untuk pasien ini", "Info", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(this, "Checkin Mobile JKN untuk pasien ini?", "Konfirmasi", javax.swing.JOptionPane.YES_NO_OPTION);
+        if (konfirmasi == javax.swing.JOptionPane.YES_OPTION) {
+            if (Sequel.mengedittf("referensi_mobilejkn_bpjs", "nobooking=?", "status='Checkin',validasi=now()", 1, new String[]{nobooking}) == true) {
+                Sequel.meghapus("referensi_mobilejkn_bpjs_batal", "nobooking", nobooking);
+                javax.swing.JOptionPane.showMessageDialog(this, "Checkin Mobile JKN berhasil", "Info", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }
+
+    private widget.Button BtnBatalMobileJKN;
+
+    private void initBatalJKNButton() {
+        BtnBatalMobileJKN = new widget.Button();
+        BtnBatalMobileJKN.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/cancel.png")));
+        BtnBatalMobileJKN.setText("Batal JKN");
+        BtnBatalMobileJKN.setToolTipText("Batal Antrean Mobile JKN ke BPJS");
+        BtnBatalMobileJKN.setName("BtnBatalMobileJKN");
+        BtnBatalMobileJKN.setPreferredSize(new java.awt.Dimension(115, 30));
+        BtnBatalMobileJKN.addActionListener(evt -> BtnBatalMobileJKNActionPerformed(evt));
+        panelGlass6.add(BtnBatalMobileJKN, panelGlass6.getComponentCount() - 1);
+    }
+
+    private void BtnBatalMobileJKNActionPerformed(java.awt.event.ActionEvent evt) {
+        if (tbPetugas.getSelectedRow() == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Pilih data pasien terlebih dahulu", "Perhatian", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String norawat = tbPetugas.getValueAt(tbPetugas.getSelectedRow(), 2).toString();
+        String nobooking = Sequel.cariIsi("select nobooking from referensi_mobilejkn_bpjs where no_rawat=? and status<>'Batal'", norawat);
+        if (nobooking == null || nobooking.trim().equals("")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Tidak ada booking Mobile JKN aktif untuk pasien ini", "Info", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        String keterangan = (String) javax.swing.JOptionPane.showInputDialog(
+            this, "Keterangan pembatalan:", "Batal Antrean JKN",
+            javax.swing.JOptionPane.PLAIN_MESSAGE, null, null,
+            "Terjadi Perubahan Jadwal dokter, silakan daftar kembali"
+        );
+        if (keterangan == null || keterangan.trim().equals("")) return;
+        try {
+            ApiMobileJKN apiMobileJKN = new ApiMobileJKN();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.add("x-cons-id", koneksiDB.CONSIDAPIMOBILEJKN());
+            String utc = String.valueOf(apiMobileJKN.GetUTCdatetimeAsString());
+            headers.add("x-timestamp", utc);
+            headers.add("x-signature", apiMobileJKN.getHmac(utc));
+            headers.add("user_key", koneksiDB.USERKEYAPIMOBILEJKN());
+            String requestJson = "{\"kodebooking\":\"" + nobooking + "\",\"keterangan\":\"" + keterangan + "\"}";
+            HttpEntity<String> requestEntity = new HttpEntity<>(requestJson, headers);
+            String url = koneksiDB.URLAPIMOBILEJKN() + "/batalantrean";
+            System.out.println("[BatalJKN] URL: " + url);
+            System.out.println("[BatalJKN] JSON: " + requestJson);
+            JsonNode root = new ObjectMapper().readTree(
+                apiMobileJKN.getRest().exchange(url, HttpMethod.POST, requestEntity, String.class).getBody()
+            );
+            String code = root.path("metadata").path("code").asText();
+            String message = root.path("metadata").path("message").asText();
+            System.out.println("[BatalJKN] Response code=" + code + " message=" + message);
+            if (code.equals("200")) {
+                Sequel.mengedittf("referensi_mobilejkn_bpjs", "nobooking=?", "status='Batal',validasi=now()", 1, new String[]{nobooking});
+                javax.swing.JOptionPane.showMessageDialog(this, "Batal Antrean JKN berhasil", "Info", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, "Batal Antrean JKN gagal: " + message, "Gagal", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            System.out.println("[BatalJKN] Error: " + e);
+            javax.swing.JOptionPane.showMessageDialog(this, "Error koneksi ke BPJS: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
