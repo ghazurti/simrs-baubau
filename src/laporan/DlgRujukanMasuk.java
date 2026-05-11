@@ -14,6 +14,9 @@ import fungsi.akses;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,10 +25,12 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
@@ -49,7 +54,7 @@ public final class DlgRujukanMasuk extends javax.swing.JDialog {
         this.setLocation(8,1);
         setSize(600,674);
 
-        Object[] cols={"No.","Faskes Perujuk","Jumlah Rujukan"};
+        Object[] cols={"No.","Faskes Perujuk","Poli Rujukan","Jumlah Rujukan"};
         tabMode=new DefaultTableModel(null,cols){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){return false;}
         };
@@ -60,9 +65,11 @@ public final class DlgRujukanMasuk extends javax.swing.JDialog {
         TableColumn c0 = tbBangsal.getColumnModel().getColumn(0);
         c0.setPreferredWidth(35);
         TableColumn c1 = tbBangsal.getColumnModel().getColumn(1);
-        c1.setPreferredWidth(280);
+        c1.setPreferredWidth(230);
         TableColumn c2 = tbBangsal.getColumnModel().getColumn(2);
-        c2.setPreferredWidth(120);
+        c2.setPreferredWidth(150);
+        TableColumn c3 = tbBangsal.getColumnModel().getColumn(3);
+        c3.setPreferredWidth(110);
 
         tbBangsal.setDefaultRenderer(Object.class, new WarnaTable());
         TCari.setDocument(new batasInput((byte)100).getKata(TCari));
@@ -207,6 +214,19 @@ public final class DlgRujukanMasuk extends javax.swing.JDialog {
         });
         panelGlass5.add(BtnPrint);
 
+        BtnExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/accept.png"))); // NOI18N
+        BtnExcel.setMnemonic('X');
+        BtnExcel.setText("Excel");
+        BtnExcel.setToolTipText("Alt+X - Export ke CSV/Excel");
+        BtnExcel.setName("BtnExcel"); // NOI18N
+        BtnExcel.setPreferredSize(new java.awt.Dimension(100, 30));
+        BtnExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnExcelActionPerformed(evt);
+            }
+        });
+        panelGlass5.add(BtnExcel);
+
         BtnKeluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/exit.png"))); // NOI18N
         BtnKeluar.setMnemonic('K');
         BtnKeluar.setText("Keluar");
@@ -253,7 +273,8 @@ public final class DlgRujukanMasuk extends javax.swing.JDialog {
                     Sequel.menyimpan("temporary","'"+r+"','"+
                         tabMode.getValueAt(r,0).toString()+"','"+
                         tabMode.getValueAt(r,1).toString()+"','"+
-                        tabMode.getValueAt(r,2).toString()+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Rujukan Masuk per Wilayah");
+                        tabMode.getValueAt(r,2).toString()+"','"+
+                        tabMode.getValueAt(r,3).toString()+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Rujukan Masuk per Wilayah");
                 }
             }
             Valid.MyReportqry("rptRujukanMasuk.jasper","report","::[ Laporan Rujukan Masuk per Wilayah ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
@@ -348,6 +369,7 @@ public final class DlgRujukanMasuk extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private widget.Button BtnAll;
     private widget.Button BtnCari;
+    private widget.Button BtnExcel = new widget.Button();
     private widget.Button BtnKeluar;
     private widget.Button BtnPrint;
     private widget.ScrollPane Scroll;
@@ -372,32 +394,75 @@ public final class DlgRujukanMasuk extends javax.swing.JDialog {
             String keyword = TCari.getText().trim();
 
             String sql =
-                "SELECT rujuk_masuk.perujuk, COUNT(DISTINCT rujuk_masuk.no_rawat) AS jumlah " +
+                "SELECT CASE WHEN TRIM(IFNULL(rujuk_masuk.perujuk,''))='' THEN CONCAT('Dokter: ',rujuk_masuk.dokter_perujuk) " +
+                "ELSE rujuk_masuk.perujuk END AS nama_perujuk, " +
+                "IFNULL(poliklinik.nm_poli,'-') AS nm_poli, " +
+                "COUNT(DISTINCT rujuk_masuk.no_rawat) AS jumlah " +
                 "FROM rujuk_masuk " +
                 "INNER JOIN reg_periksa ON reg_periksa.no_rawat = rujuk_masuk.no_rawat " +
+                "LEFT JOIN poliklinik ON poliklinik.kd_poli = reg_periksa.kd_poli " +
                 "WHERE reg_periksa.tgl_registrasi BETWEEN '"+tgl1+"' AND '"+tgl2+"' ";
             if(!keyword.isEmpty()){
-                sql += "AND rujuk_masuk.perujuk LIKE '%"+keyword+"%' ";
+                sql += "AND (rujuk_masuk.perujuk LIKE '%"+keyword+"%' OR rujuk_masuk.dokter_perujuk LIKE '%"+keyword+"%' OR poliklinik.nm_poli LIKE '%"+keyword+"%') ";
             }
-            sql += "GROUP BY rujuk_masuk.perujuk " +
-                   "ORDER BY jumlah DESC, rujuk_masuk.perujuk ASC";
+            sql += "GROUP BY nama_perujuk, poliklinik.nm_poli " +
+                   "ORDER BY nama_perujuk ASC, nm_poli ASC";
 
             ps = koneksi.prepareStatement(sql);
             rs = ps.executeQuery();
             i=1; total=0;
             while(rs.next()){
-                String perujuk = rs.getString("perujuk");
+                String perujuk = rs.getString("nama_perujuk");
+                String nmPoli  = rs.getString("nm_poli");
                 int jumlah     = rs.getInt("jumlah");
                 total += jumlah;
-                tabMode.addRow(new Object[]{i, perujuk, jumlah});
+                tabMode.addRow(new Object[]{i, perujuk, nmPoli, jumlah});
                 i++;
             }
             if(i>1){
-                tabMode.addRow(new Object[]{">>","TOTAL",total});
+                tabMode.addRow(new Object[]{">>","TOTAL","",total});
             }
             this.setCursor(Cursor.getDefaultCursor());
         }catch(Exception e){
             System.out.println("Notifikasi DlgRujukanMasuk: "+e);
+        }
+    }
+
+    private void BtnExcelActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabMode.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Tidak ada data untuk di-export.");
+            return;
+        }
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Simpan sebagai CSV (Excel)");
+        fc.setFileFilter(new FileNameExtensionFilter("CSV Files (*.csv)","csv"));
+        String defaultName = "RujukanMasuk_"+Tgl1.getSelectedItem()+"_sd_"+Tgl2.getSelectedItem()+".csv";
+        fc.setSelectedFile(new File(defaultName.replace("/","-").replace(" ","_")));
+        int result = fc.showSaveDialog(this);
+        if(result != JFileChooser.APPROVE_OPTION) return;
+        File f = fc.getSelectedFile();
+        if(!f.getName().toLowerCase().endsWith(".csv")) f = new File(f.getAbsolutePath()+".csv");
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(f))){
+            bw.write("Laporan Rujukan Masuk per Wilayah");
+            bw.newLine();
+            bw.write("Periode: "+Tgl1.getSelectedItem()+" s.d. "+Tgl2.getSelectedItem());
+            bw.newLine();
+            bw.write("RS: "+akses.getnamars());
+            bw.newLine();
+            bw.newLine();
+            bw.write("No.;Faskes Perujuk;Poli Rujukan;Jumlah Rujukan");
+            bw.newLine();
+            for(int r=0;r<tabMode.getRowCount();r++){
+                String no    = tabMode.getValueAt(r,0).toString();
+                String nama  = tabMode.getValueAt(r,1).toString().replace(";",".");
+                String poli  = tabMode.getValueAt(r,2).toString().replace(";",".");
+                String jml   = tabMode.getValueAt(r,3).toString();
+                bw.write(no+";"+nama+";"+poli+";"+jml);
+                bw.newLine();
+            }
+            JOptionPane.showMessageDialog(null,"Export berhasil!\n"+f.getAbsolutePath());
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Gagal export: "+e.getMessage());
         }
     }
 
