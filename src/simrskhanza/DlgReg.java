@@ -55,6 +55,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.AWTException;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -374,6 +379,7 @@ public final class DlgReg extends javax.swing.JDialog {
         initRegistrasi();
         initCheckinJKNButton();
         initBatalJKNButton();
+        initFingerPrintButton();
 
         this.setLocation(8,1);
         setSize(885,674);
@@ -16680,6 +16686,94 @@ private void MnLaporanRekapKunjunganBulananPoliActionPerformed(java.awt.event.Ac
         } catch (Exception e) {
             System.out.println("[BatalJKN] Error: " + e);
             javax.swing.JOptionPane.showMessageDialog(this, "Error koneksi ke BPJS: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private widget.Button BtnFingerPrint;
+
+    private void initFingerPrintButton() {
+        BtnFingerPrint = new widget.Button();
+        BtnFingerPrint.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/fingerbpjs.jpeg")));
+        BtnFingerPrint.setText("Finger Print");
+        BtnFingerPrint.setToolTipText("Buka Aplikasi Finger Print");
+        BtnFingerPrint.setName("BtnFingerPrint");
+        BtnFingerPrint.setPreferredSize(new java.awt.Dimension(115, 30));
+        BtnFingerPrint.addActionListener(evt -> BtnFingerPrintActionPerformed(evt));
+        panelGlass6.add(BtnFingerPrint, panelGlass6.getComponentCount() - 1);
+    }
+
+    private void BtnFingerPrintActionPerformed(java.awt.event.ActionEvent evt) {
+        if (tbPetugas.getSelectedRow() == -1) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Pilih data pasien terlebih dahulu", "Perhatian", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String noKartu = NoKa.getText().trim();
+        if (noKartu.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Nomor kartu JKN pasien tidak tersedia", "Perhatian", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        BukaFingerPrint(noKartu);
+    }
+
+    private void BukaFingerPrint(String NomorKartu) {
+        String urlaplikasi = koneksiDB.URLAPLIKASIFINGERPRINT();
+        String urlfinger   = koneksiDB.URLFINGER();
+        String userfinger  = koneksiDB.USERFINGER();
+        String passfinger  = koneksiDB.PASSFINGER();
+        if (urlaplikasi.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Path aplikasi finger print belum dikonfigurasi di database.xml (URLAPLIKASIFINGERPRINT)", "Konfigurasi", javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        this.toFront();
+        try {
+            Runtime.getRuntime().exec(urlaplikasi);
+            Robot robot = new Robot();
+            StringSelection stringSelection = new StringSelection(urlfinger);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, stringSelection);
+            Thread.sleep(1000);
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_TAB);
+            robot.keyRelease(KeyEvent.VK_TAB);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+            Thread.sleep(1500);
+            StringSelection stringSelectionuser = new StringSelection(userfinger);
+            Clipboard clipboarduser = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboarduser.setContents(stringSelectionuser, stringSelectionuser);
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_TAB);
+            robot.keyRelease(KeyEvent.VK_TAB);
+            Thread.sleep(1000);
+            StringSelection stringSelectionpass = new StringSelection(passfinger);
+            Clipboard clipboardpass = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboardpass.setContents(stringSelectionpass, stringSelectionpass);
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_ENTER);
+            robot.keyRelease(KeyEvent.VK_ENTER);
+            Thread.sleep(1000);
+            StringSelection stringSelectionnokartu = new StringSelection(NomorKartu);
+            Clipboard clipboardnokartu = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboardnokartu.setContents(stringSelectionnokartu, stringSelectionnokartu);
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_V);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+        } catch (IOException ex) {
+            System.out.println("Notif Finger : " + ex);
+        } catch (AWTException ex) {
+            System.out.println("Notif Finger : " + ex);
+        } catch (InterruptedException ex) {
+            System.out.println("Notif Finger : " + ex);
         }
     }
 

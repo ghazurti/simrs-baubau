@@ -1792,7 +1792,47 @@ public class koneksiDB {
             prop.loadFromXML(fis);
             var=prop.getProperty("URLDOKUMENSERTISIGN");
         }catch(Exception e){
-            var=""; 
+            var="";
+        }
+        return var;
+    }
+
+    public static String URLAPLIKASIFINGERPRINT(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=prop.getProperty("URLAPLIKASIFINGERPRINT");
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
+
+    public static String URLFINGER(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=prop.getProperty("URLFINGER");
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
+
+    public static String USERFINGER(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=EnkripsiAES.decrypt(prop.getProperty("USERFINGER"));
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
+
+    public static String PASSFINGER(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=EnkripsiAES.decrypt(prop.getProperty("PASSFINGER"));
+        }catch(Exception e){
+            var="";
         }
         return var;
     }
