@@ -422,7 +422,7 @@ public final class BPJSCekRujukanKartuPCare extends javax.swing.JDialog {
             ADDANTRIANAPIMOBILEJKN="";
             System.out.println("Notif : "+e);
         }
-        
+
         if(tampilkantni.equals("Yes")){
             chkPolri.setVisible(true);
             nmgolonganpolri.setVisible(true);
@@ -753,7 +753,7 @@ public final class BPJSCekRujukanKartuPCare extends javax.swing.JDialog {
 
         DTPLahir.setEditable(false);
         DTPLahir.setForeground(new java.awt.Color(50, 70, 50));
-        DTPLahir.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "30-01-2024" }));
+        DTPLahir.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "22-02-2026" }));
         DTPLahir.setDisplayFormat("dd-MM-yyyy");
         DTPLahir.setName("DTPLahir"); // NOI18N
         DTPLahir.setOpaque(false);
@@ -1314,7 +1314,7 @@ public final class BPJSCekRujukanKartuPCare extends javax.swing.JDialog {
         FormKelengkapanPasien.add(TNo);
         TNo.setBounds(107, 25, 160, 23);
 
-        DTPDaftar.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "30-01-2024" }));
+        DTPDaftar.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "22-02-2026" }));
         DTPDaftar.setDisplayFormat("dd-MM-yyyy");
         DTPDaftar.setName("DTPDaftar"); // NOI18N
         DTPDaftar.setOpaque(false);
@@ -2346,7 +2346,7 @@ public final class BPJSCekRujukanKartuPCare extends javax.swing.JDialog {
         FormKelengkapanSEP.add(jLabel23);
         jLabel23.setBounds(295, 355, 54, 23);
 
-        TanggalSEP.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "30-01-2024 11:34:33" }));
+        TanggalSEP.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "22-02-2026 08:59:55" }));
         TanggalSEP.setDisplayFormat("dd-MM-yyyy HH:mm:ss");
         TanggalSEP.setName("TanggalSEP"); // NOI18N
         TanggalSEP.setOpaque(false);
@@ -2365,7 +2365,7 @@ public final class BPJSCekRujukanKartuPCare extends javax.swing.JDialog {
         FormKelengkapanSEP.add(jLabel30);
         jLabel30.setBounds(341, 325, 50, 23);
 
-        TanggalRujuk.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "30-01-2024" }));
+        TanggalRujuk.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "22-02-2026" }));
         TanggalRujuk.setDisplayFormat("dd-MM-yyyy");
         TanggalRujuk.setName("TanggalRujuk"); // NOI18N
         TanggalRujuk.setOpaque(false);
@@ -2820,7 +2820,7 @@ public final class BPJSCekRujukanKartuPCare extends javax.swing.JDialog {
         jLabel47.setBounds(724, 25, 90, 23);
 
         TanggalKKL.setForeground(new java.awt.Color(50, 70, 50));
-        TanggalKKL.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "30-01-2024" }));
+        TanggalKKL.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "22-02-2026" }));
         TanggalKKL.setDisplayFormat("dd-MM-yyyy");
         TanggalKKL.setEnabled(false);
         TanggalKKL.setName("TanggalKKL"); // NOI18N
@@ -6419,6 +6419,63 @@ public final class BPJSCekRujukanKartuPCare extends javax.swing.JDialog {
     private widget.Table tbKamar;
     // End of variables declaration//GEN-END:variables
 
+    private void tampilBatasRujukan(String noRujukan, String tglKunjungan) {
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date tglMulai = sdf.parse(tglKunjungan);
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.setTime(tglMulai);
+            cal.add(java.util.Calendar.DAY_OF_MONTH, 90);
+            java.util.Date tglBerakhir = cal.getTime();
+            long sisaHari = (tglBerakhir.getTime() - new java.util.Date().getTime()) / (1000 * 60 * 60 * 24);
+
+            java.text.SimpleDateFormat disSdf = new java.text.SimpleDateFormat("dd-MM-yyyy");
+            String tglMulaiStr = disSdf.format(tglMulai);
+            String tglBerakhirStr = disSdf.format(tglBerakhir);
+
+            int sudahDipakai = 0;
+            try (Connection konCek = koneksiDB.condb();
+                 PreparedStatement psCek = konCek.prepareStatement(
+                         "SELECT COUNT(*) FROM bridging_sep WHERE no_rujukan = ?")) {
+                psCek.setString(1, noRujukan);
+                ResultSet rsCek = psCek.executeQuery();
+                if (rsCek.next()) sudahDipakai = rsCek.getInt(1);
+            }
+
+            final String tglM = tglMulaiStr, tglB = tglBerakhirStr;
+            final long sisa = sisaHari;
+            final int dipakai = sudahDipakai;
+
+            SwingUtilities.invokeLater(() -> {
+                String status;
+                int msgType;
+                String judul;
+                if (sisa < 0) {
+                    status  = "KADALUARSA  " + Math.abs(sisa) + " hari yang lalu";
+                    msgType = JOptionPane.WARNING_MESSAGE;
+                    judul   = "Rujukan Kadaluarsa";
+                } else if (sisa <= 7) {
+                    status  = "HAMPIR HABIS, sisa " + sisa + " hari";
+                    msgType = JOptionPane.WARNING_MESSAGE;
+                    judul   = "Info Batas Rujukan";
+                } else {
+                    status  = "Masih berlaku, sisa " + sisa + " hari";
+                    msgType = JOptionPane.INFORMATION_MESSAGE;
+                    judul   = "Info Batas Rujukan";
+                }
+                JOptionPane.showMessageDialog(null,
+                    "No. Rujukan   : " + noRujukan + "\n" +
+                    "Tgl. Rujukan  : " + tglM + "\n" +
+                    "Masa Berlaku  : " + tglB + "\n" +
+                    "Status        : " + status + "\n" +
+                    "Pemakaian     : " + dipakai + " kali (data lokal)",
+                    judul, msgType);
+            });
+        } catch (Exception e) {
+            System.out.println("tampilBatasRujukan KartuPCare error: " + e);
+        }
+    }
+
     public void tampil(String nomorrujukan) {
         try {
             URL = link+"/Rujukan/Peserta/"+nomorrujukan;
@@ -6623,6 +6680,7 @@ public final class BPJSCekRujukanKartuPCare extends javax.swing.JDialog {
                     "Tanggal Kunjungan",": "+response.path("tglKunjungan").asText()
                 }); 
                 Valid.SetTgl(TanggalRujuk,response.path("tglKunjungan").asText());
+                tampilBatasRujukan(response.path("noKunjungan").asText(), response.path("tglKunjungan").asText());
                 isNumber();
                 Kdpnj.setText("BPJ");
                 nmpnj.setText("BPJS");

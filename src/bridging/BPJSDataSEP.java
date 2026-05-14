@@ -415,6 +415,7 @@ public final class BPJSDataSEP extends javax.swing.JDialog {
             ADDANTRIANAPIMOBILEJKN="";
             System.out.println("Notif : "+e);
         }
+        initTemplateSEP();
     }
 
 
@@ -5793,16 +5794,21 @@ public final class BPJSDataSEP extends javax.swing.JDialog {
                 public void windowClosing(WindowEvent e) {}
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    if(rujukanterakhir.getTable().getSelectedRow()!= -1){  
-                        KdPenyakit.setText(rujukanterakhir.getTable().getValueAt(rujukanterakhir.getTable().getSelectedRow(),0).toString());
-                        NmPenyakit.setText(rujukanterakhir.getTable().getValueAt(rujukanterakhir.getTable().getSelectedRow(),1).toString());
-                        NoRujukan.setText(rujukanterakhir.getTable().getValueAt(rujukanterakhir.getTable().getSelectedRow(),2).toString());
-                        KdPoli.setText(rujukanterakhir.getTable().getValueAt(rujukanterakhir.getTable().getSelectedRow(),3).toString());
-                        NmPoli.setText(rujukanterakhir.getTable().getValueAt(rujukanterakhir.getTable().getSelectedRow(),4).toString());
-                        KdPpkRujukan.setText(rujukanterakhir.getTable().getValueAt(rujukanterakhir.getTable().getSelectedRow(),6).toString());
-                        NmPpkRujukan.setText(rujukanterakhir.getTable().getValueAt(rujukanterakhir.getTable().getSelectedRow(),7).toString());
-                        Valid.SetTgl(TanggalRujuk,rujukanterakhir.getTable().getValueAt(rujukanterakhir.getTable().getSelectedRow(),5).toString());
-                        Catatan.requestFocus();               
+                    if(rujukanterakhir.getTable().getSelectedRow()!= -1){
+                        int row = rujukanterakhir.getTable().getSelectedRow();
+                        String noRuj = rujukanterakhir.getTable().getValueAt(row, 2).toString();
+                        String tglRuj = rujukanterakhir.getTable().getValueAt(row, 5).toString();
+                        KdPenyakit.setText(rujukanterakhir.getTable().getValueAt(row, 0).toString());
+                        NmPenyakit.setText(rujukanterakhir.getTable().getValueAt(row, 1).toString());
+                        NoRujukan.setText(noRuj);
+                        KdPoli.setText(rujukanterakhir.getTable().getValueAt(row, 3).toString());
+                        NmPoli.setText(rujukanterakhir.getTable().getValueAt(row, 4).toString());
+                        KdPpkRujukan.setText(rujukanterakhir.getTable().getValueAt(row, 6).toString());
+                        NmPpkRujukan.setText(rujukanterakhir.getTable().getValueAt(row, 7).toString());
+                        Valid.SetTgl(TanggalRujuk, tglRuj);
+                        lastCekNoRujukan = noRuj;
+                        cekBatasRujukanDariTanggal(noRuj, tglRuj);
+                        Catatan.requestFocus();
                     }  
                 }
                 @Override
@@ -6191,6 +6197,358 @@ public final class BPJSDataSEP extends javax.swing.JDialog {
     private widget.Table tbDataSEPInternal;
     // End of variables declaration//GEN-END:variables
 
+    private widget.ComboBox CbTemplateSEP;
+    private widget.Label jLabelTemplateSEP;
+    private widget.Button BtnPanduanSEP;
+    private String lastCekNoRujukan = "";
+
+    private void initTemplateSEP() {
+        jLabelTemplateSEP = new widget.Label();
+        jLabelTemplateSEP.setText("Template SEP :");
+        jLabelTemplateSEP.setName("jLabelTemplateSEP");
+        FormInput.add(jLabelTemplateSEP);
+        jLabelTemplateSEP.setBounds(357, 490, 110, 23);
+
+        CbTemplateSEP = new widget.ComboBox();
+        CbTemplateSEP.setModel(new javax.swing.DefaultComboBoxModel(new String[]{
+            "-Pilih Template-",
+            "1. Pasien Baru (Rujukan Baru)",
+            "2. Kontrol Ulang",
+            "3. Poli Tutup / Pecah SEP",
+            "4. Hemodialisa Rutin",
+            "5. Post Ranap",
+            "6. Pasien IGD",
+            "7. Poli Intern"
+        }));
+        CbTemplateSEP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CbTemplateSEPActionPerformed(evt);
+            }
+        });
+        FormInput.add(CbTemplateSEP);
+        CbTemplateSEP.setBounds(470, 490, 200, 23);
+
+        BtnPanduanSEP = new widget.Button();
+        BtnPanduanSEP.setText("? Panduan");
+        BtnPanduanSEP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnPanduanSEPActionPerformed(evt);
+            }
+        });
+        FormInput.add(BtnPanduanSEP);
+        BtnPanduanSEP.setBounds(673, 490, 70, 23);
+
+        FormInput.setPreferredSize(new java.awt.Dimension(745, 520));
+        pack();
+        setLocation(8, 1);
+
+        NoRujukan.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                String noRujukan = NoRujukan.getText().trim();
+                if (!noRujukan.isEmpty() && !noRujukan.equals(lastCekNoRujukan)) {
+                    cekBatasRujukan(noRujukan);
+                }
+            }
+        });
+    }
+
+    private void cekBatasRujukan(final String noRujukan) {
+        new javax.swing.SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() throws Exception {
+                try {
+                    HttpHeaders h = new HttpHeaders();
+                    h.setContentType(MediaType.APPLICATION_JSON);
+                    h.add("X-Cons-ID", koneksiDB.CONSIDAPIBPJS());
+                    String utcLocal = String.valueOf(api.GetUTCdatetimeAsString());
+                    h.add("X-Timestamp", utcLocal);
+                    h.add("X-Signature", api.getHmac(utcLocal));
+                    h.add("user_key", koneksiDB.USERKEYAPIBPJS());
+                    HttpEntity reqCek = new HttpEntity(h);
+
+                    String tglKunjungan = "";
+                    // Coba PCare rujukan dulu
+                    try {
+                        String urlCek = link + "/Rujukan/" + noRujukan;
+                        JsonNode rootCek = mapper.readTree(api.getRest().exchange(urlCek, HttpMethod.GET, reqCek, String.class).getBody());
+                        if (rootCek.path("metaData").path("code").asText().equals("200")) {
+                            JsonNode resp = mapper.readTree(api.Decrypt(rootCek.path("response").asText(), utcLocal)).path("rujukan");
+                            tglKunjungan = resp.path("tglKunjungan").asText();
+                        }
+                    } catch (Exception e1) { /* tidak ditemukan di PCare */ }
+
+                    // Fallback: coba RS rujukan
+                    if (tglKunjungan.isEmpty() || tglKunjungan.equals("null")) {
+                        try {
+                            h = new HttpHeaders();
+                            h.setContentType(MediaType.APPLICATION_JSON);
+                            h.add("X-Cons-ID", koneksiDB.CONSIDAPIBPJS());
+                            utcLocal = String.valueOf(api.GetUTCdatetimeAsString());
+                            h.add("X-Timestamp", utcLocal);
+                            h.add("X-Signature", api.getHmac(utcLocal));
+                            h.add("user_key", koneksiDB.USERKEYAPIBPJS());
+                            reqCek = new HttpEntity(h);
+                            String urlCek = link + "/Rujukan/RS/" + noRujukan;
+                            JsonNode rootCek = mapper.readTree(api.getRest().exchange(urlCek, HttpMethod.GET, reqCek, String.class).getBody());
+                            final String utcFinal = utcLocal;
+                            if (rootCek.path("metaData").path("code").asText().equals("200")) {
+                                JsonNode resp = mapper.readTree(api.Decrypt(rootCek.path("response").asText(), utcFinal)).path("rujukan");
+                                tglKunjungan = resp.path("tglKunjungan").asText();
+                            }
+                        } catch (Exception e2) { /* tidak ditemukan di RS */ }
+                    }
+
+                    if (tglKunjungan.isEmpty() || tglKunjungan.equals("null")) {
+                        return "NOTFOUND";
+                    }
+
+                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                    java.util.Date tglMulai = sdf.parse(tglKunjungan);
+                    java.util.Calendar calBerlaku = java.util.Calendar.getInstance();
+                    calBerlaku.setTime(tglMulai);
+                    calBerlaku.add(java.util.Calendar.DAY_OF_MONTH, 90);
+                    java.util.Date tglBerakhir = calBerlaku.getTime();
+                    long sisaHari = (tglBerakhir.getTime() - new java.util.Date().getTime()) / (1000 * 60 * 60 * 24);
+
+                    java.text.SimpleDateFormat disSdf = new java.text.SimpleDateFormat("dd-MM-yyyy");
+                    String tglMulaiStr = disSdf.format(tglMulai);
+                    String tglBerakhirStr = disSdf.format(tglBerakhir);
+
+                    int sudahDipakai = 0;
+                    try (Connection konCek = koneksiDB.condb();
+                         PreparedStatement psCek = konCek.prepareStatement(
+                                 "SELECT COUNT(*) FROM bridging_sep WHERE no_rujukan = ?")) {
+                        psCek.setString(1, noRujukan);
+                        ResultSet rsCek = psCek.executeQuery();
+                        if (rsCek.next()) sudahDipakai = rsCek.getInt(1);
+                    }
+
+                    return tglMulaiStr + "|" + tglBerakhirStr + "|" + sisaHari + "|" + sudahDipakai;
+                } catch (Exception e) {
+                    return "ERROR";
+                }
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    String result = get();
+                    if (result == null || result.equals("NOTFOUND") || result.equals("ERROR")) {
+                        JOptionPane.showMessageDialog(null,
+                            "Info rujukan " + noRujukan + " tidak ditemukan di BPJS.",
+                            "Info Rujukan", JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
+                    String[] parts = result.split("\\|");
+                    tampilInfoBatasRujukan(noRujukan, parts[0], parts[1],
+                        Long.parseLong(parts[2]), Integer.parseInt(parts[3]));
+                } catch (Exception e) {
+                    System.out.println("cekBatasRujukan error: " + e);
+                }
+            }
+        }.execute();
+    }
+
+    private void cekBatasRujukanDariTanggal(final String noRujukan, final String tglKunjungan) {
+        new javax.swing.SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() throws Exception {
+                try {
+                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+                    java.util.Date tglMulai = sdf.parse(tglKunjungan);
+                    java.util.Calendar calBerlaku = java.util.Calendar.getInstance();
+                    calBerlaku.setTime(tglMulai);
+                    calBerlaku.add(java.util.Calendar.DAY_OF_MONTH, 90);
+                    java.util.Date tglBerakhir = calBerlaku.getTime();
+                    long sisaHari = (tglBerakhir.getTime() - new java.util.Date().getTime()) / (1000 * 60 * 60 * 24);
+
+                    java.text.SimpleDateFormat disSdf = new java.text.SimpleDateFormat("dd-MM-yyyy");
+                    String tglMulaiStr = disSdf.format(tglMulai);
+                    String tglBerakhirStr = disSdf.format(tglBerakhir);
+
+                    int sudahDipakai = 0;
+                    try (Connection konCek = koneksiDB.condb();
+                         PreparedStatement psCek = konCek.prepareStatement(
+                                 "SELECT COUNT(*) FROM bridging_sep WHERE no_rujukan = ?")) {
+                        psCek.setString(1, noRujukan);
+                        ResultSet rsCek = psCek.executeQuery();
+                        if (rsCek.next()) sudahDipakai = rsCek.getInt(1);
+                    }
+
+                    return tglMulaiStr + "|" + tglBerakhirStr + "|" + sisaHari + "|" + sudahDipakai;
+                } catch (Exception e) {
+                    return "ERROR";
+                }
+            }
+
+            @Override
+            protected void done() {
+                try {
+                    String result = get();
+                    if (result == null || result.equals("ERROR")) {
+                        JOptionPane.showMessageDialog(null,
+                            "Gagal menghitung masa berlaku rujukan " + noRujukan + ".",
+                            "Info Rujukan", JOptionPane.INFORMATION_MESSAGE);
+                        return;
+                    }
+                    String[] parts = result.split("\\|");
+                    tampilInfoBatasRujukan(noRujukan, parts[0], parts[1],
+                        Long.parseLong(parts[2]), Integer.parseInt(parts[3]));
+                } catch (Exception e) {
+                    System.out.println("cekBatasRujukanDariTanggal error: " + e);
+                }
+            }
+        }.execute();
+    }
+
+    private void tampilInfoBatasRujukan(String noRujukan, String tglMulai, String tglBerakhir,
+                                        long sisaHari, int sudahDipakai) {
+        String statusBerlaku;
+        int messageType;
+        String judul;
+        if (sisaHari < 0) {
+            statusBerlaku = "KADALUARSA  " + Math.abs(sisaHari) + " hari yang lalu";
+            messageType = JOptionPane.WARNING_MESSAGE;
+            judul = "Rujukan Kadaluarsa";
+        } else if (sisaHari <= 7) {
+            statusBerlaku = "HAMPIR HABIS, sisa " + sisaHari + " hari";
+            messageType = JOptionPane.WARNING_MESSAGE;
+            judul = "Info Batas Rujukan";
+        } else {
+            statusBerlaku = "Masih berlaku, sisa " + sisaHari + " hari";
+            messageType = JOptionPane.INFORMATION_MESSAGE;
+            judul = "Info Batas Rujukan";
+        }
+
+        NoRujukan.setToolTipText("<html>" +
+            "Tgl. Rujukan  : " + tglMulai + "<br>" +
+            "Masa Berlaku  : " + tglBerakhir + "<br>" +
+            "Status        : " + statusBerlaku + "<br>" +
+            "Pemakaian     : " + sudahDipakai + " kali (data lokal)" +
+            "</html>");
+
+        JOptionPane.showMessageDialog(null,
+            "No. Rujukan   : " + noRujukan + "\n" +
+            "Tgl. Rujukan  : " + tglMulai + "\n" +
+            "Masa Berlaku  : " + tglBerakhir + "\n" +
+            "Status        : " + statusBerlaku + "\n" +
+            "Pemakaian     : " + sudahDipakai + " kali (data lokal)",
+            judul, messageType);
+    }
+
+    private void CbTemplateSEPActionPerformed(java.awt.event.ActionEvent evt) {
+        int idx = CbTemplateSEP.getSelectedIndex();
+        if (idx == 0) return;
+        switch (idx) {
+            case 1: // Pasien Baru (Rujukan Baru)
+                TujuanKunjungan.setSelectedIndex(0);
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedIndex(0);
+                break;
+            case 2: // Kontrol Ulang
+                TujuanKunjungan.setSelectedItem("2. Konsul Dokter");
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedItem("5. Tujuan Kontrol");
+                break;
+            case 3: // Poli Tutup / Pecah SEP
+                TujuanKunjungan.setSelectedIndex(0);
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedItem("1. Poli spesialis tidak tersedia pada hari sebelumnya");
+                break;
+            case 4: // Hemodialisa Rutin
+                TujuanKunjungan.setSelectedItem("2. Konsul Dokter");
+                FlagProsedur.setSelectedItem("1. Prosedur dan Terapi Berkelanjutan");
+                Penunjang.setSelectedItem("12. HEMODIALISA");
+                AsesmenPoli.setSelectedItem("4. Atas Instruksi RS");
+                break;
+            case 5: // Post Ranap
+                TujuanKunjungan.setSelectedIndex(0);
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedIndex(0);
+                break;
+            case 6: // Pasien IGD
+                TujuanKunjungan.setSelectedIndex(0);
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedIndex(0);
+                break;
+            case 7: // Poli Intern
+                TujuanKunjungan.setSelectedItem("2. Konsul Dokter");
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedItem("4. Atas Instruksi RS");
+                break;
+        }
+    }
+
+    private void BtnPanduanSEPActionPerformed(java.awt.event.ActionEvent evt) {
+        javax.swing.JDialog dlg = new javax.swing.JDialog();
+        dlg.setTitle("Panduan Pengisian SEP BPJS");
+        dlg.setSize(720, 540);
+        dlg.setLocationRelativeTo(this);
+        dlg.setModal(true);
+        javax.swing.JTextArea txt = new javax.swing.JTextArea();
+        txt.setEditable(false);
+        txt.setFont(new java.awt.Font("Tahoma", 0, 12));
+        txt.setMargin(new java.awt.Insets(10, 12, 10, 12));
+        txt.setText(
+            "PANDUAN PENGISIAN SEP BPJS\n" +
+            "===========================================\n\n" +
+            "1. PASIEN BARU (RUJUKAN BARU)\n" +
+            "   - Tujuan Kunjungan : 0. Normal\n" +
+            "   - Flag Prosedur    : (kosong)\n" +
+            "   - Penunjang        : (kosong)\n" +
+            "   - Asesmen Poli     : (kosong)\n" +
+            "   Digunakan saat pasien datang dengan surat rujukan baru dari FKTP.\n\n" +
+            "2. KONTROL ULANG\n" +
+            "   - Tujuan Kunjungan : 2. Konsul Dokter\n" +
+            "   - Flag Prosedur    : (kosong)\n" +
+            "   - Penunjang        : (kosong)\n" +
+            "   - Asesmen Poli     : 5. Tujuan Kontrol\n" +
+            "   Digunakan saat pasien kontrol ulang atas perintah dokter spesialis.\n\n" +
+            "3. POLI TUTUP / PECAH SEP\n" +
+            "   - Tujuan Kunjungan : 0. Normal\n" +
+            "   - Flag Prosedur    : (kosong)\n" +
+            "   - Penunjang        : (kosong)\n" +
+            "   - Asesmen Poli     : 1. Poli spesialis tidak tersedia pada hari sebelumnya\n" +
+            "   Digunakan saat pasien dilayani di poli lain karena poli tujuan tutup/tidak tersedia.\n\n" +
+            "4. HEMODIALISA RUTIN\n" +
+            "   - Tujuan Kunjungan : 2. Konsul Dokter\n" +
+            "   - Flag Prosedur    : 1. Prosedur dan Terapi Berkelanjutan\n" +
+            "   - Penunjang        : 12. HEMODIALISA\n" +
+            "   - Asesmen Poli     : 4. Atas Instruksi RS\n" +
+            "   Digunakan untuk pasien HD rutin yang sudah ada rujukan khusus aktif.\n\n" +
+            "5. POST RANAP (Kontrol setelah Rawat Inap)\n" +
+            "   - Tujuan Kunjungan : 0. Normal\n" +
+            "   - Asesmen Poli     : (kosong)\n" +
+            "   Digunakan saat pasien kontrol rawat jalan setelah selesai rawat inap.\n" +
+            "   Pastikan No. Rujukan diisi dengan surat kontrol dari RS.\n\n" +
+            "6. PASIEN IGD\n" +
+            "   - Tujuan Kunjungan : 0. Normal\n" +
+            "   - Asesmen Poli     : (kosong)\n" +
+            "   Digunakan untuk pasien yang datang melalui IGD.\n\n" +
+            "-------------------------------------------\n" +
+            "CATATAN PENTING:\n" +
+            "- Jenis Kunjungan otomatis ditentukan oleh BPJS berdasarkan kombinasi\n" +
+            "  Tujuan Kunjungan + Asesmen Poli.\n" +
+            "- Jika salah mengisi, klaim bisa ditolak / pending di verifikator.\n" +
+            "- Template ini hanya mengisi field kelengkapan SEP, field lain\n" +
+            "  (No. Rujukan, Diagnosa, Poli, dll) tetap harus diisi manual.\n"
+        );
+        javax.swing.JScrollPane scroll = new javax.swing.JScrollPane(txt);
+        javax.swing.JButton btnTutup = new javax.swing.JButton("Tutup");
+        btnTutup.addActionListener(e -> dlg.dispose());
+        dlg.setLayout(new java.awt.BorderLayout());
+        dlg.add(scroll, java.awt.BorderLayout.CENTER);
+        dlg.add(btnTutup, java.awt.BorderLayout.SOUTH);
+        dlg.setVisible(true);
+    }
+
     private void tampil() {        
         Valid.tabelKosong(tabMode);
         try{
@@ -6443,6 +6801,7 @@ public final class BPJSDataSEP extends javax.swing.JDialog {
         Status.setText("");
         JK.setText("");
         NoRujukan.setText("");
+        lastCekNoRujukan = "";
         KdPpkRujukan.setText("");
         NmPpkRujukan.setText("");
         JenisPelayanan.setSelectedIndex(1);

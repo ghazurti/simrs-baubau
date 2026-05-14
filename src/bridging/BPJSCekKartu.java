@@ -130,6 +130,7 @@ public final class BPJSCekKartu extends javax.swing.JDialog {
     public BPJSCekKartu(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        initTemplateSEP();
 
         this.setLocation(10,2);
         setSize(628,674);
@@ -6412,6 +6413,150 @@ public final class BPJSCekKartu extends javax.swing.JDialog {
     private widget.ScrollPane scrollPane2;
     private widget.Table tbKamar;
     // End of variables declaration//GEN-END:variables
+
+    // Template SEP - manual components (outside GEN block)
+    private widget.ComboBox CbTemplateSEP;
+    private widget.Label jLabelTemplateSEP;
+    private widget.Button BtnPanduanSEP;
+
+    private void initTemplateSEP() {
+        jLabelTemplateSEP = new widget.Label();
+        jLabelTemplateSEP.setText("Template SEP :");
+        jLabelTemplateSEP.setName("jLabelTemplateSEP");
+        FormKelengkapanSEP.add(jLabelTemplateSEP);
+        jLabelTemplateSEP.setBounds(3, 370, 100, 23);
+
+        CbTemplateSEP = new widget.ComboBox();
+        CbTemplateSEP.setModel(new javax.swing.DefaultComboBoxModel(new String[]{
+            "-Pilih Template-",
+            "1. Pasien Baru (Rujukan Baru)",
+            "2. Kontrol Ulang",
+            "3. Poli Tutup / Pecah SEP",
+            "4. Hemodialisa Rutin",
+            "5. Post Ranap",
+            "6. Pasien IGD"
+        }));
+        CbTemplateSEP.setName("CbTemplateSEP");
+        CbTemplateSEP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CbTemplateSEPActionPerformed(evt);
+            }
+        });
+        FormKelengkapanSEP.add(CbTemplateSEP);
+        CbTemplateSEP.setBounds(107, 370, 280, 23);
+
+        BtnPanduanSEP = new widget.Button();
+        BtnPanduanSEP.setText("? Panduan");
+        BtnPanduanSEP.setName("BtnPanduanSEP");
+        BtnPanduanSEP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnPanduanSEPActionPerformed(evt);
+            }
+        });
+        FormKelengkapanSEP.add(BtnPanduanSEP);
+        BtnPanduanSEP.setBounds(395, 370, 95, 23);
+
+        FormKelengkapanSEP.setPreferredSize(new java.awt.Dimension(1000, 400));
+    }
+
+    private void CbTemplateSEPActionPerformed(java.awt.event.ActionEvent evt) {
+        int idx = CbTemplateSEP.getSelectedIndex();
+        if (idx == 0) return;
+        switch (idx) {
+            case 1: // Pasien Baru
+                TujuanKunjungan.setSelectedIndex(0);
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedIndex(0);
+                break;
+            case 2: // Kontrol Ulang
+                TujuanKunjungan.setSelectedItem("2. Konsul Dokter");
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedItem("5. Tujuan Kontrol");
+                break;
+            case 3: // Poli Tutup / Pecah SEP
+                TujuanKunjungan.setSelectedIndex(0);
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedItem("1. Poli spesialis tidak tersedia pada hari sebelumnya");
+                break;
+            case 4: // Hemodialisa Rutin
+                TujuanKunjungan.setSelectedItem("2. Konsul Dokter");
+                FlagProsedur.setSelectedItem("1. Prosedur dan Terapi Berkelanjutan");
+                Penunjang.setSelectedItem("12. HEMODIALISA");
+                AsesmenPoli.setSelectedItem("4. Atas Instruksi RS");
+                break;
+            case 5: // Post Ranap
+                TujuanKunjungan.setSelectedIndex(0);
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedIndex(0);
+                break;
+            case 6: // Pasien IGD
+                TujuanKunjungan.setSelectedIndex(0);
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedIndex(0);
+                break;
+        }
+    }
+
+    private void BtnPanduanSEPActionPerformed(java.awt.event.ActionEvent evt) {
+        javax.swing.JDialog dlg = new javax.swing.JDialog();
+        dlg.setTitle("Panduan Pengisian SEP BPJS");
+        dlg.setSize(720, 520);
+        dlg.setLocationRelativeTo(this);
+        dlg.setModal(true);
+
+        javax.swing.JTextArea txt = new javax.swing.JTextArea();
+        txt.setEditable(false);
+        txt.setFont(new java.awt.Font("Tahoma", 0, 12));
+        txt.setMargin(new java.awt.Insets(10, 12, 10, 12));
+        txt.setText(
+            "PANDUAN PENGISIAN SEP BPJS\n" +
+            "=====================================================\n\n" +
+            "1. PASIEN BARU (Rujukan Baru)\n" +
+            "   - Tujuan Kunjungan  = 0. Normal\n" +
+            "   - Flag Prosedur     = Kosong\n" +
+            "   - Penunjang         = Kosong\n" +
+            "   - Asesmen Pelayanan = Kosong\n\n" +
+            "2. PASIEN KONTROL ULANG\n" +
+            "   - Tujuan Kunjungan  = 2. Konsul Dokter\n" +
+            "   - Flag Prosedur     = Kosong\n" +
+            "   - Penunjang         = Kosong\n" +
+            "   - Asesmen Pelayanan = 5. Tujuan Kontrol\n\n" +
+            "3. POLI TUTUP / PECAH SEP (Internal)\n" +
+            "   - Tujuan Kunjungan  = 0. Normal\n" +
+            "   - Flag Prosedur     = Kosong\n" +
+            "   - Penunjang         = Kosong\n" +
+            "   - Asesmen Pelayanan = 1. Poli Spesialis tidak tersedia pada hari sebelumnya\n" +
+            "   - No Rujukan        = Ambil dari rujukan induk\n\n" +
+            "4. HEMODIALISA RUTIN\n" +
+            "   - Tujuan Kunjungan  = 2. Konsul Dokter\n" +
+            "   - Flag Prosedur     = 1. Prosedur dan Terapi Berkelanjutan\n" +
+            "   - Penunjang         = 12. HEMODIALISA\n" +
+            "   - Asesmen Pelayanan = 4. Atas Instruksi RS\n\n" +
+            "5. POST RANAP\n" +
+            "   - Poli Tujuan       = Sesuai Ranap\n" +
+            "   - No Rujukan        = No SEP Ranap\n" +
+            "   - Inputkan Sukon (SKDP)\n" +
+            "   - Tujuan Kunjungan  = 0. Normal\n\n" +
+            "6. PASIEN IGD\n" +
+            "   - Poli Tujuan       = IGD\n" +
+            "   - Dokter tujukan    = Masukan DPJP\n" +
+            "   - Tujuan Kunjungan  = 0. Normal\n"
+        );
+
+        javax.swing.JScrollPane scroll = new javax.swing.JScrollPane(txt);
+        javax.swing.JButton btnTutup = new javax.swing.JButton("Tutup");
+        btnTutup.addActionListener(e -> dlg.dispose());
+
+        dlg.setLayout(new java.awt.BorderLayout());
+        dlg.add(scroll, java.awt.BorderLayout.CENTER);
+        dlg.add(btnTutup, java.awt.BorderLayout.SOUTH);
+        dlg.setVisible(true);
+    }
 
     private void tampil(String nomorpeserta) {
         try {

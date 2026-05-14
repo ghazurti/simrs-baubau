@@ -61,7 +61,7 @@ import widget.TextBox;
 public final class validasi {
     private int a,j,i,result=0;
     private String s,s1,auto,PEMBULATANHARGAOBAT=koneksiDB.PEMBULATANHARGAOBAT();
-    private final Connection connect=koneksiDB.condb();
+    private Connection connect() { return koneksiDB.condb(); }
     private final sekuel sek=new sekuel();
     private final java.awt.Desktop desktop = java.awt.Desktop.getDesktop();
     private final DecimalFormat df2 = new DecimalFormat("###,###,###,###,###,###,###");  
@@ -95,7 +95,7 @@ public final class validasi {
 
     public void autoNomer(String tabel,String strAwal,Integer pnj,javax.swing.JTextField teks){
         try {
-            ps=connect.prepareStatement("select * from "+tabel);
+            ps=connect().prepareStatement("select * from "+tabel);
             try{
                rs=ps.executeQuery();
                rs.last();
@@ -124,7 +124,7 @@ public final class validasi {
     
     public void autoNomer2(String sql,String strAwal,Integer pnj,javax.swing.JTextField teks){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=connect().prepareStatement(sql);
             try{
                 rs=ps.executeQuery();
                 rs.last();
@@ -153,7 +153,7 @@ public final class validasi {
     
     public void autoNomer3(String sql,String strAwal,Integer pnj,javax.swing.JTextField teks){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=connect().prepareStatement(sql);
             try{   
                 rs=ps.executeQuery();
                 s="1";
@@ -186,7 +186,7 @@ public final class validasi {
     
     public void autoNomer4(String sql,String strAwal,Integer pnj,javax.swing.JTextField teks){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=connect().prepareStatement(sql);
             try{   
                 rs=ps.executeQuery();
                 s="1";
@@ -219,7 +219,7 @@ public final class validasi {
     
     public void autoNomer5(String sql,String strAwal,Integer pnj,javax.swing.JTextField teks){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=connect().prepareStatement(sql);
             try{   
                 rs=ps.executeQuery();
                 s="1";
@@ -252,7 +252,7 @@ public final class validasi {
     
     public void autoNomer6(String sql,String strAwal,Integer pnj,javax.swing.JTextField teks){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=connect().prepareStatement(sql);
             try{   
                 rs=ps.executeQuery();
                 s="1";
@@ -300,7 +300,7 @@ public final class validasi {
     public String autoNomer(String tabel,String strAwal,Integer pnj){
         try {
             auto="";
-            ps=connect.prepareStatement("select * from "+tabel);
+            ps=connect().prepareStatement("select * from "+tabel);
             try{        
                 rs=ps.executeQuery();
                 rs.last();
@@ -333,7 +333,7 @@ public final class validasi {
     public String autoNomer3(String sql,String strAwal,Integer pnj){
         try {
             auto="";
-            ps=connect.prepareStatement(sql);
+            ps=connect().prepareStatement(sql);
             try{
                 rs=ps.executeQuery();
                 s="1";
@@ -513,7 +513,7 @@ public final class validasi {
     public void loadCombo(JComboBox cmb,String field,String table){
         cmb.removeAllItems();
         try {
-            ps=connect.prepareStatement("select "+field+" from "+table+" order by "+field);
+            ps=connect().prepareStatement("select "+field+" from "+table+" order by "+field);
             try{
                 rs=ps.executeQuery();
                 while(rs.next()){
@@ -564,7 +564,7 @@ public final class validasi {
     public void loadCombo(JComboBox cmb,String query){
         cmb.removeAllItems();
         try {
-            ps=connect.prepareStatement(query);
+            ps=connect().prepareStatement(query);
             try{
                 rs=ps.executeQuery();
                 while(rs.next()){
@@ -628,7 +628,7 @@ public final class validasi {
         } // end if
 
         try {
-            try (Statement stm = connect.createStatement()) {
+            try (Statement stm = connect().createStatement()) {
                 try {
                     
                     String namafile="./"+reportDirName+"/"+reportName;
@@ -636,7 +636,7 @@ public final class validasi {
                         System.setProperty("net.sf.jasperreports.compiler.java","net.sf.jasperreports.engine.design.JRJavacCompiler");
                         JasperCompileManager.compileReportToFile(namafile.replace(".jasper",".jrxml"), namafile);
                     }
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect);
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect());
                     
                     JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
                     jasperViewer.setTitle(judul);
@@ -678,7 +678,7 @@ public final class validasi {
         } // end if
 
         try {
-            try (Statement stm = connect.createStatement()) {
+            try (Statement stm = connect().createStatement()) {
                 try {
                     File f = new File("./"+reportDirName+"/"+reportName.replaceAll("jasper","pdf")); 
                     String namafile="./"+reportDirName+"/"+reportName;
@@ -686,7 +686,7 @@ public final class validasi {
                         System.setProperty("net.sf.jasperreports.compiler.java","net.sf.jasperreports.engine.design.JRJavacCompiler");
                         JasperCompileManager.compileReportToFile(namafile.replace(".jasper",".jrxml"), namafile);
                     }
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect);
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect());
                     JasperExportManager.exportReportToPdfFile(jasperPrint,"./"+reportDirName+"/"+reportName.replaceAll("jasper","pdf"));
                     Desktop.getDesktop().open(f);
                 } catch (Exception rptexcpt) {
@@ -722,7 +722,7 @@ public final class validasi {
         } // end if
 
         try {
-            try (Statement stm = connect.createStatement()) {
+            try (Statement stm = connect().createStatement()) {
                 try {
                     File f = new File("./"+reportDirName+"/"+reportName.replaceAll("jasper","pdf")); 
                     String namafile="./"+reportDirName+"/"+reportName;
@@ -730,7 +730,7 @@ public final class validasi {
                         System.setProperty("net.sf.jasperreports.compiler.java","net.sf.jasperreports.engine.design.JRJavacCompiler");
                         JasperCompileManager.compileReportToFile(namafile.replace(".jasper",".jrxml"), namafile);
                     }
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect);
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect());
                     JasperExportManager.exportReportToPdfFile(jasperPrint,"./"+reportDirName+"/"+reportName.replaceAll("jasper","pdf"));
                 } catch (Exception rptexcpt) {
                     System.out.println("Report Can't view because : " + rptexcpt);
@@ -765,7 +765,7 @@ public final class validasi {
         } // end if
 
         try {
-            try (Statement stm = connect.createStatement()) {
+            try (Statement stm = connect().createStatement()) {
                 try {
                     
                     String namafile="./"+reportDirName+"/"+reportName;
@@ -773,7 +773,7 @@ public final class validasi {
                         System.setProperty("net.sf.jasperreports.compiler.java","net.sf.jasperreports.engine.design.JRJavacCompiler");
                         JasperCompileManager.compileReportToFile(namafile.replace(".jasper",".jrxml"), namafile);
                     }
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect);
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(namafile, parameters, connect());
                     
                     JasperViewer jasperViewer = new JasperViewer(jasperPrint, false);
                     jasperViewer.setTitle(judul);
@@ -814,7 +814,7 @@ public final class validasi {
         } // end if
 
         try {
-            ps=connect.prepareStatement(qry);
+            ps=connect().prepareStatement(qry);
             try {
                 String namafile="./"+reportDirName+"/"+reportName;
                 if (!new File(namafile).exists()) {
@@ -871,7 +871,7 @@ public final class validasi {
         } // end if
 
         try {
-            ps=connect.prepareStatement(qry);
+            ps=connect().prepareStatement(qry);
             try {
                 String namafile="./"+reportDirName+"/"+reportName;
                 if (!new File(namafile).exists()) {
@@ -903,7 +903,7 @@ public final class validasi {
     
     public void MyReport(String reportName,Map parameters,String title){
         try {
-                JasperViewer jasperViewer =new JasperViewer(JasperFillManager.fillReport("./report/"+reportName,parameters,connect), false);
+                JasperViewer jasperViewer =new JasperViewer(JasperFillManager.fillReport("./report/"+reportName,parameters,connect()), false);
                 jasperViewer.setTitle(title);
                 jasperViewer.setLocationRelativeTo(null);
                 jasperViewer.setVisible(true);

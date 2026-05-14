@@ -52,24 +52,26 @@ public final class DlgRujukanMasuk extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.setLocation(8,1);
-        setSize(600,674);
+        setSize(760,674);
 
-        Object[] cols={"No.","Faskes Perujuk","Poli Rujukan","Jumlah Rujukan"};
+        Object[] cols={"No.","Faskes Perujuk","Poli Rujukan","Penyakit","Jumlah Rujukan"};
         tabMode=new DefaultTableModel(null,cols){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){return false;}
         };
         tbBangsal.setModel(tabMode);
-        tbBangsal.setPreferredScrollableViewportSize(new Dimension(500,500));
+        tbBangsal.setPreferredScrollableViewportSize(new Dimension(700,500));
         tbBangsal.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         TableColumn c0 = tbBangsal.getColumnModel().getColumn(0);
         c0.setPreferredWidth(35);
         TableColumn c1 = tbBangsal.getColumnModel().getColumn(1);
-        c1.setPreferredWidth(230);
+        c1.setPreferredWidth(200);
         TableColumn c2 = tbBangsal.getColumnModel().getColumn(2);
-        c2.setPreferredWidth(150);
+        c2.setPreferredWidth(130);
         TableColumn c3 = tbBangsal.getColumnModel().getColumn(3);
-        c3.setPreferredWidth(110);
+        c3.setPreferredWidth(230);
+        TableColumn c4 = tbBangsal.getColumnModel().getColumn(4);
+        c4.setPreferredWidth(90);
 
         tbBangsal.setDefaultRenderer(Object.class, new WarnaTable());
         TCari.setDocument(new batasInput((byte)100).getKata(TCari));
@@ -274,7 +276,8 @@ public final class DlgRujukanMasuk extends javax.swing.JDialog {
                         tabMode.getValueAt(r,0).toString()+"','"+
                         tabMode.getValueAt(r,1).toString()+"','"+
                         tabMode.getValueAt(r,2).toString()+"','"+
-                        tabMode.getValueAt(r,3).toString()+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Rujukan Masuk per Wilayah");
+                        tabMode.getValueAt(r,3).toString()+"','"+
+                        tabMode.getValueAt(r,4).toString()+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Rujukan Masuk per Wilayah");
                 }
             }
             Valid.MyReportqry("rptRujukanMasuk.jasper","report","::[ Laporan Rujukan Masuk per Wilayah ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
@@ -397,30 +400,35 @@ public final class DlgRujukanMasuk extends javax.swing.JDialog {
                 "SELECT CASE WHEN TRIM(IFNULL(rujuk_masuk.perujuk,''))='' THEN CONCAT('Dokter: ',rujuk_masuk.dokter_perujuk) " +
                 "ELSE rujuk_masuk.perujuk END AS nama_perujuk, " +
                 "IFNULL(poliklinik.nm_poli,'-') AS nm_poli, " +
+                "IFNULL(CONCAT(rujuk_masuk.kd_penyakit,' - ',penyakit.nm_penyakit),'-') AS nm_penyakit_rujuk, " +
                 "COUNT(DISTINCT rujuk_masuk.no_rawat) AS jumlah " +
                 "FROM rujuk_masuk " +
                 "INNER JOIN reg_periksa ON reg_periksa.no_rawat = rujuk_masuk.no_rawat " +
                 "LEFT JOIN poliklinik ON poliklinik.kd_poli = reg_periksa.kd_poli " +
+                "LEFT JOIN penyakit ON penyakit.kd_penyakit = rujuk_masuk.kd_penyakit " +
                 "WHERE reg_periksa.tgl_registrasi BETWEEN '"+tgl1+"' AND '"+tgl2+"' ";
             if(!keyword.isEmpty()){
-                sql += "AND (rujuk_masuk.perujuk LIKE '%"+keyword+"%' OR rujuk_masuk.dokter_perujuk LIKE '%"+keyword+"%' OR poliklinik.nm_poli LIKE '%"+keyword+"%') ";
+                sql += "AND (rujuk_masuk.perujuk LIKE '%"+keyword+"%' OR rujuk_masuk.dokter_perujuk LIKE '%"+keyword+"%' " +
+                       "OR poliklinik.nm_poli LIKE '%"+keyword+"%' OR penyakit.nm_penyakit LIKE '%"+keyword+"%' " +
+                       "OR rujuk_masuk.kd_penyakit LIKE '%"+keyword+"%') ";
             }
-            sql += "GROUP BY nama_perujuk, poliklinik.nm_poli " +
-                   "ORDER BY nama_perujuk ASC, nm_poli ASC";
+            sql += "GROUP BY nama_perujuk, poliklinik.nm_poli, rujuk_masuk.kd_penyakit " +
+                   "ORDER BY nama_perujuk ASC, nm_poli ASC, rujuk_masuk.kd_penyakit ASC";
 
             ps = koneksi.prepareStatement(sql);
             rs = ps.executeQuery();
             i=1; total=0;
             while(rs.next()){
-                String perujuk = rs.getString("nama_perujuk");
-                String nmPoli  = rs.getString("nm_poli");
-                int jumlah     = rs.getInt("jumlah");
+                String perujuk   = rs.getString("nama_perujuk");
+                String nmPoli    = rs.getString("nm_poli");
+                String penyakit  = rs.getString("nm_penyakit_rujuk");
+                int jumlah       = rs.getInt("jumlah");
                 total += jumlah;
-                tabMode.addRow(new Object[]{i, perujuk, nmPoli, jumlah});
+                tabMode.addRow(new Object[]{i, perujuk, nmPoli, penyakit, jumlah});
                 i++;
             }
             if(i>1){
-                tabMode.addRow(new Object[]{">>","TOTAL","",total});
+                tabMode.addRow(new Object[]{">>","TOTAL","","",total});
             }
             this.setCursor(Cursor.getDefaultCursor());
         }catch(Exception e){
@@ -450,14 +458,15 @@ public final class DlgRujukanMasuk extends javax.swing.JDialog {
             bw.write("RS: "+akses.getnamars());
             bw.newLine();
             bw.newLine();
-            bw.write("No.;Faskes Perujuk;Poli Rujukan;Jumlah Rujukan");
+            bw.write("No.;Faskes Perujuk;Poli Rujukan;Penyakit;Jumlah Rujukan");
             bw.newLine();
             for(int r=0;r<tabMode.getRowCount();r++){
-                String no    = tabMode.getValueAt(r,0).toString();
-                String nama  = tabMode.getValueAt(r,1).toString().replace(";",".");
-                String poli  = tabMode.getValueAt(r,2).toString().replace(";",".");
-                String jml   = tabMode.getValueAt(r,3).toString();
-                bw.write(no+";"+nama+";"+poli+";"+jml);
+                String no       = tabMode.getValueAt(r,0).toString();
+                String nama     = tabMode.getValueAt(r,1).toString().replace(";",".");
+                String poli     = tabMode.getValueAt(r,2).toString().replace(";",".");
+                String penyakit = tabMode.getValueAt(r,3).toString().replace(";",".");
+                String jml      = tabMode.getValueAt(r,4).toString();
+                bw.write(no+";"+nama+";"+poli+";"+penyakit+";"+jml);
                 bw.newLine();
             }
             JOptionPane.showMessageDialog(null,"Export berhasil!\n"+f.getAbsolutePath());

@@ -397,6 +397,7 @@ public final class BPJSCekNoRujukanRS extends javax.swing.JDialog {
             LabelJabatanPolri.setVisible(false);
             LabelJabatanTNI.setVisible(false);
         }
+        initTemplateSEP();
     }
     
     
@@ -6341,6 +6342,86 @@ public final class BPJSCekNoRujukanRS extends javax.swing.JDialog {
     private widget.Table tbKamar;
     // End of variables declaration//GEN-END:variables
 
+    private widget.ComboBox CbTemplateSEP;
+    private widget.Label jLabelTemplateSEP;
+
+    private void initTemplateSEP() {
+        jLabelTemplateSEP = new widget.Label();
+        jLabelTemplateSEP.setText("Template SEP :");
+        FormKelengkapanSEP.add(jLabelTemplateSEP);
+        jLabelTemplateSEP.setBounds(495, 357, 90, 23);
+
+        CbTemplateSEP = new widget.ComboBox();
+        CbTemplateSEP.setModel(new javax.swing.DefaultComboBoxModel(new String[]{
+            "-Pilih Template-",
+            "1. Pasien Baru (Rujukan Baru)",
+            "2. Kontrol Ulang",
+            "3. Poli Tutup / Pecah SEP",
+            "4. Hemodialisa Rutin",
+            "5. Post Ranap",
+            "6. Pasien IGD",
+            "7. Poli Intern"
+        }));
+        CbTemplateSEP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CbTemplateSEPActionPerformed(evt);
+            }
+        });
+        FormKelengkapanSEP.add(CbTemplateSEP);
+        CbTemplateSEP.setBounds(589, 357, 319, 23);
+
+        FormKelengkapanSEP.setPreferredSize(new java.awt.Dimension(1000, 390));
+    }
+
+    private void CbTemplateSEPActionPerformed(java.awt.event.ActionEvent evt) {
+        int idx = CbTemplateSEP.getSelectedIndex();
+        if (idx == 0) return;
+        switch (idx) {
+            case 1: // Pasien Baru
+                TujuanKunjungan.setSelectedIndex(0);
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedIndex(0);
+                break;
+            case 2: // Kontrol Ulang
+                TujuanKunjungan.setSelectedItem("2. Konsul Dokter");
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedItem("5. Tujuan Kontrol");
+                break;
+            case 3: // Poli Tutup / Pecah SEP
+                TujuanKunjungan.setSelectedIndex(0);
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedItem("1. Poli spesialis tidak tersedia pada hari sebelumnya");
+                break;
+            case 4: // Hemodialisa Rutin
+                TujuanKunjungan.setSelectedItem("2. Konsul Dokter");
+                FlagProsedur.setSelectedItem("1. Prosedur dan Terapi Berkelanjutan");
+                Penunjang.setSelectedItem("12. HEMODIALISA");
+                AsesmenPoli.setSelectedItem("4. Atas Instruksi RS");
+                break;
+            case 5: // Post Ranap
+                TujuanKunjungan.setSelectedIndex(0);
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedIndex(0);
+                break;
+            case 6: // Pasien IGD
+                TujuanKunjungan.setSelectedIndex(0);
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedIndex(0);
+                break;
+            case 7: // Poli Intern
+                TujuanKunjungan.setSelectedItem("2. Konsul Dokter");
+                FlagProsedur.setSelectedIndex(0);
+                Penunjang.setSelectedIndex(0);
+                AsesmenPoli.setSelectedItem("4. Atas Instruksi RS");
+                break;
+        }
+    }
+
     public void tampil(String nomorrujukan) {
         try {
             URL = link+"/Rujukan/RS/"+nomorrujukan;
@@ -6546,6 +6627,7 @@ public final class BPJSCekNoRujukanRS extends javax.swing.JDialog {
                     "Tanggal Kunjungan",": "+response.path("tglKunjungan").asText()
                 }); 
                 Valid.SetTgl(TanggalRujuk,response.path("tglKunjungan").asText());
+                tampilBatasRujukan(nomorrujukan, response.path("tglKunjungan").asText());
                 isNumber();
                 Kdpnj.setText("BPJ");
                 nmpnj.setText("BPJS");
@@ -7791,6 +7873,63 @@ public final class BPJSCekNoRujukanRS extends javax.swing.JDialog {
         return statusantrean;
     }
     
+    private void tampilBatasRujukan(String noRujukan, String tglKunjungan) {
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date tglMulai = sdf.parse(tglKunjungan);
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.setTime(tglMulai);
+            cal.add(java.util.Calendar.DAY_OF_MONTH, 90);
+            java.util.Date tglBerakhir = cal.getTime();
+            long sisaHari = (tglBerakhir.getTime() - new java.util.Date().getTime()) / (1000 * 60 * 60 * 24);
+
+            java.text.SimpleDateFormat disSdf = new java.text.SimpleDateFormat("dd-MM-yyyy");
+            String tglMulaiStr = disSdf.format(tglMulai);
+            String tglBerakhirStr = disSdf.format(tglBerakhir);
+
+            int sudahDipakai = 0;
+            try (Connection konCek = koneksiDB.condb();
+                 PreparedStatement psCek = konCek.prepareStatement(
+                         "SELECT COUNT(*) FROM bridging_sep WHERE no_rujukan = ?")) {
+                psCek.setString(1, noRujukan);
+                ResultSet rsCek = psCek.executeQuery();
+                if (rsCek.next()) sudahDipakai = rsCek.getInt(1);
+            }
+
+            final String tglM = tglMulaiStr, tglB = tglBerakhirStr;
+            final long sisa = sisaHari;
+            final int dipakai = sudahDipakai;
+
+            SwingUtilities.invokeLater(() -> {
+                String status;
+                int msgType;
+                String judul;
+                if (sisa < 0) {
+                    status  = "KADALUARSA  " + Math.abs(sisa) + " hari yang lalu";
+                    msgType = JOptionPane.WARNING_MESSAGE;
+                    judul   = "Rujukan Kadaluarsa";
+                } else if (sisa <= 7) {
+                    status  = "HAMPIR HABIS, sisa " + sisa + " hari";
+                    msgType = JOptionPane.WARNING_MESSAGE;
+                    judul   = "Info Batas Rujukan";
+                } else {
+                    status  = "Masih berlaku, sisa " + sisa + " hari";
+                    msgType = JOptionPane.INFORMATION_MESSAGE;
+                    judul   = "Info Batas Rujukan";
+                }
+                JOptionPane.showMessageDialog(null,
+                    "No. Rujukan   : " + noRujukan + "\n" +
+                    "Tgl. Rujukan  : " + tglM + "\n" +
+                    "Masa Berlaku  : " + tglB + "\n" +
+                    "Status        : " + status + "\n" +
+                    "Pemakaian     : " + dipakai + " kali (data lokal)",
+                    judul, msgType);
+            });
+        } catch (Exception e) {
+            System.out.println("tampilBatasRujukan RS error: " + e);
+        }
+    }
+
     private void runBackground(Runnable task) {
         if (ceksukses) return;
         if (executor.isShutdown() || executor.isTerminated()) return;

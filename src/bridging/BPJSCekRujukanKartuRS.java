@@ -422,7 +422,7 @@ public final class BPJSCekRujukanKartuRS extends javax.swing.JDialog {
             ADDANTRIANAPIMOBILEJKN="";
             System.out.println("Notif : "+e);
         }
-        
+
         if(tampilkantni.equals("Yes")){
             chkPolri.setVisible(true);
             nmgolonganpolri.setVisible(true);
@@ -6420,6 +6420,63 @@ public final class BPJSCekRujukanKartuRS extends javax.swing.JDialog {
     private widget.Table tbKamar;
     // End of variables declaration//GEN-END:variables
 
+    private void tampilBatasRujukan(String noRujukan, String tglKunjungan) {
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date tglMulai = sdf.parse(tglKunjungan);
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.setTime(tglMulai);
+            cal.add(java.util.Calendar.DAY_OF_MONTH, 90);
+            java.util.Date tglBerakhir = cal.getTime();
+            long sisaHari = (tglBerakhir.getTime() - new java.util.Date().getTime()) / (1000 * 60 * 60 * 24);
+
+            java.text.SimpleDateFormat disSdf = new java.text.SimpleDateFormat("dd-MM-yyyy");
+            String tglMulaiStr = disSdf.format(tglMulai);
+            String tglBerakhirStr = disSdf.format(tglBerakhir);
+
+            int sudahDipakai = 0;
+            try (Connection konCek = koneksiDB.condb();
+                 PreparedStatement psCek = konCek.prepareStatement(
+                         "SELECT COUNT(*) FROM bridging_sep WHERE no_rujukan = ?")) {
+                psCek.setString(1, noRujukan);
+                ResultSet rsCek = psCek.executeQuery();
+                if (rsCek.next()) sudahDipakai = rsCek.getInt(1);
+            }
+
+            final String tglM = tglMulaiStr, tglB = tglBerakhirStr;
+            final long sisa = sisaHari;
+            final int dipakai = sudahDipakai;
+
+            SwingUtilities.invokeLater(() -> {
+                String status;
+                int msgType;
+                String judul;
+                if (sisa < 0) {
+                    status  = "KADALUARSA  " + Math.abs(sisa) + " hari yang lalu";
+                    msgType = JOptionPane.WARNING_MESSAGE;
+                    judul   = "Rujukan Kadaluarsa";
+                } else if (sisa <= 7) {
+                    status  = "HAMPIR HABIS, sisa " + sisa + " hari";
+                    msgType = JOptionPane.WARNING_MESSAGE;
+                    judul   = "Info Batas Rujukan";
+                } else {
+                    status  = "Masih berlaku, sisa " + sisa + " hari";
+                    msgType = JOptionPane.INFORMATION_MESSAGE;
+                    judul   = "Info Batas Rujukan";
+                }
+                JOptionPane.showMessageDialog(null,
+                    "No. Rujukan   : " + noRujukan + "\n" +
+                    "Tgl. Rujukan  : " + tglM + "\n" +
+                    "Masa Berlaku  : " + tglB + "\n" +
+                    "Status        : " + status + "\n" +
+                    "Pemakaian     : " + dipakai + " kali (data lokal)",
+                    judul, msgType);
+            });
+        } catch (Exception e) {
+            System.out.println("tampilBatasRujukan KartuRS error: " + e);
+        }
+    }
+
     public void tampil(String nomorrujukan) {
         try {
             URL = link+"/Rujukan/RS/Peserta/"+nomorrujukan;
@@ -6623,6 +6680,7 @@ public final class BPJSCekRujukanKartuRS extends javax.swing.JDialog {
                     "Tanggal Kunjungan",": "+response.path("tglKunjungan").asText()
                 }); 
                 Valid.SetTgl(TanggalRujuk,response.path("tglKunjungan").asText());
+                tampilBatasRujukan(response.path("noKunjungan").asText(), response.path("tglKunjungan").asText());
                 isNumber();
                 Kdpnj.setText("BPJ");
                 nmpnj.setText("BPJS");
