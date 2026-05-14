@@ -2928,7 +2928,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                         ps=koneksi.prepareStatement(
                             "select permintaan_lab.noorder,permintaan_lab.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,permintaan_lab.tgl_permintaan,pasien.tgl_lahir,"+
                             "permintaan_lab.jam_permintaan,pasien.alamat,kelurahan.nm_kel,kecamatan.nm_kec,kabupaten.nm_kab,propinsi.nm_prop,pasien.email,"+
-                            "pasien.jk,permintaan_lab.dokter_perujuk,dokter.nm_dokter,reg_periksa.kd_poli,pasien.tmp_lahir,permintaan_lab.status,"+
+                            "pasien.jk,pasien.no_ktp,permintaan_lab.dokter_perujuk,dokter.nm_dokter,reg_periksa.kd_poli,pasien.tmp_lahir,permintaan_lab.status,"+
                             "poliklinik.nm_poli,permintaan_lab.informasi_tambahan,permintaan_lab.diagnosa_klinis,reg_periksa.kd_pj,penjab.png_jawab "+
                             "from permintaan_lab inner join reg_periksa on permintaan_lab.no_rawat=reg_periksa.no_rawat "+
                             "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -2950,7 +2950,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                                         "'"+rs.getString("alamat")+", "+rs.getString("nm_kel")+", "+rs.getString("nm_kec")+", "+rs.getString("nm_kab")+", "+rs.getString("nm_prop")+"',"+
                                         "'"+rs.getString("tgl_permintaan")+"','"+rs.getString("jam_permintaan")+"','"+rs.getString("dokter_perujuk")+"','"+rs.getString("nm_dokter")+"',"+
                                         "'"+rs.getString("status")+"','"+rs.getString("kd_poli")+"','"+rs.getString("nm_poli")+"','"+rs.getString("kd_pj")+"','"+rs.getString("png_jawab")+"',"+
-                                        "'"+rs.getString("informasi_tambahan")+"','"+rs.getString("diagnosa_klinis")+"','0')").executeUpdate();
+                                        "'"+rs.getString("informasi_tambahan")+"','"+rs.getString("diagnosa_klinis")+"','"+rs.getString("no_ktp")+"')").executeUpdate();
                                 ps2=koneksi.prepareStatement("select permintaan_detail_permintaan_lab.noorder,permintaan_detail_permintaan_lab.kd_jenis_prw,permintaan_detail_permintaan_lab.id_template from permintaan_detail_permintaan_lab where permintaan_detail_permintaan_lab.noorder=?");
                                 try {
                                     ps2.setString(1,NoPermintaan);
@@ -3001,7 +3001,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                         koneksielims=koneksiDBELIMS.condb();
                         ps=koneksi.prepareStatement(
                             "select permintaan_lab.noorder,permintaan_lab.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,permintaan_lab.tgl_permintaan,pasien.tgl_lahir,"+
-                            "permintaan_lab.jam_permintaan,pasien.alamat,kelurahan.nm_kel,kecamatan.nm_kec,kabupaten.nm_kab,propinsi.nm_prop,pasien.jk,pasien.tmp_lahir,"+
+                            "permintaan_lab.jam_permintaan,pasien.alamat,pasien.no_ktp,kelurahan.nm_kel,kecamatan.nm_kec,kabupaten.nm_kab,propinsi.nm_prop,pasien.jk,pasien.tmp_lahir,"+
                             "permintaan_lab.dokter_perujuk,dokter.nm_dokter,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,permintaan_lab.informasi_tambahan,"+
                             "pasien.email,permintaan_lab.diagnosa_klinis,permintaan_lab.status,reg_periksa.kd_pj,penjab.png_jawab "+
                             "from permintaan_lab inner join reg_periksa on permintaan_lab.no_rawat=reg_periksa.no_rawat "+
@@ -3026,7 +3026,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                                         "'"+rs.getString("alamat")+", "+rs.getString("nm_kel")+", "+rs.getString("nm_kec")+", "+rs.getString("nm_kab")+", "+rs.getString("nm_prop")+"',"+
                                         "'"+rs.getString("tgl_permintaan")+"','"+rs.getString("jam_permintaan")+"','"+rs.getString("dokter_perujuk")+"','"+rs.getString("nm_dokter")+"',"+
                                         "'"+rs.getString("status")+"','"+rs.getString("kd_kamar")+"','"+rs.getString("nm_bangsal")+"','"+rs.getString("kd_pj")+"','"+rs.getString("png_jawab")+"',"+
-                                        "'"+rs.getString("informasi_tambahan")+"','"+rs.getString("diagnosa_klinis")+"','0')").executeUpdate();
+                                        "'"+rs.getString("informasi_tambahan")+"','"+rs.getString("diagnosa_klinis")+"','"+rs.getString("no_ktp")+"')").executeUpdate();
                                 
                                 ps2=koneksi.prepareStatement("select permintaan_detail_permintaan_lab.noorder,permintaan_detail_permintaan_lab.kd_jenis_prw,permintaan_detail_permintaan_lab.id_template from permintaan_detail_permintaan_lab where permintaan_detail_permintaan_lab.noorder=?");
                                 try {
