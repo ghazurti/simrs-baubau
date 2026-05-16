@@ -919,8 +919,10 @@ public final class SmartKlaimBPJSKirimFHIR extends javax.swing.JDialog {
                     System.out.println("JSON : "+requestJson);
                     System.out.println("URL : "+link+"/eclaim/rekammedis/insert");
                     requestEntity = new HttpEntity(requestJson,headers);
-                    root = mapper.readTree(api.getRest().exchange(link+"/eclaim/rekammedis/insert", HttpMethod.POST, requestEntity, String.class).getBody());
-                    nameNode = root.path("metaData");
+                    String responseBody = api.getRest().exchange(link+"/eclaim/rekammedis/insert", HttpMethod.POST, requestEntity, String.class).getBody();
+                    System.out.println("Response RAW : "+responseBody);
+                    root = mapper.readTree(responseBody);
+                    nameNode = root.path("metadata");
                     System.out.println("code : "+nameNode.path("code").asText());
                     System.out.println("message : "+nameNode.path("message").asText());
                     if(nameNode.path("code").asText().equals("200")){

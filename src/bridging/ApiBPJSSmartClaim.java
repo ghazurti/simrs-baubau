@@ -26,9 +26,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import org.apache.http.conn.scheme.Scheme;
-import org.apache.http.conn.ssl.SSLSocketFactory;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import javax.net.ssl.HttpsURLConnection;
 import org.springframework.web.client.RestTemplate;
 
 public class ApiBPJSSmartClaim {
@@ -39,10 +37,7 @@ public class ApiBPJSSmartClaim {
     private Mac mac;
     private long millis;
     private SSLContext sslContext;
-    private SSLSocketFactory sslFactory;
     private SecretKeySpec secretKey;
-    private Scheme scheme;
-    private HttpComponentsClientHttpRequestFactory factory;
     private ApiBPJSAesKeySpec mykey;
 
     public ApiBPJSSmartClaim() {
@@ -172,21 +167,18 @@ public class ApiBPJSSmartClaim {
     }
 
     public RestTemplate getRest() throws NoSuchAlgorithmException, KeyManagementException {
-        sslContext = SSLContext.getInstance("TLSv1.2");
-        TrustManager[] trustManagers= {
+        sslContext = SSLContext.getInstance("TLS");
+        TrustManager[] trustManagers = {
             new X509TrustManager() {
-                public X509Certificate[] getAcceptedIssuers() {return null;}
-                public void checkServerTrusted(X509Certificate[] arg0, String arg1)throws CertificateException {}
-                public void checkClientTrusted(X509Certificate[] arg0, String arg1)throws CertificateException {}
+                public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+                public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
+                public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
             }
         };
         sslContext.init(null, trustManagers, new SecureRandom());
-        sslFactory = new SSLSocketFactory(sslContext, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-        scheme = new Scheme("https", 443, sslFactory);
-        factory = new HttpComponentsClientHttpRequestFactory();
-        factory.setReadTimeout(60000); 
-        factory.getHttpClient().getConnectionManager().getSchemeRegistry().register(scheme);
-        return new RestTemplate(factory);
+        HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+        HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
+        return new RestTemplate();
     }
 
     public byte[] compressSmartClaimRaw(String str) throws IOException {
