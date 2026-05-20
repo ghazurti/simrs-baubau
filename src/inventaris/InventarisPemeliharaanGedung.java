@@ -959,6 +959,7 @@ private void TanggalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_T
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pemeliharaan_gedung.no_pemeliharaan,pemeliharaan_gedung.nip,petugas.nama,pemeliharaan_gedung.uraian_kegiatan,"+
                     "pemeliharaan_gedung.tanggal,pemeliharaan_gedung.pelaksana,pemeliharaan_gedung.biaya, "+

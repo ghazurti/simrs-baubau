@@ -519,6 +519,7 @@ public class DlgKecamatan extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select kecamatan.nm_kec,kecamatan.kd_kec from kecamatan");
             try {
                 rs=ps.executeQuery();
@@ -578,6 +579,7 @@ public class DlgKecamatan extends javax.swing.JDialog {
             }
             myObj.close();
             if(tabMode.getRowCount()==0){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select kecamatan.nm_kec,kecamatan.kd_kec from kecamatan where kecamatan.nm_kec like ? ");
                 try {
                     ps.setString(1,"%"+TCari.getText().trim()+"%");

@@ -595,6 +595,7 @@ public class PerpustakaanRuang extends javax.swing.JDialog {
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from perpustakaan_ruang where kd_ruang like ? or nm_ruang like ? order by kd_ruang");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

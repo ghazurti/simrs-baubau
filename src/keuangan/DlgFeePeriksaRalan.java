@@ -86,6 +86,7 @@ public class DlgFeePeriksaRalan extends javax.swing.JDialog {
         kddokter.setDocument(new batasInput((byte)10).getKata(kddokter));
                 
         try {        
+            koneksi=koneksiDB.condb();
             pspasien=koneksi.prepareStatement(
                     "select rawat_jl_dr.no_rawat,reg_periksa.tgl_registrasi,pasien.nm_pasien,penjab.png_jawab,"+
                     "rawat_jl_dr.bhp,rawat_jl_dr.material,rawat_jl_dr.biaya_rawat,rawat_jl_dr.tarif_tindakandr "+

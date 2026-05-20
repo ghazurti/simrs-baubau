@@ -366,6 +366,7 @@ public final class MasterCariSekolah extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select master_sekolah.kd_sekolah, master_sekolah.nm_sekolah from master_sekolah order by master_sekolah.nm_sekolah");   
             try {
                 rs=ps.executeQuery();

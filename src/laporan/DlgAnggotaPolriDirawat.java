@@ -794,6 +794,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select pasien.nm_pasien,pangkat_polri.nama_pangkat,pasien.nip,satuan_polri.nama_satuan,"+
                 "reg_periksa.no_rawat,golongan_polri.nama_golongan,jabatan_polri.nama_jabatan from reg_periksa "+

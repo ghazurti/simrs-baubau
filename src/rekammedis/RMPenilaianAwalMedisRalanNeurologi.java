@@ -1696,6 +1696,7 @@ public final class RMPenilaianAwalMedisRalanNeurologi extends javax.swing.JDialo
         }else if(tabMode.getRowCount()!=0){
             try{
                 if(TCari.getText().trim().equals("")){
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ralan_neurologi.tanggal,"+
                         "penilaian_medis_ralan_neurologi.kd_dokter,penilaian_medis_ralan_neurologi.anamnesis,penilaian_medis_ralan_neurologi.hubungan,penilaian_medis_ralan_neurologi.keluhan_utama,"+
@@ -1712,6 +1713,7 @@ public final class RMPenilaianAwalMedisRalanNeurologi extends javax.swing.JDialo
                         "inner join dokter on penilaian_medis_ralan_neurologi.kd_dokter=dokter.kd_dokter where "+
                         "penilaian_medis_ralan_neurologi.tanggal between ? and ? order by penilaian_medis_ralan_neurologi.tanggal");
                 }else{
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ralan_neurologi.tanggal,"+
                         "penilaian_medis_ralan_neurologi.kd_dokter,penilaian_medis_ralan_neurologi.anamnesis,penilaian_medis_ralan_neurologi.hubungan,penilaian_medis_ralan_neurologi.keluhan_utama,"+
@@ -2385,6 +2387,7 @@ public final class RMPenilaianAwalMedisRalanNeurologi extends javax.swing.JDialo
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ralan_neurologi.tanggal,"+
                         "penilaian_medis_ralan_neurologi.kd_dokter,penilaian_medis_ralan_neurologi.anamnesis,penilaian_medis_ralan_neurologi.hubungan,penilaian_medis_ralan_neurologi.keluhan_utama,"+
@@ -2401,6 +2404,7 @@ public final class RMPenilaianAwalMedisRalanNeurologi extends javax.swing.JDialo
                         "inner join dokter on penilaian_medis_ralan_neurologi.kd_dokter=dokter.kd_dokter where "+
                         "penilaian_medis_ralan_neurologi.tanggal between ? and ? order by penilaian_medis_ralan_neurologi.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ralan_neurologi.tanggal,"+
                         "penilaian_medis_ralan_neurologi.kd_dokter,penilaian_medis_ralan_neurologi.anamnesis,penilaian_medis_ralan_neurologi.hubungan,penilaian_medis_ralan_neurologi.keluhan_utama,"+
@@ -2591,6 +2595,7 @@ public final class RMPenilaianAwalMedisRalanNeurologi extends javax.swing.JDialo
 
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rkm_medis,pasien.nm_pasien, if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,"+
                     "reg_periksa.tgl_registrasi,reg_periksa.jam_reg "+
@@ -2624,6 +2629,7 @@ public final class RMPenilaianAwalMedisRalanNeurologi extends javax.swing.JDialo
  
     private void autoFillDariSOAP() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select tensi,berat,tinggi,suhu_tubuh,nadi,respirasi,keluhan,alergi from pemeriksaan_ralan "+
                 "where no_rawat=? order by tgl_perawatan desc, jam_rawat desc limit 1");

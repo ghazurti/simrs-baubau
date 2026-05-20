@@ -631,6 +631,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select ipsrssuplier.kode_suplier,ipsrssuplier.nama_suplier from ipsrssuplier where "+
                     "ipsrssuplier.kode_suplier like ? or ipsrssuplier.nama_suplier like ? order by ipsrssuplier.nama_suplier");

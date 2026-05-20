@@ -1901,6 +1901,7 @@ public final class RMPenilaianAwalMedisRanapKandungan extends javax.swing.JDialo
         }else if(tabMode.getRowCount()!=0){
             try{
                 if(TCari.getText().trim().equals("")){
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ranap_kandungan.tanggal,"+
                         "penilaian_medis_ranap_kandungan.kd_dokter,penilaian_medis_ranap_kandungan.anamnesis,penilaian_medis_ranap_kandungan.hubungan,penilaian_medis_ranap_kandungan.keluhan_utama,penilaian_medis_ranap_kandungan.rps,penilaian_medis_ranap_kandungan.rpk,penilaian_medis_ranap_kandungan.rpd,penilaian_medis_ranap_kandungan.rpo,penilaian_medis_ranap_kandungan.alergi,"+
@@ -1913,6 +1914,7 @@ public final class RMPenilaianAwalMedisRanapKandungan extends javax.swing.JDialo
                         "inner join dokter on penilaian_medis_ranap_kandungan.kd_dokter=dokter.kd_dokter where "+
                         "penilaian_medis_ranap_kandungan.tanggal between ? and ? order by penilaian_medis_ranap_kandungan.tanggal");
                 }else{
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ranap_kandungan.tanggal,"+
                         "penilaian_medis_ranap_kandungan.kd_dokter,penilaian_medis_ranap_kandungan.anamnesis,penilaian_medis_ranap_kandungan.hubungan,penilaian_medis_ranap_kandungan.keluhan_utama,penilaian_medis_ranap_kandungan.rps,penilaian_medis_ranap_kandungan.rpk,penilaian_medis_ranap_kandungan.rpd,penilaian_medis_ranap_kandungan.rpo,penilaian_medis_ranap_kandungan.alergi,"+
@@ -2656,6 +2658,7 @@ public final class RMPenilaianAwalMedisRanapKandungan extends javax.swing.JDialo
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ranap_kandungan.tanggal,"+
                         "penilaian_medis_ranap_kandungan.kd_dokter,penilaian_medis_ranap_kandungan.anamnesis,penilaian_medis_ranap_kandungan.hubungan,penilaian_medis_ranap_kandungan.keluhan_utama,penilaian_medis_ranap_kandungan.rps,penilaian_medis_ranap_kandungan.rpk,penilaian_medis_ranap_kandungan.rpd,penilaian_medis_ranap_kandungan.rpo,penilaian_medis_ranap_kandungan.alergi,"+
@@ -2668,6 +2671,7 @@ public final class RMPenilaianAwalMedisRanapKandungan extends javax.swing.JDialo
                         "inner join dokter on penilaian_medis_ranap_kandungan.kd_dokter=dokter.kd_dokter where "+
                         "penilaian_medis_ranap_kandungan.tanggal between ? and ? order by penilaian_medis_ranap_kandungan.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ranap_kandungan.tanggal,"+
                         "penilaian_medis_ranap_kandungan.kd_dokter,penilaian_medis_ranap_kandungan.anamnesis,penilaian_medis_ranap_kandungan.hubungan,penilaian_medis_ranap_kandungan.keluhan_utama,penilaian_medis_ranap_kandungan.rps,penilaian_medis_ranap_kandungan.rpk,penilaian_medis_ranap_kandungan.rpd,penilaian_medis_ranap_kandungan.rpo,penilaian_medis_ranap_kandungan.alergi,"+
@@ -2832,6 +2836,7 @@ public final class RMPenilaianAwalMedisRanapKandungan extends javax.swing.JDialo
 
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rkm_medis,pasien.nm_pasien, if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,reg_periksa.tgl_registrasi "+
                     "from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+

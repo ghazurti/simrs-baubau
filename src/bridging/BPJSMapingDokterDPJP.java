@@ -757,6 +757,7 @@ private void btnPoliBPJSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                "select maping_dokter_dpjpvclaim.kd_dokter,dokter.nm_dokter,maping_dokter_dpjpvclaim.kd_dokter_bpjs,maping_dokter_dpjpvclaim.nm_dokter_bpjs "+
                "from maping_dokter_dpjpvclaim inner join dokter on maping_dokter_dpjpvclaim.kd_dokter=dokter.kd_dokter "+(TCari.getText().trim().equals("")?"":

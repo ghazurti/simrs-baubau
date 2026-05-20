@@ -1197,6 +1197,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select detail_surat_pemesanan_non_medis.kode_brng,ipsrsbarang.nama_brng,ipsrsjenisbarang.nm_jenis as namajenis, "+
                     "detail_surat_pemesanan_non_medis.kode_sat,kodesatuan.satuan,sum(detail_surat_pemesanan_non_medis.jumlah) as jumlah,"+

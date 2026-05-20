@@ -1160,6 +1160,7 @@ private void btnSatuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select tokobarang.kode_brng,tokobarang.nama_brng,kodesatuan.satuan,tokojenisbarang.nm_jenis, "+
                         "tokobarang.stok,tokobarang.dasar,tokobarang.h_beli,tokobarang.distributor,tokobarang.grosir,tokobarang.retail "+
@@ -1167,6 +1168,7 @@ private void btnSatuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                         "inner join tokojenisbarang on tokobarang.jenis=tokojenisbarang.kd_jenis "+
                         "where tokobarang.status='1' order by tokobarang.kode_brng");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select tokobarang.kode_brng,tokobarang.nama_brng,kodesatuan.satuan,tokojenisbarang.nm_jenis, "+
                         "tokobarang.stok,tokobarang.dasar,tokobarang.h_beli,tokobarang.distributor,tokobarang.grosir,tokobarang.retail "+
@@ -1285,6 +1287,7 @@ private void btnSatuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
             try {
                 if (!beli.getText().equals("")) {
                     try{
+                        koneksi=koneksiDB.condb();
                         rs=koneksi.prepareStatement("select * from tokosetharga").executeQuery();
                         if(rs.next()){
                             grosir.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("grosir") / 100)),100)));

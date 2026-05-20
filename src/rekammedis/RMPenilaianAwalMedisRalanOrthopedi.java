@@ -1662,6 +1662,7 @@ public final class RMPenilaianAwalMedisRalanOrthopedi extends javax.swing.JDialo
         }else if(tabMode.getRowCount()!=0){
             try{
                 if(TCari.getText().trim().equals("")){
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ralan_orthopedi.tanggal,"+
                         "penilaian_medis_ralan_orthopedi.kd_dokter,penilaian_medis_ralan_orthopedi.anamnesis,penilaian_medis_ralan_orthopedi.hubungan,penilaian_medis_ralan_orthopedi.keluhan_utama,"+
@@ -1677,6 +1678,7 @@ public final class RMPenilaianAwalMedisRalanOrthopedi extends javax.swing.JDialo
                         "inner join dokter on penilaian_medis_ralan_orthopedi.kd_dokter=dokter.kd_dokter where "+
                         "penilaian_medis_ralan_orthopedi.tanggal between ? and ? order by penilaian_medis_ralan_orthopedi.tanggal");
                 }else{
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ralan_orthopedi.tanggal,"+
                         "penilaian_medis_ralan_orthopedi.kd_dokter,penilaian_medis_ralan_orthopedi.anamnesis,penilaian_medis_ralan_orthopedi.hubungan,penilaian_medis_ralan_orthopedi.keluhan_utama,"+
@@ -2339,6 +2341,7 @@ public final class RMPenilaianAwalMedisRalanOrthopedi extends javax.swing.JDialo
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ralan_orthopedi.tanggal,"+
                         "penilaian_medis_ralan_orthopedi.kd_dokter,penilaian_medis_ralan_orthopedi.anamnesis,penilaian_medis_ralan_orthopedi.hubungan,penilaian_medis_ralan_orthopedi.keluhan_utama,"+
@@ -2354,6 +2357,7 @@ public final class RMPenilaianAwalMedisRalanOrthopedi extends javax.swing.JDialo
                         "inner join dokter on penilaian_medis_ralan_orthopedi.kd_dokter=dokter.kd_dokter where "+
                         "penilaian_medis_ralan_orthopedi.tanggal between ? and ? order by penilaian_medis_ralan_orthopedi.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ralan_orthopedi.tanggal,"+
                         "penilaian_medis_ralan_orthopedi.kd_dokter,penilaian_medis_ralan_orthopedi.anamnesis,penilaian_medis_ralan_orthopedi.hubungan,penilaian_medis_ralan_orthopedi.keluhan_utama,"+
@@ -2498,6 +2502,7 @@ public final class RMPenilaianAwalMedisRalanOrthopedi extends javax.swing.JDialo
 
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rkm_medis,pasien.nm_pasien, if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,reg_periksa.tgl_registrasi "+
                     "from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -2529,6 +2534,7 @@ public final class RMPenilaianAwalMedisRalanOrthopedi extends javax.swing.JDialo
  
     private void autoFillDariSOAP() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select tensi,berat,tinggi,suhu_tubuh,nadi,respirasi,keluhan,alergi from pemeriksaan_ralan "+
                 "where no_rawat=? order by tgl_perawatan desc, jam_rawat desc limit 1");

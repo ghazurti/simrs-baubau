@@ -604,6 +604,7 @@ public class MasterImunisasi extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_imunisasi where master_imunisasi.kode_imunisasi like ? or master_imunisasi.nama_imunisasi like ? order by master_imunisasi.kode_imunisasi");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

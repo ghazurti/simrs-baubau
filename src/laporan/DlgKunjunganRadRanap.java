@@ -1077,6 +1077,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,periksa_radiologi.tgl_periksa,periksa_radiologi.jam,periksa_radiologi.dokter_perujuk, " +
                     "dokter.nm_dokter,reg_periksa.no_rkm_medis,pasien.nm_pasien,kamar_inap.kd_kamar,bangsal.nm_bangsal,"+
@@ -1159,6 +1160,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     }
                     diagnosa="";
                     kddiangnosa="";
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select penyakit.kd_penyakit,penyakit.nm_penyakit from penyakit inner join diagnosa_pasien " +
                         "on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit " +
                         "where diagnosa_pasien.no_rawat=? order by prioritas asc limit 1");
@@ -1191,6 +1193,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     }
                     
                     tindakan="";
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select trim(jns_perawatan_radiologi.nm_perawatan) from jns_perawatan_radiologi inner join periksa_radiologi "+
                         "on periksa_radiologi.kd_jenis_prw=jns_perawatan_radiologi.kd_jenis_prw where "+

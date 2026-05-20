@@ -614,6 +614,7 @@ public class LabKeslingMasterSampelBakuMutu extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select * from labkesling_master_sampel "+(TCari.getText().trim().equals("")?"":"where labkesling_master_sampel.kode_sampel like ? or labkesling_master_sampel.nama_sampel like ? or labkesling_master_sampel.baku_mutu like ?")+" order by labkesling_master_sampel.kode_sampel ");
             try{

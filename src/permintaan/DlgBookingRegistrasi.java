@@ -1697,6 +1697,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         }
         Valid.tabelKosong(tabMode);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select booking_registrasi.tanggal_booking,booking_registrasi.jam_booking,booking_registrasi.no_rkm_medis, "+
                     "pasien.nm_pasien,booking_registrasi.tanggal_periksa,booking_registrasi.kd_dokter,"+

@@ -352,6 +352,7 @@ public final class PerpustakaanCariInventaris extends javax.swing.JDialog {
     private void tampil() {
         try {
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select perpustakaan_inventaris.no_inventaris,perpustakaan_buku.kode_buku,perpustakaan_buku.judul_buku,perpustakaan_penerbit.nama_penerbit,perpustakaan_pengarang.nama_pengarang,"+
                 "perpustakaan_buku.thn_terbit,perpustakaan_buku.isbn,perpustakaan_kategori.nama_kategori,perpustakaan_jenis_buku.nama_jenis,perpustakaan_inventaris.asal_buku,perpustakaan_inventaris.tgl_pengadaan,"+

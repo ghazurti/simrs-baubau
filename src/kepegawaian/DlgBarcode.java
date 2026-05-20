@@ -705,6 +705,7 @@ public final class DlgBarcode extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{ 
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select  pegawai.id,pegawai.nik,pegawai.nama,barcode.barcode  from pegawai "+
                     "left outer join barcode on pegawai.id=barcode.id where pegawai.stts_aktif<>'KELUAR' and pegawai.nik like ? or  pegawai.stts_aktif<>'KELUAR' and pegawai.nama like ? "+
                     "or  pegawai.stts_aktif<>'KELUAR' and barcode.barcode like ? ");

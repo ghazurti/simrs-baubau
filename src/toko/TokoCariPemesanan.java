@@ -712,6 +712,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(TCari,"No.Faktur");
         }else{
             try {
+                koneksi=koneksiDB.condb();
                 pscaripesan=koneksi.prepareStatement(
                         "select tokopemesanan.no_faktur,tokopemesanan.tagihan,tokopemesanan.tgl_faktur,tokopemesanan.status,"+
                         "tokopemesanan.ppn,(tokopemesanan.meterai+tokopemesanan.total2)as total from tokopemesanan where tokopemesanan.no_faktur=?");
@@ -721,6 +722,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     if(rs.next()){
                           Sequel.AutoComitFalse();
                           sukses=true;
+                          koneksi=koneksiDB.condb();
                           pstoko_detail_pesan=koneksi.prepareStatement("select toko_detail_pesan.kode_brng,toko_detail_pesan.jumlah from toko_detail_pesan where toko_detail_pesan.no_faktur=? ");
                           try {
                                pstoko_detail_pesan.setString(1,rs.getString(1));
@@ -1052,6 +1054,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select tokopemesanan.tgl_pesan,tokopemesanan.no_faktur, "+
                     "tokopemesanan.kode_suplier,tokosuplier.nama_suplier, "+
@@ -1165,6 +1168,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                           rs.getString(5)+", "+rs.getString(6),"","","","","",""
                     });  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select toko_detail_pesan.kode_brng,tokobarang.nama_brng, "+
                         "toko_detail_pesan.kode_sat,kodesatuan.satuan,toko_detail_pesan.jumlah,toko_detail_pesan.harga, "+
                         "toko_detail_pesan.subtotal,toko_detail_pesan.dis,toko_detail_pesan.besardis,toko_detail_pesan.total "+

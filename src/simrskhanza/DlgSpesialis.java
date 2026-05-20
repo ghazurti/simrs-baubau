@@ -587,6 +587,7 @@ public class DlgSpesialis extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select * from spesialis "+(TCari.getText().trim().equals("")?"":"where spesialis.kd_sps like ? or spesialis.nm_sps like ?")+" order by spesialis.kd_sps ");
             try{

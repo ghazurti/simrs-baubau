@@ -1322,6 +1322,7 @@ private void ppBarcodeBtnPrintActionPerformed(java.awt.event.ActionEvent evt) {/
         try {
             Valid.tabelKosong(tabMode);
             if(TCari.getText().equals("")&&nm_ruangcari.getText().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select perpustakaan_inventaris.no_inventaris,perpustakaan_buku.kode_buku, perpustakaan_buku.judul_buku, "+
                         "perpustakaan_penerbit.nama_penerbit, perpustakaan_pengarang.nama_pengarang, perpustakaan_buku.thn_terbit, perpustakaan_buku.isbn,"+
                         "perpustakaan_kategori.nama_kategori, perpustakaan_jenis_buku.nama_jenis,perpustakaan_inventaris.asal_buku,perpustakaan_inventaris.tgl_pengadaan,"+
@@ -1333,6 +1334,7 @@ private void ppBarcodeBtnPrintActionPerformed(java.awt.event.ActionEvent evt) {/
                         "and perpustakaan_buku.kode_buku=perpustakaan_inventaris.kode_buku and perpustakaan_inventaris.kd_ruang=perpustakaan_ruang.kd_ruang "+
                         " order by perpustakaan_buku.kode_buku,perpustakaan_inventaris.no_inventaris");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select perpustakaan_inventaris.no_inventaris,perpustakaan_buku.kode_buku, perpustakaan_buku.judul_buku, "+
                         "perpustakaan_penerbit.nama_penerbit, perpustakaan_pengarang.nama_pengarang, perpustakaan_buku.thn_terbit, perpustakaan_buku.isbn,"+
                         "perpustakaan_kategori.nama_kategori, perpustakaan_jenis_buku.nama_jenis,perpustakaan_inventaris.asal_buku,perpustakaan_inventaris.tgl_pengadaan,"+
@@ -1487,6 +1489,7 @@ private void ppBarcodeBtnPrintActionPerformed(java.awt.event.ActionEvent evt) {/
     
     private void isBarang(){
         try {                    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                "select perpustakaan_buku.kode_buku, perpustakaan_buku.judul_buku, "+
                "perpustakaan_penerbit.nama_penerbit, perpustakaan_pengarang.nama_pengarang,"+

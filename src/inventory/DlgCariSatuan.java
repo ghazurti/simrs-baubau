@@ -386,6 +386,7 @@ public final class DlgCariSatuan extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from kodesatuan order by satuan ");
             try {
                 rs=ps.executeQuery();

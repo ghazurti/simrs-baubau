@@ -1417,6 +1417,7 @@ private void NoSirkulasiKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:eve
                 "Keterangan Sterilisasi","NIP Penyeteril","Petugas Penyeteril","Tgl & Jam Starilisasi",
                 "Keterangan Kembali","NIP Pengembali","Petugas Pengembali","Tgl & Jam Kembali"*/
             if(R1.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                        "select inventaris_ambil_cssd.no_sirkulasi,inventaris_ambil_cssd.no_inventaris,inventaris.kode_barang,inventaris_barang.nama_barang,inventaris_produsen.nama_produsen,"+
                        "inventaris_merk.nama_merk,inventaris_barang.thn_produksi,inventaris_barang.isbn,cssd_barang.jenis_barang,inventaris_ambil_cssd.keterangan_ambil,inventaris_ambil_cssd.tgl_ambil,"+
@@ -1456,6 +1457,7 @@ private void NoSirkulasiKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:eve
                     }
                 }
             }else if(R2.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                        "select inventaris_ambil_cssd.no_sirkulasi,inventaris_ambil_cssd.no_inventaris,inventaris.kode_barang,inventaris_barang.nama_barang,inventaris_produsen.nama_produsen,"+
                        "inventaris_merk.nama_merk,inventaris_barang.thn_produksi,inventaris_barang.isbn,cssd_barang.jenis_barang,inventaris_ambil_cssd.keterangan_ambil,inventaris_ambil_cssd.tgl_ambil,"+
@@ -1548,6 +1550,7 @@ private void NoSirkulasiKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:eve
     
     private void isInventaris(){
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                "select inventaris.no_inventaris,inventaris_barang.kode_barang, inventaris_barang.nama_barang, "+
                "inventaris_merk.nama_merk,cssd_barang.jenis_barang,inventaris.status_barang "+

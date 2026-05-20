@@ -607,6 +607,7 @@ public class RMMasterKesimpulanAnjuranMCU extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select * from master_kesimpulan_anjuran_mcu "+
                     (TCari.getText().trim().equals("")?"":"where master_kesimpulan_anjuran_mcu.kesimpulan like ? or master_kesimpulan_anjuran_mcu.anjuran like ?")+

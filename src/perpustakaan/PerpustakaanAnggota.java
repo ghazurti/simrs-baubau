@@ -1114,6 +1114,7 @@ private void EmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Ema
                 habis=" masa_berlaku between '"+Valid.SetTgl(Habis1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Habis2.getSelectedItem()+"")+"' and ";
             }
                
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select perpustakaan_anggota.no_anggota,perpustakaan_anggota.nama_anggota,perpustakaan_anggota.tmp_lahir,perpustakaan_anggota.tgl_lahir,perpustakaan_anggota.j_kel,perpustakaan_anggota.alamat,perpustakaan_anggota.no_telp,"+
                 "perpustakaan_anggota.email,perpustakaan_anggota.tgl_gabung,perpustakaan_anggota.masa_berlaku,perpustakaan_anggota.jenis_anggota,perpustakaan_anggota.nomer_id from perpustakaan_anggota where "+

@@ -1022,6 +1022,7 @@ public final class ApotekBPJSDaftarResepObat extends javax.swing.JDialog {
                         if(sukses==true){
                             if(JADIKANPIUTANGAPOTEKBPJS.equals("yes")){
                                 try {
+                                    koneksi=koneksiDB.condb();
                                     ps=koneksi.prepareStatement(
                                             "select piutang.nota_piutang,piutang.kd_bangsal,piutang.sisapiutang from piutang where piutang.nota_piutang=?");
                                     try {
@@ -1029,6 +1030,7 @@ public final class ApotekBPJSDaftarResepObat extends javax.swing.JDialog {
                                        rs=ps.executeQuery();
                                        if(rs.next()){
                                            Sequel.AutoComitFalse();
+                                           koneksi=koneksiDB.condb();
                                            ps2=koneksi.prepareStatement(
                                                 "select detailpiutang.kode_brng,detailpiutang.jumlah,detailpiutang.no_batch,detailpiutang.no_faktur from detailpiutang where detailpiutang.nota_piutang=? ");
                                            try {
@@ -1161,6 +1163,7 @@ public final class ApotekBPJSDaftarResepObat extends javax.swing.JDialog {
                 ChkAccor.setVisible(true);
                 Valid.tabelKosong(tabModeDetail);
                 try {
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                         "select bridging_resep_apotek_bpjs_racikan.nomor_racik,bridging_resep_apotek_bpjs_racikan.kode_brng_apotek_bpjs,maping_obat_apotek_bpjs.nama_brng_apotek_bpjs,bridging_resep_apotek_bpjs_racikan.signa1,"+
                         "bridging_resep_apotek_bpjs_racikan.signa2,bridging_resep_apotek_bpjs_racikan.jml_obat,bridging_resep_apotek_bpjs_racikan.permintaan,bridging_resep_apotek_bpjs_racikan.jho "+
@@ -1191,6 +1194,7 @@ public final class ApotekBPJSDaftarResepObat extends javax.swing.JDialog {
                 }
                 
                 try {
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                         "select bridging_resep_apotek_bpjs_nonracikan.kode_brng_apotek_bpjs,maping_obat_apotek_bpjs.nama_brng_apotek_bpjs,bridging_resep_apotek_bpjs_nonracikan.signa1,"+
                         "bridging_resep_apotek_bpjs_nonracikan.signa2,bridging_resep_apotek_bpjs_nonracikan.jml_obat,bridging_resep_apotek_bpjs_nonracikan.jho "+
@@ -1291,6 +1295,7 @@ public final class ApotekBPJSDaftarResepObat extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select bridging_resep_apotek_bpjs.no_sep,bridging_resep_apotek_bpjs.no_sep_apotek,bridging_resep_apotek_bpjs.tgl_sep,bridging_sep.no_rawat,bridging_sep.nomr,bridging_sep.nama_pasien,"+
                 "bridging_sep.no_kartu,bridging_resep_apotek_bpjs.kdjenis,bridging_resep_apotek_bpjs.id_user_sep,bridging_resep_apotek_bpjs.no_resep,bridging_resep_apotek_bpjs.tgl_resep,"+
@@ -1338,6 +1343,7 @@ public final class ApotekBPJSDaftarResepObat extends javax.swing.JDialog {
     private void tampil2() {
         Valid.tabelKosong(tabModeRekap);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select bridging_resep_apotek_bpjs.no_sep,bridging_resep_apotek_bpjs.no_sep_apotek,bridging_resep_apotek_bpjs.tgl_sep,bridging_sep.no_rawat,bridging_sep.nomr,bridging_sep.nama_pasien,"+
                 "bridging_sep.no_kartu,bridging_resep_apotek_bpjs.kdjenis,bridging_resep_apotek_bpjs.id_user_sep,bridging_resep_apotek_bpjs.no_resep,bridging_resep_apotek_bpjs.tgl_resep,"+
@@ -1386,6 +1392,7 @@ public final class ApotekBPJSDaftarResepObat extends javax.swing.JDialog {
                 }
             }
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select bridging_resep_apotek_bpjs.no_sep,bridging_resep_apotek_bpjs.no_sep_apotek,bridging_resep_apotek_bpjs.tgl_sep,bridging_sep.no_rawat,bridging_sep.nomr,bridging_sep.nama_pasien,"+
                 "bridging_sep.no_kartu,bridging_resep_apotek_bpjs.kdjenis,bridging_resep_apotek_bpjs.id_user_sep,bridging_resep_apotek_bpjs.no_resep,bridging_resep_apotek_bpjs.tgl_resep,"+
@@ -1567,6 +1574,7 @@ public final class ApotekBPJSDaftarResepObat extends javax.swing.JDialog {
                 JOptionPane.showMessageDialog(null,nameNode.path("message").asText());
             }else{
                 if(!tbResep.getValueAt(tbResep.getSelectedRow(),12).toString().equals("0. Tanpa Iterasi")){
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                         "select permintaan_resep_iterasi_bpjs.no_resep from permintaan_resep_iterasi_bpjs where permintaan_resep_iterasi_bpjs.no_resep_awal=?"
                     );

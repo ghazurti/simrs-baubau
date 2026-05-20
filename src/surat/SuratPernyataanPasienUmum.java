@@ -1366,6 +1366,7 @@ public final class SuratPernyataanPasienUmum extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select surat_pernyataan_pasien_umum.no_surat,reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,reg_periksa.umurdaftar,"+
                     "reg_periksa.sttsumur,pasien.jk,pasien.tgl_lahir,surat_pernyataan_pasien_umum.tanggal,surat_pernyataan_pasien_umum.nama_pj,"+
@@ -1377,6 +1378,7 @@ public final class SuratPernyataanPasienUmum extends javax.swing.JDialog {
                     "inner join petugas on surat_pernyataan_pasien_umum.nip=petugas.nip where "+
                     "surat_pernyataan_pasien_umum.tanggal between ? and ? order by surat_pernyataan_pasien_umum.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select surat_pernyataan_pasien_umum.no_surat,reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,reg_periksa.umurdaftar,"+
                     "reg_periksa.sttsumur,pasien.jk,pasien.tgl_lahir,surat_pernyataan_pasien_umum.tanggal,surat_pernyataan_pasien_umum.nama_pj,"+
@@ -1473,6 +1475,7 @@ public final class SuratPernyataanPasienUmum extends javax.swing.JDialog {
 
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rkm_medis,pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,reg_periksa.tgl_registrasi,"+
                     "reg_periksa.umurdaftar,reg_periksa.sttsumur from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -1602,6 +1605,7 @@ public final class SuratPernyataanPasienUmum extends javax.swing.JDialog {
         if(FormPhoto.isVisible()==true){
             lokasifile="";
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select surat_pernyataan_pasien_umum_pembuat_pernyataan.photo from surat_pernyataan_pasien_umum_pembuat_pernyataan where surat_pernyataan_pasien_umum_pembuat_pernyataan.no_surat=?");
                 try {
                     ps.setString(1,tbObat.getValueAt(tbObat.getSelectedRow(),0).toString());

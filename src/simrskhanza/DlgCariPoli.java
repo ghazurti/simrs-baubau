@@ -388,6 +388,7 @@ public final class DlgCariPoli extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from poliklinik where poliklinik.status='1'");
             try{           
                 rs=ps.executeQuery();

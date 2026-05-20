@@ -1103,6 +1103,7 @@ private void CmbCrIsiItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{     
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select kamar.kd_kamar,kamar.kd_bangsal,bangsal.nm_bangsal,kamar.kelas,kamar.trf_kamar,kamar.status from bangsal inner join kamar on kamar.kd_bangsal=bangsal.kd_bangsal "+
                 "where kamar.statusdata='1' "+(BangsalCari.getText().trim().equals("")?"":"and kamar.kd_bangsal=? ")+(CmbCrIsi.getSelectedIndex()==0?"":"and kamar.status=? ")+

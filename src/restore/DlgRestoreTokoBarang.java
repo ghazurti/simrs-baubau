@@ -420,6 +420,7 @@ public final class DlgRestoreTokoBarang extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select tokobarang.kode_brng,tokobarang.nama_brng,kodesatuan.satuan,tokojenisbarang.nm_jenis, "+
                         "tokobarang.stok,tokobarang.dasar,tokobarang.h_beli,tokobarang.distributor,tokobarang.grosir,tokobarang.retail "+
@@ -427,6 +428,7 @@ public final class DlgRestoreTokoBarang extends javax.swing.JDialog {
                         "inner join tokojenisbarang on tokobarang.jenis=tokojenisbarang.kd_jenis "+
                         "where tokobarang.status='0' order by tokobarang.kode_brng");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select tokobarang.kode_brng,tokobarang.nama_brng,kodesatuan.satuan,tokojenisbarang.nm_jenis, "+
                         "tokobarang.stok,tokobarang.dasar,tokobarang.h_beli,tokobarang.distributor,tokobarang.grosir,tokobarang.retail "+

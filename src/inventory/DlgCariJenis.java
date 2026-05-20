@@ -390,6 +390,7 @@ public final class DlgCariJenis extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from jenis order by jenis.nama ");
             try {
                 rs=ps.executeQuery();

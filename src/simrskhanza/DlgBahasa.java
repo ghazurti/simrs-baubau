@@ -500,6 +500,7 @@ public class DlgBahasa extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from bahasa_pasien "+(TCari.getText().trim().equals("")?"":"where nama_bahasa like ? "));
             try {
                 if(!TCari.getText().trim().equals("")){

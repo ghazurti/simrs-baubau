@@ -426,6 +426,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select mutasi_berkas.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,mutasi_berkas.status,reg_periksa.tgl_registrasi,reg_periksa.jam_reg, "+
                 "mutasi_berkas.dikirim,mutasi_berkas.diterima,mutasi_berkas.kembali,mutasi_berkas.tidakada,mutasi_berkas.ranap,reg_periksa.status_lanjut "+

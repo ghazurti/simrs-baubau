@@ -1492,6 +1492,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {     
         try {
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select skrining_rawat_jalan.tanggal,skrining_rawat_jalan.jam,skrining_rawat_jalan.no_rkm_medis,pasien.nm_pasien,pasien.tgl_lahir,"+
                     "pasien.nm_ibu,pasien.jk,skrining_rawat_jalan.geriatri,skrining_rawat_jalan.kesadaran,skrining_rawat_jalan.pernapasan,"+
@@ -1706,6 +1707,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void isCekPasien() {
         if(!TNoRM.equals("")){
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,pasien.nm_ibu from pasien where pasien.no_rkm_medis=?");
                 try {
                     ps.setString(1,TNoRM.getText());

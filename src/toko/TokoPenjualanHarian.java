@@ -427,6 +427,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){
         Valid.tabelKosong(tabMode);
         try{      
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select tokopenjualan.nota_jual,tokopenjualan.tgl_jual, "+
                 "tokopenjualan.nip,petugas.nama,tokopenjualan.ongkir,tokopenjualan.total, "+
                 "tokopenjualan.no_member,tokopenjualan.nm_member,tokopenjualan.keterangan, "+

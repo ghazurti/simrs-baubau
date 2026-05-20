@@ -1491,6 +1491,7 @@ private void tglKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tglKe
             if(!InventarisCari.getText().equals("")){
                 inventariscari="perpustakaan_buku.judul_buku='"+InventarisCari.getText()+"' and ";
             }
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select perpustakaan_peminjaman.no_inventaris,perpustakaan_inventaris.kode_buku,perpustakaan_buku.judul_buku,perpustakaan_penerbit.nama_penerbit,"+
                        "perpustakaan_pengarang.nama_pengarang,perpustakaan_buku.thn_terbit,perpustakaan_buku.isbn,perpustakaan_kategori.nama_kategori,"+
@@ -1605,6 +1606,7 @@ private void tglKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tglKe
     
     public void isInventaris(){
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                "select perpustakaan_inventaris.no_inventaris,perpustakaan_buku.kode_buku, perpustakaan_buku.judul_buku, "+
                 "perpustakaan_penerbit.nama_penerbit, perpustakaan_pengarang.nama_pengarang,perpustakaan_inventaris.status_buku "+

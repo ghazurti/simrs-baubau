@@ -388,6 +388,7 @@ public final class BPJSTaskIDMobileJKN extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "SELECT reg_periksa.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,pasien.no_tlp,pasien.no_peserta,"+
                    "pasien.no_ktp,reg_periksa.tgl_registrasi,poliklinik.nm_poli,dokter.nm_dokter "+
@@ -470,6 +471,7 @@ public final class BPJSTaskIDMobileJKN extends javax.swing.JDialog {
         }
         
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "SELECT referensi_mobilejkn_bpjs.nobooking,reg_periksa.no_rkm_medis,pasien.nm_pasien,referensi_mobilejkn_bpjs.nohp,referensi_mobilejkn_bpjs.nomorkartu,"+
                    "referensi_mobilejkn_bpjs.nik,referensi_mobilejkn_bpjs.tanggalperiksa,poliklinik.nm_poli,dokter.nm_dokter "+

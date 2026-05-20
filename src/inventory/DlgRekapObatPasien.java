@@ -1038,11 +1038,13 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);
             if((status.getSelectedIndex()==0)&&nmpenjab.getText().equals("")&&TCari.getText().equals("")){
+                koneksi=koneksiDB.condb();
                 psreg=koneksi.prepareStatement(
                    "select reg_periksa.tgl_registrasi,reg_periksa.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien "+
                    "from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                    "where reg_periksa.stts<>'Batal' and reg_periksa.tgl_registrasi between ? and ? order by reg_periksa.tgl_registrasi");
             }else{
+                koneksi=koneksiDB.condb();
                 psreg=koneksi.prepareStatement(
                    "select reg_periksa.tgl_registrasi,reg_periksa.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien "+
                    "from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -1068,6 +1070,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 ttlbiaya=0;ttlembalase=0;ttltuslah=0;ttltotal=0;
                 while(rsreg.next()){
                     if((status.getSelectedIndex()==0)&&nmjns.getText().equals("")&&nmkategori.getText().equals("")&&nmgolongan.getText().equals("")&&nmasal.getText().equals("")){
+                        koneksi=koneksiDB.condb();
                         psobat=koneksi.prepareStatement(
                             "select detail_pemberian_obat.kode_brng,databarang.nama_brng,sum(detail_pemberian_obat.jml) as jml,"+
                             "(sum(detail_pemberian_obat.total)-sum(detail_pemberian_obat.embalase+detail_pemberian_obat.tuslah)) as biaya,"+
@@ -1078,6 +1081,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             "where detail_pemberian_obat.no_rawat=?  "+
                             "group by detail_pemberian_obat.kode_brng order by databarang.nama_brng");  
                     }else{
+                        koneksi=koneksiDB.condb();
                         psobat=koneksi.prepareStatement(
                             "select detail_pemberian_obat.kode_brng,databarang.nama_brng,sum(detail_pemberian_obat.jml) as jml,"+
                             "(sum(detail_pemberian_obat.total)-sum(detail_pemberian_obat.embalase+detail_pemberian_obat.tuslah)) as biaya,"+
@@ -1177,6 +1181,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             Valid.tabelKosong(tabMode2);
             if(nmpenjab.getText().equals("")&&TCari.getText().equals("")){
                 if((status.getSelectedIndex()==0)||(status.getSelectedIndex()==1)){
+                    koneksi=koneksiDB.condb();
                     psreg=koneksi.prepareStatement(
                        "select reg_periksa.tgl_registrasi,reg_periksa.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien "+
                        "from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -1185,6 +1190,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 }
                 
                 if((status.getSelectedIndex()==0)||(status.getSelectedIndex()==2)){
+                    koneksi=koneksiDB.condb();
                     pskamar=koneksi.prepareStatement(
                        "select kamar_inap.tgl_keluar,reg_periksa.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien "+
                        "from kamar_inap inner join reg_periksa on kamar_inap.no_rawat=reg_periksa.no_rawat "+
@@ -1194,6 +1200,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 }
             }else{
                 if((status.getSelectedIndex()==0)||(status.getSelectedIndex()==1)){
+                    koneksi=koneksiDB.condb();
                     psreg=koneksi.prepareStatement(
                         "select reg_periksa.tgl_registrasi,reg_periksa.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien "+
                         "from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -1202,6 +1209,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         "and (reg_periksa.no_rkm_medis like ? or pasien.nm_pasien like ?) order by reg_periksa.tgl_registrasi");
                 }
                 if((status.getSelectedIndex()==0)||(status.getSelectedIndex()==2)){
+                    koneksi=koneksiDB.condb();
                     pskamar=koneksi.prepareStatement(
                        "select kamar_inap.tgl_keluar,reg_periksa.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien "+
                        "from kamar_inap inner join reg_periksa on kamar_inap.no_rawat=reg_periksa.no_rawat "+
@@ -1244,6 +1252,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     rsreg=psreg.executeQuery();
                     while(rsreg.next()){
                         if((status.getSelectedIndex()==0)&&nmjns.getText().equals("")&&nmkategori.getText().equals("")&&nmgolongan.getText().equals("")&&nmasal.getText().equals("")){
+                            koneksi=koneksiDB.condb();
                             psobat=koneksi.prepareStatement(
                                 "select detail_pemberian_obat.kode_brng,databarang.nama_brng,sum(detail_pemberian_obat.jml) as jml,"+
                                 "(sum(detail_pemberian_obat.total)-sum(detail_pemberian_obat.embalase+detail_pemberian_obat.tuslah)) as biaya,"+
@@ -1254,6 +1263,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                 "where detail_pemberian_obat.no_rawat=?  "+
                                 "group by detail_pemberian_obat.kode_brng order by databarang.nama_brng");  
                         }else{
+                            koneksi=koneksiDB.condb();
                             psobat=koneksi.prepareStatement(
                                 "select detail_pemberian_obat.kode_brng,databarang.nama_brng,sum(detail_pemberian_obat.jml) as jml,"+
                                 "(sum(detail_pemberian_obat.total)-sum(detail_pemberian_obat.embalase+detail_pemberian_obat.tuslah)) as biaya,"+
@@ -1332,6 +1342,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     rskamar=pskamar.executeQuery();
                     while(rskamar.next()){
                         if((status.getSelectedIndex()==0)&&nmjns.getText().equals("")&&nmkategori.getText().equals("")&&nmgolongan.getText().equals("")&&nmasal.getText().equals("")){
+                            koneksi=koneksiDB.condb();
                             psobat=koneksi.prepareStatement(
                                 "select detail_pemberian_obat.kode_brng,databarang.nama_brng,sum(detail_pemberian_obat.jml) as jml,"+
                                 "(sum(detail_pemberian_obat.total)-sum(detail_pemberian_obat.embalase+detail_pemberian_obat.tuslah)) as biaya,"+
@@ -1342,6 +1353,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                 "where detail_pemberian_obat.no_rawat=?  "+
                                 "group by detail_pemberian_obat.kode_brng order by databarang.nama_brng");  
                         }else{
+                            koneksi=koneksiDB.condb();
                             psobat=koneksi.prepareStatement(
                                 "select detail_pemberian_obat.kode_brng,databarang.nama_brng,sum(detail_pemberian_obat.jml) as jml,"+
                                 "(sum(detail_pemberian_obat.total)-sum(detail_pemberian_obat.embalase+detail_pemberian_obat.tuslah)) as biaya,"+

@@ -766,6 +766,7 @@ public class frmPengaduan extends javax.swing.JFrame {
         if(tbPengaduan.getSelectedRow()>-1){
             nopengaduan=tbPengaduan.getValueAt(tbPengaduan.getSelectedRow(),1).toString();
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select pasien.no_rkm_medis, pasien.nm_pasien, pasien.jk,pasien.alamat,kelurahan.nm_kel,kecamatan.nm_kec,kabupaten.nm_kab,propinsi.nm_prop, "+
                    "pasien.no_tlp,pasien.jk,pasien.email from pasien inner join kelurahan inner join kecamatan inner join kabupaten inner join propinsi on pasien.kd_prop=propinsi.kd_prop "+
                    "and pasien.kd_kel=kelurahan.kd_kel and pasien.kd_kec=kecamatan.kd_kec and pasien.kd_kab=kabupaten.kd_kab where pasien.no_rkm_medis=? ");
@@ -956,6 +957,7 @@ public class frmPengaduan extends javax.swing.JFrame {
         Valid.tabelKosong(tabMode);
         try{   
             if(R1.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select pengaduan.id,pengaduan.tanggal,pengaduan.no_rkm_medis,pasien.nm_pasien,pengaduan.pesan "+
                     "from pengaduan inner join pasien on pengaduan.no_rkm_medis=pasien.no_rkm_medis where pengaduan.id not in(select id_pengaduan from balasan_pengaduan)"+
@@ -982,6 +984,7 @@ public class frmPengaduan extends javax.swing.JFrame {
                     }
                 } 
             }else if(R2.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select pengaduan.id,pengaduan.tanggal,pengaduan.no_rkm_medis,pasien.nm_pasien,pengaduan.pesan,"+
                     "ifnull(balasan_pengaduan.pesan_balasan,'') as pesan_balasan "+

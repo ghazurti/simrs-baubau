@@ -2962,6 +2962,7 @@ public final class RMPenilaianAwalKeperawatanMata extends javax.swing.JDialog {
         }else if(tabMode.getRowCount()!=0){
             try{
                 if(TCari.getText().equals("")){
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                             "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,pasien.agama,bahasa_pasien.nama_bahasa,cacat_fisik.nama_cacat,penilaian_awal_keperawatan_mata.tanggal,"+
                             "penilaian_awal_keperawatan_mata.informasi,penilaian_awal_keperawatan_mata.td,penilaian_awal_keperawatan_mata.nadi,penilaian_awal_keperawatan_mata.rr,penilaian_awal_keperawatan_mata.suhu,penilaian_awal_keperawatan_mata.bb,penilaian_awal_keperawatan_mata.tb,"+
@@ -2982,6 +2983,7 @@ public final class RMPenilaianAwalKeperawatanMata extends javax.swing.JDialog {
                             "inner join cacat_fisik on cacat_fisik.id=pasien.cacat_fisik where "+
                             "penilaian_awal_keperawatan_mata.tanggal between ? and ? order by penilaian_awal_keperawatan_mata.tanggal");
                 }else{
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                             "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,pasien.agama,bahasa_pasien.nama_bahasa,cacat_fisik.nama_cacat,penilaian_awal_keperawatan_mata.tanggal,"+
                             "penilaian_awal_keperawatan_mata.informasi,penilaian_awal_keperawatan_mata.td,penilaian_awal_keperawatan_mata.nadi,penilaian_awal_keperawatan_mata.rr,penilaian_awal_keperawatan_mata.suhu,penilaian_awal_keperawatan_mata.bb,penilaian_awal_keperawatan_mata.tb,"+
@@ -3047,6 +3049,7 @@ public final class RMPenilaianAwalKeperawatanMata extends javax.swing.JDialog {
                     );
                     while(rs.next()){
                         masalahkeperawatan="";
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(
                             "select master_masalah_keperawatan_mata.kode_masalah,master_masalah_keperawatan_mata.nama_masalah from master_masalah_keperawatan_mata "+
                             "inner join penilaian_awal_keperawatan_mata_masalah on penilaian_awal_keperawatan_mata_masalah.kode_masalah=master_masalah_keperawatan_mata.kode_masalah "+
@@ -3869,6 +3872,7 @@ public final class RMPenilaianAwalKeperawatanMata extends javax.swing.JDialog {
             param.put("finger",Sequel.cariIsi("select sha1(sidikjari.sidikjari) from sidikjari inner join pegawai on pegawai.id=sidikjari.id where pegawai.nik=?",tbObat.getValueAt(tbObat.getSelectedRow(),63).toString()));
             try {
                 masalahkeperawatan="";
+                koneksi=koneksiDB.condb();
                 ps2=koneksi.prepareStatement(
                     "select master_masalah_keperawatan_mata.kode_masalah,master_masalah_keperawatan_mata.nama_masalah from master_masalah_keperawatan_mata "+
                     "inner join penilaian_awal_keperawatan_mata_masalah on penilaian_awal_keperawatan_mata_masalah.kode_masalah=master_masalah_keperawatan_mata.kode_masalah "+
@@ -4359,6 +4363,7 @@ public final class RMPenilaianAwalKeperawatanMata extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,pasien.agama,bahasa_pasien.nama_bahasa,cacat_fisik.nama_cacat,penilaian_awal_keperawatan_mata.tanggal,"+
                         "penilaian_awal_keperawatan_mata.informasi,penilaian_awal_keperawatan_mata.td,penilaian_awal_keperawatan_mata.nadi,penilaian_awal_keperawatan_mata.rr,penilaian_awal_keperawatan_mata.suhu,penilaian_awal_keperawatan_mata.bb,penilaian_awal_keperawatan_mata.tb,"+
@@ -4379,6 +4384,7 @@ public final class RMPenilaianAwalKeperawatanMata extends javax.swing.JDialog {
                         "inner join cacat_fisik on cacat_fisik.id=pasien.cacat_fisik where "+
                         "penilaian_awal_keperawatan_mata.tanggal between ? and ? order by penilaian_awal_keperawatan_mata.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,pasien.agama,bahasa_pasien.nama_bahasa,cacat_fisik.nama_cacat,penilaian_awal_keperawatan_mata.tanggal,"+
                         "penilaian_awal_keperawatan_mata.informasi,penilaian_awal_keperawatan_mata.td,penilaian_awal_keperawatan_mata.nadi,penilaian_awal_keperawatan_mata.rr,penilaian_awal_keperawatan_mata.suhu,penilaian_awal_keperawatan_mata.bb,penilaian_awal_keperawatan_mata.tb,"+
@@ -4632,6 +4638,7 @@ public final class RMPenilaianAwalKeperawatanMata extends javax.swing.JDialog {
             try {
                 Valid.tabelKosong(tabModeMasalah);
                 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select master_masalah_keperawatan_mata.kode_masalah,master_masalah_keperawatan_mata.nama_masalah from master_masalah_keperawatan_mata "+
                         "inner join penilaian_awal_keperawatan_mata_masalah on penilaian_awal_keperawatan_mata_masalah.kode_masalah=master_masalah_keperawatan_mata.kode_masalah "+
@@ -4660,6 +4667,7 @@ public final class RMPenilaianAwalKeperawatanMata extends javax.swing.JDialog {
 
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rkm_medis,pasien.nm_pasien, if(pasien.jk='L','Laki-Laki','Perempuan') as jk,"+
                     "pasien.tgl_lahir,pasien.agama,bahasa_pasien.nama_bahasa,cacat_fisik.nama_cacat,reg_periksa.tgl_registrasi "+
@@ -4758,6 +4766,7 @@ public final class RMPenilaianAwalKeperawatanMata extends javax.swing.JDialog {
                     pilih[i],kode[i],masalah[i]
                 });
             }
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_masalah_keperawatan_mata where kode_masalah like ? or nama_masalah like ? order by kode_masalah");
             try {
                 ps.setString(1,"%"+TCariMasalah.getText().trim()+"%");
@@ -4804,6 +4813,7 @@ public final class RMPenilaianAwalKeperawatanMata extends javax.swing.JDialog {
             DetailRencana.setText(tbObat.getValueAt(tbObat.getSelectedRow(),62).toString());
             try {
                 Valid.tabelKosong(tabModeDetailMasalah);
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select master_masalah_keperawatan_mata.kode_masalah,master_masalah_keperawatan_mata.nama_masalah from master_masalah_keperawatan_mata "+
                         "inner join penilaian_awal_keperawatan_mata_masalah on penilaian_awal_keperawatan_mata_masalah.kode_masalah=master_masalah_keperawatan_mata.kode_masalah "+

@@ -492,6 +492,7 @@ public final class DlgKehadiran extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select pegawai.nik,pegawai.nama,departemen.nama,pegawai.id,pegawai.wajibmasuk from pegawai inner join departemen on pegawai.departemen=departemen.dep_id "+
                    "inner join stts_kerja on stts_kerja.stts=pegawai.stts_kerja where pegawai.stts_aktif<>'KELUAR' and departemen.nama like ? and stts_kerja.ktg like ? "+
@@ -534,6 +535,7 @@ public final class DlgKehadiran extends javax.swing.JDialog {
                         wajibmasuk=jumlahhari-liburakhad-liburhariraya;
                     }
 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select count(rekap_presensi.id) from rekap_presensi where rekap_presensi.id=?  "+
                         "and rekap_presensi.jam_datang like ?");
@@ -556,6 +558,7 @@ public final class DlgKehadiran extends javax.swing.JDialog {
                         }
                     }
                                        
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select count(rekap_presensi.id) from rekap_presensi where rekap_presensi.id=? and rekap_presensi.shift like '%Siang%' "+
                         "and rekap_presensi.jam_datang like ?");
@@ -578,6 +581,7 @@ public final class DlgKehadiran extends javax.swing.JDialog {
                         }
                     }
 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select count(rekap_presensi.id) from rekap_presensi where rekap_presensi.id=? and rekap_presensi.shift like '%Pagi%' "+
                         "and rekap_presensi.jam_datang like ?");
@@ -600,6 +604,7 @@ public final class DlgKehadiran extends javax.swing.JDialog {
                         }
                     }    
 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select count(rekap_presensi.id) from rekap_presensi where rekap_presensi.id=? and rekap_presensi.shift like '%Malam%' "+
                         "and rekap_presensi.jam_datang like ?");
@@ -623,6 +628,7 @@ public final class DlgKehadiran extends javax.swing.JDialog {
                     }
                                        
 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select count(rekap_presensi.id) from rekap_presensi where rekap_presensi.id=? and rekap_presensi.status like '%Tepat Waktu%' "+
                         "and rekap_presensi.jam_datang like ?");
@@ -646,6 +652,7 @@ public final class DlgKehadiran extends javax.swing.JDialog {
                     }
                         
 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select count(rekap_presensi.id) from rekap_presensi where rekap_presensi.id=? and rekap_presensi.status like '%Terlambat Toleransi%' "+
                         "and rekap_presensi.jam_datang like ?");
@@ -668,6 +675,7 @@ public final class DlgKehadiran extends javax.swing.JDialog {
                         }
                     }
                         
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select count(rekap_presensi.id) from rekap_presensi where rekap_presensi.id=? and rekap_presensi.status like '%Terlambat I%' "+
                         "and rekap_presensi.jam_datang like ?");
@@ -690,6 +698,7 @@ public final class DlgKehadiran extends javax.swing.JDialog {
                         }
                     }
 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select count(rekap_presensi.id) from rekap_presensi where rekap_presensi.id=? and rekap_presensi.status like '%Terlambat II%' "+
                         "and rekap_presensi.jam_datang like ?");
@@ -712,6 +721,7 @@ public final class DlgKehadiran extends javax.swing.JDialog {
                         }
                     }   
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select concat(round((sum(TIME_TO_SEC(rekap_presensi.keterlambatan))-mod(sum(TIME_TO_SEC(rekap_presensi.keterlambatan)),3600))/3600),':',round((mod(sum(TIME_TO_SEC(rekap_presensi.keterlambatan)),3600)-mod(mod(sum(TIME_TO_SEC(rekap_presensi.keterlambatan)),3600),60))/60),':',round(mod(mod(sum(TIME_TO_SEC(rekap_presensi.keterlambatan)),3600),60))) from rekap_presensi where rekap_presensi.id=? and rekap_presensi.jam_datang like ?");
                     try {
@@ -737,6 +747,7 @@ public final class DlgKehadiran extends javax.swing.JDialog {
                         }
                     }
 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select concat(round((sum(TIME_TO_SEC(rekap_presensi.durasi))-mod(sum(TIME_TO_SEC(rekap_presensi.durasi)),3600))/3600),':',round((mod(sum(TIME_TO_SEC(rekap_presensi.durasi)),3600)-mod(mod(sum(TIME_TO_SEC(rekap_presensi.durasi)),3600),60))/60),':',round(mod(mod(sum(TIME_TO_SEC(rekap_presensi.durasi)),3600),60))) from rekap_presensi where rekap_presensi.id=? and rekap_presensi.jam_datang like ?");
                     try {

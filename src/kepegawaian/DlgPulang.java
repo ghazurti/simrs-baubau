@@ -576,6 +576,7 @@ public final class DlgPulang extends javax.swing.JDialog {
     public void tampil() {        
         Valid.tabelKosong(tabMode);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select  pegawai.id, "+
                 "pegawai.nik, "+

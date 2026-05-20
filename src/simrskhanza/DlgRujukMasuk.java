@@ -1239,6 +1239,7 @@ private void TAlamatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_T
             Map<String, Object> param = new HashMap<>();
             diagnosa="";
             try {           
+                koneksi=koneksiDB.condb();
                 psobat=koneksi.prepareStatement("select databarang.nama_brng from detail_pemberian_obat inner join databarang "+
                    "on detail_pemberian_obat.kode_brng=databarang.kode_brng where detail_pemberian_obat.no_rawat=? group by databarang.nama_brng ");
                 try {
@@ -1306,6 +1307,7 @@ private void TAlamatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_T
             
             status="";
             try {          
+                koneksi=koneksiDB.condb();
                 psreseppulang=koneksi.prepareStatement("select databarang.nama_brng from resep_pulang inner join databarang "+
                    "on resep_pulang.kode_brng=databarang.kode_brng where resep_pulang.no_rawat=? group by databarang.nama_brng ");
                 try {
@@ -1364,6 +1366,7 @@ private void TAlamatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_T
             diagnosa="";
             keluar="";
             try {           
+                koneksi=koneksiDB.condb();
                 psobat=koneksi.prepareStatement("select databarang.nama_brng from detail_pemberian_obat inner join databarang "+
                    "on detail_pemberian_obat.kode_brng=databarang.kode_brng where detail_pemberian_obat.no_rawat=? group by databarang.nama_brng ");
                 try {
@@ -1522,6 +1525,7 @@ private void TAlamatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_T
             diagnosa="";
             keluar="";
             try {          
+                koneksi=koneksiDB.condb();
                 psreseppulang=koneksi.prepareStatement("select databarang.nama_brng from resep_pulang inner join databarang "+
                    "on resep_pulang.kode_brng=databarang.kode_brng where resep_pulang.no_rawat=? group by databarang.nama_brng ");
                 try {
@@ -1551,6 +1555,7 @@ private void TAlamatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_T
             
             diagnosapulang="";
             try {    
+                koneksi=koneksiDB.condb();
                 psdiagnosapulang=koneksi.prepareStatement(
                         "select diagnosa_pasien.kd_penyakit,penyakit.nm_penyakit from diagnosa_pasien inner join penyakit "+
                         "on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit where diagnosa_pasien.no_rawat=?");
@@ -1767,6 +1772,7 @@ private void TAlamatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_T
     private void tampil() {        
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement(
                     "select rujuk_masuk.perujuk,rujuk_masuk.alamat,rujuk_masuk.no_rujuk,reg_periksa.no_rawat,reg_periksa.no_rkm_medis,"+
                     "pasien.nm_pasien,reg_periksa.almt_pj,concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur)as umur,reg_periksa.tgl_registrasi,"+
@@ -1803,6 +1809,7 @@ private void TAlamatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_T
                 rs=pstampil.executeQuery();
                 while(rs.next()){
                     keluar="";diagnosa="";status="";diagnosa2="";
+                    koneksi=koneksiDB.condb();
                     pskamin=koneksi.prepareStatement("select ifnull(kamar_inap.tgl_keluar,''),ifnull(kamar_inap.diagnosa_awal,''),ifnull(kamar_inap.diagnosa_akhir,''),ifnull(kamar_inap.stts_pulang,'') from kamar_inap where kamar_inap.no_rawat=? "+
                                 "order by kamar_inap.tgl_keluar desc limit 1");            
                     try {
@@ -1893,6 +1900,7 @@ private void TAlamatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_T
 
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement(
                 "select reg_periksa.no_rkm_medis,pasien.nm_pasien from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat=?");
             try {
@@ -1938,6 +1946,7 @@ private void TAlamatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_T
     private void tampil2() {        
         Valid.tabelKosong(tabMode2);
         try{
+            koneksi=koneksiDB.condb();
             psperujuk=koneksi.prepareStatement("select rujuk_masuk.perujuk,rujuk_masuk.alamat from rujuk_masuk "+(TCariPerujuk.getText().trim().equals("")?"":"where rujuk_masuk.perujuk like ? or rujuk_masuk.alamat like ? ")+"group by rujuk_masuk.perujuk order by rujuk_masuk.perujuk");
             try {
                 if(!TCariPerujuk.getText().trim().equals("")){

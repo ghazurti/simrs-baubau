@@ -1119,6 +1119,7 @@ public class InventoryRingkasanReturSuplierBarangMedis extends javax.swing.JDial
         
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select detreturbeli.kode_brng,databarang.nama_brng,detreturbeli.kode_sat,kodesatuan.satuan,jenis.nama as namajenis,sum(detreturbeli.jml_retur2) as jumlah,sum(detreturbeli.total) as total "+
                 "from returbeli inner join petugas on returbeli.nip=petugas.nip inner join bangsal on returbeli.kd_bangsal=bangsal.kd_bangsal inner join detreturbeli on returbeli.no_retur_beli=detreturbeli.no_retur_beli "+

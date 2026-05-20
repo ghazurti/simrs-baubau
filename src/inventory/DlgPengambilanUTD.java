@@ -732,6 +732,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             try {
                 stok_asal=0;   
                 if(aktifkanbatch.equals("yes")){
+                    koneksi=koneksiDB.condb();
                     psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch=? and gudangbarang.no_faktur=?");
                     try {
                         psstok.setString(1,kddari.getText());
@@ -753,6 +754,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                         }
                     }
                 }else{
+                    koneksi=koneksiDB.condb();
                     psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                     try {
                         psstok.setString(1,kddari.getText());
@@ -775,6 +777,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                     
 
                 stok_tujuan=0;                
+                koneksi=koneksiDB.condb();
                 psstok2=koneksi.prepareStatement("select ifnull(stok,'0') from utd_stok_medis where kode_brng=?");
                 try {
                     psstok2.setString(1,tabMode.getValueAt(i,1).toString());
@@ -913,6 +916,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         }
         try{
             if(aktifkanbatch.equals("yes")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select data_batch.kode_brng, databarang.nama_brng,data_batch."+hppfarmasi+" as dasar,databarang.kode_sat,data_batch.no_batch,data_batch.no_faktur, "+
                     " gudangbarang.stok from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "+
@@ -937,6 +941,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                     }
                 }  
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select databarang.kode_brng, databarang.nama_brng,databarang."+hppfarmasi+" as dasar,databarang.kode_sat,gudangbarang.stok "+
                     " from databarang inner join gudangbarang on databarang.kode_brng=gudangbarang.kode_brng "+
@@ -979,6 +984,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                     if(Double.parseDouble(tabMode.getValueAt(row,0).toString())>0){
                         stok_asal=0;  
                         if(aktifkanbatch.equals("yes")){
+                            koneksi=koneksiDB.condb();
                             psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch=? and gudangbarang.no_faktur=?");
                             try {
                                 psstok.setString(1,kddari.getText());
@@ -1000,6 +1006,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                                 }
                             }
                         }else{
+                            koneksi=koneksiDB.condb();
                             psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                             try {
                                 psstok.setString(1,kddari.getText());
@@ -1022,6 +1029,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                             
 
                         stok_tujuan=0;                
+                        koneksi=koneksiDB.condb();
                         psstok2=koneksi.prepareStatement("select ifnull(stok,'0') from utd_stok_medis where kode_brng=?");
                         try {
                             psstok2.setString(1,tabMode.getValueAt(row,1).toString());

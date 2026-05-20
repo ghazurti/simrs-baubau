@@ -797,6 +797,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
                 tabMode.addRow(new Object[]{jumlah[i],kodebarang[i],namabarang[i],satuan[i],tokojenisbarang[i],h_beli[i],subtotal[i]});
             }
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select tokobarang.kode_brng,tokobarang.nama_brng,tokobarang.kode_sat,tokojenisbarang.nm_jenis,tokobarang.h_beli from tokobarang "+
                 "inner join tokojenisbarang on tokobarang.jenis=tokojenisbarang.kd_jenis where tokobarang.status='1' "+(TCari.getText().trim().equals("")?"":

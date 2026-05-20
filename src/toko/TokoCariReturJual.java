@@ -846,6 +846,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(TCari,"No.Nota");
         }else{
           try {
+             koneksi=koneksiDB.condb();
              pscaripesan=koneksi.prepareStatement("select no_retur_jual, total from tokoreturjual where no_retur_jual=?");
              try {
                 pscaripesan.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());
@@ -853,6 +854,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 if(rs.next()){
                     Sequel.AutoComitFalse();
                     sukses=true;
+                    koneksi=koneksiDB.condb();
                     pstoko_detail_returjual=koneksi.prepareStatement("select kode_brng,jml_retur from toko_detail_returjual where no_retur_jual=? ");
                     try {
                         pstoko_detail_returjual.setString(1,rs.getString(1));
@@ -1020,6 +1022,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             if(!nmbar.getText().equals("")){
                 caribarang= " and tokobarang.nama_brng like '%"+nmbar.getText()+"%' ";
             }
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select tokoreturjual.no_retur_jual,tokoreturjual.no_member,tokomember.nama, "+
                     "tokoreturjual.nip,petugas.nama,tokoreturjual.tgl_retur,tokoreturjual.catatan "+
@@ -1044,6 +1047,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                           rs.getString("nip")+" "+rs.getString("nama"),rs.getString("catatan"),"","",""
                     });  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select toko_detail_returjual.kode_brng,tokobarang.nama_brng, "+
                         "toko_detail_returjual.kode_sat,kodesatuan.satuan,toko_detail_returjual.jml_retur,toko_detail_returjual.h_retur, "+
                         "toko_detail_returjual.h_jual,toko_detail_returjual.total,toko_detail_returjual.nota_jual "+

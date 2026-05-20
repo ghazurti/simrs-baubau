@@ -1484,6 +1484,7 @@ private void BtnCetakKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         try{
             nilaitotal=0;
             if(TCari.getText().trim().equals("")&&nmjns.getText().trim().equals("")&&nmkategori.getText().trim().equals("")&&nmgolongan.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select mutasibarang.kd_bangsaldari,bangsaldari.nm_bangsal as dari,"+
                     "mutasibarang.kd_bangsalke,bangsalke.nm_bangsal as ke, "+
@@ -1497,6 +1498,7 @@ private void BtnCetakKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     "inner join golongan_barang on databarang.kode_golongan=golongan_barang.kode where "+
                     "mutasibarang.tanggal between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+" 00:00:00' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+" 23:59:59'  "+order);
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select mutasibarang.kd_bangsaldari,bangsaldari.nm_bangsal as dari,"+
                     "mutasibarang.kd_bangsalke,bangsalke.nm_bangsal as ke, "+

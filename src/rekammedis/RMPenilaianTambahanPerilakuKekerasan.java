@@ -2420,6 +2420,7 @@ public final class RMPenilaianTambahanPerilakuKekerasan extends javax.swing.JDia
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,penilaian_tambahan_perilaku_kekerasan.tanggal,"+
                     "penilaian_tambahan_perilaku_kekerasan.statik_insiden_kekerasan_baru_ini,penilaian_tambahan_perilaku_kekerasan.statik_skorinsiden_kekerasan_baru_ini,"+
@@ -2445,6 +2446,7 @@ public final class RMPenilaianTambahanPerilakuKekerasan extends javax.swing.JDia
                     "inner join petugas on penilaian_tambahan_perilaku_kekerasan.nip=petugas.nip where "+
                     "penilaian_tambahan_perilaku_kekerasan.tanggal between ? and ? order by penilaian_tambahan_perilaku_kekerasan.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,penilaian_tambahan_perilaku_kekerasan.tanggal,"+
                     "penilaian_tambahan_perilaku_kekerasan.statik_insiden_kekerasan_baru_ini,penilaian_tambahan_perilaku_kekerasan.statik_skorinsiden_kekerasan_baru_ini,"+
@@ -2625,6 +2627,7 @@ public final class RMPenilaianTambahanPerilakuKekerasan extends javax.swing.JDia
 
     private void isPsien() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select pasien.nm_pasien,pasien.jk,pasien.tgl_lahir as lahir from pasien where pasien.no_rkm_medis=?");
             try {
                 ps.setString(1,TNoRM.getText());

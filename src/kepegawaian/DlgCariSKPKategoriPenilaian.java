@@ -384,6 +384,7 @@ public final class DlgCariSKPKategoriPenilaian extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from skp_kategori_penilaian order by skp_kategori_penilaian.sasaran");
             try {
                 rs=ps.executeQuery();

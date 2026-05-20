@@ -912,6 +912,7 @@ private void NmAkunKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Nm
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from kategori_pemasukan_lain "+(TCari.getText().trim().equals("")?"":"where kategori_pemasukan_lain.kode_kategori like ? or kategori_pemasukan_lain.nama_kategori like ?")+" order by kategori_pemasukan_lain.nama_kategori");  
             try {
                 if(!TCari.getText().trim().equals("")){

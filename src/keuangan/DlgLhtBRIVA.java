@@ -541,6 +541,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     public void tampil(){
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from tagihan_briva where tagihan_briva.tgl_closing between ? and ? "+
                    (TCari.getText().equals("")?"":"and (tagihan_briva.no_rkm_medis like ? or tagihan_briva.nm_pasien like ? or "+
                    "tagihan_briva.no_tagihan like ? or tagihan_briva.referensi like ? or tagihan_briva.status_tagihan like ? or "+

@@ -506,6 +506,7 @@ public class DlgAturanPakai extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{         
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_aturan_pakai where aturan like ? ");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

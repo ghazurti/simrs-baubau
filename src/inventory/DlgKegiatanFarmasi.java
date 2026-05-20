@@ -605,6 +605,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select * from golongan_barang where nama like ? order by nama ");
             try {                
@@ -621,6 +622,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 while(rs.next()){
                     itempengadaan=0;itemtersedia=0;
                     //pemesanan
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select count(distinct detailpesan.kode_brng) as jumlah from pemesanan inner join detailpesan "+
                         " inner join databarang on pemesanan.no_faktur=detailpesan.no_faktur and databarang.kode_brng=detailpesan.kode_brng "+
@@ -645,6 +647,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
                     }
                        
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(qrystok);
                     try {
                         ps2.setString(1,rs.getString("kode"));
@@ -692,6 +695,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode2);   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select * from jenis where nama like ? order by nama ");
             try {                
@@ -707,6 +711,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 while(rs.next()){
                     itempengadaan=0;itemtersedia=0;
                     //pemesanan
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select count(distinct detailpesan.kode_brng) as jumlah from pemesanan inner join detailpesan "+
                         " inner join databarang on pemesanan.no_faktur=detailpesan.no_faktur and databarang.kode_brng=detailpesan.kode_brng "+
@@ -731,6 +736,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
                     }
                        
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(qrystok);
                     try {
                         ps2.setString(1,rs.getString("kdjns"));
@@ -778,6 +784,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode3);   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select * from kategori_barang where nama like ? order by nama ");
             try {                
@@ -794,6 +801,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 while(rs.next()){
                     itempengadaan=0;itemtersedia=0;
                     //pemesanan
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select count(distinct detailpesan.kode_brng) as jumlah from pemesanan inner join detailpesan "+
                         " inner join databarang on pemesanan.no_faktur=detailpesan.no_faktur and databarang.kode_brng=detailpesan.kode_brng "+
@@ -818,6 +826,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
                     }
                        
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(qrystok);
                     try {
                         ps2.setString(1,rs.getString("kode"));

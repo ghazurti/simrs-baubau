@@ -1227,6 +1227,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
             if(!nmbar.getText().equals("")){
                 caribarang= " and ipsrsbarang.nama_brng like '%"+nmbar.getText()+"%' ";
             }
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select ipsrs_detail_returbeli.kode_brng,ipsrsbarang.nama_brng,ipsrsjenisbarang.nm_jenis as namajenis, "+
                     "ipsrs_detail_returbeli.kode_sat,kodesatuan.satuan,sum(ipsrs_detail_returbeli.jml_retur) as jumlah, "+

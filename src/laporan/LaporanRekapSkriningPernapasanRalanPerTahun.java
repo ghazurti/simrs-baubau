@@ -397,6 +397,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select skrining_rawat_jalan.pernapasan from skrining_rawat_jalan where skrining_rawat_jalan.pernapasan like ? group by skrining_rawat_jalan.pernapasan order by skrining_rawat_jalan.pernapasan ");
             try {

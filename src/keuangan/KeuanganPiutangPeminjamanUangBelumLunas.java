@@ -837,6 +837,7 @@ private void MnDetailPiutangActionPerformed(java.awt.event.ActionEvent evt) {//G
         Valid.tabelKosong(tabMode);
         try{
             sisapiutang=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select piutang_lainlain.nota_piutang,piutang_lainlain.tgl_piutang,piutang_lainlain.kode_peminjam,peminjampiutang.nama_peminjam,piutang_lainlain.keterangan,piutang_lainlain.nominal,piutang_lainlain.sisapiutang,piutang_lainlain.tgltempo,"+
                     "(piutang_lainlain.nominal-piutang_lainlain.sisapiutang) as cicilan,peminjampiutang.kd_rek,rekening.nm_rek from piutang_lainlain inner join peminjampiutang on piutang_lainlain.kode_peminjam=peminjampiutang.kode_peminjam "+
@@ -949,6 +950,7 @@ private void MnDetailPiutangActionPerformed(java.awt.event.ActionEvent evt) {//G
              file.createNewFile();
              fileWriter = new FileWriter(file);
              StringBuilder iyembuilder = new StringBuilder();
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement("select * from akun_bayar order by akun_bayar.nama_bayar");
              try{
                  rs=ps.executeQuery();

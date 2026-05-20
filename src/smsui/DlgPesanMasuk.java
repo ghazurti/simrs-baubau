@@ -383,6 +383,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){        
         try{   
             Valid.tabelKosong(tabMode);  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select * from sms where sms.tgl_sms between ? and ? "+(TCari.getText().trim().equals("")?"":"and (sms.sms_masuk like ? or sms.no_hp like ? or sms.pdu_pesan like ?) ")+" order by sms.id_pesan desc");
             try {

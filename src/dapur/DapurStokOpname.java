@@ -802,6 +802,7 @@ private void StokKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Stok
         totalreal=0;
         totallebih=0;
         try{     
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement("select dapuropname.kode_brng, dapurbarang.nama_brng,dapuropname.h_beli, dapurbarang.kode_sat, dapuropname.tanggal, dapuropname.stok, "+
                      "dapuropname.real, dapuropname.selisih,dapuropname.lebih, (dapuropname.real*dapuropname.h_beli) as totalreal,dapuropname.nomihilang,dapuropname.nomilebih,dapuropname.keterangan "+
                      "from dapuropname inner join dapurbarang on dapuropname.kode_brng=dapurbarang.kode_brng where dapurbarang.jenis like ? and dapuropname.tanggal between ? and ? and "+

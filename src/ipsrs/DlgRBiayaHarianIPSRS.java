@@ -329,6 +329,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try {
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select ipsrspembelian.tgl_beli,sum(ipsrspembelian.total) from ipsrspembelian  "+
                     "where ipsrspembelian.tgl_beli between ? and ? group by ipsrspembelian.tgl_beli order by ipsrspembelian.tgl_beli");
             try {

@@ -702,6 +702,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     private void tampil(){
         Valid.tabelKosong(tabMode);
         try{     
+            koneksi=koneksiDB.condb();
             ps= koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,reg_periksa.no_rkm_medis,reg_periksa.tgl_registrasi,reg_periksa.jam_reg,penjab.png_jawab, "+
                         "nota_jalan.tanggal,nota_jalan.jam,pasien.jk,pasien.tgl_lahir from reg_periksa inner join penjab inner join nota_jalan inner join pasien "+
@@ -728,6 +729,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     ds16="";ds17="";ds18="";ds19="";ds20="";ds21="";ds22="";ds23="";
                     ds24="";ds25="";ds26="";ds27="";ds28="";ds29="";
             
+                    koneksi=koneksiDB.condb();
                     pspenyakit=koneksi.prepareStatement(
                             "select kd_penyakit,prioritas from diagnosa_pasien where "+
                             "no_rawat=? and status='Ralan' order by prioritas");
@@ -842,6 +844,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     p18="";p19="";p20="";p21="";p22="";p23="";p24="";p25="";
                     p26="";p27="";p28="";p29="";p30="";
                     
+                    koneksi=koneksiDB.condb();
                     psprosedur=koneksi.prepareStatement(
                             "select kode,prioritas from prosedur_pasien where "+
                             "no_rawat=? and status='Ralan' order by prioritas");
@@ -952,6 +955,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     }
                     
                     Operasi=0;Laborat=0;Radiologi=0;Obat=0;Ralan_Dokter=0;Ralan_Dokter_paramedis=0;Ralan_Paramedis=0;Tambahan=0;Potongan=0;Registrasi=0;operasi2=0;kebidanan=0;tarifincabg=0;untungrugiinacbg=0;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select billing.nm_perawatan,billing.totalbiaya,billing.status from billing where billing.no_rawat=? ");
                     try {
                         ps2.setString(1,rs.getString("no_rawat"));

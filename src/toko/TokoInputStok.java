@@ -702,6 +702,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                     hargabeli[i],stok[i],selisih[i],nomihilang[i]
                 });
             }
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement(
                 "select tokobarang.kode_brng, tokobarang.nama_brng,tokojenisbarang.nm_jenis,tokobarang.kode_sat,tokobarang."+hpptoko+" as dasar,tokobarang.stok from tokobarang inner join tokojenisbarang on tokobarang.jenis=tokojenisbarang.kd_jenis "+
                 "where tokobarang.status='1' "+(TCari.getText().trim().equals("")?"":"and (tokobarang.kode_brng like ? or tokobarang.nama_brng like ? or tokobarang.kode_sat like ? or tokojenisbarang.nm_jenis like ?) ")+"order by tokobarang.nama_brng");

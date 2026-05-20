@@ -1048,6 +1048,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
             ttltotaljual=0;ttltotalbeli=0;ttltotalpesan=0;ttltotalpiutang=0;ttltotalutd=0;ttltotalkeluar=0;ttltotalmutasikeluar=0;
             ttltotalmutasimasuk=0;ttltotalretbeli=0;ttltotalretjual=0;ttltotalretpiut=0;ttltotalpasin=0;ttltotalrespulang=0;
             ttltotalhibah=0;ttltotalstok=0;ttltotalstokawal=0;ttltotalstokakhir=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select databarang.kode_brng,databarang.nama_brng,kodesatuan.satuan "+
                     "from databarang inner join kodesatuan on databarang.kode_sat=kodesatuan.kode_sat "+
@@ -1090,6 +1091,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         tglopname=Valid.SetTgl(Tgl1.getSelectedItem()+"");
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(qrystok);
                     try {
                         ps2.setString(1,rs.getString(1));
@@ -1111,6 +1113,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }
                                        
                     //pembelian 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detailbeli.jumlah2), sum(detailbeli.total) "+
                         " from pembelian inner join detailbeli "+
                         " on pembelian.no_faktur=detailbeli.no_faktur "+
@@ -1137,6 +1140,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }
                         
                     //pemesanan
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detailpesan.jumlah2), sum(detailpesan.total) "+
                         " from pemesanan inner join detailpesan "+
                         " on pemesanan.no_faktur=detailpesan.no_faktur "+
@@ -1163,6 +1167,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }
                         
                     //penjualan
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detailjual.jumlah), sum(detailjual.total) "+
                         " from penjualan inner join detailjual "+
                         " on penjualan.nota_jual=detailjual.nota_jual "+
@@ -1190,6 +1195,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         
 
                     //piutang 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detailpiutang.jumlah), sum(detailpiutang.total) "+
                         " from piutang inner join detailpiutang "+
                         " on piutang.nota_piutang=detailpiutang.nota_piutang "+
@@ -1216,6 +1222,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }   
 
                     //returbeli
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detreturbeli.jml_retur2), sum(detreturbeli.total) "+
                         " from returbeli inner join detreturbeli "+
                         " on returbeli.no_retur_beli=detreturbeli.no_retur_beli "+
@@ -1242,6 +1249,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }
                         
                     //returjual
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detreturjual.jml_retur), sum(detreturjual.subtotal) "+
                         " from returjual inner join detreturjual "+
                         " on returjual.no_retur_jual=detreturjual.no_retur_jual "+
@@ -1267,6 +1275,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                                        
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detreturpiutang.jml_retur), sum(detreturpiutang.subtotal) "+
                         " from returpiutang inner join detreturpiutang "+
                         " on returpiutang.no_retur_piutang=detreturpiutang.no_retur_piutang "+
@@ -1292,6 +1301,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detail_pemberian_obat.jml) as jumlah, "+
                         "(sum(detail_pemberian_obat.total)-sum(detail_pemberian_obat.embalase+detail_pemberian_obat.tuslah)) as jumpas "+
                         " from detail_pemberian_obat where detail_pemberian_obat.kode_brng=? and "+
@@ -1316,6 +1326,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                         
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(utd_pengambilan_medis.jml) as jumlah, "+
                         "sum(utd_pengambilan_medis.total) as jumpas "+
                         " from utd_pengambilan_medis where utd_pengambilan_medis.kode_brng=? and "+
@@ -1340,6 +1351,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detail_pengeluaran_obat_bhp.jumlah), sum(detail_pengeluaran_obat_bhp.total) "+
                         " from pengeluaran_obat_bhp inner join detail_pengeluaran_obat_bhp "+
                         " on pengeluaran_obat_bhp.no_keluar=detail_pengeluaran_obat_bhp.no_keluar "+
@@ -1365,6 +1377,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }    
 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(resep_pulang.jml_barang), sum(resep_pulang.total) "+
                         " from resep_pulang where resep_pulang.kode_brng=? and "+
                         " resep_pulang.tanggal between ? and ?");
@@ -1389,6 +1402,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }
                     
                     //hibah 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detailhibah_obat_bhp.jumlah2), sum(detailhibah_obat_bhp.subtotaldiakui) "+
                         " from hibah_obat_bhp inner join detailhibah_obat_bhp "+
                         " on hibah_obat_bhp.no_hibah=detailhibah_obat_bhp.no_hibah "+
@@ -1414,6 +1428,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(opname.real),(opname.real*opname.h_beli) from opname where opname.kode_brng=? and opname.tanggal=?");
                     try {
                         ps2.setString(1,rs.getString(1));
@@ -1434,6 +1449,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     } 
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select count(opname.real) from opname where opname.kode_brng=? and opname.tanggal=?");
                     try {
                         ps2.setString(1,rs.getString(1));
@@ -1453,6 +1469,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(mutasibarang.jml), sum(mutasibarang.jml*mutasibarang.harga) "+
                         " from mutasibarang where mutasibarang.kode_brng=? and mutasibarang.tanggal between ? and ?");
                     try {
@@ -1474,6 +1491,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(mutasibarang.jml), sum(mutasibarang.jml*mutasibarang.harga) "+
                         " from mutasibarang where mutasibarang.kode_brng=? and mutasibarang.tanggal between ? and ?");
                     try {
@@ -1565,6 +1583,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
             ttltotaljual=0;ttltotalbeli=0;ttltotalpesan=0;ttltotalpiutang=0;ttltotalutd=0;ttltotalkeluar=0;ttltotalmutasikeluar=0;
             ttltotalmutasimasuk=0;ttltotalretbeli=0;ttltotalretjual=0;ttltotalretpiut=0;ttltotalpasin=0;ttltotalrespulang=0;
             ttltotalhibah=0;ttltotalstok=0;ttltotalstokawal=0;ttltotalstokakhir=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select databarang.kode_brng,databarang.nama_brng,kodesatuan.satuan "+
                     "from databarang inner join kodesatuan on databarang.kode_sat=kodesatuan.kode_sat "+
@@ -1605,6 +1624,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         tglopname=Valid.SetTgl(Tgl1.getSelectedItem()+"");
                     }
 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(qrystok);
                     try {
                         ps2.setString(1,rs.getString(1));
@@ -1627,6 +1647,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }
                                        
                     //pembelian 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detailbeli.jumlah2), sum(detailbeli.total) "+
                         " from pembelian inner join detailbeli "+
                         " on pembelian.no_faktur=detailbeli.no_faktur "+
@@ -1654,6 +1675,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }
                         
                     //pemesanan
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detailpesan.jumlah2), sum(detailpesan.total) "+
                         " from pemesanan inner join detailpesan "+
                         " on pemesanan.no_faktur=detailpesan.no_faktur "+
@@ -1681,6 +1703,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }
                         
                     //penjualan
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detailjual.jumlah), sum(detailjual.total)  "+
                         " from penjualan inner join detailjual "+
                         " on penjualan.nota_jual=detailjual.nota_jual "+
@@ -1708,6 +1731,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }                        
 
                     //piutang 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detailpiutang.jumlah), sum(detailpiutang.total) "+
                         " from piutang inner join detailpiutang "+
                         " on piutang.nota_piutang=detailpiutang.nota_piutang "+
@@ -1735,6 +1759,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }                        
 
                     //returbeli
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detreturbeli.jml_retur2), sum(detreturbeli.total) "+
                         " from returbeli inner join detreturbeli "+
                         " on returbeli.no_retur_beli=detreturbeli.no_retur_beli "+
@@ -1763,6 +1788,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         
 
                     //returjual
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detreturjual.jml_retur), sum(detreturjual.subtotal) "+
                         " from returjual inner join detreturjual "+
                         " on returjual.no_retur_jual=detreturjual.no_retur_jual "+
@@ -1789,6 +1815,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                                        
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detreturpiutang.jml_retur), sum(detreturpiutang.subtotal) "+
                         " from returpiutang inner join detreturpiutang "+
                         " on returpiutang.no_retur_piutang=detreturpiutang.no_retur_piutang "+
@@ -1815,6 +1842,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detail_pemberian_obat.jml) as jumlah, "+
                         "(sum(detail_pemberian_obat.total)-sum(detail_pemberian_obat.embalase+detail_pemberian_obat.tuslah)) as jumpas "+
                         " from detail_pemberian_obat where detail_pemberian_obat.kode_brng=? and "+
@@ -1840,6 +1868,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                         
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(utd_pengambilan_medis.jml) as jumlah, "+
                         "sum(utd_pengambilan_medis.total) as jumpas "+
                         " from utd_pengambilan_medis where utd_pengambilan_medis.kode_brng=? and "+
@@ -1865,6 +1894,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detail_pengeluaran_obat_bhp.jumlah), sum(detail_pengeluaran_obat_bhp.total) "+
                         " from pengeluaran_obat_bhp inner join detail_pengeluaran_obat_bhp "+
                         " on pengeluaran_obat_bhp.no_keluar=detail_pengeluaran_obat_bhp.no_keluar "+
@@ -1891,6 +1921,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }                        
 
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(resep_pulang.jml_barang), sum(resep_pulang.total) "+
                         " from resep_pulang where resep_pulang.kode_brng=? and "+
                         " resep_pulang.tanggal between ? and ? and resep_pulang.kd_bangsal=?");
@@ -1915,6 +1946,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(mutasibarang.jml), sum(mutasibarang.jml*mutasibarang.harga) "+
                         " from mutasibarang where mutasibarang.kode_brng=? and mutasibarang.tanggal between ? and ? and mutasibarang.kd_bangsalke=?");
                     try {
@@ -1938,6 +1970,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(mutasibarang.jml), sum(mutasibarang.jml*mutasibarang.harga) "+
                         " from mutasibarang where mutasibarang.kode_brng=? and mutasibarang.tanggal between ? and ? and mutasibarang.kd_bangsaldari=?");
                     try {
@@ -1962,6 +1995,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }
                     
                     //hibah
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(detailhibah_obat_bhp.jumlah2), sum(detailhibah_obat_bhp.subtotaldiakui) "+
                         " from hibah_obat_bhp inner join detailhibah_obat_bhp "+
                         " on hibah_obat_bhp.no_hibah=detailhibah_obat_bhp.no_hibah "+
@@ -1988,6 +2022,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(opname.real),(opname.real*opname.h_beli) from opname where opname.kode_brng=? and opname.tanggal=? and opname.kd_bangsal=?");
                     try {
                         ps2.setString(1,rs.getString(1));
@@ -2009,6 +2044,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     } 
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select count(opname.real) from opname where opname.kode_brng=? and opname.tanggal=? and opname.kd_bangsal=?");
                     try {
                         ps2.setString(1,rs.getString(1));

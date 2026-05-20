@@ -1072,6 +1072,7 @@ public class DlgPiutang extends javax.swing.JDialog {
              try {
                 stok=0;   
                 if(aktifkanbatch.equals("yes")){
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch=? and gudangbarang.no_faktur=?");
                     try {
                         ps.setString(1,kdgudang.getText());
@@ -1093,6 +1094,7 @@ public class DlgPiutang extends javax.swing.JDialog {
                         }
                     } 
                 }else{
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                     try {
                         ps.setString(1,kdgudang.getText());
@@ -1836,6 +1838,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select tamppiutang.kode_brng,tamppiutang.nama_brng,tamppiutang.satuan,tamppiutang.h_jual,tamppiutang.jumlah,"+
                     "tamppiutang.subtotal,tamppiutang.dis,tamppiutang.bsr_dis,tamppiutang.total,tamppiutang.no_batch,tamppiutang.no_faktur,"+
@@ -2047,6 +2050,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private void cariBatch() {
         try {
             if((!NoBatch.getText().equals(""))&&NoFaktur.getText().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select * from data_batch where data_batch.no_batch=? and data_batch.kode_brng=? and data_batch.sisa>0 order by data_batch.tgl_kadaluarsa limit 1");
                 try {
@@ -2097,6 +2101,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     }
                 } 
             }else if((!NoBatch.getText().equals(""))&&(!NoFaktur.getText().equals(""))){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select * from data_batch where data_batch.no_batch=? and data_batch.kode_brng=? and data_batch.no_faktur=?");
                 try {
@@ -2166,6 +2171,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 
     private void simpan() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select tamppiutang.kode_brng,tamppiutang.satuan,tamppiutang.h_jual,tamppiutang.h_beli,tamppiutang.jumlah,tamppiutang.subtotal,tamppiutang.dis,tamppiutang.bsr_dis,tamppiutang.total,tamppiutang.no_batch,tamppiutang.no_faktur,tamppiutang.aturan_pakai from tamppiutang where tamppiutang.petugas=?");
             try {
                 ps.setString(1,akses.getkode());

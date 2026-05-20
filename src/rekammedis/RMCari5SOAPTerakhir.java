@@ -350,6 +350,7 @@ public final class RMCari5SOAPTerakhir extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         if(Status.getSelectedIndex()==0){
             try{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select pemeriksaan_ralan.tgl_perawatan,pemeriksaan_ralan.jam_rawat,pemeriksaan_ralan.keluhan,pemeriksaan_ralan.pemeriksaan,"+
                         "pemeriksaan_ralan.penilaian,pemeriksaan_ralan.rtl,pemeriksaan_ralan.instruksi,pemeriksaan_ralan.evaluasi "+
@@ -384,6 +385,7 @@ public final class RMCari5SOAPTerakhir extends javax.swing.JDialog {
             }
         }else{
             try{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select pemeriksaan_ranap.tgl_perawatan,pemeriksaan_ranap.jam_rawat,pemeriksaan_ranap.keluhan,pemeriksaan_ranap.pemeriksaan,"+
                         "pemeriksaan_ranap.penilaian,pemeriksaan_ranap.rtl,pemeriksaan_ranap.instruksi,pemeriksaan_ranap.evaluasi "+

@@ -647,6 +647,7 @@ private void BtnHapusKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement(
                    "select pcare_kegiatan_kelompok.eduId,pcare_kegiatan_kelompok.tglPelayanan,"+
                    "pcare_kegiatan_kelompok.nmKegiatan,pcare_kegiatan_kelompok.nmKelompok,"+
@@ -743,6 +744,7 @@ private void BtnHapusKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     "<td valign='top' bgcolor='#FFFAFA' align='center' width='12%'>Keterangan</td>"+
                     "<td valign='top' bgcolor='#FFFAFA' align='center' width='6%'>Biaya</td>"+
                 "</tr>"); 
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select eduId,tglPelayanan,nmKegiatan,nmKelompok,materi, "+
                    "pembicara,lokasi,keterangan,biaya from pcare_kegiatan_kelompok where "+
@@ -802,6 +804,7 @@ private void BtnHapusKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         "<td valign='top' bgcolor='#fdfff9' align='center' width='34%'>Alamat</td>"+
                                         "<td valign='top' bgcolor='#fdfff9' align='center' width='15%'>Pekerjaan</td>"+
                                     "</tr>");
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                                 "select pasien.no_peserta,pasien.no_rkm_medis,pasien.nm_pasien,pasien.umur,pasien.jk,"+
                                 "concat(pasien.alamat,', ',kelurahan.nm_kel,', ',kecamatan.nm_kec,', ',kabupaten.nm_kab,', ',propinsi.nm_prop) as alamat,"+

@@ -391,6 +391,7 @@ public final class DlgCariPerusahaan extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select kode_perusahaan,nama_perusahaan,alamat,kota,no_telp from perusahaan_pasien order by nama_perusahaan");
             try{           
                 rs=ps.executeQuery();

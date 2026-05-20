@@ -347,6 +347,7 @@ public final class DlgCariTemplateLaborat extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "SELECT template_laboratorium.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,template_laboratorium.id_template,template_laboratorium.Pemeriksaan,template_laboratorium.satuan "+
                     "FROM template_laboratorium inner join jns_perawatan_lab on jns_perawatan_lab.kd_jenis_prw=template_laboratorium.kd_jenis_prw where jns_perawatan_lab.status='1' "+

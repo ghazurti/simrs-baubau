@@ -391,6 +391,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){        
         try{    
             Valid.tabelKosong(tabMode);  
+            koneksi=koneksiDB.condb();
             pstindakan=koneksi.prepareStatement(
                 "select jns_perawatan_lab.nm_perawatan,count(jns_perawatan_lab.nm_perawatan),jns_perawatan_lab.kd_jenis_prw from periksa_lab "+
                 "inner join jns_perawatan_lab on periksa_lab.kd_jenis_prw=jns_perawatan_lab.kd_jenis_prw where periksa_lab.tgl_periksa between ? and ? "+
@@ -409,6 +410,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     tabMode.addRow(new Object[]{
                         i,rstindakan.getString(1),rstindakan.getInt(2)
                     });
+                    koneksi=koneksiDB.condb();
                     pstindakan2=koneksi.prepareStatement(
                         "select template_laboratorium.Pemeriksaan,count(template_laboratorium.Pemeriksaan) from detail_periksa_lab "+
                         "inner join template_laboratorium on detail_periksa_lab.id_template=template_laboratorium.id_template "+

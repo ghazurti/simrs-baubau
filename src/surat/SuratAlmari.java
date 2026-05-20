@@ -660,6 +660,7 @@ public final class SuratAlmari extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from surat_lemari "+(TCari.getText().trim().equals("")?"":"where surat_lemari.kd like ? or surat_lemari.lemari like ? ")+"order by surat_lemari.kd");
             try {
                 if(!TCari.getText().trim().equals("")){

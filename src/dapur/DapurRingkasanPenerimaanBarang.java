@@ -1108,6 +1108,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
        Valid.tabelKosong(tabMode);
         try{   
             tagihan=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select dapurdetailpesan.kode_brng,dapurbarang.nama_brng,dapurbarang.jenis as namajenis, "+
                     "dapurdetailpesan.kode_sat,kodesatuan.satuan,sum(dapurdetailpesan.jumlah) as jumlah,sum(dapurdetailpesan.total) as total "+

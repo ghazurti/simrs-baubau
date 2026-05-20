@@ -781,6 +781,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 ChkAccor.setVisible(true);
                 Valid.tabelKosong(tabModeDetailPermintaan);
                 try {
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                         "select labkesling_detail_pembayaran_pengujian_sampel.nama_bayar,labkesling_detail_pembayaran_pengujian_sampel.besar_bayar,akun_bayar.kd_rek "+
                         "from labkesling_detail_pembayaran_pengujian_sampel inner join akun_bayar on akun_bayar.nama_bayar=labkesling_detail_pembayaran_pengujian_sampel.nama_bayar "+
@@ -961,6 +962,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select set_akun2.Suspen_Piutang_Pelayanan_Lab_Kesling from set_akun2"
             );
@@ -1066,6 +1068,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
         Valid.tabelKosong(tabModePembayaran);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                         "select labkesling_pembayaran_pengujian_sampel.tanggal,labkesling_pembayaran_pengujian_sampel.no_pembayaran,labkesling_pembayaran_pengujian_sampel.dibayar_oleh,labkesling_pembayaran_pengujian_sampel.no_permintaan,"+
                         "labkesling_permintaan_pengujian_sampel.kode_pelanggan,labkesling_pelanggan.nama_pelanggan,labkesling_permintaan_pengujian_sampel.kode_sampel,labkesling_master_sampel.nama_sampel,"+

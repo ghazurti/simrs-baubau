@@ -389,6 +389,7 @@ public final class DlgCariGolongan extends javax.swing.JDialog {
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from golongan_barang order by golongan_barang.nama ");
             try {
                 rs=ps.executeQuery();

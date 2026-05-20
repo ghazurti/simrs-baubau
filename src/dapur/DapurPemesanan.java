@@ -1160,6 +1160,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select dapurbarang.kode_brng, dapurbarang.nama_brng,dapurbarang.kode_sat,dapurbarang.harga "+
                     " from dapurbarang where dapurbarang.status='1' order by dapurbarang.nama_brng");
@@ -1368,6 +1369,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         Meterai.setText(Valid.SetAngka2(meterai));
         try{
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select detail_surat_pemesanan_dapur.kode_brng,concat(dapurbarang.nama_brng,' (',dapurbarang.jenis,')') as nama_brng, "+
                 "detail_surat_pemesanan_dapur.kode_sat,detail_surat_pemesanan_dapur.jumlah,detail_surat_pemesanan_dapur.h_pesan, "+
@@ -1403,6 +1405,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private void tampilAkun() {         
          try{      
              PPN_Masukan=Sequel.cariIsi("select set_akun.PPN_Masukan from set_akun");
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement("select set_akun2.Penerimaan_Dapur,set_akun2.Kontra_Penerimaan_Dapur from set_akun2");
              try{
                  rs=ps.executeQuery();

@@ -2603,6 +2603,7 @@ public final class RMChecklistKesiapanAnestesi extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.tgl_lahir,pasien.jk,checklist_kesiapan_anestesi.tanggal,"+
                     "checklist_kesiapan_anestesi.nip,petugas.nama,checklist_kesiapan_anestesi.kd_dokter,dokter.nm_dokter,checklist_kesiapan_anestesi.tindakan,"+
@@ -2622,6 +2623,7 @@ public final class RMChecklistKesiapanAnestesi extends javax.swing.JDialog {
                     "inner join dokter on dokter.kd_dokter=checklist_kesiapan_anestesi.kd_dokter "+
                     "where checklist_kesiapan_anestesi.tanggal between ? and ? order by checklist_kesiapan_anestesi.tanggal ");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.tgl_lahir,pasien.jk,checklist_kesiapan_anestesi.tanggal,"+
                     "checklist_kesiapan_anestesi.nip,petugas.nama,checklist_kesiapan_anestesi.kd_dokter,dokter.nm_dokter,checklist_kesiapan_anestesi.tindakan,"+
@@ -2792,6 +2794,7 @@ public final class RMChecklistKesiapanAnestesi extends javax.swing.JDialog {
     
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rkm_medis,pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,reg_periksa.tgl_registrasi,"+
                     "reg_periksa.jam_reg from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+

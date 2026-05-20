@@ -381,6 +381,7 @@ public final class DlgCariPenyakit extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select penyakit.kd_penyakit,penyakit.nm_penyakit,penyakit.ciri_ciri,penyakit.keterangan,kategori_penyakit.nm_kategori,"+
                 "kategori_penyakit.ciri_umum from kategori_penyakit inner join penyakit on penyakit.kd_ktg=kategori_penyakit.kd_ktg "+
@@ -428,6 +429,7 @@ public final class DlgCariPenyakit extends javax.swing.JDialog {
             }
                 
             
+            koneksi=koneksiDB.condb();
             ps2=koneksi.prepareStatement(
                 "select count(penyakit.kd_penyakit) as jumlah from kategori_penyakit inner join penyakit on penyakit.kd_ktg=kategori_penyakit.kd_ktg  "+
                 (TCari.getText().trim().equals("")?"":"where penyakit.kd_penyakit like ? or penyakit.nm_penyakit like ? or penyakit.ciri_ciri like ? or "+

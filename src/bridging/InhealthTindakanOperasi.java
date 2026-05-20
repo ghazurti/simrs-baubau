@@ -685,6 +685,7 @@ public final class InhealthTindakanOperasi extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                        "select inhealth_tindakan_operasi.kode_paket,paket_operasi.nm_perawatan,(paket_operasi.operator1+paket_operasi.operator2+paket_operasi.operator3+"+
                        "paket_operasi.asisten_operator1+paket_operasi.asisten_operator2+paket_operasi.asisten_operator3+paket_operasi.instrumen+"+
@@ -694,6 +695,7 @@ public final class InhealthTindakanOperasi extends javax.swing.JDialog {
                        "paket_operasi.omloop4+paket_operasi.omloop5+paket_operasi.sarpras+paket_operasi.dokter_pjanak+paket_operasi.dokter_umum) as total_byr,inhealth_tindakan_operasi.kd_inhealth "+
                        "from inhealth_tindakan_operasi inner join paket_operasi on inhealth_tindakan_operasi.kode_paket=paket_operasi.kode_paket order by paket_operasi.nm_perawatan");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                        "select inhealth_tindakan_operasi.kode_paket,paket_operasi.nm_perawatan,(paket_operasi.operator1+paket_operasi.operator2+paket_operasi.operator3+"+
                        "paket_operasi.asisten_operator1+paket_operasi.asisten_operator2+paket_operasi.asisten_operator3+paket_operasi.instrumen+"+

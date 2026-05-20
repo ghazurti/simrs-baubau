@@ -876,6 +876,7 @@ public final class SatuSehatMapingLaborat extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement(
                    "select satu_sehat_mapping_lab.id_template,template_laboratorium.Pemeriksaan,satu_sehat_mapping_lab.code,satu_sehat_mapping_lab.system,"+
                    "satu_sehat_mapping_lab.display,satu_sehat_mapping_lab.sampel_code,satu_sehat_mapping_lab.sampel_system,satu_sehat_mapping_lab.sampel_display "+

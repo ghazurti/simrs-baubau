@@ -713,6 +713,7 @@ public class InventarisBarangCSSD extends javax.swing.JDialog {
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select inventaris.no_inventaris,inventaris_barang.kode_barang,inventaris_barang.nama_barang,"+
                     "inventaris_ruang.nama_ruang,cssd_barang.jenis_barang "+

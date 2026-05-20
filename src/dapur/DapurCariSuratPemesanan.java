@@ -997,6 +997,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Sequel.queryu("delete from temporary where temp37='"+akses.getalamatip()+"'");
             try {
                 i=0;
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select surat_pemesanan_dapur.tanggal,surat_pemesanan_dapur.no_pemesanan,surat_pemesanan_dapur.kode_suplier,dapursuplier.nama_suplier, "+
                     "surat_pemesanan_dapur.nip,pegawai.nama,surat_pemesanan_dapur.status,surat_pemesanan_dapur.total,surat_pemesanan_dapur.ppn,surat_pemesanan_dapur.meterai,"+
@@ -1029,6 +1030,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         param.put("kabidkeu",KabidKeu.getText());
                         param.put("logo",Sequel.cariGambar("select setting.logo from setting"));
                         
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement("select detail_surat_pemesanan_dapur.kode_brng,dapurbarang.nama_brng, "+
                             "detail_surat_pemesanan_dapur.kode_sat,kodesatuan.satuan,detail_surat_pemesanan_dapur.jumlah,detail_surat_pemesanan_dapur.h_pesan, "+
                             "detail_surat_pemesanan_dapur.subtotal,detail_surat_pemesanan_dapur.dis,detail_surat_pemesanan_dapur.besardis,detail_surat_pemesanan_dapur.total "+
@@ -1218,6 +1220,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select surat_pemesanan_dapur.tanggal,surat_pemesanan_dapur.no_pemesanan,surat_pemesanan_dapur.kode_suplier,dapursuplier.nama_suplier, "+
                     "surat_pemesanan_dapur.nip,pegawai.nama,surat_pemesanan_dapur.status,surat_pemesanan_dapur.total,surat_pemesanan_dapur.ppn,surat_pemesanan_dapur.meterai,"+
@@ -1257,6 +1260,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         rs.getString("no_pemesanan"),"Tanggal : "+rs.getString("tanggal")+", Status : "+rs.getString("status"),"","","","","","",""
                     });  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select detail_surat_pemesanan_dapur.kode_brng,dapurbarang.nama_brng, "+
                         "detail_surat_pemesanan_dapur.kode_sat,kodesatuan.satuan,detail_surat_pemesanan_dapur.jumlah,detail_surat_pemesanan_dapur.h_pesan, "+
                         "detail_surat_pemesanan_dapur.subtotal,detail_surat_pemesanan_dapur.dis,detail_surat_pemesanan_dapur.besardis,detail_surat_pemesanan_dapur.total "+

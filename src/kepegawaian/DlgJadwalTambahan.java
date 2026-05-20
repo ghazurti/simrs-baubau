@@ -791,6 +791,7 @@ public class DlgJadwalTambahan extends javax.swing.JDialog {
         
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pegawai.id,pegawai.nik,pegawai.nama,pegawai.pendidikan,departemen.nama as departemen from pegawai inner join departemen "+
                     "on pegawai.departemen=departemen.dep_id where  pegawai.stts_aktif<>'KELUAR' and departemen.nama like ? and pegawai.nik like ? or "+
@@ -806,6 +807,7 @@ public class DlgJadwalTambahan extends javax.swing.JDialog {
                     h1="";h2="";h3="";h4="";h5="";h6="";h7="";h8="";h9="";h10="";h11="";h12="";h13="";
                     h14="";h15="";h16="";h17="";h18="";h19="";h20="";h21="";h22="";h23="";h24="";
                     h25="";h26="";h27="";h28="";h29="";h30="";h31="";
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select jadwal_tambahan.h1,jadwal_tambahan.h2,jadwal_tambahan.h3,jadwal_tambahan.h4,jadwal_tambahan.h5,"+
                         "jadwal_tambahan.h6,jadwal_tambahan.h7,jadwal_tambahan.h8,jadwal_tambahan.h9,jadwal_tambahan.h10,"+
                         "jadwal_tambahan.h11,jadwal_tambahan.h12,jadwal_tambahan.h13,jadwal_tambahan.h14,jadwal_tambahan.h15,"+

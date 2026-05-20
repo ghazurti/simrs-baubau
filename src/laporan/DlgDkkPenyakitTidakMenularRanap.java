@@ -494,6 +494,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit,SUBSTRING(penyakit.nm_penyakit,1,80) as nm_penyakit from diagnosa_pasien inner join penyakit "+
                     "inner join reg_periksa on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit and reg_periksa.no_rawat=diagnosa_pasien.no_rawat "+
                     "where diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1'  and reg_periksa.tgl_registrasi between ? and ? and left(upper(diagnosa_pasien.kd_penyakit),1)<>'A' and "+
@@ -512,6 +513,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                 tth45s64p=0;tth65plusl=0;tth65plusp=0;ttotall=0;ttotalp=0;ttotaljml=0;tmatil=0;tmatip=0;
                 while(rs.next()){
                     kr1l=0;kr1p=0;th1s4l=0;th1s4p=0;th5s14l=0;th5s14p=0;th15s44l=0;th15S44p=0;th45s64l=0;th45s64p=0;th65plusl=0;th65plusp=0;totall=0;totalp=0;totaljml=0;matil=0;matip=0;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.jk,pasien.no_rkm_medis from pasien inner join reg_periksa inner join diagnosa_pasien "+
                                 "on pasien.no_rkm_medis=reg_periksa.no_rkm_medis and reg_periksa.no_rawat=diagnosa_pasien.no_rawat where "+
                                 "diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1' and reg_periksa.tgl_registrasi between ? and ? and diagnosa_pasien.kd_penyakit=? "+
@@ -647,6 +649,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode2);  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit,SUBSTRING(penyakit.nm_penyakit,1,80) as nm_penyakit from diagnosa_pasien inner join penyakit inner join kamar_inap "+
                     "inner join reg_periksa on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit and reg_periksa.no_rawat=diagnosa_pasien.no_rawat and reg_periksa.no_rawat=kamar_inap.no_rawat "+
                     "where diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1'  and kamar_inap.tgl_keluar between ? and ? and left(upper(diagnosa_pasien.kd_penyakit),1)<>'A' and "+
@@ -665,6 +668,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                 tth45s64p=0;tth65plusl=0;tth65plusp=0;ttotall=0;ttotalp=0;ttotaljml=0;tmatil=0;tmatip=0;
                 while(rs.next()){
                     kr1l=0;kr1p=0;th1s4l=0;th1s4p=0;th5s14l=0;th5s14p=0;th15s44l=0;th15S44p=0;th45s64l=0;th45s64p=0;th65plusl=0;th65plusp=0;totall=0;totalp=0;totaljml=0;matil=0;matip=0;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.jk,pasien.no_rkm_medis from pasien inner join reg_periksa inner join diagnosa_pasien inner join kamar_inap "+
                                 "on pasien.no_rkm_medis=reg_periksa.no_rkm_medis and reg_periksa.no_rawat=diagnosa_pasien.no_rawat and reg_periksa.no_rawat=kamar_inap.no_rawat where "+
                                 "diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1' and kamar_inap.tgl_keluar between ? and ? and diagnosa_pasien.kd_penyakit=? "+

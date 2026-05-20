@@ -304,6 +304,7 @@ public class INACBGCariCoderNIK extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select inacbg_coder_nik.nik,pegawai.nama,inacbg_coder_nik.no_ik from inacbg_coder_nik inner join pegawai on inacbg_coder_nik.nik=pegawai.nik "+
                 (TCari.getText().trim().equals("")?"":"where pegawai.nama like ? or inacbg_coder_nik.no_ik like ? ")+"order by pegawai.nama"

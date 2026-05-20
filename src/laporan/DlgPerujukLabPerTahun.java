@@ -396,6 +396,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select kd_dokter,nm_dokter from dokter where status='1' "+(TCari.getText().trim().equals("")?"":"and nm_dokter like ? ")+"order by nm_dokter");
             try {

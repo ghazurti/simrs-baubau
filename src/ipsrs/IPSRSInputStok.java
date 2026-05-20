@@ -815,6 +815,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private void ppBelumOpnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppBelumOpnameActionPerformed
         try{
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement(
                 "select ipsrsbarang.kode_brng, ipsrsbarang.nama_brng,ipsrsjenisbarang.nm_jenis,ipsrsbarang.kode_sat,ipsrsbarang.harga,ipsrsbarang.stok from ipsrsbarang "+
                 " inner join ipsrsjenisbarang on ipsrsbarang.jenis=ipsrsjenisbarang.kd_jenis where ipsrsbarang.kode_brng not in (select kode_brng from ipsrsopname where tanggal=?) "+
@@ -854,6 +855,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private void ppSudahOpnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppSudahOpnameActionPerformed
         try{
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement(
                 "select ipsrsbarang.kode_brng, ipsrsbarang.nama_brng,ipsrsjenisbarang.nm_jenis,ipsrsbarang.kode_sat,ipsrsbarang.harga,ipsrsbarang.stok from ipsrsbarang "+
                 " inner join ipsrsjenisbarang on ipsrsbarang.jenis=ipsrsjenisbarang.kd_jenis where ipsrsbarang.kode_brng in (select kode_brng from ipsrsopname where tanggal=?) "+
@@ -1096,6 +1098,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                     hargabeli[i],stok[i],selisih[i],nomihilang[i],lebih[i],nomilebih[i]
                 });
             }
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement(
                 "select ipsrsbarang.kode_brng, ipsrsbarang.nama_brng,ipsrsjenisbarang.nm_jenis, ipsrsbarang.kode_sat,ipsrsbarang.harga,ipsrsbarang.stok from ipsrsbarang "+
                 "inner join ipsrsjenisbarang on ipsrsbarang.jenis=ipsrsjenisbarang.kd_jenis where ipsrsbarang.status='1' "+(TCari.getText().trim().equals("")?"":

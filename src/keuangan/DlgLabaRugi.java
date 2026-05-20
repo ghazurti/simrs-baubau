@@ -471,6 +471,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 saldoawal=0;debkret=0;saldoakhir=0;
                 tabMode.addRow(new Object[]{"Pendapatan : ","",""});  
                 tabMode.addRow(new Object[]{"","Nama Rekening","Saldo Akhir"});
+                koneksi=koneksiDB.condb();
                 rs=koneksi.prepareStatement(
                     "select rekening.kd_rek, rekening.nm_rek  from rekening where "+
                     " rekening.level='0' and rekening.tipe='R' and rekening.balance='K' order by rekening.kd_rek").executeQuery();
@@ -487,6 +488,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     pendapatan=pendapatan+saldoakhir;
                     tabMode.addRow(new Object[]{"",rs.getString(1)+" "+rs.getString(2),"  "+df2.format(saldoakhir)});   
                     try {
+                        koneksi=koneksiDB.condb();
                         rs2=koneksi.prepareStatement(
                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -505,6 +507,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             pendapatan=pendapatan+saldoakhir;
                             tabMode.addRow(new Object[]{"", " "+rs2.getString(1)+" "+rs2.getString(2),"  "+df2.format(saldoakhir)}); 
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -523,6 +526,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                     pendapatan=pendapatan+saldoakhir;
                                     tabMode.addRow(new Object[]{"", "  "+rs3.getString(1)+" "+rs3.getString(2),"  "+df2.format(saldoakhir)}); 
                                     try {
+                                        koneksi=koneksiDB.condb();
                                         rs4=koneksi.prepareStatement(
                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -541,6 +545,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                             pendapatan=pendapatan+saldoakhir;
                                             tabMode.addRow(new Object[]{"", "   "+rs4.getString(1)+" "+rs4.getString(2),"  "+df2.format(saldoakhir)}); 
                                             try {
+                                                koneksi=koneksiDB.condb();
                                                 rs5=koneksi.prepareStatement(
                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -559,6 +564,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                     pendapatan=pendapatan+saldoakhir;
                                                     tabMode.addRow(new Object[]{"","    "+rs5.getString(1)+" "+rs5.getString(2),"  "+df2.format(saldoakhir)}); 
                                                     try {
+                                                        koneksi=koneksiDB.condb();
                                                         rs6=koneksi.prepareStatement(
                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -577,6 +583,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                             pendapatan=pendapatan+saldoakhir;
                                                             tabMode.addRow(new Object[]{"","     "+rs6.getString(1)+" "+rs6.getString(2),"  "+df2.format(saldoakhir)}); 
                                                             try {
+                                                                koneksi=koneksiDB.condb();
                                                                 rs7=koneksi.prepareStatement(
                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -595,6 +602,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                     pendapatan=pendapatan+saldoakhir;
                                                                     tabMode.addRow(new Object[]{"","      "+rs7.getString(1)+" "+rs7.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                     try {
+                                                                        koneksi=koneksiDB.condb();
                                                                         rs8=koneksi.prepareStatement(
                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -613,6 +621,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                             pendapatan=pendapatan+saldoakhir;
                                                                             tabMode.addRow(new Object[]{"","       "+rs8.getString(1)+" "+rs8.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                             try {
+                                                                                koneksi=koneksiDB.condb();
                                                                                 rs9=koneksi.prepareStatement(
                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -631,6 +640,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                     pendapatan=pendapatan+saldoakhir;
                                                                                     tabMode.addRow(new Object[]{"","        "+rs9.getString(1)+" "+rs9.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                     try {
+                                                                                        koneksi=koneksiDB.condb();
                                                                                         rs10=koneksi.prepareStatement(
                                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -649,6 +659,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                             pendapatan=pendapatan+saldoakhir;
                                                                                             tabMode.addRow(new Object[]{"","         "+rs10.getString(1)+" "+rs10.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                             try {
+                                                                                                koneksi=koneksiDB.condb();
                                                                                                 rs11=koneksi.prepareStatement(
                                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -667,6 +678,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                                     pendapatan=pendapatan+saldoakhir;
                                                                                                     tabMode.addRow(new Object[]{"","          "+rs11.getString(1)+" "+rs11.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                                     try {
+                                                                                                        koneksi=koneksiDB.condb();
                                                                                                         rs12=koneksi.prepareStatement(
                                                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -685,6 +697,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                                             pendapatan=pendapatan+saldoakhir;
                                                                                                             tabMode.addRow(new Object[]{"","           "+rs12.getString(1)+" "+rs12.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                                             try {
+                                                                                                                koneksi=koneksiDB.condb();
                                                                                                                 rs13=koneksi.prepareStatement(
                                                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -813,6 +826,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 saldoawal=0;debkret=0;saldoakhir=0;
                 tabMode.addRow(new Object[]{"Biaya-Biaya :","",""});  
                 tabMode.addRow(new Object[]{"","Nama Rekening","Saldo Akhir"});
+                koneksi=koneksiDB.condb();
                 rs=koneksi.prepareStatement(
                     "select rekening.kd_rek, rekening.nm_rek  from rekening "+
                     "where rekening.level='0' and rekening.tipe='R' and rekening.balance='D' order by rekening.kd_rek").executeQuery();                
@@ -828,6 +842,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     biaya=biaya+saldoakhir;
                     tabMode.addRow(new Object[]{"",rs.getString(1)+" "+rs.getString(2),"  "+df2.format(saldoakhir)});    
                     try {
+                        koneksi=koneksiDB.condb();
                         rs2=koneksi.prepareStatement(
                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -846,6 +861,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             biaya=biaya+saldoakhir;
                             tabMode.addRow(new Object[]{"", " "+rs2.getString(1)+" "+rs2.getString(2),"  "+df2.format(saldoakhir)}); 
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -864,6 +880,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                     biaya=biaya+saldoakhir;
                                     tabMode.addRow(new Object[]{"", "  "+rs3.getString(1)+" "+rs3.getString(2),"  "+df2.format(saldoakhir)}); 
                                     try {
+                                        koneksi=koneksiDB.condb();
                                         rs4=koneksi.prepareStatement(
                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -882,6 +899,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                             biaya=biaya+saldoakhir;
                                             tabMode.addRow(new Object[]{"", "   "+rs4.getString(1)+" "+rs4.getString(2),"  "+df2.format(saldoakhir)}); 
                                             try {
+                                                koneksi=koneksiDB.condb();
                                                 rs5=koneksi.prepareStatement(
                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -900,6 +918,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                     biaya=biaya+saldoakhir;
                                                     tabMode.addRow(new Object[]{"","    "+rs5.getString(1)+" "+rs5.getString(2),"  "+df2.format(saldoakhir)}); 
                                                     try {
+                                                        koneksi=koneksiDB.condb();
                                                         rs6=koneksi.prepareStatement(
                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -918,6 +937,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                             biaya=biaya+saldoakhir;
                                                             tabMode.addRow(new Object[]{"","     "+rs6.getString(1)+" "+rs6.getString(2),"  "+df2.format(saldoakhir)}); 
                                                             try {
+                                                                koneksi=koneksiDB.condb();
                                                                 rs7=koneksi.prepareStatement(
                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -936,6 +956,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                     biaya=biaya+saldoakhir;
                                                                     tabMode.addRow(new Object[]{"","      "+rs7.getString(1)+" "+rs7.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                     try {
+                                                                        koneksi=koneksiDB.condb();
                                                                         rs8=koneksi.prepareStatement(
                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -954,6 +975,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                             biaya=biaya+saldoakhir;
                                                                             tabMode.addRow(new Object[]{"","       "+rs8.getString(1)+" "+rs8.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                             try {
+                                                                                koneksi=koneksiDB.condb();
                                                                                 rs9=koneksi.prepareStatement(
                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -972,6 +994,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                     biaya=biaya+saldoakhir;
                                                                                     tabMode.addRow(new Object[]{"","        "+rs9.getString(1)+" "+rs9.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                     try {
+                                                                                        koneksi=koneksiDB.condb();
                                                                                         rs10=koneksi.prepareStatement(
                                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -990,6 +1013,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                             biaya=biaya+saldoakhir;
                                                                                             tabMode.addRow(new Object[]{"","         "+rs10.getString(1)+" "+rs10.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                             try {
+                                                                                                koneksi=koneksiDB.condb();
                                                                                                 rs11=koneksi.prepareStatement(
                                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1008,6 +1032,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                                     biaya=biaya+saldoakhir;
                                                                                                     tabMode.addRow(new Object[]{"","          "+rs11.getString(1)+" "+rs11.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                                     try {
+                                                                                                        koneksi=koneksiDB.condb();
                                                                                                         rs12=koneksi.prepareStatement(
                                                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1026,6 +1051,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                                             biaya=biaya+saldoakhir;
                                                                                                             tabMode.addRow(new Object[]{"","           "+rs12.getString(1)+" "+rs12.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                                             try {
+                                                                                                                koneksi=koneksiDB.condb();
                                                                                                                 rs13=koneksi.prepareStatement(
                                                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1158,6 +1184,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 saldoawal=0;debkret=0;saldoakhir=0;
                 tabMode2.addRow(new Object[]{"Modal Awal :","",""}); 
                 tabMode2.addRow(new Object[]{"","Nama Rekening","Saldo Akhir"});
+                koneksi=koneksiDB.condb();
                 rs=koneksi.prepareStatement(
                     "select rekening.kd_rek, rekening.nm_rek  from rekening "+
                     "where rekening.level='0' and rekening.tipe='M' order by rekening.kd_rek").executeQuery();     
@@ -1173,6 +1200,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     modal=modal+saldoakhir;
                     tabMode2.addRow(new Object[]{"",rs.getString(1)+" "+rs.getString(2),"  "+df2.format(saldoakhir)});  
                     try {
+                        koneksi=koneksiDB.condb();
                         rs2=koneksi.prepareStatement(
                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1191,6 +1219,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             modal=modal+saldoakhir;
                             tabMode2.addRow(new Object[]{"", " "+rs2.getString(1)+" "+rs2.getString(2),"  "+df2.format(saldoakhir)}); 
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1209,6 +1238,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                     modal=modal+saldoakhir;
                                     tabMode2.addRow(new Object[]{"", "  "+rs3.getString(1)+" "+rs3.getString(2),"  "+df2.format(saldoakhir)}); 
                                     try {
+                                        koneksi=koneksiDB.condb();
                                         rs4=koneksi.prepareStatement(
                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1227,6 +1257,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                             modal=modal+saldoakhir;
                                             tabMode2.addRow(new Object[]{"", "   "+rs4.getString(1)+" "+rs4.getString(2),"  "+df2.format(saldoakhir)}); 
                                             try {
+                                                koneksi=koneksiDB.condb();
                                                 rs5=koneksi.prepareStatement(
                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1245,6 +1276,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                     modal=modal+saldoakhir;
                                                     tabMode2.addRow(new Object[]{"","    "+rs5.getString(1)+" "+rs5.getString(2),"  "+df2.format(saldoakhir)}); 
                                                     try {
+                                                        koneksi=koneksiDB.condb();
                                                         rs6=koneksi.prepareStatement(
                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1263,6 +1295,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                             modal=modal+saldoakhir;
                                                             tabMode2.addRow(new Object[]{"","     "+rs6.getString(1)+" "+rs6.getString(2),"  "+df2.format(saldoakhir)}); 
                                                             try {
+                                                                koneksi=koneksiDB.condb();
                                                                 rs7=koneksi.prepareStatement(
                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1281,6 +1314,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                     modal=modal+saldoakhir;
                                                                     tabMode2.addRow(new Object[]{"","      "+rs7.getString(1)+" "+rs7.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                     try {
+                                                                        koneksi=koneksiDB.condb();
                                                                         rs8=koneksi.prepareStatement(
                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1299,6 +1333,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                             modal=modal+saldoakhir;
                                                                             tabMode2.addRow(new Object[]{"","       "+rs8.getString(1)+" "+rs8.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                             try {
+                                                                                koneksi=koneksiDB.condb();
                                                                                 rs9=koneksi.prepareStatement(
                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1317,6 +1352,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                     modal=modal+saldoakhir;
                                                                                     tabMode2.addRow(new Object[]{"","        "+rs9.getString(1)+" "+rs9.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                     try {
+                                                                                        koneksi=koneksiDB.condb();
                                                                                         rs10=koneksi.prepareStatement(
                                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1335,6 +1371,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                             modal=modal+saldoakhir;
                                                                                             tabMode2.addRow(new Object[]{"","         "+rs10.getString(1)+" "+rs10.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                             try {
+                                                                                                koneksi=koneksiDB.condb();
                                                                                                 rs11=koneksi.prepareStatement(
                                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1353,6 +1390,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                                     modal=modal+saldoakhir;
                                                                                                     tabMode2.addRow(new Object[]{"","          "+rs11.getString(1)+" "+rs11.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                                     try {
+                                                                                                        koneksi=koneksiDB.condb();
                                                                                                         rs12=koneksi.prepareStatement(
                                                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1371,6 +1409,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                                             modal=modal+saldoakhir;
                                                                                                             tabMode2.addRow(new Object[]{"","           "+rs12.getString(1)+" "+rs12.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                                             try {
+                                                                                                                koneksi=koneksiDB.condb();
                                                                                                                 rs13=koneksi.prepareStatement(
                                                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1503,6 +1542,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 saldoawal=0;debkret=0;saldoakhir=0;
                 tabMode3.addRow(new Object[]{"Aktiva :","",""}); 
                 tabMode3.addRow(new Object[]{"","Nama Rekening","Saldo Akhir"});
+                koneksi=koneksiDB.condb();
                 rs=koneksi.prepareStatement(
                     "select rekening.kd_rek, rekening.nm_rek  from rekening "+
                     "where rekening.level='0' and rekening.tipe='N' and balance='D' order by rekening.kd_rek").executeQuery();
@@ -1519,6 +1559,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     aktiva=aktiva+saldoakhir;
                     tabMode3.addRow(new Object[]{"",rs.getString(1)+" "+rs.getString(2),"  "+df2.format(saldoakhir)});      
                     try {
+                        koneksi=koneksiDB.condb();
                         rs2=koneksi.prepareStatement(
                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1537,6 +1578,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             aktiva=aktiva+saldoakhir;
                             tabMode3.addRow(new Object[]{"", " "+rs2.getString(1)+" "+rs2.getString(2),"  "+df2.format(saldoakhir)}); 
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1555,6 +1597,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                     aktiva=aktiva+saldoakhir;
                                     tabMode3.addRow(new Object[]{"", "  "+rs3.getString(1)+" "+rs3.getString(2),"  "+df2.format(saldoakhir)}); 
                                     try {
+                                        koneksi=koneksiDB.condb();
                                         rs4=koneksi.prepareStatement(
                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1573,6 +1616,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                             aktiva=aktiva+saldoakhir;
                                             tabMode3.addRow(new Object[]{"", "   "+rs4.getString(1)+" "+rs4.getString(2),"  "+df2.format(saldoakhir)}); 
                                             try {
+                                                koneksi=koneksiDB.condb();
                                                 rs5=koneksi.prepareStatement(
                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1591,6 +1635,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                     aktiva=aktiva+saldoakhir;
                                                     tabMode3.addRow(new Object[]{"","    "+rs5.getString(1)+" "+rs5.getString(2),"  "+df2.format(saldoakhir)}); 
                                                     try {
+                                                        koneksi=koneksiDB.condb();
                                                         rs6=koneksi.prepareStatement(
                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1609,6 +1654,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                             aktiva=aktiva+saldoakhir;
                                                             tabMode3.addRow(new Object[]{"","     "+rs6.getString(1)+" "+rs6.getString(2),"  "+df2.format(saldoakhir)}); 
                                                             try {
+                                                                koneksi=koneksiDB.condb();
                                                                 rs7=koneksi.prepareStatement(
                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1627,6 +1673,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                     aktiva=aktiva+saldoakhir;
                                                                     tabMode3.addRow(new Object[]{"","      "+rs7.getString(1)+" "+rs7.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                     try {
+                                                                        koneksi=koneksiDB.condb();
                                                                         rs8=koneksi.prepareStatement(
                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1645,6 +1692,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                             aktiva=aktiva+saldoakhir;
                                                                             tabMode3.addRow(new Object[]{"","       "+rs8.getString(1)+" "+rs8.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                             try {
+                                                                                koneksi=koneksiDB.condb();
                                                                                 rs9=koneksi.prepareStatement(
                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1663,6 +1711,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                     aktiva=aktiva+saldoakhir;
                                                                                     tabMode3.addRow(new Object[]{"","        "+rs9.getString(1)+" "+rs9.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                     try {
+                                                                                        koneksi=koneksiDB.condb();
                                                                                         rs10=koneksi.prepareStatement(
                                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1681,6 +1730,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                             aktiva=aktiva+saldoakhir;
                                                                                             tabMode3.addRow(new Object[]{"","         "+rs10.getString(1)+" "+rs10.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                             try {
+                                                                                                koneksi=koneksiDB.condb();
                                                                                                 rs11=koneksi.prepareStatement(
                                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1699,6 +1749,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                                     aktiva=aktiva+saldoakhir;
                                                                                                     tabMode3.addRow(new Object[]{"","          "+rs11.getString(1)+" "+rs11.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                                     try {
+                                                                                                        koneksi=koneksiDB.condb();
                                                                                                         rs12=koneksi.prepareStatement(
                                                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1717,6 +1768,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                                             aktiva=aktiva+saldoakhir;
                                                                                                             tabMode3.addRow(new Object[]{"","           "+rs12.getString(1)+" "+rs12.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                                             try {
+                                                                                                                koneksi=koneksiDB.condb();
                                                                                                                 rs13=koneksi.prepareStatement(
                                                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1845,6 +1897,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 saldoawal=0;debkret=0;saldoakhir=0;
                 tabMode3.addRow(new Object[]{"Pasiva :","",""}); 
                 tabMode3.addRow(new Object[]{"","Nama Rekening","Saldo Akhir"});
+                koneksi=koneksiDB.condb();
                 rs=koneksi.prepareStatement(
                     "select rekening.kd_rek, rekening.nm_rek  from rekening "+
                     "where rekening.level='0' and rekening.tipe='N' and balance='K' order by rekening.kd_rek").executeQuery();
@@ -1860,6 +1913,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     pasiva=pasiva+saldoakhir;
                     tabMode3.addRow(new Object[]{"",rs.getString(1)+" "+rs.getString(2),"  "+df2.format(saldoakhir)});     
                     try {
+                        koneksi=koneksiDB.condb();
                         rs2=koneksi.prepareStatement(
                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1878,6 +1932,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             pasiva=pasiva+saldoakhir;
                             tabMode3.addRow(new Object[]{"", " "+rs2.getString(1)+" "+rs2.getString(2),"  "+df2.format(saldoakhir)}); 
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1896,6 +1951,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                     pasiva=pasiva+saldoakhir;
                                     tabMode3.addRow(new Object[]{"", "  "+rs3.getString(1)+" "+rs3.getString(2),"  "+df2.format(saldoakhir)}); 
                                     try {
+                                        koneksi=koneksiDB.condb();
                                         rs4=koneksi.prepareStatement(
                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1914,6 +1970,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                             pasiva=pasiva+saldoakhir;
                                             tabMode3.addRow(new Object[]{"", "   "+rs4.getString(1)+" "+rs4.getString(2),"  "+df2.format(saldoakhir)}); 
                                             try {
+                                                koneksi=koneksiDB.condb();
                                                 rs5=koneksi.prepareStatement(
                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1932,6 +1989,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                     pasiva=pasiva+saldoakhir;
                                                     tabMode3.addRow(new Object[]{"","    "+rs5.getString(1)+" "+rs5.getString(2),"  "+df2.format(saldoakhir)}); 
                                                     try {
+                                                        koneksi=koneksiDB.condb();
                                                         rs6=koneksi.prepareStatement(
                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1950,6 +2008,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                             pasiva=pasiva+saldoakhir;
                                                             tabMode3.addRow(new Object[]{"","     "+rs6.getString(1)+" "+rs6.getString(2),"  "+df2.format(saldoakhir)}); 
                                                             try {
+                                                                koneksi=koneksiDB.condb();
                                                                 rs7=koneksi.prepareStatement(
                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1968,6 +2027,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                     pasiva=pasiva+saldoakhir;
                                                                     tabMode3.addRow(new Object[]{"","      "+rs7.getString(1)+" "+rs7.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                     try {
+                                                                        koneksi=koneksiDB.condb();
                                                                         rs8=koneksi.prepareStatement(
                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -1986,6 +2046,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                             pasiva=pasiva+saldoakhir;
                                                                             tabMode3.addRow(new Object[]{"","       "+rs8.getString(1)+" "+rs8.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                             try {
+                                                                                koneksi=koneksiDB.condb();
                                                                                 rs9=koneksi.prepareStatement(
                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -2004,6 +2065,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                     pasiva=pasiva+saldoakhir;
                                                                                     tabMode3.addRow(new Object[]{"","        "+rs9.getString(1)+" "+rs9.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                     try {
+                                                                                        koneksi=koneksiDB.condb();
                                                                                         rs10=koneksi.prepareStatement(
                                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -2022,6 +2084,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                             pasiva=pasiva+saldoakhir;
                                                                                             tabMode3.addRow(new Object[]{"","         "+rs10.getString(1)+" "+rs10.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                             try {
+                                                                                                koneksi=koneksiDB.condb();
                                                                                                 rs11=koneksi.prepareStatement(
                                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -2040,6 +2103,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                                     pasiva=pasiva+saldoakhir;
                                                                                                     tabMode3.addRow(new Object[]{"","          "+rs11.getString(1)+" "+rs11.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                                     try {
+                                                                                                        koneksi=koneksiDB.condb();
                                                                                                         rs12=koneksi.prepareStatement(
                                                                                                             "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                             " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+
@@ -2058,6 +2122,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                                                                                             pasiva=pasiva+saldoakhir;
                                                                                                             tabMode3.addRow(new Object[]{"","           "+rs12.getString(1)+" "+rs12.getString(2),"  "+df2.format(saldoakhir)}); 
                                                                                                             try {
+                                                                                                                koneksi=koneksiDB.condb();
                                                                                                                 rs13=koneksi.prepareStatement(
                                                                                                                     "select rekening.kd_rek, rekening.nm_rek, rekening.tipe, rekening.balance "+
                                                                                                                     " from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 "+

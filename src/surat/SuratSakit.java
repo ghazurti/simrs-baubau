@@ -1152,6 +1152,7 @@ public final class SuratSakit extends javax.swing.JDialog {
         try{
             tgl=" suratsakit.tanggalawal between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' ";
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                      "select suratsakit.no_surat,suratsakit.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                      "suratsakit.tanggalawal,suratsakit.tanggalakhir,suratsakit.lamasakit "+                  
@@ -1159,6 +1160,7 @@ public final class SuratSakit extends javax.swing.JDialog {
                      "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                      "where "+tgl+"order by suratsakit.no_surat");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                      "select suratsakit.no_surat,suratsakit.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                      "suratsakit.tanggalawal,suratsakit.tanggalakhir,suratsakit.lamasakit "+                  

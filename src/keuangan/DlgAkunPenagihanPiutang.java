@@ -858,6 +858,7 @@ private void BtnPoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                         "select akun_penagihan_piutang.kd_rek,rekening.nm_rek,akun_penagihan_piutang.nama_bank,akun_penagihan_piutang.atas_nama,akun_penagihan_piutang.no_rek from akun_penagihan_piutang inner join rekening on akun_penagihan_piutang.kd_rek=rekening.kd_rek "+
                         (TCari.getText().trim().equals("")?"":"where akun_penagihan_piutang.nama_bank like ? or rekening.nm_rek like ? ")+"order by akun_penagihan_piutang.atas_nama");

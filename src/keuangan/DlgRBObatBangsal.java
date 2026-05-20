@@ -484,6 +484,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void prosesCari() {            
         try{   
             Valid.tabelKosong(tabMode); 
+            koneksi=koneksiDB.condb();
             psbangsal=koneksi.prepareStatement("select bangsal.kd_bangsal,bangsal.nm_bangsal from bangsal where bangsal.kd_bangsal in (select bangsal.kd_bangsal from kamar group by bangsal.kd_bangsal) "+(nmbangsal.getText().trim().equals("")?"":"and bangsal.kd_bangsal like ? "));
             try {
                 if(!nmbangsal.getText().trim().equals("")){
@@ -494,6 +495,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 ttlbiaya=0;ttlembalase=0;ttltuslah=0;ttltotal=0;
                 while(rsbangsal.next()){
                     tabMode.addRow(new Object[]{i+". ",rsbangsal.getString(2),"","","","","",""});
+                    koneksi=koneksiDB.condb();
                     psdokter=koneksi.prepareStatement(
                         "select dokter.kd_dokter,dokter.nm_dokter from dokter inner join reg_periksa on reg_periksa.kd_dokter=dokter.kd_dokter "+
                         "inner join kamar_inap on reg_periksa.no_rawat=kamar_inap.no_rawat inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
@@ -507,6 +509,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         a=1;
                         while(rsdokter.next()){         
                             tabMode.addRow(new Object[]{"",a+". "+rsdokter.getString(2),"","","","","",""});
+                            koneksi=koneksiDB.condb();
                             psobat=koneksi.prepareStatement(
                                 "select detail_pemberian_obat.kode_brng,databarang.nama_brng,sum(detail_pemberian_obat.jml) as jml,(sum(detail_pemberian_obat.total)-sum(detail_pemberian_obat.embalase+detail_pemberian_obat.tuslah)) as biaya,"+
                                 "sum(detail_pemberian_obat.embalase) as embalase,sum(detail_pemberian_obat.tuslah) as tuslah,sum(detail_pemberian_obat.total) as total from detail_pemberian_obat inner join reg_periksa on detail_pemberian_obat.no_rawat=reg_periksa.no_rawat "+

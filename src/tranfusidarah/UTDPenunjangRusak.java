@@ -1117,6 +1117,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         }
         
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select ipsrsbarang.kode_brng, ipsrsbarang.nama_brng,utd_stok_penunjang.hargaterakhir,ipsrsbarang.kode_sat, "+
                 " utd_stok_penunjang.stok from ipsrsbarang inner join utd_stok_penunjang on ipsrsbarang.kode_brng=utd_stok_penunjang.kode_brng "+
                 " where ipsrsbarang.kode_brng like ? or ipsrsbarang.nama_brng like ? order by ipsrsbarang.nama_brng");
@@ -1172,6 +1173,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     public void tampil2() {
         Valid.tabelKosong(tabMode2);
         try{
+            koneksi=koneksiDB.condb();
             ps2=koneksi.prepareStatement(
                     "select utd_penunjang_rusak.kode_brng,ipsrsbarang.nama_brng,utd_penunjang_rusak.jml,utd_penunjang_rusak.harga,"+
                     "utd_penunjang_rusak.total,utd_penunjang_rusak.nip,petugas.nama,utd_penunjang_rusak.tanggal,"+

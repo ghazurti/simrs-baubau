@@ -720,6 +720,7 @@ public class DlgJamMasuk extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from jam_masuk "+(TCari.getText().trim().equals("")?"":"where jam_masuk.shift like ? ")+"order by jam_masuk.shift");
             try {
                 if(!TCari.getText().trim().equals("")){

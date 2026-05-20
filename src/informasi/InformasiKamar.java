@@ -323,6 +323,7 @@ public final class InformasiKamar extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select kamar.kd_kamar,kamar.kd_bangsal,bangsal.nm_bangsal, "+
                    "kamar.kelas,kamar.trf_kamar,kamar.status from bangsal inner join kamar "+
                    "on kamar.kd_bangsal=bangsal.kd_bangsal where kamar.statusdata='1' and kamar.kd_kamar like ? or "+

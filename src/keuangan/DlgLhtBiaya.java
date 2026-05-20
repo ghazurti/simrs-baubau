@@ -377,6 +377,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){
         Valid.tabelKosong(tabMode);
         try{            
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement(
                    "select billing.no,billing.nm_perawatan, if(billing.biaya<>0,billing.biaya,null) as satu, "+
                    "if(billing.jumlah<>0,billing.jumlah,null) as dua,"+

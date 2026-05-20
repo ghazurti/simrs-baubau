@@ -700,6 +700,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     private void tampil(){
         Valid.tabelKosong(tabMode);
         try{      
+            koneksi=koneksiDB.condb();
             ps= koneksi.prepareStatement(
                 "select kamar_inap.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,kamar_inap.tgl_keluar,penjab.png_jawab, "+
                 "kamar_inap.tgl_masuk,kamar_inap.jam_masuk,kamar_inap.tgl_keluar,kamar_inap.jam_keluar,"+
@@ -731,6 +732,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         ds16="";ds17="";ds18="";ds19="";ds20="";ds21="";ds22="";ds23="";
                         ds24="";ds25="";ds26="";ds27="";ds28="";ds29="";
 
+                        koneksi=koneksiDB.condb();
                         pspenyakit=koneksi.prepareStatement(
                                 "select kd_penyakit,prioritas from diagnosa_pasien where "+
                                 "no_rawat=? and status='Ranap' order by prioritas");
@@ -845,6 +847,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         p18="";p19="";p20="";p21="";p22="";p23="";p24="";p25="";
                         p26="";p27="";p28="";p29="";p30="";
 
+                        koneksi=koneksiDB.condb();
                         psprosedur=koneksi.prepareStatement(
                                 "select kode,prioritas from prosedur_pasien where "+
                                 "no_rawat=? and status='Ranap' order by prioritas");
@@ -954,6 +957,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                             }
                         }
                         Laborat=0;   
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -975,6 +979,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Radiologi=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -996,6 +1001,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Operasi=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1017,6 +1023,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Obat=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1038,6 +1045,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Ranap_Dokter=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1059,6 +1067,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }                        
 
                         Ranap_Dokter_Paramedis=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1080,6 +1089,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Ranap_Paramedis=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1101,6 +1111,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Ralan_Dokter=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1122,6 +1133,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Ralan_Dokter_Paramedis=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1143,6 +1155,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Ralan_Paramedis=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1164,6 +1177,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Tambahan=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1185,6 +1199,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Potongan=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1206,6 +1221,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Kamar=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1227,6 +1243,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Registrasi=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1248,6 +1265,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Harian=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1269,6 +1287,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Retur_Obat=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1290,6 +1309,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Resep_Pulang=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1311,6 +1331,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
 
                         Service=0;
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(sqlps2);
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));

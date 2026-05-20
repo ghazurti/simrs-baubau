@@ -540,6 +540,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select dapursuplier.kode_suplier,dapursuplier.nama_suplier from dapursuplier where "+
                     "dapursuplier.kode_suplier like ? or dapursuplier.nama_suplier like ? order by dapursuplier.nama_suplier");

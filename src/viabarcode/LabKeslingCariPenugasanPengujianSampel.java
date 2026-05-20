@@ -1398,6 +1398,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 ChkAccor.setVisible(true);
                 Valid.tabelKosong(tabModeDetailPenugasan);
                 try {
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                         "select labkesling_detail_penugasan_pengujian_sampel.kode_parameter,labkesling_parameter_pengujian.nama_parameter,labkesling_parameter_pengujian.metode_pengujian,labkesling_parameter_pengujian.satuan,"+
                         "labkesling_parameter_pengujian.kategori,labkesling_nilai_normal_baku_mutu.nilai_normal from labkesling_detail_penugasan_pengujian_sampel inner join labkesling_parameter_pengujian "+
@@ -1622,6 +1623,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
         Valid.tabelKosong(tabModePenugasan);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                         "select labkesling_penugasan_pengujian_sampel.tanggal,labkesling_penugasan_pengujian_sampel.no_penugasan,labkesling_penugasan_pengujian_sampel.nip_pj,"+
                         "pjlab.nama as namapj,labkesling_penugasan_pengujian_sampel.nip_pelaksana,pelaksana.nama as namapelaksana,labkesling_penugasan_pengujian_sampel.no_permintaan,"+
@@ -1678,6 +1680,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil2() {
         Valid.tabelKosong(tabModeRekapPenugasan);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                         "select labkesling_penugasan_pengujian_sampel.tanggal,labkesling_penugasan_pengujian_sampel.no_penugasan,labkesling_penugasan_pengujian_sampel.nip_pj,"+
                         "pjlab.nama as namapj,labkesling_penugasan_pengujian_sampel.nip_pelaksana,pelaksana.nama as namapelaksana,labkesling_penugasan_pengujian_sampel.no_permintaan,"+

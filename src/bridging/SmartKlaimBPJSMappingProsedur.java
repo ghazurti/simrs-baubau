@@ -800,6 +800,7 @@ public final class SmartKlaimBPJSMappingProsedur extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement(
                    "select mapping_prosedur_smart_klaim_bpjs.kode_snomed,mapping_prosedur_smart_klaim_bpjs.display,mapping_prosedur_smart_klaim_bpjs.system,"+
                    "mapping_prosedur_smart_klaim_bpjs.icd9,icd9.deskripsi_panjang from mapping_prosedur_smart_klaim_bpjs inner join icd9 "+

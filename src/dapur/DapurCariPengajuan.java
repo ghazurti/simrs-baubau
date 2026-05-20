@@ -836,6 +836,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pengajuan_barang_dapur.tanggal,pengajuan_barang_dapur.no_pengajuan,pengajuan_barang_dapur.keterangan,pengajuan_barang_dapur.nip,pegawai.nama,pengajuan_barang_dapur.status from pengajuan_barang_dapur inner join pegawai on pengajuan_barang_dapur.nip=pegawai.nik "+
                     "inner join detail_pengajuan_barang_dapur on pengajuan_barang_dapur.no_pengajuan=detail_pengajuan_barang_dapur.no_pengajuan inner join dapurbarang on detail_pengajuan_barang_dapur.kode_brng=dapurbarang.kode_brng "+
@@ -869,6 +870,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         rs.getString("tanggal"),rs.getString("no_pengajuan"),rs.getString("status"),
                         rs.getString("keterangan"),rs.getString("nip")+" "+rs.getString("nama")
                     });   
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select detail_pengajuan_barang_dapur.kode_brng,dapurbarang.nama_brng,detail_pengajuan_barang_dapur.kode_sat,kodesatuan.satuan,detail_pengajuan_barang_dapur.jumlah,"+
                         "detail_pengajuan_barang_dapur.h_pengajuan,detail_pengajuan_barang_dapur.total from detail_pengajuan_barang_dapur inner join dapurbarang on detail_pengajuan_barang_dapur.kode_brng=dapurbarang.kode_brng "+

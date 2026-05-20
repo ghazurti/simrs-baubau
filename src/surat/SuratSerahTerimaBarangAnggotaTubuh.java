@@ -1463,6 +1463,7 @@ public final class SuratSerahTerimaBarangAnggotaTubuh extends javax.swing.JDialo
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select surat_serah_terima_barang_anggota_tubuh.no_pernyataan,reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,reg_periksa.umurdaftar,"+
                     "reg_periksa.sttsumur,pasien.jk,pasien.tgl_lahir,surat_serah_terima_barang_anggota_tubuh.tanggal,surat_serah_terima_barang_anggota_tubuh.jenis_barang,"+
@@ -1475,6 +1476,7 @@ public final class SuratSerahTerimaBarangAnggotaTubuh extends javax.swing.JDialo
                     "inner join petugas on surat_serah_terima_barang_anggota_tubuh.nip=petugas.nip where "+
                     "surat_serah_terima_barang_anggota_tubuh.tanggal between ? and ? order by surat_serah_terima_barang_anggota_tubuh.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select surat_serah_terima_barang_anggota_tubuh.no_pernyataan,reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,reg_periksa.umurdaftar,"+
                     "reg_periksa.sttsumur,pasien.jk,pasien.tgl_lahir,surat_serah_terima_barang_anggota_tubuh.tanggal,surat_serah_terima_barang_anggota_tubuh.jenis_barang,"+
@@ -1577,6 +1579,7 @@ public final class SuratSerahTerimaBarangAnggotaTubuh extends javax.swing.JDialo
 
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rkm_medis,pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,reg_periksa.tgl_registrasi,"+
                     "reg_periksa.umurdaftar,reg_periksa.sttsumur from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -1709,6 +1712,7 @@ public final class SuratSerahTerimaBarangAnggotaTubuh extends javax.swing.JDialo
         if(FormPhoto.isVisible()==true){
             lokasifile="";
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select surat_serah_terima_barang_anggota_tubuh_bukti.photo from surat_serah_terima_barang_anggota_tubuh_bukti where surat_serah_terima_barang_anggota_tubuh_bukti.no_pernyataan=?");
                 try {
                     ps.setString(1,tbObat.getValueAt(tbObat.getSelectedRow(),0).toString());

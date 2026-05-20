@@ -849,6 +849,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select perusahaan_pasien.kode_perusahaan, perusahaan_pasien.nama_perusahaan,perusahaan_pasien.alamat,perusahaan_pasien.kota,"+
                     "perusahaan_pasien.no_telp,aes_decrypt(password_perusahaan_pasien.password,'windi') from perusahaan_pasien "+

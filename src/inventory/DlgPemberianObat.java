@@ -1368,6 +1368,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         
         Valid.tabelKosong(tabModePO);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(sql);
             try {
                 if(!TCari.getText().trim().equals("")){
@@ -1437,6 +1438,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         
         Valid.tabelKosong(tabModePO);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(sql);
             try {
                 if(!TCari.getText().trim().equals("")){

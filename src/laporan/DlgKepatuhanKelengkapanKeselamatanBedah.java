@@ -868,6 +868,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select operasi.no_rawat,operasi.tgl_operasi,dokter.nm_dokter,reg_periksa.no_rkm_medis,pasien.nm_pasien,paket_operasi.nm_perawatan,operasi.status "+
                 "from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat inner join dokter on operasi.operator1=dokter.kd_dokter "+

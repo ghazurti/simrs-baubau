@@ -734,6 +734,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(TCari,"No.Faktur");
         }else{
            try {
+               koneksi=koneksiDB.condb();
                pscaribeli=koneksi.prepareStatement("select no_hibah,totalhibah,tgl_hibah,kd_rek_aset from inventaris_hibah where no_hibah=?");
                try {
                   pscaribeli.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),1).toString());
@@ -914,6 +915,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{            
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select inventaris_hibah.tgl_hibah,inventaris_hibah.no_hibah, "+
                     "inventaris_hibah.kode_pemberi,pemberihibah.nama_pemberi, "+
                     "inventaris_hibah.nip,petugas.nama,inventaris_hibah.totalhibah,"+
@@ -951,6 +953,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3)+", "+rs.getString(4),
                           rs.getString(5)+", "+rs.getString(6),"","",""
                     });      
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select inventaris_detail_hibah.kode_barang,inventaris_barang.nama_barang, "+
                         "inventaris_barang.id_jenis,inventaris_jenis.nama_jenis,inventaris_detail_hibah.jumlah,inventaris_detail_hibah.h_hibah, "+
                         "inventaris_detail_hibah.subtotalhibah "+

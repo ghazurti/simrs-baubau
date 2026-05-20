@@ -676,6 +676,7 @@ private void BtnSimpanTindakanActionPerformed(java.awt.event.ActionEvent evt) {/
                             try {                                    
                                 switch (pilihtable) {
                                     case "rawat_jl_dr":
+                                        koneksi=koneksiDB.condb();
                                         pssimpandokter=koneksi.prepareStatement("insert into rawat_jl_dr values(?,?,?,?,?,?,?,?,?,?,?,'Belum')");
                                         try {
                                             pssimpandokter.setString(1,TNoRw.getText());
@@ -718,6 +719,7 @@ private void BtnSimpanTindakanActionPerformed(java.awt.event.ActionEvent evt) {/
                                         }   
                                         break;
                                     case "rawat_jl_pr":
+                                        koneksi=koneksiDB.condb();
                                         pssimpanperawat=koneksi.prepareStatement("insert into rawat_jl_pr values(?,?,?,?,?,?,?,?,?,?,?,'Belum')");
                                         try {
                                             pssimpanperawat.setString(1,TNoRw.getText());
@@ -763,6 +765,7 @@ private void BtnSimpanTindakanActionPerformed(java.awt.event.ActionEvent evt) {/
                                         if(Nip2.getText().trim().equals("")||NmPetugas2.getText().trim().equals("")){
                                             Valid.textKosong(TCariTindakan,"Data Petugas");
                                         }else{
+                                            koneksi=koneksiDB.condb();
                                             pssimpandokterperawat=koneksi.prepareStatement("insert into rawat_jl_drpr values(?,?,?,?,?,?,?,?,?,?,?,?,?,'Belum')");
                                             try {
                                                 pssimpandokterperawat.setString(1,TNoRw.getText());
@@ -1223,12 +1226,16 @@ private void ppPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                    "on jns_perawatan.kd_kategori=kategori_perawatan.kd_kategori  ";
             }
             
+            koneksi=koneksiDB.condb();
             pstindakan=koneksi.prepareStatement(sql+
                    "where jns_perawatan.status='1' and (jns_perawatan.kd_pj=? or jns_perawatan.kd_pj='-') and (jns_perawatan.kd_poli=? or jns_perawatan.kd_poli='-') order by jns_perawatan.nm_perawatan "); 
+            koneksi=koneksiDB.condb();
             pstindakan2=koneksi.prepareStatement(sql+
                    "where jns_perawatan.status='1' and (jns_perawatan.kd_pj=? or jns_perawatan.kd_pj='-') order by jns_perawatan.nm_perawatan ");        
+            koneksi=koneksiDB.condb();
             pstindakan3=koneksi.prepareStatement(sql+
                    "where jns_perawatan.status='1' and (jns_perawatan.kd_poli=? or jns_perawatan.kd_poli='-') order by jns_perawatan.nm_perawatan ");     
+            koneksi=koneksiDB.condb();
             pstindakan4=koneksi.prepareStatement(sql+
                    "where jns_perawatan.status='1' order by jns_perawatan.nm_perawatan "); 
             try {

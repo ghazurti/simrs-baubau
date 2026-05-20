@@ -338,6 +338,7 @@ public final class RMCariLabPending extends javax.swing.JDialog {
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select permintaan_lab.tgl_permintaan,permintaan_lab.jam_permintaan,template_laboratorium.Pemeriksaan "+
                     "from permintaan_lab inner join permintaan_detail_permintaan_lab on permintaan_detail_permintaan_lab.noorder=permintaan_lab.noorder "+

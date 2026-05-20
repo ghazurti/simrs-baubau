@@ -415,6 +415,7 @@ public final class InformasiTarifRanap extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select jns_perawatan_inap.kd_jenis_prw,jns_perawatan_inap.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan_inap.total_byrdr,penjab.png_jawab,bangsal.nm_bangsal "+
                        "from jns_perawatan_inap inner join kategori_perawatan inner join penjab inner join bangsal  "+
@@ -461,6 +462,7 @@ public final class InformasiTarifRanap extends javax.swing.JDialog {
     private void tampil2() {
         Valid.tabelKosong(tabMode2);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select jns_perawatan_inap.kd_jenis_prw,jns_perawatan_inap.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan_inap.total_byrpr,penjab.png_jawab,bangsal.nm_bangsal "+
                        "from jns_perawatan_inap inner join kategori_perawatan inner join penjab inner join bangsal  "+
@@ -507,6 +509,7 @@ public final class InformasiTarifRanap extends javax.swing.JDialog {
     private void tampil3() {
         Valid.tabelKosong(tabMode3);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select jns_perawatan_inap.kd_jenis_prw,jns_perawatan_inap.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan_inap.total_byrdrpr,penjab.png_jawab,bangsal.nm_bangsal "+
                        "from jns_perawatan_inap inner join kategori_perawatan inner join penjab inner join bangsal  "+

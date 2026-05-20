@@ -711,6 +711,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             rek=" and rekening.nm_rek='"+nmrek.getText()+"' ";
                         } 
 
+                        koneksi=koneksiDB.condb();
                         rs=koneksi.prepareStatement("select jurnal.no_jurnal, jurnal.no_bukti, jurnal.tgl_jurnal, jurnal.jenis, jurnal.keterangan,"+
                            "detailjurnal.kd_rek,rekening.nm_rek,jurnal.jam_jurnal from jurnal inner join detailjurnal on detailjurnal.no_jurnal=jurnal.no_jurnal "+
                            "inner join rekening on detailjurnal.kd_rek=rekening.kd_rek where "+
@@ -736,6 +737,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                 rs.getString(1),rs.getString(2),rs.getString(3)+" "+rs.getString(8),jns,rs.getString(5),"",""
                             });
 
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement("select detailjurnal.kd_rek,rekening.nm_rek,detailjurnal.debet,detailjurnal.kredit "+
                                     " from detailjurnal inner join rekening on detailjurnal.kd_rek=rekening.kd_rek where "+
                                     " detailjurnal.no_jurnal='"+rs.getString(1)+"' "+rek+" and detailjurnal.kd_rek like '%"+TCari.getText()+"%' or "+

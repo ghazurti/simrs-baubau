@@ -689,6 +689,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){        
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select count(diagnosa_pasien.no_rawat) as jumlah,diagnosa_pasien.kd_penyakit,penyakit.nm_penyakit "+
                 "from penyakit inner join diagnosa_pasien inner join reg_periksa on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit "+
@@ -731,6 +732,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil2(){        
         Valid.tabelKosong(tabMode2);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select count(diagnosa_pasien.no_rawat) as jumlah,diagnosa_pasien.kd_penyakit,penyakit.nm_penyakit "+
                 "from penyakit inner join diagnosa_pasien inner join reg_periksa inner join kamar_inap "+

@@ -890,6 +890,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             tabMode.addRow(new Object[]{jumlah[i],kodebarang[i],namabarang[i],satuan[i],h_retur[i],jmltotal[i],nofaktur[i],stok[i],harga[i]});
         }
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select dapurbarang.kode_brng,dapurbarang.nama_brng,dapurbarang.kode_sat,dapurbarang.harga,dapurbarang.stok "+
                     " from dapurbarang where dapurbarang.status='1' and dapurbarang.kode_brng like ? or "+

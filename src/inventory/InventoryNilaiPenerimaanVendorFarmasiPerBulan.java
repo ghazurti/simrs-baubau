@@ -836,6 +836,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select datasuplier.kode_suplier,datasuplier.nama_suplier from datasuplier "+
                     (TCari.getText().trim().equals("")?"":"where datasuplier.kode_suplier like ? or datasuplier.nama_suplier like ? ")+

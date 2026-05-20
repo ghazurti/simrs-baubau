@@ -2203,6 +2203,7 @@ public final class RMPenilaianAwalMedisRalanAnak extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ralan_anak.tanggal,"+
                         "penilaian_medis_ralan_anak.kd_dokter,penilaian_medis_ralan_anak.anamnesis,penilaian_medis_ralan_anak.hubungan,penilaian_medis_ralan_anak.keluhan_utama,penilaian_medis_ralan_anak.rps,penilaian_medis_ralan_anak.rpk,penilaian_medis_ralan_anak.rpd,penilaian_medis_ralan_anak.rpo,penilaian_medis_ralan_anak.alergi,"+
@@ -2214,6 +2215,7 @@ public final class RMPenilaianAwalMedisRalanAnak extends javax.swing.JDialog {
                         "inner join dokter on penilaian_medis_ralan_anak.kd_dokter=dokter.kd_dokter where "+
                         "penilaian_medis_ralan_anak.tanggal between ? and ? order by penilaian_medis_ralan_anak.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ralan_anak.tanggal,"+
                         "penilaian_medis_ralan_anak.kd_dokter,penilaian_medis_ralan_anak.anamnesis,penilaian_medis_ralan_anak.hubungan,penilaian_medis_ralan_anak.keluhan_utama,penilaian_medis_ralan_anak.rps,penilaian_medis_ralan_anak.rpk,penilaian_medis_ralan_anak.rpd,penilaian_medis_ralan_anak.rpo,penilaian_medis_ralan_anak.alergi,"+
@@ -2352,6 +2354,7 @@ public final class RMPenilaianAwalMedisRalanAnak extends javax.swing.JDialog {
 
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rkm_medis,pasien.nm_pasien, if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,"+
                     "reg_periksa.tgl_registrasi,reg_periksa.jam_reg "+
@@ -2385,6 +2388,7 @@ public final class RMPenilaianAwalMedisRalanAnak extends javax.swing.JDialog {
  
     private void autoFillDariSOAP() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select tensi,berat,tinggi,suhu_tubuh,nadi,respirasi,keluhan,alergi from pemeriksaan_ralan "+
                 "where no_rawat=? order by tgl_perawatan desc, jam_rawat desc limit 1");

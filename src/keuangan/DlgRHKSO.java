@@ -561,6 +561,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void prosesCari() {
        Valid.tabelKosong(tabMode);      
        try{         
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement("select penjab.kd_pj,penjab.png_jawab from penjab "+(nmbayar.getText().trim().equals("")?"":"where penjab.kd_pj=? ")+" order by penjab.png_jawab");
            try {
                 if(!nmbayar.getText().trim().equals("")){
@@ -575,6 +576,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                    tabMode.addRow(new Object[]{i+".",rs.getString("png_jawab"),"","","",""}); 
                    //rawat jalan
                    if(chkRalan.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         psrawatjalandr=koneksi.prepareStatement("select pasien.nm_pasien,rawat_jl_dr.kso,"+
                             "jns_perawatan.nm_perawatan,reg_periksa.tgl_registrasi "+
                             "from pasien inner join reg_periksa  "+
@@ -584,6 +586,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             "and rawat_jl_dr.kd_jenis_prw=jns_perawatan.kd_jenis_prw "+
                             "where reg_periksa.tgl_registrasi between ? and ? and reg_periksa.kd_pj=? "+
                             " and rawat_jl_dr.kso>0 order by reg_periksa.tgl_registrasi,jns_perawatan.nm_perawatan");
+                        koneksi=koneksiDB.condb();
                         psrawatjalandrpr=koneksi.prepareStatement("select pasien.nm_pasien,rawat_jl_drpr.kso,"+
                             "jns_perawatan.nm_perawatan,reg_periksa.tgl_registrasi "+
                             "from pasien inner join reg_periksa  "+
@@ -593,6 +596,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             "and rawat_jl_drpr.kd_jenis_prw=jns_perawatan.kd_jenis_prw "+
                             "where reg_periksa.tgl_registrasi between ? and ? and reg_periksa.kd_pj=? "+
                             " and rawat_jl_drpr.kso>0 order by reg_periksa.tgl_registrasi,jns_perawatan.nm_perawatan");
+                        koneksi=koneksiDB.condb();
                         psrawatjalanpr=koneksi.prepareStatement("select pasien.nm_pasien,rawat_jl_pr.kso,"+
                             "jns_perawatan.nm_perawatan,reg_periksa.tgl_registrasi "+
                             "from pasien inner join reg_periksa  "+
@@ -673,6 +677,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                    }
                    //rawat inap
                    if(chkRanap.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         psrawatinapdr=koneksi.prepareStatement("select pasien.nm_pasien,rawat_inap_dr.kso,"+
                             "jns_perawatan_inap.nm_perawatan,rawat_inap_dr.tgl_perawatan,rawat_inap_dr.jam_rawat "+
                             "from pasien inner join reg_periksa  "+
@@ -682,6 +687,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             "and rawat_inap_dr.kd_jenis_prw=jns_perawatan_inap.kd_jenis_prw "+
                             "where rawat_inap_dr.tgl_perawatan between ? and ? and reg_periksa.kd_pj=? "+
                             " and rawat_inap_dr.kso>0 order by rawat_inap_dr.tgl_perawatan,jns_perawatan_inap.nm_perawatan");
+                        koneksi=koneksiDB.condb();
                         psrawatinapdrpr=koneksi.prepareStatement("select pasien.nm_pasien,rawat_inap_drpr.kso,"+
                             "jns_perawatan_inap.nm_perawatan,rawat_inap_drpr.tgl_perawatan,rawat_inap_drpr.jam_rawat "+
                             "from pasien inner join reg_periksa  "+
@@ -691,6 +697,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             "and rawat_inap_drpr.kd_jenis_prw=jns_perawatan_inap.kd_jenis_prw "+
                             "where rawat_inap_drpr.tgl_perawatan between ? and ? and reg_periksa.kd_pj=? "+
                             " and rawat_inap_drpr.kso>0 order by rawat_inap_drpr.tgl_perawatan,jns_perawatan_inap.nm_perawatan");
+                        koneksi=koneksiDB.condb();
                         psrawatinappr=koneksi.prepareStatement("select pasien.nm_pasien,rawat_inap_pr.kso,"+
                             "jns_perawatan_inap.nm_perawatan,rawat_inap_pr.tgl_perawatan,rawat_inap_pr.jam_rawat "+
                             "from pasien inner join reg_periksa  "+
@@ -772,6 +779,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                      
                    //periksa lab
                    if(chkLaborat.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        psperiksa_lab=koneksi.prepareStatement("select periksa_lab.kso,pasien.nm_pasien,"+
                                     "jns_perawatan_lab.nm_perawatan,periksa_lab.tgl_periksa,periksa_lab.jam,periksa_lab.no_rawat,periksa_lab.kd_jenis_prw "+
                                     " from periksa_lab inner join reg_periksa inner join pasien inner join jns_perawatan_lab "+
@@ -792,6 +800,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             while(rsperiksa_lab.next()){
                                 detail_lab=0;
                                 
+                                koneksi=koneksiDB.condb();
                                 psdetail_lab=koneksi.prepareStatement(
                                     "select sum(detail_periksa_lab.kso) as total from detail_periksa_lab "+
                                     "inner join jns_perawatan_lab inner join template_laboratorium "+
@@ -836,6 +845,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                    
                    //radiologi
                    if(chkRadiologi.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        psperiksa_radiologi=koneksi.prepareStatement("select periksa_radiologi.kso,pasien.nm_pasien,"+
                             "jns_perawatan_radiologi.nm_perawatan,periksa_radiologi.tgl_periksa,periksa_radiologi.jam,"+
                             "periksa_radiologi.no_rawat,periksa_radiologi.kd_jenis_prw "+

@@ -1456,6 +1456,7 @@ public final class DlgPengeluaranPengeluaran extends javax.swing.JDialog {
         try{    
             Valid.tabelKosong(tabModeBayarPesanObat);
             bayarobat=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select bayar_pemesanan.tgl_bayar,bayar_pemesanan.no_faktur,datasuplier.nama_suplier,bayar_pemesanan.nip,"+
                     "petugas.nama,bayar_pemesanan.nama_bayar,bayar_pemesanan.no_bukti,bayar_pemesanan.besar_bayar "+
@@ -1487,6 +1488,7 @@ public final class DlgPengeluaranPengeluaran extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabModeBayarPesanNonMedis);
             bayarnonmedis=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select bayar_pemesanan_non_medis.tgl_bayar,bayar_pemesanan_non_medis.no_faktur,ipsrssuplier.nama_suplier,bayar_pemesanan_non_medis.nip,"+
                     "petugas.nama,bayar_pemesanan_non_medis.nama_bayar,bayar_pemesanan_non_medis.no_bukti,bayar_pemesanan_non_medis.besar_bayar "+
@@ -1518,6 +1520,7 @@ public final class DlgPengeluaranPengeluaran extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabModeBayarPesanAset);
             bayaraset=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select bayar_pemesanan_inventaris.tgl_bayar,bayar_pemesanan_inventaris.no_faktur,inventaris_suplier.nama_suplier,bayar_pemesanan_inventaris.nip,"+
                     "petugas.nama,bayar_pemesanan_inventaris.nama_bayar,bayar_pemesanan_inventaris.no_bukti,bayar_pemesanan_inventaris.besar_bayar "+
@@ -1549,6 +1552,7 @@ public final class DlgPengeluaranPengeluaran extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabModeBayarPesanDapur);
             bayardapur=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select bayar_pemesanan_dapur.tgl_bayar,bayar_pemesanan_dapur.no_faktur,dapursuplier.nama_suplier,bayar_pemesanan_dapur.nip,"+
                     "petugas.nama,bayar_pemesanan_dapur.nama_bayar,bayar_pemesanan_dapur.no_bukti,bayar_pemesanan_dapur.besar_bayar "+
@@ -1580,6 +1584,7 @@ public final class DlgPengeluaranPengeluaran extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabModeBayarJM);
             bayarjm=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select bayar_jm_dokter.tanggal,bayar_jm_dokter.no_bayar,bayar_jm_dokter.kd_dokter,dokter.nm_dokter,bayar_jm_dokter.nama_bayar, "+
                     "bayar_jm_dokter.besar_bayar from bayar_jm_dokter inner join dokter on bayar_jm_dokter.kd_dokter=dokter.kd_dokter "+
@@ -1608,6 +1613,7 @@ public final class DlgPengeluaranPengeluaran extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabModePengeluaranHarian);
             pengeluaranharian=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select DATE_FORMAT(pengeluaran_harian.tanggal,'%Y-%m-%d'),pengeluaran_harian.no_keluar,pengeluaran_harian.nip,"+
                     "petugas.nama,kategori_pengeluaran_harian.nama_kategori,pengeluaran_harian.biaya from pengeluaran_harian "+
@@ -1638,6 +1644,7 @@ public final class DlgPengeluaranPengeluaran extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabModeBebanHutang);
             bayarbebanhutang=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select bayar_beban_hutang_lain.tgl_bayar, bayar_beban_hutang_lain.kode_pemberi_hutang,pemberi_hutang_lain.nama_pemberi_hutang, bayar_beban_hutang_lain.besar_cicilan,"+
                     "bayar_beban_hutang_lain.keterangan, bayar_beban_hutang_lain.no_hutang,bayar_beban_hutang_lain.kd_rek,bayar_beban_hutang_lain.nama_bayar,bayar_beban_hutang_lain.no_bukti "+
@@ -1667,6 +1674,7 @@ public final class DlgPengeluaranPengeluaran extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabModePengadaanObat);
             pengadaanobat=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pembelian.tgl_beli,pembelian.no_faktur,datasuplier.nama_suplier,pembelian.nip,"+
                     "petugas.nama,rekening.nm_rek,pembelian.tagihan from pembelian "+
@@ -1698,6 +1706,7 @@ public final class DlgPengeluaranPengeluaran extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabModePengadaanNonMedis);
             pengadaannonmedis=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select ipsrspembelian.tgl_beli,ipsrspembelian.no_faktur,ipsrssuplier.nama_suplier,ipsrspembelian.nip,"+
                     "petugas.nama,rekening.nm_rek,ipsrspembelian.tagihan from ipsrspembelian "+
@@ -1729,6 +1738,7 @@ public final class DlgPengeluaranPengeluaran extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabModePengadaanInventaris);
             pengadaaninventaris=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select inventaris_pembelian.tgl_beli,inventaris_pembelian.no_faktur,inventaris_suplier.nama_suplier,inventaris_pembelian.nip,"+
                     "petugas.nama,rekening.nm_rek,inventaris_pembelian.tagihan from inventaris_pembelian "+
@@ -1760,6 +1770,7 @@ public final class DlgPengeluaranPengeluaran extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabModePengadaanDapur);
             pengadaandapur=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select dapurpembelian.tgl_beli,dapurpembelian.no_faktur,dapursuplier.nama_suplier,dapurpembelian.nip,"+
                     "petugas.nama,rekening.nm_rek,dapurpembelian.tagihan from dapurpembelian "+
@@ -1791,6 +1802,7 @@ public final class DlgPengeluaranPengeluaran extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabModeBayarPesanToko);
             bayartoko=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select toko_bayar_pemesanan.tgl_bayar,toko_bayar_pemesanan.no_faktur,tokosuplier.nama_suplier,toko_bayar_pemesanan.nip,"+
                     "petugas.nama,toko_bayar_pemesanan.nama_bayar,toko_bayar_pemesanan.no_bukti,toko_bayar_pemesanan.besar_bayar "+
@@ -1822,6 +1834,7 @@ public final class DlgPengeluaranPengeluaran extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabModePengadaanToko);
             pengadaantoko=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select tokopembelian.tgl_beli,tokopembelian.no_faktur,tokosuplier.nama_suplier,tokopembelian.nip,"+
                     "petugas.nama,rekening.nm_rek,tokopembelian.tagihan from tokopembelian "+

@@ -1316,6 +1316,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private void tampil() {
         Valid.tabelKosong(tabMode);
          try{
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement("select tampreturjual.nota_jual,tampreturjual.kode_brng,tampreturjual.nama_brng,tampreturjual.satuan,tampreturjual.h_jual,tampreturjual.jml_jual,tampreturjual.h_retur,tampreturjual.jml_retur,tampreturjual.subtotal,tampreturjual.no_batch,tampreturjual.no_faktur from tampreturjual where tampreturjual.petugas=? ");
              try {
                 ps.setString(1,akses.getkode());
@@ -1417,6 +1418,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     
     private void cariBatch() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select data_batch.karyawan,data_batch.jualbebas,data_batch.beliluar,data_batch.ralan,data_batch.kelas1,data_batch.kelas2,data_batch.kelas3,data_batch.utama,data_batch.vip,data_batch.vvip,data_batch.h_beli from data_batch where data_batch.no_batch=? and data_batch.kode_brng=? and data_batch.no_faktur=?");
             try {
@@ -1475,6 +1477,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 
     private void simpan() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select tampreturjual.nota_jual,tampreturjual.kode_brng,tampreturjual.satuan,tampreturjual.jml_jual,tampreturjual.h_jual,tampreturjual.jml_retur,tampreturjual.h_retur,tampreturjual.subtotal,tampreturjual.no_batch,tampreturjual.no_faktur from tampreturjual where tampreturjual.petugas=?");
             try {
                 ps.setString(1,akses.getkode());

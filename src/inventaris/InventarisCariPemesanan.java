@@ -938,6 +938,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
       Valid.textKosong(TCari,"No.Faktur");
   }else{
      try {
+         koneksi=koneksiDB.condb();
          pscaripesan=koneksi.prepareStatement(
                  "select inventaris_pemesanan.no_faktur,inventaris_pemesanan.tagihan,inventaris_pemesanan.tgl_faktur,inventaris_pemesanan.status,"+
                  "inventaris_pemesanan.kd_rek_aset,inventaris_pemesanan.ppn,(inventaris_pemesanan.meterai+inventaris_pemesanan.total2) as total "+
@@ -1151,6 +1152,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select inventaris_pemesanan.tgl_pesan,inventaris_pemesanan.no_faktur, "+
                     "inventaris_pemesanan.kode_suplier,inventaris_suplier.nama_suplier, "+
@@ -1194,6 +1196,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                           rs.getString(5)+", "+rs.getString(6),"","","","","",""
                     });  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select inventaris_detail_pesan.kode_barang,inventaris_barang.nama_barang, "+
                         "inventaris_barang.id_jenis,inventaris_jenis.nama_jenis,inventaris_detail_pesan.jumlah,inventaris_detail_pesan.harga, "+
                         "inventaris_detail_pesan.subtotal,inventaris_detail_pesan.dis,inventaris_detail_pesan.besardis,inventaris_detail_pesan.total "+
@@ -1287,6 +1290,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void panggilPhoto() {
         if(FormPhoto.isVisible()==true){
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select inventaris_bukti_pemesanan.photo from inventaris_bukti_pemesanan where inventaris_bukti_pemesanan.no_faktur=?");
                 try {
                     ps.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());

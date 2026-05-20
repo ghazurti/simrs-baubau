@@ -402,6 +402,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select penjab.kd_pj,penjab.png_jawab from penjab "+(TCari.getText().trim().equals("")?"":"where penjab.kd_pj like ? or penjab.png_jawab like ? ")+" order by penjab.png_jawab");
             try {

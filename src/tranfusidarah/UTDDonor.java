@@ -1616,6 +1616,7 @@ public final class UTDDonor extends javax.swing.JDialog {
             if(!tbTranfusiDarah.getValueAt(tbTranfusiDarah.getSelectedRow(),0).toString().equals("")){
                 try {
                     
+                    koneksi=koneksiDB.condb();
                     pscekmedis=koneksi.prepareStatement(sqlpscekmedis);
                     try {
                         pscekmedis.setString(1,tbTranfusiDarah.getValueAt(tbTranfusiDarah.getSelectedRow(),0).toString());
@@ -1635,6 +1636,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                         }
                     }
 
+                    koneksi=koneksiDB.condb();
                     psceknonmedis=koneksi.prepareStatement(sqlpsceknonmedis);
                     try {
                         psceknonmedis.setString(1,tbTranfusiDarah.getValueAt(tbTranfusiDarah.getSelectedRow(),0).toString());
@@ -1707,6 +1709,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                         KdPetugas2.getText(),tbTranfusiDarah.getValueAt(tbTranfusiDarah.getSelectedRow(),0).toString()
                     })==true){
                         try {
+                            koneksi=koneksiDB.condb();
                             pscekmedis=koneksi.prepareStatement(sqlpscekmedis);
                             try {
                                 pscekmedis.setString(1,tbTranfusiDarah.getValueAt(tbTranfusiDarah.getSelectedRow(),0).toString());
@@ -1727,6 +1730,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                             }
                             Sequel.meghapus("utd_penggunaan_medis_donor","no_donor",tbTranfusiDarah.getValueAt(tbTranfusiDarah.getSelectedRow(),0).toString());
                             
+                            koneksi=koneksiDB.condb();
                             psceknonmedis=koneksi.prepareStatement(sqlpsceknonmedis);
                             try {
                                 psceknonmedis.setString(1,tbTranfusiDarah.getValueAt(tbTranfusiDarah.getSelectedRow(),0).toString());
@@ -2073,6 +2077,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                 if (reply == JOptionPane.YES_OPTION) {
                     try {
                         
+                        koneksi=koneksiDB.condb();
                         pscekmedis=koneksi.prepareStatement(sqlpscekmedis);
                         try {
                             pscekmedis.setString(1,tbTranfusiDarah.getValueAt(tbTranfusiDarah.getSelectedRow(),0).toString());
@@ -2117,6 +2122,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                 if (reply == JOptionPane.YES_OPTION) {
                     try {
                         
+                        koneksi=koneksiDB.condb();
                         psceknonmedis=koneksi.prepareStatement(sqlpsceknonmedis);
                         try {
                             psceknonmedis.setString(1,tbTranfusiDarah.getValueAt(tbTranfusiDarah.getSelectedRow(),0).toString());
@@ -2161,6 +2167,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                 if (reply == JOptionPane.YES_OPTION) {
                     try {
                         
+                        koneksi=koneksiDB.condb();
                         pscekmedis=koneksi.prepareStatement(sqlpscekmedis);
                         try {
                             pscekmedis.setString(1,tbTranfusiDarah.getValueAt(tbTranfusiDarah.getSelectedRow(),0).toString());
@@ -2180,6 +2187,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                             }
                         }
                         Sequel.meghapus("utd_penggunaan_medis_donor","no_donor",tbTranfusiDarah.getValueAt(tbTranfusiDarah.getSelectedRow(),0).toString());
+                        koneksi=koneksiDB.condb();
                         psceknonmedis=koneksi.prepareStatement(sqlpsceknonmedis);
                         try {
                             psceknonmedis.setString(1,tbTranfusiDarah.getValueAt(tbTranfusiDarah.getSelectedRow(),0).toString());
@@ -2248,6 +2256,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                 KdPetugas2.setText(Sequel.cariIsi("select petugas_u_saring from utd_donor where no_donor=?",NomorDonor.getText()));
                 try {
                     Valid.tabelKosong(tabModeMedis);
+                    koneksi=koneksiDB.condb();
                     pscekmedis=koneksi.prepareStatement(sqlpscekmedis);
                     try {
                         pscekmedis.setString(1,NomorDonor.getText());
@@ -2270,6 +2279,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                     }
                     
                     Valid.tabelKosong(tabModeNonMedis);
+                    koneksi=koneksiDB.condb();
                     psceknonmedis=koneksi.prepareStatement(sqlpsceknonmedis);
                     try {
                         psceknonmedis.setString(1,NomorDonor.getText());
@@ -2548,6 +2558,7 @@ public final class UTDDonor extends javax.swing.JDialog {
         Valid.tabelKosong(tabModeTranfusi);
         try{   
             if(TCari.getText().equals("")){
+                koneksi=koneksiDB.condb();
                 pstranfusi=koneksi.prepareStatement(
                         "select utd_donor.no_donor,utd_donor.no_pendonor,utd_donor.tanggal,utd_donor.dinas,utd_donor.tensi,utd_donor.no_bag,utd_donor.jenis_bag,"+
                         "utd_donor.jenis_donor,utd_donor.tempat_aftap,utd_donor.petugas_aftap,utd_donor.hbsag,utd_donor.hcv,utd_donor.hiv,utd_donor.spilis,utd_donor.malaria,"+
@@ -2564,6 +2575,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                         "where tanggal between ? and ? order by tanggal,no_donor "
                 );
             }else{
+                koneksi=koneksiDB.condb();
                 pstranfusi=koneksi.prepareStatement(
                         "select utd_donor.no_donor,utd_donor.no_pendonor,utd_donor.tanggal,utd_donor.dinas,utd_donor.tensi,utd_donor.no_bag,utd_donor.jenis_bag,"+
                         "utd_donor.jenis_donor,utd_donor.tempat_aftap,utd_donor.petugas_aftap,utd_donor.hbsag,utd_donor.hcv,utd_donor.hiv,utd_donor.spilis,utd_donor.malaria,"+
@@ -2632,6 +2644,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                         rstranfusi.getString("petugasusaring")                        
                     });
                     if(aktifkan.equals("medis")){
+                        koneksi=koneksiDB.condb();
                         pscekmedis=koneksi.prepareStatement(sqlpscekmedis);
                         try {
                             pscekmedis.setString(1,rstranfusi.getString("no_donor"));
@@ -2660,6 +2673,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                             }
                         }
                     }else if(aktifkan.equals("nonmedis")){
+                        koneksi=koneksiDB.condb();
                         psceknonmedis=koneksi.prepareStatement(sqlpsceknonmedis);
                         try {
                             psceknonmedis.setString(1,rstranfusi.getString("no_donor"));
@@ -2688,6 +2702,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                             }
                         }
                     }else if(aktifkan.equals("medis&nonmedis")){
+                        koneksi=koneksiDB.condb();
                         pscekmedis=koneksi.prepareStatement(sqlpscekmedis);
                         try {
                             pscekmedis.setString(1,rstranfusi.getString("no_donor"));
@@ -2716,6 +2731,7 @@ public final class UTDDonor extends javax.swing.JDialog {
                             }
                         }
                         
+                        koneksi=koneksiDB.condb();
                         psceknonmedis=koneksi.prepareStatement(sqlpsceknonmedis);
                         try {
                             psceknonmedis.setString(1,rstranfusi.getString("no_donor"));
@@ -2811,6 +2827,7 @@ public final class UTDDonor extends javax.swing.JDialog {
         }
         
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select databarang.kode_brng, databarang.nama_brng,utd_stok_medis.hargaterakhir,databarang.kode_sat, "+
                 " utd_stok_medis.stok from databarang inner join utd_stok_medis on databarang.kode_brng=utd_stok_medis.kode_brng "+
                 " where databarang.status='1' and databarang.kode_brng like ? or "+
@@ -2887,6 +2904,7 @@ public final class UTDDonor extends javax.swing.JDialog {
         }
         
         try{
+            koneksi=koneksiDB.condb();
             ps2=koneksi.prepareStatement("select ipsrsbarang.kode_brng, ipsrsbarang.nama_brng,utd_stok_penunjang.hargaterakhir,ipsrsbarang.kode_sat, "+
                 " utd_stok_penunjang.stok from ipsrsbarang inner join utd_stok_penunjang on ipsrsbarang.kode_brng=utd_stok_penunjang.kode_brng "+
                 " where ipsrsbarang.kode_brng like ? or ipsrsbarang.nama_brng like ? order by ipsrsbarang.nama_brng");

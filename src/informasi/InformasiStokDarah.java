@@ -318,6 +318,7 @@ public final class InformasiStokDarah extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select utd_komponen_darah.nama,utd_stok_darah.golongan_darah,utd_stok_darah.resus,count(utd_stok_darah.kode_komponen) as jumlah from utd_komponen_darah inner join utd_stok_darah on utd_stok_darah.kode_komponen=utd_komponen_darah.kode where utd_stok_darah.status='Ada' and utd_komponen_darah.nama like ? group by utd_stok_darah.kode_komponen,utd_stok_darah.golongan_darah,utd_stok_darah.resus order by utd_stok_darah.golongan_darah");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

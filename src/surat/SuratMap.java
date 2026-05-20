@@ -660,6 +660,7 @@ public final class SuratMap extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select * from surat_map "+(TCari.getText().trim().equals("")?"":"where surat_map.kd like ? or surat_map.map like ? ")+" order by surat_map.kd"
             );

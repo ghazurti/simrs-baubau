@@ -1128,6 +1128,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
         Valid.tabelKosong(tabMode);
         try{
             if(NmPoli.getText().trim().equals("")&&NmDokter.getText().trim().equals("")&&NmPerusahaan.getText().trim().equals("")&&TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select pasien.no_rkm_medis,pasien.nm_pasien,pasien.jk,reg_periksa.umurdaftar,reg_periksa.sttsumur,pasien.no_tlp,pasien.no_ktp,pasien.nip,"+
                         "booking_mcu_perusahaan.no_mcu,booking_mcu_perusahaan.tanggal_booking,booking_mcu_perusahaan.jam_booking,booking_mcu_perusahaan.status as statusmcu," +
@@ -1142,6 +1143,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj "+
                         "where booking_mcu_perusahaan.tanggal_mcu between ? and ? order by booking_mcu_perusahaan.tanggal_mcu,booking_mcu_perusahaan.no_mcu");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select pasien.no_rkm_medis,pasien.nm_pasien,pasien.jk,reg_periksa.umurdaftar,reg_periksa.sttsumur,pasien.no_tlp,pasien.no_ktp,pasien.nip,"+
                         "booking_mcu_perusahaan.no_mcu,booking_mcu_perusahaan.tanggal_booking,booking_mcu_perusahaan.jam_booking,booking_mcu_perusahaan.status as statusmcu," +

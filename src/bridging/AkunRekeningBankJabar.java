@@ -520,6 +520,7 @@ public class AkunRekeningBankJabar extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select set_akun_bankjabar.kd_rek,rekening.nm_rek,set_akun_bankjabar.kode_bank "+
                    "from set_akun_bankjabar inner join rekening on set_akun_bankjabar.kd_rek=rekening.kd_rek"); 

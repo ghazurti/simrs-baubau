@@ -1040,6 +1040,7 @@ public final class DlgAuditPembuanganLimbahCairInfeksius extends javax.swing.JDi
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_pembuangan_limbah_cair_infeksius.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_pembuangan_limbah_cair_infeksius.tanggal,audit_pembuangan_limbah_cair_infeksius.audit1,"+
                     "audit_pembuangan_limbah_cair_infeksius.audit2,audit_pembuangan_limbah_cair_infeksius.audit3,"+
@@ -1048,6 +1049,7 @@ public final class DlgAuditPembuanganLimbahCairInfeksius extends javax.swing.JDi
                     "inner join ruang_audit_kepatuhan on audit_pembuangan_limbah_cair_infeksius.id_ruang=ruang_audit_kepatuhan.id_ruang "+
                     "where audit_pembuangan_limbah_cair_infeksius.tanggal between ? and ? order by audit_pembuangan_limbah_cair_infeksius.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_pembuangan_limbah_cair_infeksius.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_pembuangan_limbah_cair_infeksius.tanggal,audit_pembuangan_limbah_cair_infeksius.audit1,"+
                     "audit_pembuangan_limbah_cair_infeksius.audit2,audit_pembuangan_limbah_cair_infeksius.audit3,"+

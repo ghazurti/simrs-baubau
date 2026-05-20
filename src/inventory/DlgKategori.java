@@ -647,6 +647,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select kategori_barang.kode,kategori_barang.nama  "+
                     " from kategori_barang where  kategori_barang.kode like ? or "+
                     " kategori_barang.nama like ? order by kategori_barang.nama ");

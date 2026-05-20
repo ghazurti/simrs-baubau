@@ -836,6 +836,7 @@ private void MnDetailPiutangActionPerformed(java.awt.event.ActionEvent evt) {//G
         Valid.tabelKosong(tabMode);
         try{
             sisapiutang=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select piutang_jasa_perusahaan.no_piutang,piutang_jasa_perusahaan.tgl_piutang,piutang_jasa_perusahaan.kode_perusahaan,perusahaan_pasien.nama_perusahaan,piutang_jasa_perusahaan.keterangan,piutang_jasa_perusahaan.totalpiutang,piutang_jasa_perusahaan.sisapiutang,piutang_jasa_perusahaan.jatuh_tempo,"+
                     "(piutang_jasa_perusahaan.totalpiutang-piutang_jasa_perusahaan.sisapiutang) as cicilan from piutang_jasa_perusahaan inner join perusahaan_pasien on piutang_jasa_perusahaan.kode_perusahaan=perusahaan_pasien.kode_perusahaan where piutang_jasa_perusahaan.status='Belum Lunas' "+
@@ -946,6 +947,7 @@ private void MnDetailPiutangActionPerformed(java.awt.event.ActionEvent evt) {//G
              file.createNewFile();
              fileWriter = new FileWriter(file);
              StringBuilder iyembuilder = new StringBuilder();
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement("select * from akun_bayar order by akun_bayar.nama_bayar");
              try{
                  rs=ps.executeQuery();

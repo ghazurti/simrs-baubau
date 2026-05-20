@@ -674,6 +674,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
           JOptionPane.showMessageDialog(null,"Silahkan pilih No.Faktur");
         }else{
            try {
+               koneksi=koneksiDB.condb();
                pscaribeli=koneksi.prepareStatement(
                        "select tokopembelian.no_faktur,tokopembelian.tagihan,tokopembelian.tgl_beli,tokopembelian.ppn,(tokopembelian.meterai+tokopembelian.total) as total from tokopembelian where tokopembelian.no_faktur=?");
                try {
@@ -682,6 +683,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                   if(rs.next()){
                       Sequel.AutoComitFalse();
                       sukses=true;
+                      koneksi=koneksiDB.condb();
                       pstoko_detail_beli=koneksi.prepareStatement("select toko_detail_beli.kode_brng,toko_detail_beli.jumlah from toko_detail_beli where toko_detail_beli.no_faktur=? ");
                       try {
                           pstoko_detail_beli.setString(1,rs.getString(1));
@@ -1005,6 +1007,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{            
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select tokopembelian.tgl_beli,tokopembelian.no_faktur, "+
                     "tokopembelian.kode_suplier,tokosuplier.nama_suplier, "+
                     "tokopembelian.nip,petugas.nama,tokopembelian.subtotal,tokopembelian.potongan,tokopembelian.total, "+
@@ -1112,6 +1115,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 while(rs.next()){
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),"Pembelian :","","","","","","",""
                     });      
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select toko_detail_beli.kode_brng,tokobarang.nama_brng, "+
                         "toko_detail_beli.kode_sat,kodesatuan.satuan,toko_detail_beli.jumlah,toko_detail_beli.harga, "+
                         "toko_detail_beli.subtotal,toko_detail_beli.dis,toko_detail_beli.besardis,toko_detail_beli.total "+

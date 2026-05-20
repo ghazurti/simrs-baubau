@@ -624,6 +624,7 @@ public final class MandiriMetodePembayaran extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select metode_pembayaran_bankmandiri.kode_metode,metode_pembayaran_bankmandiri.nama_metode,metode_pembayaran_bankmandiri.biaya_transaksi "+
                     "from metode_pembayaran_bankmandiri where metode_pembayaran_bankmandiri.kode_metode like ? or metode_pembayaran_bankmandiri.nama_metode like ? "+

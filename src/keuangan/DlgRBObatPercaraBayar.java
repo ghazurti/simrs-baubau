@@ -90,8 +90,10 @@ public class DlgRBObatPercaraBayar extends javax.swing.JDialog {
         kdpenjab.setDocument(new batasInput((byte)8).getKata(kdpenjab));
                 
         try {
+             koneksi=koneksiDB.condb();
              pspenjab=koneksi.prepareStatement(
                      "select kd_pj,png_jawab from penjab where kd_pj like ?");             
+             koneksi=koneksiDB.condb();
              psresep=koneksi.prepareStatement(
                      "select detail_pemberian_obat.tgl_perawatan,detail_pemberian_obat.jam,"+
                      "detail_pemberian_obat.no_rawat,pasien.nm_pasien,reg_periksa.kd_pj,databarang.nama_brng,"+
@@ -101,6 +103,7 @@ public class DlgRBObatPercaraBayar extends javax.swing.JDialog {
                      "detail_pemberian_obat inner join databarang "+
                      "on detail_pemberian_obat.kode_brng=databarang.kode_brng and detail_pemberian_obat.no_rawat=reg_periksa.no_rawat and "+
                      "reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.kd_pj=? and detail_pemberian_obat.tgl_perawatan between ? and ? order by detail_pemberian_obat.tgl_perawatan,detail_pemberian_obat.jam");             
+             koneksi=koneksiDB.condb();
              psresep2=koneksi.prepareStatement(
                      "select detail_pemberian_obat.tgl_perawatan,detail_pemberian_obat.jam,"+
                      "detail_pemberian_obat.no_rawat,pasien.nm_pasien,reg_periksa.kd_pj,databarang.nama_brng,"+

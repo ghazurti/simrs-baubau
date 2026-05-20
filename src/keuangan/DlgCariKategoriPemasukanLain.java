@@ -350,6 +350,7 @@ public final class DlgCariKategoriPemasukanLain extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                      "select kategori_pemasukan_lain.kode_kategori,kategori_pemasukan_lain.nama_kategori,akun1.nm_rek as akun1,akun2.nm_rek as akun2 "+
                      "from kategori_pemasukan_lain inner join rekening as akun1 on kategori_pemasukan_lain.kd_rek=akun1.kd_rek "+

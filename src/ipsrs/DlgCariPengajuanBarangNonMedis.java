@@ -911,6 +911,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pengajuan_barang_nonmedis.tanggal,pengajuan_barang_nonmedis.no_pengajuan, "+
                     "pengajuan_barang_nonmedis.keterangan,pengajuan_barang_nonmedis.nip,pegawai.nama,pengajuan_barang_nonmedis.status "+
@@ -1001,6 +1002,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         rs.getString("tanggal"),rs.getString("no_pengajuan"),rs.getString("status"),
                         rs.getString("keterangan"),rs.getString("nip")+" "+rs.getString("nama")
                     });   
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select detail_pengajuan_barang_nonmedis.kode_brng,ipsrsbarang.nama_brng, "+
                         "detail_pengajuan_barang_nonmedis.kode_sat,kodesatuan.satuan,detail_pengajuan_barang_nonmedis.jumlah,"+

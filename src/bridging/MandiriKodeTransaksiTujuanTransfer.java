@@ -802,6 +802,7 @@ private void btnBankActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement(
                    "select kodetransaksi_tujuan_transfer_bankmandiri.kode_metode,metode_pembayaran_bankmandiri.nama_metode,kodetransaksi_tujuan_transfer_bankmandiri.kode_bank,bank_tujuan_transfer_bankmandiri.nama_bank,"+
                    "kodetransaksi_tujuan_transfer_bankmandiri.kode_transaksi from kodetransaksi_tujuan_transfer_bankmandiri inner join metode_pembayaran_bankmandiri "+

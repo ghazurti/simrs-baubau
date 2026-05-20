@@ -86,6 +86,7 @@ public class grafikpenjualantersedikit extends JDialog {
           DecimalFormat df2 = new DecimalFormat("###,###,###,###,###,###,###"); 
 
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("SELECT  databarang.nama_brng,sum(detailjual.jumlah),sum(detailjual.total) from penjualan inner join detailjual on penjualan.nota_jual=detailjual.nota_jual "+
                         "inner join databarang on detailjual.kode_brng=databarang.kode_brng where penjualan.status='Sudah Dibayar' and "+symbol+" group by databarang.nama_brng order by sum(detailjual.jumlah) asc limit 10");
                 rs = ps.executeQuery();
@@ -127,6 +128,7 @@ public class grafikpenjualantersedikit extends JDialog {
              DecimalFormat df2 = new DecimalFormat("###,###,###,###,###,###,###");
 
              try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("SELECT  databarang.nama_brng,sum(detailjual.jumlah),sum(detailjual.total) from penjualan inner join detailjual on penjualan.nota_jual=detailjual.nota_jual  "+
                         "inner join databarang on detailjual.kode_brng=databarang.kode_brng where penjualan.status='Sudah Dibayar' and "+symbol+" group by databarang.nama_brng order by sum(detailjual.jumlah) asc limit 10");
                 try {

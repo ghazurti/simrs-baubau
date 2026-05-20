@@ -499,6 +499,7 @@ public class DlgSuku extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from suku_bangsa where nama_suku_bangsa like ? ");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

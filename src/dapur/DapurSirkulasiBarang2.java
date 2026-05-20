@@ -545,6 +545,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void prosesCari() {
        Valid.tabelKosong(tabMode);      
        try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select dapurbarang.kode_brng,dapurbarang.nama_brng, "+
                         "kodesatuan.satuan,dapurbarang.stok,(dapurbarang.stok*dapurbarang.harga) as aset "+
                         "from dapurbarang inner join kodesatuan on dapurbarang.kode_sat=kodesatuan.kode_sat "+
@@ -574,6 +575,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     stok=rs.getDouble("stok");
                     totalstok=rs.getDouble("aset");
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(dapurdetailbeli.jumlah), sum(dapurdetailbeli.subtotal) "+
                         " from dapurpembelian inner join dapurdetailbeli "+
                         " on dapurpembelian.no_faktur=dapurdetailbeli.no_faktur "+
@@ -600,6 +602,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }          
                     
                     //dapurpemesanan
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(dapurdetailpesan.jumlah), sum(dapurdetailpesan.subtotal) "+
                         " from dapurpemesanan inner join dapurdetailpesan "+
                         " on dapurpemesanan.no_faktur=dapurdetailpesan.no_faktur "+
@@ -625,6 +628,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(dapurdetailpengeluaran.jumlah), sum(dapurdetailpengeluaran.total) "+
                         " from dapurpengeluaran inner join dapurdetailpengeluaran "+
                         " on dapurpengeluaran.no_keluar=dapurdetailpengeluaran.no_keluar "+
@@ -651,6 +655,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }
                     
                     //dapurhibah
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(dapur_detail_hibah.jumlah), sum(dapur_detail_hibah.subtotalhibah) "+
                         " from dapur_hibah inner join dapur_detail_hibah "+
                         " on dapur_hibah.no_hibah=dapur_detail_hibah.no_hibah "+
@@ -676,6 +681,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     } 
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(dapuropname.real),(dapuropname.real*dapuropname.h_beli) from dapuropname where kode_brng=? and tanggal=?");
                     try {
                         ps2.setString(1,rs.getString(1));

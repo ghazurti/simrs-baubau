@@ -648,6 +648,7 @@ public class BRIApiIntegrasi extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select set_akun_bankbri.kd_rek,rekening.nm_rek,aes_decrypt(consumer_key,'nur'),aes_decrypt(consumer_secret,'windi'),aes_decrypt(institution_code,'nur'),aes_decrypt(briva_no,'windi'),aes_decrypt(urlapi,'dewi') "+
                    "from set_akun_bankbri inner join rekening on set_akun_bankbri.kd_rek=rekening.kd_rek"); 

@@ -771,9 +771,11 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void prosesCariSemua() {
        try{   
             if(NmDepartemen.getText().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select petugas.nip,petugas.nama from petugas where petugas.status='1' "+(nmptg.getText().trim().equals("")?"":"and concat(petugas.nip,petugas.nama)=? ")+" order by petugas.nama");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select petugas.nip,petugas.nama from petugas inner join pegawai on petugas.nip=pegawai.nik where petugas.status='1' and pegawai.departemen=? "+(nmptg.getText().trim().equals("")?"":"and concat(petugas.nip,petugas.nama)=? ")+" order by petugas.nama");
             }
@@ -798,6 +800,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   tabMode.addRow(new Object[]{i+".",rs.getString("nama"),"","","",""});   
                   //rawat jalan       
                   if(chkRalan.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        pstindakanprjalan=koneksi.prepareStatement(
                            "select pasien.nm_pasien,rawat_jl_pr.tarif_tindakanpr,"+
                            "jns_perawatan.nm_perawatan,reg_periksa.tgl_registrasi,reg_periksa.kd_pj "+
@@ -808,6 +811,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            "and rawat_jl_pr.kd_jenis_prw=jns_perawatan.kd_jenis_prw "+
                            "where reg_periksa.tgl_registrasi between ? and ? and rawat_jl_pr.nip=? "+
                            "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_jl_pr.tarif_tindakanpr>0 order by reg_periksa.tgl_registrasi,jns_perawatan.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        pstindakandrprjalan=koneksi.prepareStatement(
                            "select pasien.nm_pasien,rawat_jl_drpr.tarif_tindakanpr,"+
                            "jns_perawatan.nm_perawatan,reg_periksa.tgl_registrasi,reg_periksa.kd_pj "+
@@ -870,6 +874,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   }
 
                   if(chkRanap.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        pstindakanprinap=koneksi.prepareStatement(
                             "select rawat_inap_pr.tarif_tindakanpr,pasien.nm_pasien,jns_perawatan_inap.nm_perawatan,"+
                            "rawat_inap_pr.tgl_perawatan,rawat_inap_pr.jam_rawat,reg_periksa.kd_pj " +
@@ -879,6 +884,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            "and rawat_inap_pr.kd_jenis_prw=jns_perawatan_inap.kd_jenis_prw "+
                            "where rawat_inap_pr.tgl_perawatan between ? and ? and rawat_inap_pr.nip=? "+
                            "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_inap_pr.tarif_tindakanpr>0 order by rawat_inap_pr.tgl_perawatan,rawat_inap_pr.jam_rawat,jns_perawatan_inap.nm_perawatan  ");
+                       koneksi=koneksiDB.condb();
                        pstindakandrprinap=koneksi.prepareStatement(
                            "select rawat_inap_drpr.tarif_tindakanpr,pasien.nm_pasien,jns_perawatan_inap.nm_perawatan,"+
                            "rawat_inap_drpr.tgl_perawatan,rawat_inap_drpr.jam_rawat,reg_periksa.kd_pj " +
@@ -941,81 +947,97 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   }
 
                   if(chkOperasi.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        psasisten_operator1=koneksi.prepareStatement("select operasi.biayaasisten_operator1,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.asisten_operator1=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator1>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");  
+                       koneksi=koneksiDB.condb();
                        psasisten_operator2=koneksi.prepareStatement("select operasi.biayaasisten_operator2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.asisten_operator2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psasisten_operator3=koneksi.prepareStatement("select operasi.biayaasisten_operator3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.asisten_operator3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psinstrumen=koneksi.prepareStatement("select operasi.biayainstrumen,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.instrumen=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayainstrumen>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psperawaat_resusitas=koneksi.prepareStatement("select operasi.biayaperawaat_resusitas,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.perawaat_resusitas=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaperawaat_resusitas>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");   
+                       koneksi=koneksiDB.condb();
                        psasisten_anestesi=koneksi.prepareStatement("select operasi.biayaasisten_anestesi,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.asisten_anestesi=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_anestesi>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psasisten_anestesi2=koneksi.prepareStatement("select operasi.biayaasisten_anestesi2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.asisten_anestesi2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_anestesi2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan=koneksi.prepareStatement("select operasi.biayabidan,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.bidan=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan2=koneksi.prepareStatement("select operasi.biayabidan2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.bidan2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan3=koneksi.prepareStatement("select operasi.biayabidan3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.bidan3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psperawatluar=koneksi.prepareStatement("select operasi.biayaperawat_luar,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.perawat_luar=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaperawat_luar>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop=koneksi.prepareStatement("select operasi.biaya_omloop,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.omloop=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop2=koneksi.prepareStatement("select operasi.biaya_omloop2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.omloop2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop3=koneksi.prepareStatement("select operasi.biaya_omloop3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.omloop3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop4=koneksi.prepareStatement("select operasi.biaya_omloop4,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where operasi.tgl_operasi between ? and ? and operasi.omloop4=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop4>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop5=koneksi.prepareStatement("select operasi.biaya_omloop5,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
@@ -1396,6 +1418,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                   //periksa lab
                   if(chkLaborat.isSelected()==true){   
+                       koneksi=koneksiDB.condb();
                        psperiksa_lab=koneksi.prepareStatement("select periksa_lab.tarif_tindakan_petugas,pasien.nm_pasien,"+
                            "jns_perawatan_lab.nm_perawatan,periksa_lab.tgl_periksa,periksa_lab.jam,periksa_lab.no_rawat,periksa_lab.kd_jenis_prw,reg_periksa.kd_pj "+
                            " from periksa_lab inner join reg_periksa inner join pasien inner join petugas inner join jns_perawatan_lab "+
@@ -1417,6 +1440,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            rsperiksa_lab.beforeFirst();
                            while(rsperiksa_lab.next()){
                                detaillab=0;
+                               koneksi=koneksiDB.condb();
                                psdetaillab=koneksi.prepareStatement(
                                    "select sum(detail_periksa_lab.bagian_laborat) as total from detail_periksa_lab "+
                                    "where detail_periksa_lab.no_rawat=? and detail_periksa_lab.kd_jenis_prw=? "+
@@ -1460,6 +1484,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                   //periksa radiologi
                   if(chkRadiologi.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        psperiksa_radiologi=koneksi.prepareStatement("select periksa_radiologi.tarif_tindakan_petugas,pasien.nm_pasien,"+
                            "jns_perawatan_radiologi.nm_perawatan,periksa_radiologi.tgl_periksa,periksa_radiologi.jam,periksa_radiologi.no_rawat,periksa_radiologi.kd_jenis_prw,reg_periksa.kd_pj "+
                            " from periksa_radiologi inner join reg_periksa inner join pasien inner join petugas inner join jns_perawatan_radiologi "+
@@ -1544,9 +1569,11 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void prosesCariPiutangBelumLunas() {
         try{   
             if(NmDepartemen.getText().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select petugas.nip,petugas.nama from petugas where petugas.status='1' "+(nmptg.getText().trim().equals("")?"":"and concat(petugas.nip,petugas.nama)=? ")+" order by petugas.nama");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select petugas.nip,petugas.nama from petugas inner join pegawai on petugas.nip=pegawai.nik where petugas.status='1' and pegawai.departemen=? "+(nmptg.getText().trim().equals("")?"":"and concat(petugas.nip,petugas.nama)=? ")+" order by petugas.nama");
             }
@@ -1571,6 +1598,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   tabMode.addRow(new Object[]{i+".",rs.getString("nama"),"","","",""});   
                   //rawat jalan       
                   if(chkRalan.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        pstindakanprjalan=koneksi.prepareStatement(
                            "select pasien.nm_pasien,rawat_jl_pr.tarif_tindakanpr,"+
                            "jns_perawatan.nm_perawatan,reg_periksa.tgl_registrasi,reg_periksa.kd_pj "+
@@ -1581,6 +1609,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            "and rawat_jl_pr.kd_jenis_prw=jns_perawatan.kd_jenis_prw "+
                            "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and reg_periksa.tgl_registrasi between ? and ? and rawat_jl_pr.nip=? "+
                            "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_jl_pr.tarif_tindakanpr>0 order by reg_periksa.tgl_registrasi,jns_perawatan.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        pstindakandrprjalan=koneksi.prepareStatement(
                            "select pasien.nm_pasien,rawat_jl_drpr.tarif_tindakanpr,"+
                            "jns_perawatan.nm_perawatan,reg_periksa.tgl_registrasi,reg_periksa.kd_pj "+
@@ -1643,6 +1672,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   }
 
                   if(chkRanap.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        pstindakanprinap=koneksi.prepareStatement(
                             "select rawat_inap_pr.tarif_tindakanpr,pasien.nm_pasien,jns_perawatan_inap.nm_perawatan,"+
                            "rawat_inap_pr.tgl_perawatan,rawat_inap_pr.jam_rawat,reg_periksa.kd_pj " +
@@ -1652,6 +1682,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            "and rawat_inap_pr.kd_jenis_prw=jns_perawatan_inap.kd_jenis_prw "+
                            "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and rawat_inap_pr.tgl_perawatan between ? and ? and rawat_inap_pr.nip=? "+
                            "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_inap_pr.tarif_tindakanpr>0 order by rawat_inap_pr.tgl_perawatan,rawat_inap_pr.jam_rawat,jns_perawatan_inap.nm_perawatan  ");
+                       koneksi=koneksiDB.condb();
                        pstindakandrprinap=koneksi.prepareStatement(
                            "select rawat_inap_drpr.tarif_tindakanpr,pasien.nm_pasien,jns_perawatan_inap.nm_perawatan,"+
                            "rawat_inap_drpr.tgl_perawatan,rawat_inap_drpr.jam_rawat,reg_periksa.kd_pj " +
@@ -1714,81 +1745,97 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   }
 
                   if(chkOperasi.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        psasisten_operator1=koneksi.prepareStatement("select operasi.biayaasisten_operator1,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.asisten_operator1=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator1>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");  
+                       koneksi=koneksiDB.condb();
                        psasisten_operator2=koneksi.prepareStatement("select operasi.biayaasisten_operator2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.asisten_operator2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psasisten_operator3=koneksi.prepareStatement("select operasi.biayaasisten_operator3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.asisten_operator3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psinstrumen=koneksi.prepareStatement("select operasi.biayainstrumen,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.instrumen=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayainstrumen>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psperawaat_resusitas=koneksi.prepareStatement("select operasi.biayaperawaat_resusitas,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.perawaat_resusitas=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaperawaat_resusitas>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");   
+                       koneksi=koneksiDB.condb();
                        psasisten_anestesi=koneksi.prepareStatement("select operasi.biayaasisten_anestesi,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.asisten_anestesi=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_anestesi>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psasisten_anestesi2=koneksi.prepareStatement("select operasi.biayaasisten_anestesi2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.asisten_anestesi2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_anestesi2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan=koneksi.prepareStatement("select operasi.biayabidan,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.bidan=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan2=koneksi.prepareStatement("select operasi.biayabidan2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.bidan2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan3=koneksi.prepareStatement("select operasi.biayabidan3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.bidan3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psperawatluar=koneksi.prepareStatement("select operasi.biayaperawat_luar,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.perawat_luar=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaperawat_luar>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop=koneksi.prepareStatement("select operasi.biaya_omloop,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.omloop=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop2=koneksi.prepareStatement("select operasi.biaya_omloop2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.omloop2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop3=koneksi.prepareStatement("select operasi.biaya_omloop3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.omloop3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop4=koneksi.prepareStatement("select operasi.biaya_omloop4,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.omloop4=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop4>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop5=koneksi.prepareStatement("select operasi.biaya_omloop5,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
@@ -2169,6 +2216,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                   //periksa lab
                   if(chkLaborat.isSelected()==true){   
+                       koneksi=koneksiDB.condb();
                        psperiksa_lab=koneksi.prepareStatement("select periksa_lab.tarif_tindakan_petugas,pasien.nm_pasien,"+
                            "jns_perawatan_lab.nm_perawatan,periksa_lab.tgl_periksa,periksa_lab.jam,periksa_lab.no_rawat,periksa_lab.kd_jenis_prw,reg_periksa.kd_pj "+
                            " from periksa_lab inner join reg_periksa inner join pasien inner join petugas inner join jns_perawatan_lab "+
@@ -2190,6 +2238,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            rsperiksa_lab.beforeFirst();
                            while(rsperiksa_lab.next()){
                                detaillab=0;
+                               koneksi=koneksiDB.condb();
                                psdetaillab=koneksi.prepareStatement(
                                    "select sum(detail_periksa_lab.bagian_laborat) as total from detail_periksa_lab "+
                                    "where detail_periksa_lab.no_rawat=? and detail_periksa_lab.kd_jenis_prw=? "+
@@ -2233,6 +2282,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                   //periksa radiologi
                   if(chkRadiologi.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        psperiksa_radiologi=koneksi.prepareStatement("select periksa_radiologi.tarif_tindakan_petugas,pasien.nm_pasien,"+
                            "jns_perawatan_radiologi.nm_perawatan,periksa_radiologi.tgl_periksa,periksa_radiologi.jam,periksa_radiologi.no_rawat,periksa_radiologi.kd_jenis_prw,reg_periksa.kd_pj "+
                            " from periksa_radiologi inner join reg_periksa inner join pasien inner join petugas inner join jns_perawatan_radiologi "+
@@ -2299,9 +2349,11 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void prosesCariPiutangSudahLunas() {
         try{   
             if(NmDepartemen.getText().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select petugas.nip,petugas.nama from petugas where petugas.status='1' "+(nmptg.getText().trim().equals("")?"":"and concat(petugas.nip,petugas.nama)=? ")+" order by petugas.nama");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select petugas.nip,petugas.nama from petugas inner join pegawai on petugas.nip=pegawai.nik where petugas.status='1' and pegawai.departemen=? "+(nmptg.getText().trim().equals("")?"":"and concat(petugas.nip,petugas.nama)=? ")+" order by petugas.nama");
             }
@@ -2326,6 +2378,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   tabMode.addRow(new Object[]{i+".",rs.getString("nama"),"","","",""});   
                   //rawat jalan       
                   if(chkRalan.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        pstindakanprjalan=koneksi.prepareStatement(
                            "select pasien.nm_pasien,rawat_jl_pr.tarif_tindakanpr,"+
                            "jns_perawatan.nm_perawatan,reg_periksa.tgl_registrasi,reg_periksa.kd_pj "+
@@ -2336,6 +2389,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            "and rawat_jl_pr.kd_jenis_prw=jns_perawatan.kd_jenis_prw "+
                            "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and reg_periksa.tgl_registrasi between ? and ? and rawat_jl_pr.nip=? "+
                            "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_jl_pr.tarif_tindakanpr>0 order by reg_periksa.tgl_registrasi,jns_perawatan.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        pstindakandrprjalan=koneksi.prepareStatement(
                            "select pasien.nm_pasien,rawat_jl_drpr.tarif_tindakanpr,"+
                            "jns_perawatan.nm_perawatan,reg_periksa.tgl_registrasi,reg_periksa.kd_pj "+
@@ -2398,6 +2452,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   }
 
                   if(chkRanap.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        pstindakanprinap=koneksi.prepareStatement(
                             "select rawat_inap_pr.tarif_tindakanpr,pasien.nm_pasien,jns_perawatan_inap.nm_perawatan,"+
                            "rawat_inap_pr.tgl_perawatan,rawat_inap_pr.jam_rawat,reg_periksa.kd_pj " +
@@ -2407,6 +2462,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            "and rawat_inap_pr.kd_jenis_prw=jns_perawatan_inap.kd_jenis_prw "+
                            "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and rawat_inap_pr.tgl_perawatan between ? and ? and rawat_inap_pr.nip=? "+
                            "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_inap_pr.tarif_tindakanpr>0 order by rawat_inap_pr.tgl_perawatan,rawat_inap_pr.jam_rawat,jns_perawatan_inap.nm_perawatan  ");
+                       koneksi=koneksiDB.condb();
                        pstindakandrprinap=koneksi.prepareStatement(
                            "select rawat_inap_drpr.tarif_tindakanpr,pasien.nm_pasien,jns_perawatan_inap.nm_perawatan,"+
                            "rawat_inap_drpr.tgl_perawatan,rawat_inap_drpr.jam_rawat,reg_periksa.kd_pj " +
@@ -2469,81 +2525,97 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   }
 
                   if(chkOperasi.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        psasisten_operator1=koneksi.prepareStatement("select operasi.biayaasisten_operator1,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.asisten_operator1=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator1>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");  
+                       koneksi=koneksiDB.condb();
                        psasisten_operator2=koneksi.prepareStatement("select operasi.biayaasisten_operator2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.asisten_operator2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psasisten_operator3=koneksi.prepareStatement("select operasi.biayaasisten_operator3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.asisten_operator3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psinstrumen=koneksi.prepareStatement("select operasi.biayainstrumen,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.instrumen=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayainstrumen>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psperawaat_resusitas=koneksi.prepareStatement("select operasi.biayaperawaat_resusitas,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.perawaat_resusitas=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaperawaat_resusitas>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");   
+                       koneksi=koneksiDB.condb();
                        psasisten_anestesi=koneksi.prepareStatement("select operasi.biayaasisten_anestesi,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.asisten_anestesi=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_anestesi>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psasisten_anestesi2=koneksi.prepareStatement("select operasi.biayaasisten_anestesi2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.asisten_anestesi2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_anestesi2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan=koneksi.prepareStatement("select operasi.biayabidan,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.bidan=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan2=koneksi.prepareStatement("select operasi.biayabidan2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.bidan2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan3=koneksi.prepareStatement("select operasi.biayabidan3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.bidan3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psperawatluar=koneksi.prepareStatement("select operasi.biayaperawat_luar,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.perawat_luar=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaperawat_luar>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop=koneksi.prepareStatement("select operasi.biaya_omloop,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.omloop=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop2=koneksi.prepareStatement("select operasi.biaya_omloop2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.omloop2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop3=koneksi.prepareStatement("select operasi.biaya_omloop3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.omloop3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop4=koneksi.prepareStatement("select operasi.biaya_omloop4,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.omloop4=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop4>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop5=koneksi.prepareStatement("select operasi.biaya_omloop5,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat and reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
@@ -2924,6 +2996,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                   //periksa lab
                   if(chkLaborat.isSelected()==true){   
+                       koneksi=koneksiDB.condb();
                        psperiksa_lab=koneksi.prepareStatement("select periksa_lab.tarif_tindakan_petugas,pasien.nm_pasien,"+
                            "jns_perawatan_lab.nm_perawatan,periksa_lab.tgl_periksa,periksa_lab.jam,periksa_lab.no_rawat,periksa_lab.kd_jenis_prw,reg_periksa.kd_pj "+
                            " from periksa_lab inner join reg_periksa inner join pasien inner join petugas inner join jns_perawatan_lab "+
@@ -2945,6 +3018,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            rsperiksa_lab.beforeFirst();
                            while(rsperiksa_lab.next()){
                                detaillab=0;
+                               koneksi=koneksiDB.condb();
                                psdetaillab=koneksi.prepareStatement(
                                    "select sum(detail_periksa_lab.bagian_laborat) as total from detail_periksa_lab "+
                                    "where detail_periksa_lab.no_rawat=? and detail_periksa_lab.kd_jenis_prw=? "+
@@ -2988,6 +3062,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                   //periksa radiologi
                   if(chkRadiologi.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        psperiksa_radiologi=koneksi.prepareStatement("select periksa_radiologi.tarif_tindakan_petugas,pasien.nm_pasien,"+
                            "jns_perawatan_radiologi.nm_perawatan,periksa_radiologi.tgl_periksa,periksa_radiologi.jam,periksa_radiologi.no_rawat,periksa_radiologi.kd_jenis_prw,reg_periksa.kd_pj "+
                            " from periksa_radiologi inner join reg_periksa inner join pasien inner join petugas inner join jns_perawatan_radiologi "+
@@ -3054,9 +3129,11 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void prosesCariSudahBayarNonPiutang() {
         try{   
             if(NmDepartemen.getText().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select petugas.nip,petugas.nama from petugas where petugas.status='1' "+(nmptg.getText().trim().equals("")?"":"and concat(petugas.nip,petugas.nama)=? ")+" order by petugas.nama");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select petugas.nip,petugas.nama from petugas inner join pegawai on petugas.nip=pegawai.nik where petugas.status='1' and pegawai.departemen=? "+(nmptg.getText().trim().equals("")?"":"and concat(petugas.nip,petugas.nama)=? ")+" order by petugas.nama");
             }
@@ -3081,6 +3158,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   tabMode.addRow(new Object[]{i+".",rs.getString("nama"),"","","",""});   
                   //rawat jalan       
                   if(chkRalan.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        pstindakanprjalan=koneksi.prepareStatement(
                            "select pasien.nm_pasien,rawat_jl_pr.tarif_tindakanpr,"+
                            "jns_perawatan.nm_perawatan,reg_periksa.tgl_registrasi,reg_periksa.kd_pj "+
@@ -3091,6 +3169,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            "and rawat_jl_pr.kd_jenis_prw=jns_perawatan.kd_jenis_prw "+
                            "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and reg_periksa.tgl_registrasi between ? and ? and rawat_jl_pr.nip=? "+
                            "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_jl_pr.tarif_tindakanpr>0 order by reg_periksa.tgl_registrasi,jns_perawatan.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        pstindakandrprjalan=koneksi.prepareStatement(
                            "select pasien.nm_pasien,rawat_jl_drpr.tarif_tindakanpr,"+
                            "jns_perawatan.nm_perawatan,reg_periksa.tgl_registrasi,reg_periksa.kd_pj "+
@@ -3153,6 +3232,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   }
 
                   if(chkRanap.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        pstindakanprinap=koneksi.prepareStatement(
                             "select rawat_inap_pr.tarif_tindakanpr,pasien.nm_pasien,jns_perawatan_inap.nm_perawatan,"+
                            "rawat_inap_pr.tgl_perawatan,rawat_inap_pr.jam_rawat,reg_periksa.kd_pj " +
@@ -3162,6 +3242,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            "and rawat_inap_pr.kd_jenis_prw=jns_perawatan_inap.kd_jenis_prw "+
                            "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and rawat_inap_pr.tgl_perawatan between ? and ? and rawat_inap_pr.nip=? "+
                            "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_inap_pr.tarif_tindakanpr>0 order by rawat_inap_pr.tgl_perawatan,rawat_inap_pr.jam_rawat,jns_perawatan_inap.nm_perawatan  ");
+                       koneksi=koneksiDB.condb();
                        pstindakandrprinap=koneksi.prepareStatement(
                            "select rawat_inap_drpr.tarif_tindakanpr,pasien.nm_pasien,jns_perawatan_inap.nm_perawatan,"+
                            "rawat_inap_drpr.tgl_perawatan,rawat_inap_drpr.jam_rawat,reg_periksa.kd_pj " +
@@ -3224,81 +3305,97 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   }
 
                   if(chkOperasi.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        psasisten_operator1=koneksi.prepareStatement("select operasi.biayaasisten_operator1,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.asisten_operator1=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator1>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");  
+                       koneksi=koneksiDB.condb();
                        psasisten_operator2=koneksi.prepareStatement("select operasi.biayaasisten_operator2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.asisten_operator2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psasisten_operator3=koneksi.prepareStatement("select operasi.biayaasisten_operator3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.asisten_operator3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psinstrumen=koneksi.prepareStatement("select operasi.biayainstrumen,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.instrumen=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayainstrumen>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psperawaat_resusitas=koneksi.prepareStatement("select operasi.biayaperawaat_resusitas,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.perawaat_resusitas=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaperawaat_resusitas>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");   
+                       koneksi=koneksiDB.condb();
                        psasisten_anestesi=koneksi.prepareStatement("select operasi.biayaasisten_anestesi,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.asisten_anestesi=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_anestesi>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psasisten_anestesi2=koneksi.prepareStatement("select operasi.biayaasisten_anestesi2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.asisten_anestesi2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_anestesi2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan=koneksi.prepareStatement("select operasi.biayabidan,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.bidan=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan2=koneksi.prepareStatement("select operasi.biayabidan2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.bidan2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan3=koneksi.prepareStatement("select operasi.biayabidan3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.bidan3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psperawatluar=koneksi.prepareStatement("select operasi.biayaperawat_luar,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.perawat_luar=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaperawat_luar>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop=koneksi.prepareStatement("select operasi.biaya_omloop,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.omloop=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop2=koneksi.prepareStatement("select operasi.biaya_omloop2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.omloop2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop3=koneksi.prepareStatement("select operasi.biaya_omloop3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.omloop3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop4=koneksi.prepareStatement("select operasi.biaya_omloop4,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.omloop4=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop4>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop5=koneksi.prepareStatement("select operasi.biaya_omloop5,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
@@ -3679,6 +3776,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                   //periksa lab
                   if(chkLaborat.isSelected()==true){   
+                       koneksi=koneksiDB.condb();
                        psperiksa_lab=koneksi.prepareStatement("select periksa_lab.tarif_tindakan_petugas,pasien.nm_pasien,"+
                            "jns_perawatan_lab.nm_perawatan,periksa_lab.tgl_periksa,periksa_lab.jam,periksa_lab.no_rawat,periksa_lab.kd_jenis_prw,reg_periksa.kd_pj "+
                            " from periksa_lab inner join reg_periksa inner join pasien inner join petugas inner join jns_perawatan_lab "+
@@ -3700,6 +3798,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            rsperiksa_lab.beforeFirst();
                            while(rsperiksa_lab.next()){
                                detaillab=0;
+                               koneksi=koneksiDB.condb();
                                psdetaillab=koneksi.prepareStatement(
                                    "select sum(detail_periksa_lab.bagian_laborat) as total from detail_periksa_lab "+
                                    "where detail_periksa_lab.no_rawat=? and detail_periksa_lab.kd_jenis_prw=? "+
@@ -3743,6 +3842,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                   //periksa radiologi
                   if(chkRadiologi.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        psperiksa_radiologi=koneksi.prepareStatement("select periksa_radiologi.tarif_tindakan_petugas,pasien.nm_pasien,"+
                            "jns_perawatan_radiologi.nm_perawatan,periksa_radiologi.tgl_periksa,periksa_radiologi.jam,periksa_radiologi.no_rawat,periksa_radiologi.kd_jenis_prw,reg_periksa.kd_pj "+
                            " from periksa_radiologi inner join reg_periksa inner join pasien inner join petugas inner join jns_perawatan_radiologi "+
@@ -3809,9 +3909,11 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void prosesCariBelumTerclosing() {
         try{   
             if(NmDepartemen.getText().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select petugas.nip,petugas.nama from petugas where petugas.status='1' "+(nmptg.getText().trim().equals("")?"":"and concat(petugas.nip,petugas.nama)=? ")+" order by petugas.nama");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select petugas.nip,petugas.nama from petugas inner join pegawai on petugas.nip=pegawai.nik where petugas.status='1' and pegawai.departemen=? "+(nmptg.getText().trim().equals("")?"":"and concat(petugas.nip,petugas.nama)=? ")+" order by petugas.nama");
             }
@@ -3836,6 +3938,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   tabMode.addRow(new Object[]{i+".",rs.getString("nama"),"","","",""});   
                   //rawat jalan       
                   if(chkRalan.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        pstindakanprjalan=koneksi.prepareStatement(
                            "select pasien.nm_pasien,rawat_jl_pr.tarif_tindakanpr,"+
                            "jns_perawatan.nm_perawatan,reg_periksa.tgl_registrasi,reg_periksa.kd_pj "+
@@ -3846,6 +3949,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            "and rawat_jl_pr.kd_jenis_prw=jns_perawatan.kd_jenis_prw "+
                            "where reg_periksa.status_bayar='Belum Bayar' and reg_periksa.tgl_registrasi between ? and ? and rawat_jl_pr.nip=? "+
                            "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_jl_pr.tarif_tindakanpr>0 order by reg_periksa.tgl_registrasi,jns_perawatan.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        pstindakandrprjalan=koneksi.prepareStatement(
                            "select pasien.nm_pasien,rawat_jl_drpr.tarif_tindakanpr,"+
                            "jns_perawatan.nm_perawatan,reg_periksa.tgl_registrasi,reg_periksa.kd_pj "+
@@ -3908,6 +4012,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   }
 
                   if(chkRanap.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        pstindakanprinap=koneksi.prepareStatement(
                             "select rawat_inap_pr.tarif_tindakanpr,pasien.nm_pasien,jns_perawatan_inap.nm_perawatan,"+
                            "rawat_inap_pr.tgl_perawatan,rawat_inap_pr.jam_rawat,reg_periksa.kd_pj " +
@@ -3917,6 +4022,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            "and rawat_inap_pr.kd_jenis_prw=jns_perawatan_inap.kd_jenis_prw "+
                            "where reg_periksa.status_bayar='Belum Bayar' and rawat_inap_pr.tgl_perawatan between ? and ? and rawat_inap_pr.nip=? "+
                            "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_inap_pr.tarif_tindakanpr>0 order by rawat_inap_pr.tgl_perawatan,rawat_inap_pr.jam_rawat,jns_perawatan_inap.nm_perawatan  ");
+                       koneksi=koneksiDB.condb();
                        pstindakandrprinap=koneksi.prepareStatement(
                            "select rawat_inap_drpr.tarif_tindakanpr,pasien.nm_pasien,jns_perawatan_inap.nm_perawatan,"+
                            "rawat_inap_drpr.tgl_perawatan,rawat_inap_drpr.jam_rawat,reg_periksa.kd_pj " +
@@ -3979,81 +4085,97 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                   }
 
                   if(chkOperasi.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        psasisten_operator1=koneksi.prepareStatement("select operasi.biayaasisten_operator1,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.asisten_operator1=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator1>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");  
+                       koneksi=koneksiDB.condb();
                        psasisten_operator2=koneksi.prepareStatement("select operasi.biayaasisten_operator2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.asisten_operator2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psasisten_operator3=koneksi.prepareStatement("select operasi.biayaasisten_operator3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.asisten_operator3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_operator3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psinstrumen=koneksi.prepareStatement("select operasi.biayainstrumen,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.instrumen=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayainstrumen>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psperawaat_resusitas=koneksi.prepareStatement("select operasi.biayaperawaat_resusitas,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.perawaat_resusitas=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaperawaat_resusitas>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");   
+                       koneksi=koneksiDB.condb();
                        psasisten_anestesi=koneksi.prepareStatement("select operasi.biayaasisten_anestesi,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.asisten_anestesi=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_anestesi>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psasisten_anestesi2=koneksi.prepareStatement("select operasi.biayaasisten_anestesi2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.asisten_anestesi2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaasisten_anestesi2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan=koneksi.prepareStatement("select operasi.biayabidan,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.bidan=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan2=koneksi.prepareStatement("select operasi.biayabidan2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.bidan2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psbidan3=koneksi.prepareStatement("select operasi.biayabidan3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.bidan3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayabidan3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psperawatluar=koneksi.prepareStatement("select operasi.biayaperawat_luar,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.perawat_luar=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaperawat_luar>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop=koneksi.prepareStatement("select operasi.biaya_omloop,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.omloop=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop2=koneksi.prepareStatement("select operasi.biaya_omloop2,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.omloop2=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop2>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop3=koneksi.prepareStatement("select operasi.biaya_omloop3,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.omloop3=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop3>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop4=koneksi.prepareStatement("select operasi.biaya_omloop4,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
                               "where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.omloop4=? "+
                               "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_omloop4>0 order by operasi.tgl_operasi,paket_operasi.nm_perawatan");
+                       koneksi=koneksiDB.condb();
                        psomloop5=koneksi.prepareStatement("select operasi.biaya_omloop5,pasien.nm_pasien,paket_operasi.nm_perawatan,"+
                               "operasi.tgl_operasi,reg_periksa.kd_pj from operasi inner join reg_periksa inner join pasien inner join paket_operasi "+
                               "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj and operasi.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and operasi.kode_paket=paket_operasi.kode_paket "+
@@ -4434,6 +4556,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                   //periksa lab
                   if(chkLaborat.isSelected()==true){   
+                       koneksi=koneksiDB.condb();
                        psperiksa_lab=koneksi.prepareStatement("select periksa_lab.tarif_tindakan_petugas,pasien.nm_pasien,"+
                            "jns_perawatan_lab.nm_perawatan,periksa_lab.tgl_periksa,periksa_lab.jam,periksa_lab.no_rawat,periksa_lab.kd_jenis_prw,reg_periksa.kd_pj "+
                            " from periksa_lab inner join reg_periksa inner join pasien inner join petugas inner join jns_perawatan_lab "+
@@ -4455,6 +4578,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                            rsperiksa_lab.beforeFirst();
                            while(rsperiksa_lab.next()){
                                detaillab=0;
+                               koneksi=koneksiDB.condb();
                                psdetaillab=koneksi.prepareStatement(
                                    "select sum(detail_periksa_lab.bagian_laborat) as total from detail_periksa_lab "+
                                    "where detail_periksa_lab.no_rawat=? and detail_periksa_lab.kd_jenis_prw=? "+
@@ -4498,6 +4622,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                   //periksa radiologi
                   if(chkRadiologi.isSelected()==true){
+                       koneksi=koneksiDB.condb();
                        psperiksa_radiologi=koneksi.prepareStatement("select periksa_radiologi.tarif_tindakan_petugas,pasien.nm_pasien,"+
                            "jns_perawatan_radiologi.nm_perawatan,periksa_radiologi.tgl_periksa,periksa_radiologi.jam,periksa_radiologi.no_rawat,periksa_radiologi.kd_jenis_prw,reg_periksa.kd_pj "+
                            " from periksa_radiologi inner join reg_periksa inner join pasien inner join petugas inner join jns_perawatan_radiologi "+

@@ -314,6 +314,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
         Valid.tabelKosong(tabMode);
         try{  
             if(ChkTanggal.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select permintaan_stok_obat_pasien.no_permintaan,permintaan_stok_obat_pasien.tgl_permintaan,permintaan_stok_obat_pasien.jam,"+
                     " permintaan_stok_obat_pasien.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,permintaan_stok_obat_pasien.kd_dokter,dokter.nm_dokter, "+
                     " if(permintaan_stok_obat_pasien.jam=permintaan_stok_obat_pasien.jam,'Belum Terlayani','Sudah Terlayani') as status,permintaan_stok_obat_pasien.status as status_asal "+
@@ -321,6 +322,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     " and reg_periksa.no_rkm_medis=pasien.no_rkm_medis and permintaan_stok_obat_pasien.kd_dokter=dokter.kd_dokter where "+
                     " permintaan_stok_obat_pasien.tgl_permintaan between ? and ? and pasien.no_rkm_medis=? and permintaan_stok_obat_pasien.kd_dokter=? order by permintaan_stok_obat_pasien.tgl_permintaan,permintaan_stok_obat_pasien.jam desc");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select permintaan_stok_obat_pasien.no_permintaan,permintaan_stok_obat_pasien.tgl_permintaan,permintaan_stok_obat_pasien.jam,"+
                     " permintaan_stok_obat_pasien.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,permintaan_stok_obat_pasien.kd_dokter,dokter.nm_dokter, "+
                     " if(permintaan_stok_obat_pasien.jam=permintaan_stok_obat_pasien.jam,'Belum Terlayani','Sudah Terlayani') as status,permintaan_stok_obat_pasien.status as status_asal "+
@@ -344,6 +346,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         rs.getString("no_permintaan"),rs.getString("tgl_permintaan"),rs.getString("jam"),rs.getString("no_rawat"),
                         rs.getString("no_rkm_medis"),rs.getString("nm_pasien"),rs.getString("nm_dokter"),rs.getString("kd_dokter")
                     });  
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select databarang.kode_brng,databarang.nama_brng,detail_permintaan_stok_obat_pasien.jml,"+
                         "databarang.kode_sat,detail_permintaan_stok_obat_pasien.aturan_pakai,detail_permintaan_stok_obat_pasien.jam00,"+
                         "detail_permintaan_stok_obat_pasien.jam01,detail_permintaan_stok_obat_pasien.jam02,detail_permintaan_stok_obat_pasien.jam03,"+

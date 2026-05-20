@@ -691,6 +691,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){        
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from bangsal where bangsal.status='1' and bangsal.kd_bangsal like ? "+
                     "or bangsal.status='1' and bangsal.nm_bangsal like ? order by bangsal.kd_bangsal");
             try {
@@ -702,6 +703,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 ttljmlpasien=0;
                 while(rs.next()){
                     jmlpasien=0;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select count(reg_periksa.no_rawat) from reg_periksa inner join kamar_inap inner join kamar "+
                         "on reg_periksa.no_rawat=kamar_inap.no_rawat and kamar_inap.kd_kamar=kamar.kd_kamar  "+
@@ -729,6 +731,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     }
                     
                     jmlhari=0;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select sum(kamar_inap.lama) from reg_periksa inner join kamar_inap inner join kamar "+
                         "on reg_periksa.no_rawat=kamar_inap.no_rawat and kamar_inap.kd_kamar=kamar.kd_kamar  "+
@@ -786,6 +789,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil2(){        
         Valid.tabelKosong(tabMode2);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from bangsal where bangsal.status='1' and bangsal.kd_bangsal like ? "+
                     "or bangsal.status='1' and bangsal.nm_bangsal like ? order by bangsal.kd_bangsal");
             try {
@@ -797,6 +801,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 ttljmlpasien=0;
                 while(rs.next()){
                     jmlpasien=0;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select count(reg_periksa.no_rawat) from reg_periksa inner join kamar_inap inner join kamar "+
                         "on reg_periksa.no_rawat=kamar_inap.no_rawat and kamar_inap.kd_kamar=kamar.kd_kamar  "+
@@ -824,6 +829,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     }
                     
                     jmlhari=0;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select sum(kamar_inap.lama) from reg_periksa inner join kamar_inap inner join kamar "+
                         "on reg_periksa.no_rawat=kamar_inap.no_rawat and kamar_inap.kd_kamar=kamar.kd_kamar  "+

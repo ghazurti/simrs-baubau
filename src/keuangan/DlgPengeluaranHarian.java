@@ -775,6 +775,7 @@ public final class DlgPengeluaranHarian extends javax.swing.JDialog {
             akun="";
             kontrakun="";
             try {
+                koneksi=koneksiDB.condb();
                 psakun=koneksi.prepareStatement(
                     "select kategori_pengeluaran_harian.kd_rek,kategori_pengeluaran_harian.kd_rek2 from kategori_pengeluaran_harian where kategori_pengeluaran_harian.kode_kategori=?");
                 try {
@@ -895,6 +896,7 @@ public final class DlgPengeluaranHarian extends javax.swing.JDialog {
                     tbResep.getValueAt(tbResep.getSelectedRow(),0).toString()
                 })==true){
                     try {
+                        koneksi=koneksiDB.condb();
                         psakun=koneksi.prepareStatement(
                             "select kategori_pengeluaran_harian.kd_rek,kategori_pengeluaran_harian.kd_rek2 from kategori_pengeluaran_harian where kategori_pengeluaran_harian.kode_kategori=?");
                         try {
@@ -1455,6 +1457,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{     
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pengeluaran_harian.no_keluar,pengeluaran_harian.tanggal, pengeluaran_harian.keterangan, pengeluaran_harian.biaya, pengeluaran_harian.nip, "+
                     "petugas.nama,pengeluaran_harian.kode_kategori,kategori_pengeluaran_harian.nama_kategori "+
@@ -1612,6 +1615,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     
     private void tampilAkunBankMandiri() { 
         try{     
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select set_akun_mandiri.kd_rek,set_akun_mandiri.kd_rek_biaya,set_akun_mandiri.kode_mcm,set_akun_mandiri.no_rekening from set_akun_mandiri");
             try {

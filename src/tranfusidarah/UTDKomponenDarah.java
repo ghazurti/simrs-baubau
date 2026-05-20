@@ -932,6 +932,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabModeKomponen);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select * from utd_komponen_darah "+(TCari.getText().trim().equals("")?"":"where utd_komponen_darah.kode like ? or utd_komponen_darah.nama like ? ")+"order by utd_komponen_darah.nama"
             );

@@ -2844,6 +2844,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
             penyakit="";
             keluar="";
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select databarang.nama_brng from detail_pemberian_obat inner join databarang "+
                    "on detail_pemberian_obat.kode_brng=databarang.kode_brng where detail_pemberian_obat.no_rawat=? group by databarang.nama_brng ");
                 try {
@@ -3247,6 +3248,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
     private void tampilData(){
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select sisrute_rujukan_keluar.no_rawat,sisrute_rujukan_keluar.no_rujuk,sisrute_rujukan_keluar.no_rkm_medis,"+
                 "sisrute_rujukan_keluar.nm_pasien,sisrute_rujukan_keluar.no_ktp,sisrute_rujukan_keluar.no_peserta,"+
@@ -3361,6 +3363,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
     private void tampilData2(){
         Valid.tabelKosong(tabMode2);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select sisrute_rujukan_keluar.no_rujuk,sisrute_rujukan_keluar.no_rkm_medis,"+
                 "sisrute_rujukan_keluar.nm_pasien,sisrute_rujukan_keluar.nm_faskes_tujuan from sisrute_rujukan_keluar where "+
@@ -3572,6 +3575,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
         TabRawat.setSelectedIndex(0);
         TNoRw.setText(NoRawat);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select reg_periksa.no_rawat,nm_pasien,concat(pasien.alamat,', ',kelurahan.nm_kel,', ',kecamatan.nm_kec,', ',kabupaten.nm_kab,', ',propinsi.nm_prop) asal,"+
                 "pasien.no_rkm_medis,pasien.no_ktp,pasien.no_peserta,pasien.jk,pasien.tmp_lahir,pasien.tgl_lahir,pasien.no_tlp, "+
@@ -3596,6 +3600,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                     Alamat.setText(rs.getString("asal"));
                     KdDokter.setText(rs.getString("ktpdokter"));
                     DokterPerujuk.setText(rs.getString("nama"));
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select diagnosa_pasien.kd_penyakit,penyakit.nm_penyakit from penyakit "+
                         "inner join diagnosa_pasien on penyakit.kd_penyakit=diagnosa_pasien.kd_penyakit "+
@@ -3618,6 +3623,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select suhu_tubuh, tensi, nadi, respirasi, tinggi, berat, gcs,keluhan, pemeriksaan, "+
                         "alergi, lingkar_perut, rtl from pemeriksaan_ralan where no_rawat=? order by tgl_perawatan desc limit 1");
@@ -3644,6 +3650,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select template_laboratorium.Pemeriksaan,detail_periksa_lab.nilai from template_laboratorium "+
                         "inner join detail_periksa_lab on template_laboratorium.id_template=detail_periksa_lab.id_template "+
@@ -3668,6 +3675,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select hasil_radiologi.hasil from hasil_radiologi where hasil_radiologi.no_rawat=?");
                     try {
@@ -3690,6 +3698,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select databarang.nama_brng from detail_pemberian_obat inner join databarang "+
                         "on detail_pemberian_obat.kode_brng=databarang.kode_brng where detail_pemberian_obat.no_rawat=?");
@@ -3716,6 +3725,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                     }
                     
                     cari2="";
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select jns_perawatan.nm_perawatan from jns_perawatan inner join rawat_jl_dr "+
                         "on jns_perawatan.kd_jenis_prw=rawat_jl_dr.kd_jenis_prw where no_rawat=? group by jns_perawatan.nm_perawatan");
@@ -3736,6 +3746,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select jns_perawatan.nm_perawatan from jns_perawatan inner join rawat_jl_pr "+
                         "on jns_perawatan.kd_jenis_prw=rawat_jl_pr.kd_jenis_prw where no_rawat=? group by jns_perawatan.nm_perawatan");
@@ -3756,6 +3767,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select jns_perawatan.nm_perawatan from jns_perawatan inner join rawat_jl_drpr "+
                         "on jns_perawatan.kd_jenis_prw=rawat_jl_drpr.kd_jenis_prw where no_rawat=? group by jns_perawatan.nm_perawatan");
@@ -3805,6 +3817,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
         TabRawat.setSelectedIndex(0);
         TNoRw.setText(NoRawat);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select reg_periksa.no_rawat,nm_pasien,concat(pasien.alamat,', ',kelurahan.nm_kel,', ',kecamatan.nm_kec,', ',kabupaten.nm_kab,', ',propinsi.nm_prop) asal,"+
                 "pasien.no_rkm_medis,pasien.no_ktp,pasien.no_peserta,pasien.jk,pasien.tmp_lahir,pasien.tgl_lahir,pasien.no_tlp, "+
@@ -3829,6 +3842,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                     Alamat.setText(rs.getString("asal"));
                     KdDokter.setText(rs.getString("ktpdokter"));
                     DokterPerujuk.setText(rs.getString("nama"));
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select diagnosa_pasien.kd_penyakit,penyakit.nm_penyakit from penyakit "+
                         "inner join diagnosa_pasien on penyakit.kd_penyakit=diagnosa_pasien.kd_penyakit "+
@@ -3851,6 +3865,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select suhu_tubuh, tensi, nadi, respirasi, tinggi, berat, gcs,keluhan, pemeriksaan, "+
                         "alergi from pemeriksaan_ranap where no_rawat=? order by tgl_perawatan desc limit 1");
@@ -3877,6 +3892,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select template_laboratorium.Pemeriksaan,detail_periksa_lab.nilai from template_laboratorium "+
                         "inner join detail_periksa_lab on template_laboratorium.id_template=detail_periksa_lab.id_template "+
@@ -3901,6 +3917,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select hasil_radiologi.hasil from hasil_radiologi where hasil_radiologi.no_rawat=?");
                     try {
@@ -3923,6 +3940,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select databarang.nama_brng from detail_pemberian_obat inner join databarang "+
                         "on detail_pemberian_obat.kode_brng=databarang.kode_brng where detail_pemberian_obat.no_rawat=?");
@@ -3948,6 +3966,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                     }
                     
                     cari2="";
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select jns_perawatan.nm_perawatan from jns_perawatan inner join rawat_inap_dr "+
                         "on jns_perawatan.kd_jenis_prw=rawat_inap_dr.kd_jenis_prw where no_rawat=? group by jns_perawatan.nm_perawatan");
@@ -3968,6 +3987,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select jns_perawatan.nm_perawatan from jns_perawatan inner join rawat_inap_pr "+
                         "on jns_perawatan.kd_jenis_prw=rawat_inap_pr.kd_jenis_prw where no_rawat=? group by jns_perawatan.nm_perawatan");
@@ -3988,6 +4008,7 @@ public final class SisruteRujukanKeluar extends javax.swing.JDialog {
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select jns_perawatan.nm_perawatan from jns_perawatan inner join rawat_inap_drpr "+
                         "on jns_perawatan.kd_jenis_prw=rawat_inap_drpr.kd_jenis_prw where no_rawat=? group by jns_perawatan.nm_perawatan");

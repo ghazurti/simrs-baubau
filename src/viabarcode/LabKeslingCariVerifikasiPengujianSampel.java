@@ -1402,6 +1402,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 ChkAccor.setVisible(true);
                 Valid.tabelKosong(tabModeDetailVerifikasi);
                 try {
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                         "select labkesling_detail_verifikasi_pengujian_sampel.kode_parameter,labkesling_parameter_pengujian.nama_parameter,labkesling_parameter_pengujian.satuan,labkesling_detail_verifikasi_pengujian_sampel.hasil_pengujian,"+
                         "labkesling_detail_verifikasi_pengujian_sampel.keterangan,labkesling_detail_verifikasi_pengujian_sampel.nilai_normal,labkesling_parameter_pengujian.metode_pengujian,labkesling_parameter_pengujian.kategori,"+
@@ -1616,6 +1617,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
         Valid.tabelKosong(tabModeVerifikasi);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                         "select labkesling_verifikasi_pengujian_sampel.tanggal,labkesling_verifikasi_pengujian_sampel.no_verifikasi,labkesling_verifikasi_pengujian_sampel.nip_pj,petugas.nama,"+
                         "labkesling_verifikasi_pengujian_sampel.no_permintaan,labkesling_permintaan_pengujian_sampel.kode_pelanggan,labkesling_pelanggan.nama_pelanggan,labkesling_permintaan_pengujian_sampel.kode_sampel,"+
@@ -1669,6 +1671,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil2() {
         Valid.tabelKosong(tabModeRekapVerifikasi);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select labkesling_verifikasi_pengujian_sampel.tanggal,labkesling_verifikasi_pengujian_sampel.no_verifikasi,labkesling_verifikasi_pengujian_sampel.nip_pj,petugas.nama,"+
                 "labkesling_verifikasi_pengujian_sampel.no_permintaan,labkesling_permintaan_pengujian_sampel.kode_pelanggan,labkesling_pelanggan.nama_pelanggan,labkesling_permintaan_pengujian_sampel.kode_sampel,"+

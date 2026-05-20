@@ -918,6 +918,7 @@ public final class SuratKewaspadaanKesehatan extends javax.swing.JDialog {
         try{
             tgl=" surat_kewaspadaan_kesehatan.tanggalperiksa between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' ";
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                      "select surat_kewaspadaan_kesehatan.no_surat,surat_kewaspadaan_kesehatan.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                      "surat_kewaspadaan_kesehatan.tanggalperiksa,surat_kewaspadaan_kesehatan.keluhan_saat_ini,reg_periksa.kd_dokter,dokter.nm_dokter,surat_kewaspadaan_kesehatan.keperluan "+                  
@@ -925,6 +926,7 @@ public final class SuratKewaspadaanKesehatan extends javax.swing.JDialog {
                      "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis inner join dokter on dokter.kd_dokter=reg_periksa.kd_dokter "+
                      "where "+tgl+"order by surat_kewaspadaan_kesehatan.no_surat");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select surat_kewaspadaan_kesehatan.no_surat,surat_kewaspadaan_kesehatan.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                      "surat_kewaspadaan_kesehatan.tanggalperiksa,surat_kewaspadaan_kesehatan.keluhan_saat_ini,reg_periksa.kd_dokter,dokter.nm_dokter,surat_kewaspadaan_kesehatan.keperluan "+                  

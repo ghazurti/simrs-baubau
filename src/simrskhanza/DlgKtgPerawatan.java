@@ -604,6 +604,7 @@ public final class DlgKtgPerawatan extends javax.swing.JDialog {
     private void tampil(){
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select * from kategori_perawatan where kd_kategori like ? "+
                 "or nm_kategori like ? ");

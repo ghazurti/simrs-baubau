@@ -587,6 +587,7 @@ public final class DlgJabatan extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select jabatan.kd_jbtn,jabatan.nm_jbtn from jabatan "+(TCari.getText().trim().equals("")?"":"where jabatan.kd_jbtn like ? or jabatan.nm_jbtn like ? ")+"order by jabatan.kd_jbtn"
             );

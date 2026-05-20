@@ -371,6 +371,7 @@ public final class MasterCariImunisasi extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select master_imunisasi.kode_imunisasi, master_imunisasi.nama_imunisasi from master_imunisasi order by master_imunisasi.nama_imunisasi");   
             try {
                 rs=ps.executeQuery();

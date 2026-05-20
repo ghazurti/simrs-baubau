@@ -589,6 +589,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 cari=" and (titip_faktur.no_tagihan like '%"+TCari.getText()+"%' or petugas.nama like '%"+TCari.getText()+"%' or titip_faktur.keterangan like '%"+TCari.getText()+"%' or detail_titip_faktur.no_faktur like '%"+TCari.getText()+"%' or datasuplier.nama_suplier like '%"+TCari.getText()+"%' ) ";
             }
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                      "select titip_faktur.no_tagihan,titip_faktur.tanggal,titip_faktur.nip,petugas.nama,"+
                      "titip_faktur.keterangan,titip_faktur.status,sum(pemesanan.tagihan) as tagihan from titip_faktur "+
@@ -601,6 +602,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 rs=ps.executeQuery();
                 while(rs.next()){
                     bayar=0;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select (SELECT ifnull(SUM(besar_bayar),0) FROM bayar_pemesanan where bayar_pemesanan.no_faktur=pemesanan.no_faktur) as bayar "+
                         "from detail_titip_faktur inner join pemesanan on detail_titip_faktur.no_faktur=pemesanan.no_faktur "+

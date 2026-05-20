@@ -747,6 +747,7 @@ public class DlgRekapPerShift extends javax.swing.JDialog {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
         Valid.tabelKosong(tabModeRalan);
         try{      
+            koneksi=koneksiDB.condb();
             psjamshift=koneksi.prepareStatement("select * from closing_kasir where shift like ? ");
             try {
                 psjamshift.setString(1,"%"+CmbStatus.getSelectedItem().toString().replaceAll("Semua","")+"%");
@@ -755,6 +756,7 @@ public class DlgRekapPerShift extends javax.swing.JDialog {
                     tabModeRalan.addRow(new Object[]{
                         "Shift : "+rs.getString("shift"),rs.getString("jam_masuk")+" - "+rs.getString("jam_pulang"),"","","","","","","","","","","",""
                     });
+                    koneksi=koneksiDB.condb();
                     pspasienralan= koneksi.prepareStatement("select reg_periksa.no_rawat,nota_jalan.no_nota,pasien.nm_pasien,nota_jalan.tanggal,nota_jalan.jam,dokter.nm_dokter,penjab.png_jawab "+
                         "from reg_periksa inner join pasien inner join penjab inner join dokter inner join nota_jalan "+
                         "on reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj and "+
@@ -775,6 +777,7 @@ public class DlgRekapPerShift extends javax.swing.JDialog {
                         i=1;
                         while(rspasien.next()){
                             Operasi=0;Laborat=0;Radiologi=0;Obat=0;Ralan_Dokter=0;Ralan_Dokter_Paramedis=0;Ralan_Paramedis=0;Tambahan=0;Potongan=0;Registrasi=0;
+                            koneksi=koneksiDB.condb();
                             psbilling=koneksi.prepareStatement("select billing.nm_perawatan,billing.totalbiaya,billing.status from billing where billing.no_rawat=? ");
                             try {
                                 psbilling.setString(1,rspasien.getString("no_rawat"));
@@ -888,6 +891,7 @@ public class DlgRekapPerShift extends javax.swing.JDialog {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
         Valid.tabelKosong(tabModeRanap);
         try{
+            koneksi=koneksiDB.condb();
             psjamshift=koneksi.prepareStatement("select * from closing_kasir where shift like ? ");
             try{
                 psjamshift.setString(1,"%"+CmbStatus.getSelectedItem().toString().replaceAll("Semua","")+"%");
@@ -896,6 +900,7 @@ public class DlgRekapPerShift extends javax.swing.JDialog {
                     tabModeRanap.addRow(new Object[]{
                         "Shift : "+rs.getString("shift"),rs.getString("jam_masuk")+" - "+rs.getString("jam_pulang"),"","","","","","","","","","","","","","","",""
                     });
+                    koneksi=koneksiDB.condb();
                     pspasienranap=koneksi.prepareStatement("select reg_periksa.no_rawat,nota_inap.no_nota,pasien.nm_pasien,nota_inap.tanggal,nota_inap.jam,penjab.png_jawab "+
                         "from reg_periksa inner join pasien inner join penjab inner join nota_inap "+
                         "on reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj and "+
@@ -922,6 +927,7 @@ public class DlgRekapPerShift extends javax.swing.JDialog {
                             Potongan=0;Registrasi=0;Retur_Obat=0;Resep_Pulang=0;Harian=0;Kamar=0;Service=0;
                             Ralan_Dokter_Paramedis=0;Operasi=0;Ranap_Dokter=0;Ranap_Dokter_Paramedis=0;
                             Ranap_Paramedis=0;
+                            koneksi=koneksiDB.condb();
                             psbilling=koneksi.prepareStatement("select billing.nm_perawatan,billing.totalbiaya,billing.status from billing where billing.no_rawat=? ");
                             try{
                                 psbilling.setString(1,rspasien.getString("no_rawat"));
@@ -1060,6 +1066,7 @@ public class DlgRekapPerShift extends javax.swing.JDialog {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
         Valid.tabelKosong(tabModePemasukan);
         try{
+            koneksi=koneksiDB.condb();
             psjamshift=koneksi.prepareStatement("select * from closing_kasir where shift like ? ");
             try{
                 psjamshift.setString(1,"%"+CmbStatus.getSelectedItem().toString().replaceAll("Semua","")+"%");
@@ -1068,6 +1075,7 @@ public class DlgRekapPerShift extends javax.swing.JDialog {
                     tabModePemasukan.addRow(new Object[]{
                         "Shift : "+rs.getString("shift"),rs.getString("jam_masuk")+" - "+rs.getString("jam_pulang"),"",""
                     });
+                    koneksi=koneksiDB.condb();
                     pspemasukan=koneksi.prepareStatement("select pemasukan_lain.tanggal, pemasukan_lain.keterangan, pemasukan_lain.besar, kategori_pemasukan_lain.nama_kategori "+
                         "from pemasukan_lain inner join kategori_pemasukan_lain on pemasukan_lain.kode_kategori=kategori_pemasukan_lain.kode_kategori "+
                         "where pemasukan_lain.tanggal between ? and ? order by pemasukan_lain.tanggal");
@@ -1125,6 +1133,7 @@ public class DlgRekapPerShift extends javax.swing.JDialog {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
         Valid.tabelKosong(tabModeDeposit);
         try{
+            koneksi=koneksiDB.condb();
             psjamshift=koneksi.prepareStatement("select * from closing_kasir where shift like ? ");
             try{
                 psjamshift.setString(1,"%"+CmbStatus.getSelectedItem().toString().replaceAll("Semua","")+"%");
@@ -1133,6 +1142,7 @@ public class DlgRekapPerShift extends javax.swing.JDialog {
                     tabModeDeposit.addRow(new Object[]{
                         "Shift : "+rs.getString("shift"),rs.getString("jam_masuk")+" - "+rs.getString("jam_pulang"),"","","",""
                     });
+                    koneksi=koneksiDB.condb();
                     psdeposit=koneksi.prepareStatement(
                         "select deposit.no_deposit,deposit.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,deposit.tgl_deposit,deposit.besar_deposit "+
                         "from deposit inner join reg_periksa on deposit.no_rawat=reg_periksa.no_rawat inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -1191,6 +1201,7 @@ public class DlgRekapPerShift extends javax.swing.JDialog {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
         Valid.tabelKosong(tabModePengeluaran);
         try{
+            koneksi=koneksiDB.condb();
             psjamshift=koneksi.prepareStatement("select * from closing_kasir where shift like ? ");
             try{
                 psjamshift.setString(1,"%"+CmbStatus.getSelectedItem().toString().replaceAll("Semua","")+"%");
@@ -1199,6 +1210,7 @@ public class DlgRekapPerShift extends javax.swing.JDialog {
                     tabModePengeluaran.addRow(new Object[]{
                         "Shift : "+rs.getString("shift"),rs.getString("jam_masuk")+" - "+rs.getString("jam_pulang"),"",""
                     });
+                    koneksi=koneksiDB.condb();
                     pspengeluaran=koneksi.prepareStatement("select pengeluaran_harian.tanggal, pengeluaran_harian.keterangan, pengeluaran_harian.biaya,  "+
                         "kategori_pengeluaran_harian.nama_kategori from pengeluaran_harian inner join kategori_pengeluaran_harian "+
                         "on pengeluaran_harian.kode_kategori=kategori_pengeluaran_harian.kode_kategori "+

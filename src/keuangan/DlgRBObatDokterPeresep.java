@@ -93,8 +93,10 @@ public class DlgRBObatDokterPeresep extends javax.swing.JDialog {
         kddokter.setDocument(new batasInput((byte)8).getKata(kddokter));
                 
         try {
+             koneksi=koneksiDB.condb();
              psdokter=koneksi.prepareStatement(
                      "select kd_dokter,nm_dokter from dokter where  kd_dokter<>'-' and status='1' and kd_dokter like ?");             
+             koneksi=koneksiDB.condb();
              psresep=koneksi.prepareStatement(
                      "select resep_obat.no_resep,resep_obat.tgl_perawatan,resep_obat.jam,"+
                      "resep_obat.no_rawat,pasien.nm_pasien,resep_obat.kd_dokter,databarang.nama_brng,"+
@@ -106,6 +108,7 @@ public class DlgRBObatDokterPeresep extends javax.swing.JDialog {
                      "and resep_obat.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                      "where detail_pemberian_obat.tgl_perawatan=resep_obat.tgl_perawatan and detail_pemberian_obat.jam=resep_obat.jam "+
                      "and resep_obat.kd_dokter=? and resep_obat.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? order by resep_obat.tgl_perawatan");
+             koneksi=koneksiDB.condb();
              psresep2=koneksi.prepareStatement(
                      "select resep_obat.no_resep,resep_obat.tgl_perawatan,resep_obat.jam,"+
                      "resep_obat.no_rawat,pasien.nm_pasien,resep_obat.kd_dokter,databarang.nama_brng,"+

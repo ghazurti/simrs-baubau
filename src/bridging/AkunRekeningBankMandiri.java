@@ -793,6 +793,7 @@ public class AkunRekeningBankMandiri extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select set_akun_mandiri.kd_rek,akunmandiri.nm_rek,set_akun_mandiri.kd_rek_biaya,biaya.nm_rek,aes_decrypt(username,'nur'),aes_decrypt(set_akun_mandiri.password,'windi'),"+
                    "aes_decrypt(set_akun_mandiri.client_id,'nur'),aes_decrypt(set_akun_mandiri.client_secret,'windi'),set_akun_mandiri.kode_rs,set_akun_mandiri.kode_mcm,set_akun_mandiri.no_rekening "+

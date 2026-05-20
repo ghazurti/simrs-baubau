@@ -1214,6 +1214,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
 
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select detail_pengeluaran_obat_bhp.kode_brng,databarang.nama_brng, detail_pengeluaran_obat_bhp.kode_sat,kodesatuan.satuan,jenis.nama as namajenis,sum(detail_pengeluaran_obat_bhp.jumlah) as jumlah,sum(detail_pengeluaran_obat_bhp.total) as total "+
                 "from pengeluaran_obat_bhp inner join petugas on pengeluaran_obat_bhp.nip=petugas.nip inner join detail_pengeluaran_obat_bhp on pengeluaran_obat_bhp.no_keluar=detail_pengeluaran_obat_bhp.no_keluar inner join bangsal on pengeluaran_obat_bhp.kd_bangsal=bangsal.kd_bangsal "+

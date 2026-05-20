@@ -596,6 +596,7 @@ public class K3RSJenisPekerjaan extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from k3rs_jenis_pekerjaan where kode_pekerjaan like ? or jenis_pekerjaan like ? order by kode_pekerjaan");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

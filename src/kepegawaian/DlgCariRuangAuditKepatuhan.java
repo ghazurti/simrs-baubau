@@ -385,6 +385,7 @@ public final class DlgCariRuangAuditKepatuhan extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from ruang_audit_kepatuhan order by nama_ruang");
             try {
                 rs=ps.executeQuery();

@@ -1520,6 +1520,7 @@ public final class PCareKegiatanKelompok extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement(
                    "select eduId,clubId,namaClub,tglPelayanan,nmKegiatan,nmKelompok,materi, "+
                    "pembicara,lokasi,keterangan,biaya from pcare_kegiatan_kelompok where "+

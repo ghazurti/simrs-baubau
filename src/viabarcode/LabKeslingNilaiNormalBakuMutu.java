@@ -878,6 +878,7 @@ public final class LabKeslingNilaiNormalBakuMutu extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select labkesling_parameter_pengujian.kode_parameter,labkesling_parameter_pengujian.nama_parameter,labkesling_parameter_pengujian.metode_pengujian,labkesling_parameter_pengujian.satuan,"+
                     "labkesling_nilai_normal_baku_mutu.nilai_normal,labkesling_master_sampel.kode_sampel,labkesling_master_sampel.nama_sampel,labkesling_master_sampel.baku_mutu from labkesling_nilai_normal_baku_mutu "+

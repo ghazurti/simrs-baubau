@@ -720,6 +720,7 @@ public final class DlgMasterBerkasPegawai extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select * from master_berkas_pegawai where kode like ? "+
                     "or kategori like ? or nama_berkas like ? order by kategori,no_urut");

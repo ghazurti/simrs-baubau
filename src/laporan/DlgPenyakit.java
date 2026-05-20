@@ -1039,6 +1039,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select penyakit.kd_penyakit,penyakit.nm_penyakit,penyakit.ciri_ciri,penyakit.keterangan,"+
                     "kategori_penyakit.nm_kategori,kategori_penyakit.ciri_umum,penyakit.status,penyakit.validcode,penyakit.accpdx,"+
                     "penyakit.asterisk,penyakit.im from kategori_penyakit inner join penyakit "+
@@ -1051,6 +1052,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     " penyakit.status like ? or "+
                     " kategori_penyakit.ciri_umum like ? "+
                     "order by penyakit.kd_penyakit  LIMIT ?,500");
+            koneksi=koneksiDB.condb();
             ps2=koneksi.prepareStatement("select count(penyakit.kd_penyakit) as jumlah from kategori_penyakit inner join penyakit "+
                     " on penyakit.kd_ktg=kategori_penyakit.kd_ktg where  "+
                     " penyakit.kd_penyakit like ? or "+

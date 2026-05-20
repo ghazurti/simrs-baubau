@@ -853,6 +853,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     public void tampil() {        
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select DISTINCT bridging_sep.tglsep as tanggal from bridging_sep where "+
                    "bridging_sep.tglsep between ? and ? order by bridging_sep.tglsep");
@@ -897,6 +898,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 }
             }   
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select DISTINCT bridging_sep_internal.tglsep as tanggal from bridging_sep_internal where "+
                    "bridging_sep_internal.tglsep between ? and ? order by bridging_sep_internal.tglsep");
@@ -976,6 +978,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 if(response.path("klaim").isArray()){
                     if(TCari.getText().trim().equals("")){
                         for(JsonNode list:response.path("klaim")){
+                            koneksi=koneksiDB.condb();
                             pssep=koneksi.prepareStatement("select * from bridging_sep where bridging_sep.no_sep=?");
                             try {
                                 pssep.setString(1,list.path("noSEP").asText());
@@ -1005,6 +1008,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }        
                     }else{
                         for(JsonNode list:response.path("klaim")){
+                            koneksi=koneksiDB.condb();
                             pssep=koneksi.prepareStatement("select * from bridging_sep where bridging_sep.no_sep=?");
                             try {
                                 pssep.setString(1,list.path("noSEP").asText());
@@ -1072,6 +1076,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 if(response.path("klaim").isArray()){
                     if(TCari.getText().trim().equals("")){
                         for(JsonNode list:response.path("klaim")){
+                            koneksi=koneksiDB.condb();
                             pssep=koneksi.prepareStatement("select * from bridging_sep_internal where bridging_sep_internal.no_sep=?");
                             try {
                                 pssep.setString(1,list.path("noSEP").asText());
@@ -1101,6 +1106,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }else{
                         for(JsonNode list:response.path("klaim")){
+                            koneksi=koneksiDB.condb();
                             pssep=koneksi.prepareStatement("select * from bridging_sep_internal where bridging_sep_internal.no_sep=?");
                             try {
                                 pssep.setString(1,list.path("noSEP").asText());

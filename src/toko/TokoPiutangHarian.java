@@ -427,6 +427,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){
         Valid.tabelKosong(tabMode);
         try{      
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select tokopiutang.nota_piutang,tokopiutang.tgl_piutang,tokopiutang.nip,petugas.nama,"+
                 "tokopiutang.ongkir,(tokopiutang.ongkir+tokopiutang.uangmuka+tokopiutang.sisapiutang) as total, "+

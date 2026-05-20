@@ -660,6 +660,7 @@ public final class SuratKlasifikasi extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from surat_klasifikasi where kd like ? "+
                     "or klasifikasi like ? order by kd");
             try {

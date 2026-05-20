@@ -132,6 +132,12 @@ on bridging_surat_kontrol_bpjs.no_sep=bridging_sep.no_sep]]>
 		<property name="com.jaspersoft.studio.field.tree.path" value="bridging_surat_kontrol_bpjs"/>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="jnspelayanan" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="jnspelayanan"/>
+		<property name="com.jaspersoft.studio.field.label" value="jnspelayanan"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="bridging_sep"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<background>
 		<band/>
 	</background>
@@ -410,6 +416,20 @@ on bridging_surat_kontrol_bpjs.no_sep=bridging_sep.no_sep]]>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tgl_rencana}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="145" y="70" width="80" height="16" backcolor="#FFD700" uuid="a1b2c3d4-e5f6-7890-abcd-ef1234567890">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<printWhenExpression><![CDATA[$F{jnspelayanan} != null && $F{jnspelayanan}.equals("1")]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["POST RI"]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="120" width="325" height="13" uuid="75e872f1-def3-4a61-8536-a3a1c79c209a">

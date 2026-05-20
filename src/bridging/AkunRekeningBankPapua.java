@@ -549,6 +549,7 @@ public class AkunRekeningBankPapua extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select set_akun_bankpapua.kd_rek,rekening.nm_rek,aes_decrypt(usere,'nur'),aes_decrypt(passworde,'windi') "+
                    "from set_akun_bankpapua inner join rekening on set_akun_bankpapua.kd_rek=rekening.kd_rek"); 

@@ -789,6 +789,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select pemberihibah.kode_pemberi, pemberihibah.nama_pemberi, "+
                     " pemberihibah.alamat,pemberihibah.kota, pemberihibah.no_telp from pemberihibah "+
                     " where pemberihibah.kode_pemberi like ? or "+

@@ -338,6 +338,7 @@ public final class RMCariObatPulang extends javax.swing.JDialog {
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select resep_pulang.tanggal,resep_pulang.jam,databarang.nama_brng,resep_pulang.jml_barang,resep_pulang.dosis "+
                     "from resep_pulang inner join databarang on databarang.kode_brng=resep_pulang.kode_brng where resep_pulang.no_rawat=? "+

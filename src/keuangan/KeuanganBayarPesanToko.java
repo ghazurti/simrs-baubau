@@ -869,6 +869,7 @@ public final class KeuanganBayarPesanToko extends javax.swing.JDialog {
                     }else{
                         if(koderekening.equals(Host_to_Host_Bank_Mandiri)){
                             Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(pembayaran_pihak_ke3_bankmandiri.nomor_pembayaran,6),signed)),0) from pembayaran_pihak_ke3_bankmandiri where left(pembayaran_pihak_ke3_bankmandiri.tgl_pembayaran,10)='"+Valid.SetTgl(TglBayar.getSelectedItem()+"")+"' ",kodemcm+"14"+TglBayar.getSelectedItem().toString().replaceAll("-",""),6,NoBukti); 
+                            koneksi=koneksiDB.condb();
                             ps=koneksi.prepareStatement(
                                     "select tokosuplier.nama_suplier,tokosuplier.kota,tokosuplier.nama_bank,tokosuplier.rekening "+
                                     "from tokopemesanan inner join tokosuplier on tokopemesanan.kode_suplier=tokosuplier.kode_suplier "+
@@ -1629,6 +1630,7 @@ public final class KeuanganBayarPesanToko extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{           
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select toko_bayar_pemesanan.tgl_bayar,tokopemesanan.tgl_faktur,tokopemesanan.tgl_pesan,tokopemesanan.tgl_tempo, toko_bayar_pemesanan.no_faktur,"+
                     "tokosuplier.nama_suplier,toko_bayar_pemesanan.nama_bayar,toko_bayar_pemesanan.no_bukti,toko_bayar_pemesanan.besar_bayar,toko_bayar_pemesanan.keterangan,"+
@@ -1745,6 +1747,7 @@ public final class KeuanganBayarPesanToko extends javax.swing.JDialog {
              file.createNewFile();
              fileWriter = new FileWriter(file);
              StringBuilder iyembuilder = new StringBuilder();
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement("select * from akun_bayar_hutang order by akun_bayar_hutang.nama_bayar");
              try{
                  rs=ps.executeQuery();
@@ -1805,6 +1808,7 @@ public final class KeuanganBayarPesanToko extends javax.swing.JDialog {
     
     private void tampilAkunBankMandiri() { 
         try{     
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select set_akun_mandiri.kd_rek,set_akun_mandiri.kd_rek_biaya,set_akun_mandiri.kode_mcm,set_akun_mandiri.no_rekening from set_akun_mandiri");
             try {

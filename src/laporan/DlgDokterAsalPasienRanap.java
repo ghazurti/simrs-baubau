@@ -517,6 +517,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     public void tampil(){        
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select dokter.kd_dokter,dokter.nm_dokter from dokter where dokter.status='1' "+
                     (TCari.getText().trim().equals("")?"":"and (dokter.kd_dokter like ? or dokter.nm_dokter like ?) ")+

@@ -502,6 +502,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             if(ChkTanggalTempo.isSelected()==true){
                 tanggaltempo=" dapurpemesanan.tgl_tempo between '"+Valid.SetTgl(TglTempo1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(TglTempo2.getSelectedItem()+"")+"' and ";
             }
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select dapurpemesanan.kode_suplier,dapursuplier.nama_suplier,(dapurpemesanan.tagihan-"+
                     "(SELECT ifnull(SUM(besar_bayar),0) FROM bayar_pemesanan_dapur where bayar_pemesanan_dapur.no_faktur=dapurpemesanan.no_faktur)) as sisahutang "+

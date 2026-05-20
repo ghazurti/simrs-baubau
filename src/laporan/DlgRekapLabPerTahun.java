@@ -394,6 +394,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan from jns_perawatan_lab where jns_perawatan_lab.status='1' "+(TCari.getText().trim().equals("")?"":"and jns_perawatan_lab.nm_perawatan like ? ")+"order by jns_perawatan_lab.nm_perawatan");
             try {
@@ -419,6 +420,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         i+"",rs.getString("kd_jenis_prw")+" "+rs.getString("nm_perawatan"),jan+"",feb+"",mar+"",apr+"",mei+"",jun+"",jul+"",agu+"",
                         sep+"",okt+"",nov+"",des+"",(jan+feb+mar+apr+mei+jun+jul+agu+sep+okt+nov+des)+""
                     });
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select id_template,Pemeriksaan from template_laboratorium where kd_jenis_prw=? order by urut");
                     try {
                         ps2.setString(1,rs.getString("kd_jenis_prw"));

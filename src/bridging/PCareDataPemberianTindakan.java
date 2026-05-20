@@ -972,6 +972,7 @@ private void BtnHapusKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pcare_tindakan_ralan_diberikan.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                     "pcare_tindakan_ralan_diberikan.noKunjungan,pcare_tindakan_ralan_diberikan.kdTindakanSK,"+
@@ -1034,6 +1035,7 @@ private void BtnHapusKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     private void tampil2() {
         Valid.tabelKosong(tabMode2);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pcare_tindakan_ranap_diberikan.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                     "pcare_tindakan_ranap_diberikan.noKunjungan,pcare_tindakan_ranap_diberikan.kdTindakanSK,"+

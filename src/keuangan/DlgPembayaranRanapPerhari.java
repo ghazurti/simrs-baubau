@@ -641,6 +641,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
         Valid.tabelKosong(tabMode);
         try{          
+            koneksi=koneksiDB.condb();
             pstanggal=koneksi.prepareStatement(
                     "select kamar_inap.tgl_keluar from kamar_inap where kamar_inap.tgl_keluar between ? and ? group by kamar_inap.tgl_keluar order by kamar_inap.tgl_keluar");  
             try {
@@ -657,6 +658,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     Ralan_Paramedis=0;Ranap_Paramedis=0;Ralan_Dokter=0;Ralan_Dokter_Paramedis=0;
                     Tambahan=0;Potongan=0;Kamar=0;Registrasi=0;Harian=0;Retur_Obat=0;Resep_Pulang=0;Service=0;
                     if(nmbangsal.getText().equals("")&&NmCaraBayar.getText().equals("")){
+                        koneksi=koneksiDB.condb();
                         ps= koneksi.prepareStatement(
                             "select kamar_inap.no_rawat,kamar_inap.tgl_keluar,kamar_inap.stts_pulang from kamar_inap "+
                             "inner join reg_periksa on kamar_inap.no_rawat=reg_periksa.no_rawat "+
@@ -666,6 +668,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                             "where kamar_inap.stts_pulang<>'Pindah Kamar' and reg_periksa.no_rawat not in (select piutang_pasien.no_rawat from piutang_pasien where piutang_pasien.no_rawat=reg_periksa.no_rawat) and kamar_inap.tgl_keluar=? "+
                             "group by kamar_inap.no_rawat order by kamar_inap.tgl_keluar");
                     }else{
+                        koneksi=koneksiDB.condb();
                         ps= koneksi.prepareStatement(
                             "sselect kamar_inap.no_rawat,kamar_inap.tgl_keluar,kamar_inap.stts_pulang from kamar_inap "+
                             "inner join reg_periksa on kamar_inap.no_rawat=reg_periksa.no_rawat "+
@@ -689,6 +692,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         while(rs.next()){
                             if(!rs.getString("stts_pulang").equals("-")){
                             if(!rs.getString("stts_pulang").equals("Pindah Kamar")){
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -709,6 +713,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -729,6 +734,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -749,6 +755,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -769,6 +776,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -789,6 +797,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -809,6 +818,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -829,6 +839,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -849,6 +860,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -869,6 +881,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -889,6 +902,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -909,6 +923,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -929,6 +944,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -949,6 +965,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -969,6 +986,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -989,6 +1007,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -1009,6 +1028,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));
@@ -1029,6 +1049,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     }
                                 }
                                 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement("select sum(billing.totalbiaya) from billing where billing.no_rawat=? and billing.status=? ");
                                 try{
                                     ps2.setString(1,rs.getString(1));

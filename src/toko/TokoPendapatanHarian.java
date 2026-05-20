@@ -515,6 +515,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){        
         try {
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select tokopenjualan.tgl_jual,tokopenjualan.nip,petugas.nama,sum(tokopenjualan.ongkir)as ongkir,sum(tokopenjualan.total)as total,sum(tokopenjualan.ppn) as ppn "+
                 "from tokopenjualan inner join petugas on tokopenjualan.nip=petugas.nip where tokopenjualan.tgl_jual between ? and ? "+
@@ -563,6 +564,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil2(){        
         try {
             Valid.tabelKosong(tabMode2);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select tokopiutang.tgl_piutang,tokopiutang.nip,petugas.nama,sum(tokopiutang.ongkir) as ongkir,"+
                 "sum(tokopiutang.ongkir+tokopiutang.uangmuka+tokopiutang.sisapiutang) as total, "+

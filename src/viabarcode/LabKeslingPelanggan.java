@@ -851,6 +851,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select labkesling_pelanggan.kode_pelanggan, labkesling_pelanggan.nama_pelanggan, "+
                     "labkesling_pelanggan.alamat,labkesling_pelanggan.kota, labkesling_pelanggan.no_telp,"+

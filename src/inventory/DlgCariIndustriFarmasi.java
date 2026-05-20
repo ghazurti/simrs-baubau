@@ -395,6 +395,7 @@ public final class DlgCariIndustriFarmasi extends javax.swing.JDialog {
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from industrifarmasi order by industrifarmasi.nama_industri ");
             try {
                 rs=ps.executeQuery();

@@ -30,7 +30,7 @@ public class koneksiDB {
     private static final Object LOCK=new Object();
     private static volatile long lastCheck =0;
     private static final long CHECK_INTERVAL =40000;
-    
+
     private koneksiDB(){}
     
     static {
@@ -60,7 +60,7 @@ public class koneksiDB {
                     }
                 }
             }
-            
+
             if (connection == null || connection.isClosed()) {
                 synchronized (LOCK) {
                     if (connection == null || connection.isClosed()) {

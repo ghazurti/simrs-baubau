@@ -479,6 +479,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             lebihsatujam3=0;
             lamajam3=0;
             i=1;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select inventaris_ambil_cssd.no_sirkulasi,inventaris_ambil_cssd.no_inventaris,inventaris.kode_barang,inventaris_barang.nama_barang," +
                 "inventaris_ambil_cssd.tgl_ambil,inventaris_sterilisasi_cssd.tgl_sterilisasi,inventaris_kembali_cssd.tgl_kembali," +

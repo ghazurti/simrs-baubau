@@ -664,6 +664,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select template_hasil_radiologi.no_template,template_hasil_radiologi.nama_pemeriksaan, "+
                     "template_hasil_radiologi.template_hasil_radiologi from template_hasil_radiologi "+

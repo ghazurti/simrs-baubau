@@ -891,6 +891,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select tokomember.no_member,tokomember.nama,tokomember.jk,tokomember.tmp_lahir,tokomember.tgl_lahir,tokomember.alamat,tokomember.no_telp,tokomember.email from tokomember "+
                     (TCari.getText().trim().equals("")?"":"where tokomember.no_member like ? or tokomember.nama like ? or tokomember.alamat like ? or tokomember.email like ? or tokomember.tgl_lahir like ? ")+

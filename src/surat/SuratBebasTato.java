@@ -913,6 +913,7 @@ public final class SuratBebasTato extends javax.swing.JDialog {
         try{
             tgl=" surat_bebas_tato.tanggalperiksa between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' ";
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                      "select surat_bebas_tato.no_surat,surat_bebas_tato.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                      "surat_bebas_tato.tanggalperiksa,surat_bebas_tato.hasilperiksa,reg_periksa.kd_dokter,dokter.nm_dokter,surat_bebas_tato.keperluan "+                  
@@ -920,6 +921,7 @@ public final class SuratBebasTato extends javax.swing.JDialog {
                      "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis inner join dokter on dokter.kd_dokter=reg_periksa.kd_dokter "+
                      "where "+tgl+"order by surat_bebas_tato.no_surat");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select surat_bebas_tato.no_surat,surat_bebas_tato.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                      "surat_bebas_tato.tanggalperiksa,surat_bebas_tato.hasilperiksa,reg_periksa.kd_dokter,dokter.nm_dokter,surat_bebas_tato.keperluan "+                  

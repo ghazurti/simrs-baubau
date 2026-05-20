@@ -921,6 +921,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                 if(response.isArray()){
                    for(JsonNode list:response){
                        if(list.path("NamaAkun").asText().equals(AkunAset.getSelectedItem().toString())){
+                           koneksi=koneksiDB.condb();
                            ps=koneksi.prepareStatement(
                                     "select inventaris_barang.kode_barang,inventaris_barang.nama_barang,inventaris_produsen.nama_produsen,"+
                                     "inventaris_merk.nama_merk,inventaris_kategori.nama_kategori,inventaris_jenis.nama_jenis "+
@@ -1028,6 +1029,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
              file.createNewFile();
              fileWriter = new FileWriter(file);
              StringBuilder iyembuilder = new StringBuilder();
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement("select rekening.nm_rek,akun_aset_inventaris.kd_rek from akun_aset_inventaris inner join rekening on akun_aset_inventaris.kd_rek=rekening.kd_rek group by rekening.nm_rek order by rekening.nm_rek");
              try{
                  rs=ps.executeQuery();

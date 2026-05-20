@@ -383,6 +383,7 @@ public final class DlgCariMasterMenolakAnjuranMedis extends javax.swing.JDialog 
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_menolak_anjuran_medis order by master_menolak_anjuran_medis.kode_penolakan");
             try {
                 rs=ps.executeQuery();

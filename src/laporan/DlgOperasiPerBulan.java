@@ -397,6 +397,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){  
         try { 
             Valid.tabelKosong(tabMode);  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select paket_operasi.nm_perawatan,count(paket_operasi.nm_perawatan) from operasi inner join paket_operasi on paket_operasi.kode_paket=operasi.kode_paket "+
                 "where left(operasi.tgl_operasi,4)=? "+(TCari.getText().trim().equals("")?"":"and paket_operasi.nm_perawatan like ? ")+

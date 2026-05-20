@@ -932,6 +932,7 @@ private void NmPetugasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select kesling_limbah_b3medis_cair.nip,petugas.nama,kesling_limbah_b3medis_cair.tanggal,"+
                    "kesling_limbah_b3medis_cair.jmllimbah,kesling_limbah_b3medis_cair.tujuan_penyerahan,kesling_limbah_b3medis_cair.bukti_dokumen, "+

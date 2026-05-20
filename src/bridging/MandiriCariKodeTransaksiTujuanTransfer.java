@@ -372,6 +372,7 @@ public final class MandiriCariKodeTransaksiTujuanTransfer extends javax.swing.JD
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select kodetransaksi_tujuan_transfer_bankmandiri.kode_metode,metode_pembayaran_bankmandiri.nama_metode,metode_pembayaran_bankmandiri.biaya_transaksi,"+
                    "kodetransaksi_tujuan_transfer_bankmandiri.kode_bank,bank_tujuan_transfer_bankmandiri.nama_bank,kodetransaksi_tujuan_transfer_bankmandiri.kode_transaksi "+

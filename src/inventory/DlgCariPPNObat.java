@@ -893,6 +893,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     public void tampil(){        
         try {
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pembelian.tgl_beli,pembelian.no_faktur,pembelian.kode_suplier,datasuplier.nama_suplier, "+
                     "pembelian.nip,petugas.nama,pembelian.total1,pembelian.potongan,pembelian.total2,pembelian.ppn,pembelian.tagihan "+
@@ -947,6 +948,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     public void tampil2(){        
         try {
             Valid.tabelKosong(tabMode2);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pemesanan.tgl_pesan,pemesanan.no_faktur, pemesanan.kode_suplier,datasuplier.nama_suplier, "+
                     "pemesanan.nip,petugas.nama,pemesanan.total1,pemesanan.potongan,pemesanan.total2,pemesanan.ppn,pemesanan.tagihan "+
@@ -1001,6 +1003,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     public void tampil3(){        
         try {
             Valid.tabelKosong(tabMode3);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select nota_jalan.tanggal,nota_jalan.no_nota,pasien.no_rkm_medis,pasien.nm_pasien,nota_jalan.no_rawat "+
                     "from nota_jalan inner join reg_periksa on nota_jalan.no_rawat=reg_periksa.no_rawat "+
@@ -1054,6 +1057,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     public void tampil4(){        
         try {
             Valid.tabelKosong(tabMode4);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select penjualan.tgl_jual,penjualan.nota_jual,penjualan.no_rkm_medis,pasien.nm_pasien, "+
                     "penjualan.nip,petugas.nama,round(penjualan.ppn) as ppn,sum(detailjual.total) as total "+
@@ -1110,6 +1114,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     public void tampil5(){        
         try {
             Valid.tabelKosong(tabMode5);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select nota_inap.tanggal,nota_inap.no_nota,pasien.no_rkm_medis,pasien.nm_pasien,nota_inap.no_rawat "+
                     "from nota_inap inner join reg_periksa on nota_inap.no_rawat=reg_periksa.no_rawat "+
@@ -1163,6 +1168,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     public void tampil6(){        
         try {
             Valid.tabelKosong(tabMode6);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select piutang.tgl_piutang,piutang.nota_piutang,piutang.no_rkm_medis,pasien.nm_pasien, "+
                     "piutang.nip,petugas.nama,round(piutang.ppn) as ppn,sum(detailpiutang.total) as total "+

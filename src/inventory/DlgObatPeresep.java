@@ -646,6 +646,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             Valid.tabelKosong(tabMode);
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select resep_obat.no_resep,resep_obat.tgl_perawatan,resep_obat.jam,"+
                     " resep_obat.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,resep_obat.kd_dokter,dokter.nm_dokter "+
                     " from resep_obat inner join reg_periksa inner join pasien inner join dokter inner join penjab inner join poliklinik "+
@@ -672,6 +673,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     tabMode.addRow(new Object[]{
                         null,null,"Tgl.Resep : "+rs.getString("tgl_perawatan"),null,null,null,null
                     });
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select databarang.kode_brng,databarang.nama_brng,detail_pemberian_obat.jml,detail_pemberian_obat.biaya_obat,"+
                         "(detail_pemberian_obat.jml * detail_pemberian_obat.biaya_obat) as total,databarang.kode_sat "+

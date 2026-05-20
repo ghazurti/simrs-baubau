@@ -83,92 +83,115 @@ public class DlgRBTindakanDokter extends javax.swing.JDialog {
         kddokter.setDocument(new batasInput((byte)8).getKata(kddokter));
                 
         try {
+            koneksi=koneksiDB.condb();
             psdokter=koneksi.prepareStatement(
                     "select dokter.kd_dokter,dokter.nm_dokter,count(dokter.kd_dokter) as jumlah from dokter inner join reg_periksa "+
                     "on reg_periksa.kd_dokter=dokter.kd_dokter where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and "+
                     "reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ? group by dokter.kd_dokter");
+            koneksi=koneksiDB.condb();
             pstindakan=koneksi.prepareStatement(
                     "select sum(rawat_jl_dr.biaya_rawat) from rawat_jl_dr inner join reg_periksa "+
                     "on reg_periksa.no_rawat=rawat_jl_dr.no_rawat where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and "+
                     "rawat_jl_dr.kd_dokter=? and reg_periksa.tgl_registrasi between ? and ?");
+            koneksi=koneksiDB.condb();
             pstindakan2=koneksi.prepareStatement(
                     "select sum(rawat_jl_drpr.biaya_rawat) from rawat_jl_drpr inner join reg_periksa "+
                     "on reg_periksa.no_rawat=rawat_jl_drpr.no_rawat where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and "+
                     "rawat_jl_drpr.kd_dokter=? and reg_periksa.tgl_registrasi between ? and ?");
+            koneksi=koneksiDB.condb();
             psobat=koneksi.prepareStatement(
                     "select sum(detail_pemberian_obat.total) from detail_pemberian_obat inner join reg_periksa "+
                     "on detail_pemberian_obat.no_rawat=reg_periksa.no_rawat where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and "+
                     "reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ? ");  
+            koneksi=koneksiDB.condb();
             psobatlangsung=koneksi.prepareStatement(
                     "select sum(tagihan_obat_langsung.besar_tagihan) from tagihan_obat_langsung inner join reg_periksa "+
                     "on tagihan_obat_langsung.no_rawat=reg_periksa.no_rawat where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and "+
                     "reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ? ");  
+            koneksi=koneksiDB.condb();
             pstambahan=koneksi.prepareStatement(
                     "select sum(tambahan_biaya.besar_biaya) from tambahan_biaya inner join reg_periksa "+
                     "on tambahan_biaya.no_rawat=reg_periksa.no_rawat where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and "+
                     "reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ? "); 
+            koneksi=koneksiDB.condb();
             pspotongan=koneksi.prepareStatement(
                     "select sum(pengurangan_biaya.besar_pengurangan) from pengurangan_biaya inner join reg_periksa "+
                     "on pengurangan_biaya.no_rawat=reg_periksa.no_rawat where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and "+
                     "reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ? "); 
+            koneksi=koneksiDB.condb();
             pslaborat=koneksi.prepareStatement(
                     "select sum(periksa_lab.biaya) from periksa_lab inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat "+
                     "where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ? ");
+            koneksi=koneksiDB.condb();
             psitemlaborat=koneksi.prepareStatement(
                     "select sum(detail_periksa_lab.biaya_item) as total from detail_periksa_lab "+
                     "inner join periksa_lab inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat  "+
                     "and detail_periksa_lab.no_rawat=periksa_lab.no_rawat and detail_periksa_lab.kd_jenis_prw=periksa_lab.kd_jenis_prw "+
                     "and detail_periksa_lab.tgl_periksa=periksa_lab.tgl_periksa and detail_periksa_lab.jam=periksa_lab.jam "+
                     "where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ? ");  
+            koneksi=koneksiDB.condb();
             psradiologi=koneksi.prepareStatement(
                     "select sum(periksa_radiologi.biaya) from periksa_radiologi inner join reg_periksa "+
                     "on periksa_radiologi.no_rawat=reg_periksa.no_rawat where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and "+
                     "reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ? ");                    
+            koneksi=koneksiDB.condb();
             psdetaillaborat=koneksi.prepareStatement(
                     "select sum(periksa_lab.biaya) from periksa_lab inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat "+
                     "where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and periksa_lab.no_rawat=? and reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ?  ");
+            koneksi=koneksiDB.condb();
             psdetailradiologi=koneksi.prepareStatement(
                     "select sum(periksa_radiologi.biaya) from periksa_radiologi inner join reg_periksa on periksa_radiologi.no_rawat=reg_periksa.no_rawat "+
                     "where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and periksa_radiologi.no_rawat=? and reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ?  ");
+            koneksi=koneksiDB.condb();
             psdetailitemlaborat=koneksi.prepareStatement("select sum(detail_periksa_lab.biaya_item) as total from detail_periksa_lab inner join periksa_lab "+
                     "inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat and detail_periksa_lab.no_rawat=periksa_lab.no_rawat "+
                     "and detail_periksa_lab.kd_jenis_prw=periksa_lab.kd_jenis_prw  and detail_periksa_lab.tgl_periksa=periksa_lab.tgl_periksa and detail_periksa_lab.jam=periksa_lab.jam "+
                     "where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and periksa_lab.no_rawat=? and reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ? ");
+            koneksi=koneksiDB.condb();
             pspasien=koneksi.prepareStatement(
                     "select reg_periksa.tgl_registrasi,reg_periksa.no_rkm_medis,pasien.nm_pasien,reg_periksa.no_rawat,reg_periksa.kd_pj "+
                     "from pasien inner join reg_periksa on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                     "where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and reg_periksa.tgl_registrasi between ? and ? and reg_periksa.kd_dokter like ?  order by reg_periksa.kd_pj,reg_periksa.tgl_registrasi");
+            koneksi=koneksiDB.condb();
             psdetailtindakan=koneksi.prepareStatement(
                     "select sum(rawat_jl_dr.biaya_rawat) from rawat_jl_dr inner join reg_periksa "+
                     "on reg_periksa.no_rawat=rawat_jl_dr.no_rawat where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and reg_periksa.no_rawat=? and reg_periksa.kd_dokter like ? "+
                     "and reg_periksa.tgl_registrasi between ? and ? ");
+            koneksi=koneksiDB.condb();
             psdetailtindakan2=koneksi.prepareStatement(
                     "select sum(rawat_jl_drpr.biaya_rawat) from rawat_jl_drpr inner join reg_periksa "+
                     "on reg_periksa.no_rawat=rawat_jl_drpr.no_rawat where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and reg_periksa.no_rawat=? and reg_periksa.kd_dokter like ? "+
                     "and reg_periksa.tgl_registrasi between ? and ? ");
+            koneksi=koneksiDB.condb();
             psdetailobat=koneksi.prepareStatement(
                     "select sum(detail_pemberian_obat.total) from detail_pemberian_obat inner join reg_periksa "+
                     "on detail_pemberian_obat.no_rawat=reg_periksa.no_rawat where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) "+
                     "and reg_periksa.no_rawat=? and reg_periksa.kd_dokter like ? "+
                     "and reg_periksa.tgl_registrasi between ? and ? ");
+            koneksi=koneksiDB.condb();
             psdetailobatlangsung=koneksi.prepareStatement(
                     "select sum(tagihan_obat_langsung.besar_tagihan) from tagihan_obat_langsung inner join reg_periksa "+
                     "on tagihan_obat_langsung.no_rawat=reg_periksa.no_rawat where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and "+
                     "tagihan_obat_langsung.no_rawat=? and reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ?  ");            
+            koneksi=koneksiDB.condb();
             psdetailtambahan=koneksi.prepareStatement(
                     "select sum(tambahan_biaya.besar_biaya) from tambahan_biaya inner join reg_periksa "+
                     "on tambahan_biaya.no_rawat=reg_periksa.no_rawat where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and "+
                     "tambahan_biaya.no_rawat=? and reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ? ");
+            koneksi=koneksiDB.condb();
             psdetailpotongan=koneksi.prepareStatement(
                     "select sum(pengurangan_biaya.besar_pengurangan) from pengurangan_biaya inner join reg_periksa "+
                     "on pengurangan_biaya.no_rawat=reg_periksa.no_rawat where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and "+
                     "pengurangan_biaya.no_rawat=? and reg_periksa.kd_dokter like ? and reg_periksa.tgl_registrasi between ? and ? ");
+            koneksi=koneksiDB.condb();
             psregistrasi=koneksi.prepareStatement(
                     "select sum(reg_periksa.biaya_reg) from reg_periksa where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and reg_periksa.kd_dokter like ? "+
                     "and reg_periksa.tgl_registrasi between ? and ? ");
+            koneksi=koneksiDB.condb();
             psdetailregistrasi=koneksi.prepareStatement(
                     "select sum(reg_periksa.biaya_reg) from reg_periksa where reg_periksa.no_rawat not in(select no_rawat from kamar_inap) and reg_periksa.no_rawat=? and reg_periksa.kd_dokter like ? "+
                     "and reg_periksa.tgl_registrasi between ? and ? ");
+            koneksi=koneksiDB.condb();
             pscarabayar=koneksi.prepareStatement("select penjab.png_jawab from penjab where penjab.kd_pj=?");
         } catch (SQLException e) {
             System.out.println(e);

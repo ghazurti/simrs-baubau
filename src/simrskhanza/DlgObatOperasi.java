@@ -759,6 +759,7 @@ private void BtnSatuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private void tampil() {        
         Valid.tabelKosong(tabMode2);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select obatbhp_ok.kd_obat, obatbhp_ok.nm_obat, kodesatuan.satuan, "+
                "obatbhp_ok.hargasatuan from obatbhp_ok inner join kodesatuan "+
                "on obatbhp_ok.kode_sat=kodesatuan.kode_sat "+

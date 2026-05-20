@@ -3322,6 +3322,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             akuntindakanoperasi.SetAkunTindakanOperasi();
         }
         try {
+            koneksi=koneksiDB.condb();
             psset_tarif=koneksi.prepareStatement("select set_tarif.cara_bayar_operasi,set_tarif.kelas_operasi from set_tarif");
             try {
                 rsset_tarif=psset_tarif.executeQuery();
@@ -3687,6 +3688,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         
         try{
             if(cara_bayar_operasi.equals("Yes")&&kelas_operasi.equals("No")){
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement("select kode_paket, nm_perawatan,kategori, operator1, operator2, operator3, "+
                    "asisten_operator1, asisten_operator2,asisten_operator3, instrumen, dokter_anak,perawaat_resusitas,"+
                    "dokter_anestesi, asisten_anestesi, asisten_anestesi2, bidan, bidan2, bidan3, perawat_luar, alat,"+
@@ -3697,6 +3699,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                    "from paket_operasi where status='1' and (kd_pj=? or kd_pj='-') "+
                    (TCariPaket.getText().trim().equals("")?"":"and (kode_paket like ? or nm_perawatan like ?) ")+"order by nm_perawatan ");
             }else if(cara_bayar_operasi.equals("No")&&kelas_operasi.equals("No")){
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement("select kode_paket, nm_perawatan,kategori, operator1, operator2, operator3, "+
                    "asisten_operator1, asisten_operator2,asisten_operator3, instrumen, dokter_anak,perawaat_resusitas,"+
                    "dokter_anestesi, asisten_anestesi, asisten_anestesi2, bidan, bidan2, bidan3, perawat_luar, alat,"+
@@ -3707,6 +3710,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                    "from paket_operasi where status='1' "+
                    (TCariPaket.getText().trim().equals("")?"":"and (kode_paket like ? or nm_perawatan like ?) ")+"order by nm_perawatan ");
             }else if(cara_bayar_operasi.equals("Yes")&&kelas_operasi.equals("Yes")){
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement("select kode_paket, nm_perawatan,kategori, operator1, operator2, operator3, "+
                    "asisten_operator1, asisten_operator2,asisten_operator3, instrumen, dokter_anak,perawaat_resusitas,"+
                    "dokter_anestesi, asisten_anestesi, asisten_anestesi2, bidan, bidan2, bidan3, perawat_luar, alat,"+
@@ -3717,6 +3721,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                    "from paket_operasi where status='1' and (kd_pj=? or kd_pj='-') and (kelas=? or kelas='-') "+
                    (TCariPaket.getText().trim().equals("")?"":"and (kode_paket like ? or nm_perawatan like ?) ")+"order by nm_perawatan ");
             }else if(cara_bayar_operasi.equals("No")&&kelas_operasi.equals("Yes")){
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement("select kode_paket, nm_perawatan,kategori, operator1, operator2, operator3, "+
                    "asisten_operator1, asisten_operator2,asisten_operator3, instrumen, dokter_anak,perawaat_resusitas,"+
                    "dokter_anestesi, asisten_anestesi, asisten_anestesi2, bidan, bidan2, bidan3, perawat_luar, alat,"+
@@ -3846,6 +3851,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         }
         
         try{    
+            koneksi=koneksiDB.condb();
             psobat=koneksi.prepareStatement("select obatbhp_ok.kd_obat, obatbhp_ok.nm_obat, kodesatuan.satuan, "+
                        "obatbhp_ok.hargasatuan from obatbhp_ok inner join kodesatuan "+
                        "on obatbhp_ok.kode_sat=kodesatuan.kode_sat "+

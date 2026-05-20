@@ -1066,6 +1066,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try{     
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("SELECT * FROM bridging_rujukan_bpjs_khusus where tglrujukan_awal between ? and ? "+
                     (TCari.getText().trim().equals("")?"":"and (no_rujukan like ? or nokapst like ? or nmpst like ?)")+" order by tglrujukan_awal");
             try {
@@ -1106,6 +1107,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             Valid.tabelKosong(tabMode2);
             Valid.tabelKosong(tabMode3);
             try{     
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select * from bridging_rujukan_bpjs_khusus_diagnosa where no_rujukan=? order by status");
                 try {
                     ps.setString(1,tbProgramPRB.getValueAt(tbProgramPRB.getSelectedRow(),0).toString());
@@ -1126,6 +1128,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     }
                 }
                 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select * from bridging_rujukan_bpjs_khusus_prosedur where no_rujukan=?");
                 try {
                     ps.setString(1,tbProgramPRB.getValueAt(tbProgramPRB.getSelectedRow(),0).toString());

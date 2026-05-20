@@ -86,6 +86,7 @@ public class ApiMEDQLAB {
     
     public void kirimRalan(String nopermintaan) {
         try {
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement(
                     "select permintaan_lab.noorder,permintaan_lab.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,permintaan_lab.tgl_permintaan,"+
                     "if(permintaan_lab.jam_permintaan='00:00:00','',permintaan_lab.jam_permintaan) as jam_permintaan,pasien.tgl_lahir,pasien.jk,pasien.alamat,"+
@@ -107,6 +108,7 @@ public class ApiMEDQLAB {
                     headers.add("X-Time",String.valueOf(GetUTCdatetimeAsString()));
                     headers.add("X-Sign",getSignature());
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select permintaan_pemeriksaan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan "+
                             "from permintaan_pemeriksaan_lab inner join jns_perawatan_lab on permintaan_pemeriksaan_lab.kd_jenis_prw=jns_perawatan_lab.kd_jenis_prw "+
@@ -121,6 +123,7 @@ public class ApiMEDQLAB {
                                     "\"id_test\": \""+rs2.getString("kd_jenis_prw")+"\"," +
                                     "\"nama_test\": \""+rs2.getString("nm_perawatan")+"\"" +
                                 "},";
+                            koneksi=koneksiDB.condb();
                             ps3=koneksi.prepareStatement(
                                     "select permintaan_detail_permintaan_lab.id_template,template_laboratorium.Pemeriksaan,"+
                                     "template_laboratorium.urut from permintaan_detail_permintaan_lab "+
@@ -221,6 +224,7 @@ public class ApiMEDQLAB {
     
     public void kirimRanap(String nopermintaan) {
         try {
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement(
                     "select permintaan_lab.noorder,permintaan_lab.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,permintaan_lab.tgl_permintaan,reg_periksa.kd_pj,"+
                     "if(permintaan_lab.jam_permintaan='00:00:00','',permintaan_lab.jam_permintaan) as jam_permintaan,pasien.jk,pasien.alamat,"+
@@ -243,6 +247,7 @@ public class ApiMEDQLAB {
                     headers.add("X-Time",String.valueOf(GetUTCdatetimeAsString()));
                     headers.add("X-Sign",getSignature());
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select permintaan_pemeriksaan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan "+
                             "from permintaan_pemeriksaan_lab inner join jns_perawatan_lab on permintaan_pemeriksaan_lab.kd_jenis_prw=jns_perawatan_lab.kd_jenis_prw "+
@@ -257,6 +262,7 @@ public class ApiMEDQLAB {
                                     "\"id_test\": \""+rs2.getString("kd_jenis_prw")+"\"," +
                                     "\"nama_test\": \""+rs2.getString("nm_perawatan")+"\"" +
                                 "},";
+                            koneksi=koneksiDB.condb();
                             ps3=koneksi.prepareStatement(
                                     "select permintaan_detail_permintaan_lab.id_template,template_laboratorium.Pemeriksaan,"+
                                     "template_laboratorium.urut from permintaan_detail_permintaan_lab "+

@@ -1219,6 +1219,7 @@ private void btnJenisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select perpustakaan_buku.kode_buku,perpustakaan_buku.judul_buku, perpustakaan_buku.jml_halaman,perpustakaan_penerbit.nama_penerbit,perpustakaan_pengarang.nama_pengarang,perpustakaan_buku.thn_terbit,"+
                 "perpustakaan_buku.isbn,perpustakaan_kategori.nama_kategori,perpustakaan_jenis_buku.nama_jenis from perpustakaan_buku inner join perpustakaan_penerbit on perpustakaan_buku.kode_penerbit=perpustakaan_penerbit.kode_penerbit "+
@@ -1293,6 +1294,7 @@ private void btnJenisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 nm_jenis.setText(tbJnsPerawatan.getValueAt(tbJnsPerawatan.getSelectedRow(),8).toString());
                 ThnTerbit.setSelectedItem(tbJnsPerawatan.getValueAt(tbJnsPerawatan.getSelectedRow(),5).toString());
                 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                        "select perpustakaan_buku.kode_buku, perpustakaan_buku.judul_buku, perpustakaan_buku.jml_halaman, "+
                        "perpustakaan_buku.kode_penerbit, perpustakaan_buku.kode_pengarang, perpustakaan_buku.thn_terbit, perpustakaan_buku.isbn,"+

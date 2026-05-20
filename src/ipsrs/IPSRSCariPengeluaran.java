@@ -821,6 +821,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
       Valid.textKosong(TCari,tbDokter.getValueAt(tbDokter.getSelectedRow(),1).toString());
   }else{
      try {
+         koneksi=koneksiDB.condb();
          psdetailpengeluaran=koneksi.prepareStatement("select kode_brng,jumlah,total from ipsrsdetailpengeluaran where no_keluar=? ");
          try {
             Sequel.AutoComitFalse();
@@ -1029,6 +1030,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{     
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select ipsrspengeluaran.tanggal,ipsrspengeluaran.no_keluar,ipsrspengeluaran.keterangan,ipsrspengeluaran.nip,petugas.nama "+
                     " from ipsrspengeluaran inner join petugas on ipsrspengeluaran.nip=petugas.nip "+
@@ -1059,6 +1061,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 ttltagihan=0;
                 while(rs.next()){
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)+", "+rs.getString(5),"Stok Keluar :","","","","",""});    
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select ipsrsdetailpengeluaran.kode_brng,ipsrsbarang.nama_brng, ipsrsdetailpengeluaran.kode_sat,kodesatuan.satuan,"+
                         "ipsrsdetailpengeluaran.jumlah,ipsrsdetailpengeluaran.harga,ipsrsdetailpengeluaran.total "+
@@ -1126,6 +1129,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil2(){
         Valid.tabelKosong(tabMode2);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select ipsrspengeluaran.no_keluar,ipsrspengeluaran.tanggal,ipsrspengeluaran.nip,"+
                     "ipsrspengeluaran.keterangan,petugas.nama,ipsrsdetailpengeluaran.kode_brng,"+

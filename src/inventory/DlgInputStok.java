@@ -869,6 +869,7 @@ public class DlgInputStok extends javax.swing.JDialog {
                 }else if(tbDokter.getSelectedColumn()==11){
                     try {
                         if(!tbDokter.getValueAt(tbDokter.getSelectedRow(),11).toString().equals("")){
+                            koneksi=koneksiDB.condb();
                             psstok=koneksi.prepareStatement("select data_batch.no_faktur,data_batch."+hppfarmasi+" as dasar,data_batch.tgl_kadaluarsa from data_batch where data_batch.no_batch=? and data_batch.kode_brng=? and data_batch.sisa>0 order by data_batch.tgl_kadaluarsa limit 1");
                             try {
                                 psstok.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),11).toString());
@@ -1108,6 +1109,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 try {
                     stokbarang=0;
                     if(aktifkanbatch.equals("yes")){
+                        koneksi=koneksiDB.condb();
                         psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch=? and gudangbarang.no_faktur=?");
                         try {
                             psstok.setString(1,kdgudang.getText());
@@ -1129,6 +1131,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                             }
                         }
                     }else{
+                        koneksi=koneksiDB.condb();
                         psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                         try {
                             psstok.setString(1,kdgudang.getText());
@@ -1321,6 +1324,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 file.createNewFile();
                 fileWriter = new FileWriter(file);
                 StringBuilder iyembuilder = new StringBuilder();
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select data_batch.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,data_batch."+hppfarmasi+" as dasar, "+
                     "data_batch.sisa,data_batch.no_batch,data_batch.no_faktur,data_batch.tgl_kadaluarsa from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "+
@@ -1371,6 +1375,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 file.createNewFile();
                 fileWriter = new FileWriter(file);
                 StringBuilder iyembuilder = new StringBuilder();
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select data_batch.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,data_batch."+hppfarmasi+" as dasar, "+
                     "gudangbarang.stok as sisa,data_batch.no_batch,data_batch.no_faktur,data_batch.tgl_kadaluarsa from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "+
@@ -1430,6 +1435,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 file.createNewFile();
                 fileWriter = new FileWriter(file);
                 StringBuilder iyembuilder = new StringBuilder();
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select data_batch.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,data_batch."+hppfarmasi+" as dasar, "+
                     "data_batch.sisa,data_batch.no_batch,data_batch.no_faktur,data_batch.tgl_kadaluarsa from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "+
@@ -1481,6 +1487,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 file.createNewFile();
                 fileWriter = new FileWriter(file);
                 StringBuilder iyembuilder = new StringBuilder();
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select data_batch.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,data_batch."+hppfarmasi+" as dasar, "+
                     "gudangbarang.stok as sisa,data_batch.no_batch,data_batch.no_faktur,data_batch.tgl_kadaluarsa from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "+
@@ -1540,6 +1547,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 file.createNewFile();
                 fileWriter = new FileWriter(file);
                 StringBuilder iyembuilder = new StringBuilder();
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select data_batch.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,data_batch."+hppfarmasi+" as dasar, "+
                     "data_batch.sisa,data_batch.no_batch,data_batch.no_faktur,data_batch.tgl_kadaluarsa from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "+
@@ -1591,6 +1599,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 file.createNewFile();
                 fileWriter = new FileWriter(file);
                 StringBuilder iyembuilder = new StringBuilder();
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select data_batch.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,data_batch."+hppfarmasi+" as dasar, "+
                     "gudangbarang.stok as sisa,data_batch.no_batch,data_batch.no_faktur,data_batch.tgl_kadaluarsa from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "+
@@ -1650,6 +1659,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 file.createNewFile();
                 fileWriter = new FileWriter(file);
                 StringBuilder iyembuilder = new StringBuilder();
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select data_batch.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,data_batch."+hppfarmasi+" as dasar, "+
                     "data_batch.sisa,data_batch.no_batch,data_batch.no_faktur,data_batch.tgl_kadaluarsa from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "+
@@ -1701,6 +1711,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 file.createNewFile();
                 fileWriter = new FileWriter(file);
                 StringBuilder iyembuilder = new StringBuilder();
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select data_batch.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,data_batch."+hppfarmasi+" as dasar, "+
                     "gudangbarang.stok as sisa,data_batch.no_batch,data_batch.no_faktur,data_batch.tgl_kadaluarsa from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "+
@@ -1760,6 +1771,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 file.createNewFile();
                 fileWriter = new FileWriter(file);
                 StringBuilder iyembuilder = new StringBuilder();
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select data_batch.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,data_batch."+hppfarmasi+" as dasar, "+
                     "data_batch.sisa,data_batch.no_batch,data_batch.no_faktur,data_batch.tgl_kadaluarsa from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "+
@@ -1811,6 +1823,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 file.createNewFile();
                 fileWriter = new FileWriter(file);
                 StringBuilder iyembuilder = new StringBuilder();
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select data_batch.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,data_batch."+hppfarmasi+" as dasar, "+
                     "gudangbarang.stok as sisa,data_batch.no_batch,data_batch.no_faktur,data_batch.tgl_kadaluarsa from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "+
@@ -1870,6 +1883,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 file.createNewFile();
                 fileWriter = new FileWriter(file);
                 StringBuilder iyembuilder = new StringBuilder();
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select data_batch.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,data_batch."+hppfarmasi+" as dasar, "+
                     "data_batch.sisa,data_batch.no_batch,data_batch.no_faktur,data_batch.tgl_kadaluarsa from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "+
@@ -1921,6 +1935,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 file.createNewFile();
                 fileWriter = new FileWriter(file);
                 StringBuilder iyembuilder = new StringBuilder();
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select data_batch.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,data_batch."+hppfarmasi+" as dasar, "+
                     "gudangbarang.stok as sisa,data_batch.no_batch,data_batch.no_faktur,data_batch.tgl_kadaluarsa from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "+
@@ -2072,6 +2087,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement(
                 "select databarang.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,databarang."+hppfarmasi+" as dasar,"+
                 "if(databarang.expire='0000-00-00','',databarang.expire) as expire from databarang inner join jenis "+
@@ -2227,6 +2243,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     if(Double.parseDouble(tabMode.getValueAt(i,0).toString())>=0){
                         stokbarang=0;   
                         if(aktifkanbatch.equals("yes")){
+                            koneksi=koneksiDB.condb();
                             psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch=? and gudangbarang.no_faktur=?");
                             try{
                                 psstok.setString(1,kdgudang.getText());
@@ -2248,6 +2265,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                                 }
                             }
                         }else{
+                            koneksi=koneksiDB.condb();
                             psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                             try{
                                 psstok.setString(1,kdgudang.getText());
@@ -2384,6 +2402,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private void BelumOpname() {
         try{  
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement("select databarang.kode_brng, databarang.nama_brng,jenis.nama, databarang.kode_sat, "+
                     "databarang."+hppfarmasi+" as dasar from databarang inner join jenis on databarang.kdjns=jenis.kdjns "+
                     "where databarang.kode_brng not in (select opname.kode_brng from opname where opname.tanggal=? and opname.kd_bangsal=?) and databarang.status='1' and "+
@@ -2421,6 +2440,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private void SudahOpname(){
         try{  
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement("select databarang.kode_brng, databarang.nama_brng,jenis.nama, databarang.kode_sat, "+
                     "databarang."+hppfarmasi+" as dasar from databarang inner join jenis on databarang.kdjns=jenis.kdjns "+
                     "where databarang.kode_brng in (select opname.kode_brng from opname where opname.tanggal=? and opname.kd_bangsal=?) and databarang.status='1' and "+

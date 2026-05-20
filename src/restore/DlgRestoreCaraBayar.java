@@ -406,6 +406,7 @@ public final class DlgRestoreCaraBayar extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select kd_pj, png_jawab, nama_perusahaan, alamat_asuransi, no_telp,attn "+
                     "from penjab where status='0' and (kd_pj like ? or png_jawab like ?) order by png_jawab ");

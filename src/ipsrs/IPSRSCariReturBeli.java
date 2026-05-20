@@ -696,6 +696,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(TCari,"No.Faktur");
         }else{
           try {
+             koneksi=koneksiDB.condb();
              pscaripesan=koneksi.prepareStatement("select no_retur_beli, total from ipsrsreturbeli where no_retur_beli=?");
              try {
                 pscaripesan.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());
@@ -703,6 +704,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 if(rs.next()){
                     Sequel.AutoComitFalse();
                     sukses=true;
+                    koneksi=koneksiDB.condb();
                     psipsrs_detail_returbeli=koneksi.prepareStatement("select kode_brng,jml_retur from ipsrs_detail_returbeli where no_retur_beli=? ");
                     try {
                         psipsrs_detail_returbeli.setString(1,rs.getString(1));
@@ -1023,6 +1025,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             if(!nmbar.getText().equals("")){
                 caribarang= " and ipsrsbarang.nama_brng like '%"+nmbar.getText()+"%' ";
             }
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select ipsrsreturbeli.no_retur_beli,ipsrsreturbeli.kode_suplier,ipsrssuplier.nama_suplier, "+
                     "ipsrsreturbeli.nip,petugas.nama,ipsrsreturbeli.tgl_retur,ipsrsreturbeli.catatan "+
@@ -1047,6 +1050,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                           rs.getString("nip")+" "+rs.getString("nama"),rs.getString("catatan"),"","",""
                     });  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select ipsrs_detail_returbeli.kode_brng,ipsrsbarang.nama_brng, "+
                         "ipsrs_detail_returbeli.kode_sat,kodesatuan.satuan,ipsrs_detail_returbeli.jml_retur,ipsrs_detail_returbeli.h_retur, "+
                         "ipsrs_detail_returbeli.h_beli,ipsrs_detail_returbeli.total,ipsrs_detail_returbeli.no_faktur "+

@@ -749,6 +749,7 @@ private void btnPoliBPJSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement(
                    "select maping_tindakan_ranap_pcare.kd_jenis_prw,jns_perawatan_inap.nm_perawatan,maping_tindakan_ranap_pcare.kd_tindakan_pcare,maping_tindakan_ranap_pcare.nm_tindakan_pcare "+
                    "from maping_tindakan_ranap_pcare inner join jns_perawatan_inap on maping_tindakan_ranap_pcare.kd_jenis_prw=jns_perawatan_inap.kd_jenis_prw  where "+

@@ -1254,6 +1254,7 @@ public class DlgBookingPeriksa extends javax.swing.JFrame {
         aktif=true;
         runBackground(() ->tampil());
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from set_alamat_pasien");
             try {
                 rs=ps.executeQuery();
@@ -1274,6 +1275,7 @@ public class DlgBookingPeriksa extends javax.swing.JFrame {
                 }
             }
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from set_kelengkapan_data_pasien");
             try {
                 rs=ps.executeQuery();
@@ -1298,6 +1300,7 @@ public class DlgBookingPeriksa extends javax.swing.JFrame {
                 }
             }
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from set_urut_no_rkm_medis");
             try {
                 rs=ps.executeQuery();
@@ -2144,6 +2147,7 @@ public class DlgBookingPeriksa extends javax.swing.JFrame {
                 pilihtampil="booking_periksa.tanggal between '"+Valid.SetTgl(DTPCari3.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari4.getSelectedItem()+"")+"' ";
             }
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select booking_periksa.no_booking,booking_periksa.tanggal,booking_periksa.nama,booking_periksa.alamat,booking_periksa.no_telp,booking_periksa.email,booking_periksa.kd_poli,poliklinik.nm_poli,"+
                     "booking_periksa.tambahan_pesan,booking_periksa.status,booking_periksa.tanggal_booking from booking_periksa inner join poliklinik on booking_periksa.kd_poli=poliklinik.kd_poli "+

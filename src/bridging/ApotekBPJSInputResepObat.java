@@ -907,6 +907,7 @@ public final class ApotekBPJSInputResepObat extends javax.swing.JDialog {
                     if(JADIKANPIUTANGAPOTEKBPJS.equals("yes")){
                         sisacari=0;
                         try {
+                            koneksi=koneksiDB.condb();
                             psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                             try {
                                 psstok.setString(1,kdgudang.getText());
@@ -950,6 +951,7 @@ public final class ApotekBPJSInputResepObat extends javax.swing.JDialog {
                         if(JADIKANPIUTANGAPOTEKBPJS.equals("yes")){
                             sisacari=0;
                             try {
+                                koneksi=koneksiDB.condb();
                                 psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                                 try {
                                     psstok.setString(1,kdgudang.getText());
@@ -1435,6 +1437,7 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                         if(JADIKANPIUTANGAPOTEKBPJS.equals("yes")){
                             sisacari=0;
                             try {
+                                koneksi=koneksiDB.condb();
                                 psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                                 try {
                                     psstok.setString(1,kdgudang.getText());
@@ -1484,6 +1487,7 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     if(JADIKANPIUTANGAPOTEKBPJS.equals("yes")){
                         sisacari=0;
                         try {
+                            koneksi=koneksiDB.condb();
                             psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                             try {
                                 psstok.setString(1,kdgudang.getText());
@@ -1725,6 +1729,7 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         }
            
         try {
+            koneksi=koneksiDB.condb();
             psstok=koneksi.prepareStatement(
                 "select antrianiterasi.status from antrianiterasi where antrianiterasi.no_resep=?"
             );
@@ -1753,6 +1758,7 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
             Valid.tabelKosong(tabModeObatRacikan);
             Valid.tabelKosong(tabModeDetailObatRacikan);
             if(kenaikan>0){
+                koneksi=koneksiDB.condb();
                 psobat=koneksi.prepareStatement(
                     "select maping_obat_apotek_bpjs.kode_brng_apotek_bpjs,maping_obat_apotek_bpjs.nama_brng_apotek_bpjs,databarang.kode_brng,databarang.kode_sat,databarang.expire,"+
                     "(databarang.h_beli+(databarang.h_beli*?)) as harga,databarang."+hppfarmasi+" as dasar,resep_dokter.jml,resep_dokter.aturan_pakai from databarang "+
@@ -1768,6 +1774,7 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                         double jumlahpiutang=0,jumlahralan=0;
                         if(JADIKANPIUTANGAPOTEKBPJS.equals("yes")){
                             sisacari=0;
+                            koneksi=koneksiDB.condb();
                             psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                             try {
                                 psstok.setString(1,kdgudang.getText());
@@ -1830,6 +1837,7 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     }
                 }                                                      
             }else{   
+                koneksi=koneksiDB.condb();
                 psobat=koneksi.prepareStatement(
                     "select maping_obat_apotek_bpjs.kode_brng_apotek_bpjs,maping_obat_apotek_bpjs.nama_brng_apotek_bpjs,databarang.kode_brng,databarang.kode_sat,databarang.expire,"+
                     "databarang.ralan as harga,databarang."+hppfarmasi+" as dasar,resep_dokter.jml,resep_dokter.aturan_pakai from databarang "+
@@ -1844,6 +1852,7 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                         double jumlahpiutang=0,jumlahralan=0;
                         if(JADIKANPIUTANGAPOTEKBPJS.equals("yes")){
                             sisacari=0;
+                            koneksi=koneksiDB.condb();
                             psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                             try {
                                 psstok.setString(1,kdgudang.getText());
@@ -1908,6 +1917,7 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 }
             } 
             
+            koneksi=koneksiDB.condb();
             psobat=koneksi.prepareStatement(
                     "select resep_dokter_racikan.no_racik,resep_dokter_racikan.nama_racik,"+
                     "resep_dokter_racikan.kd_racik,metode_racik.nm_racik as metode,"+
@@ -1946,6 +1956,7 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                         }
                         
                         if(kenaikan>0){
+                            koneksi=koneksiDB.condb();
                             ps2=koneksi.prepareStatement(
                                 "select maping_obat_apotek_bpjs.kode_brng_apotek_bpjs,maping_obat_apotek_bpjs.nama_brng_apotek_bpjs,resep_dokter_racikan_detail.jml,"+
                                 "databarang.kode_sat,(databarang.h_beli+(databarang.h_beli*?)) as harga,databarang."+hppfarmasi+" as dasar,databarang.kode_brng,databarang.expire "+
@@ -1962,6 +1973,7 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                                     double jumlahpiutang=0,jumlahralan=0;
                                     if(JADIKANPIUTANGAPOTEKBPJS.equals("yes")){
                                         sisacari=0;
+                                        koneksi=koneksiDB.condb();
                                         psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                                         try {
                                             psstok.setString(1,kdgudang.getText());
@@ -2004,6 +2016,7 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                                 }
                             }
                         }else{
+                            koneksi=koneksiDB.condb();
                             ps2=koneksi.prepareStatement(
                                 "select maping_obat_apotek_bpjs.kode_brng_apotek_bpjs,maping_obat_apotek_bpjs.nama_brng_apotek_bpjs,resep_dokter_racikan_detail.jml,"+
                                 "databarang.kode_sat,databarang.ralan as harga,databarang."+hppfarmasi+" as dasar,databarang.kode_brng,databarang.expire "+
@@ -2019,6 +2032,7 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                                     double jumlahpiutang=0,jumlahralan=0;
                                     if(JADIKANPIUTANGAPOTEKBPJS.equals("yes")){
                                         sisacari=0;
+                                        koneksi=koneksiDB.condb();
                                         psstok=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                                         try {
                                             psstok.setString(1,kdgudang.getText());

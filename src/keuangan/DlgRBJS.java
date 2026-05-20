@@ -573,6 +573,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void prosesCari() {
        Valid.tabelKosong(tabMode);      
        try{      
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement("select penjab.kd_pj,penjab.png_jawab from penjab "+(nmbayar.getText().trim().equals("")?"":"where penjab.kd_pj=? ")+" order by penjab.png_jawab");
            try {
                 if(!nmbayar.getText().trim().equals("")){
@@ -588,18 +589,21 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                    a=0;
                    //rawat jalan   
                    if(chkRalan.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         psralanpr=koneksi.prepareStatement(
                             "select jns_perawatan.nm_perawatan,rawat_jl_pr.material,count(rawat_jl_pr.kd_jenis_prw) as jml,sum(rawat_jl_pr.material) as total "+
                             "from reg_periksa inner join rawat_jl_pr on rawat_jl_pr.no_rawat=reg_periksa.no_rawat inner join jns_perawatan "+
                             "on rawat_jl_pr.kd_jenis_prw=jns_perawatan.kd_jenis_prw where reg_periksa.tgl_registrasi between ? and ? and "+
                             "reg_periksa.kd_pj=? and rawat_jl_pr.material>0 "+
                             "group by rawat_jl_pr.kd_jenis_prw order by jns_perawatan.nm_perawatan");
+                        koneksi=koneksiDB.condb();
                         psralandrpr=koneksi.prepareStatement(
                             "select jns_perawatan.nm_perawatan,rawat_jl_drpr.material,count(rawat_jl_drpr.kd_jenis_prw) as jml,sum(rawat_jl_drpr.material) as total "+
                             "from reg_periksa inner join rawat_jl_drpr on rawat_jl_drpr.no_rawat=reg_periksa.no_rawat inner join jns_perawatan "+
                             "on rawat_jl_drpr.kd_jenis_prw=jns_perawatan.kd_jenis_prw where reg_periksa.tgl_registrasi between ? and ? and "+
                             "reg_periksa.kd_pj=? and rawat_jl_drpr.material>0 "+
                             "group by rawat_jl_drpr.kd_jenis_prw order by jns_perawatan.nm_perawatan");
+                        koneksi=koneksiDB.condb();
                         psralandr=koneksi.prepareStatement(
                             "select jns_perawatan.nm_perawatan,rawat_jl_dr.material,count(rawat_jl_dr.kd_jenis_prw) as jml,sum(rawat_jl_dr.material) as total "+
                             "from reg_periksa inner join rawat_jl_dr on rawat_jl_dr.no_rawat=reg_periksa.no_rawat inner join jns_perawatan "+
@@ -679,6 +683,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                    
                    //rawat inap               
                    if(chkRanap.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         psranappr=koneksi.prepareStatement(
                                 "select jns_perawatan_inap.nm_perawatan,rawat_inap_pr.material,count(rawat_inap_pr.kd_jenis_prw) as jml,sum(rawat_inap_pr.material) as total "+
                                 "from jns_perawatan_inap inner join rawat_inap_pr inner join reg_periksa "+
@@ -687,6 +692,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                 "where rawat_inap_pr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? "+
                                 "and rawat_inap_pr.material>0 "+
                                 "group by rawat_inap_pr.kd_jenis_prw order by jns_perawatan_inap.nm_perawatan  ");
+                        koneksi=koneksiDB.condb();
                         psranapdrpr=koneksi.prepareStatement("select jns_perawatan_inap.nm_perawatan,rawat_inap_drpr.material,"+
                                 "count(rawat_inap_drpr.kd_jenis_prw) as jml, " +
                                 "sum(rawat_inap_drpr.material) as total "+
@@ -696,6 +702,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                 "where rawat_inap_drpr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? "+
                                 "and rawat_inap_drpr.material>0 "+
                                 "group by rawat_inap_drpr.kd_jenis_prw order by jns_perawatan_inap.nm_perawatan  ");
+                        koneksi=koneksiDB.condb();
                         psranapdr=koneksi.prepareStatement("select jns_perawatan_inap.nm_perawatan,rawat_inap_dr.material,"+
                                 "count(rawat_inap_dr.kd_jenis_prw) as jml, " +
                                 "sum(rawat_inap_dr.material) as total "+
@@ -776,6 +783,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                    }
                    
                    if(chkOperasi.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         psbiayaalat=koneksi.prepareStatement("select paket_operasi.nm_perawatan,operasi.biayaalat,"+
                             "count(operasi.kode_paket) as jml, " +
                             "sum(operasi.biayaalat) as total "+
@@ -783,6 +791,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             "on operasi.no_rawat=reg_periksa.no_rawat and operasi.kode_paket=paket_operasi.kode_paket "+
                             "where operasi.tgl_operasi between ? and ? and reg_periksa.kd_pj=? "+
                             "and operasi.biayaalat>0 group by operasi.kode_paket order by paket_operasi.nm_perawatan  ");
+                        koneksi=koneksiDB.condb();
                         psbiayasewaok=koneksi.prepareStatement("select paket_operasi.nm_perawatan,operasi.biayasewaok,"+
                             "count(operasi.kode_paket) as jml, " +
                             "sum(operasi.biayasewaok) as total "+
@@ -790,6 +799,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             "on operasi.no_rawat=reg_periksa.no_rawat and operasi.kode_paket=paket_operasi.kode_paket "+
                             "where operasi.tgl_operasi between ? and ? and reg_periksa.kd_pj=? "+
                             "and operasi.biayasewaok>0 group by operasi.kode_paket order by paket_operasi.nm_perawatan  ");
+                        koneksi=koneksiDB.condb();
                         psakomodasi=koneksi.prepareStatement("select paket_operasi.nm_perawatan,operasi.akomodasi,"+
                             "count(operasi.kode_paket) as jml, " +
                             "sum(operasi.akomodasi) as total "+
@@ -797,6 +807,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             "on operasi.no_rawat=reg_periksa.no_rawat and operasi.kode_paket=paket_operasi.kode_paket "+
                             "where operasi.tgl_operasi between ? and ? and reg_periksa.kd_pj=? "+
                             "and operasi.akomodasi>0 group by operasi.kode_paket order by paket_operasi.nm_perawatan  ");
+                        koneksi=koneksiDB.condb();
                         psbiayasarpras=koneksi.prepareStatement("select paket_operasi.nm_perawatan,operasi.biayasarpras,"+
                             "count(operasi.kode_paket) as jml, " +
                             "sum(operasi.biayasarpras) as total "+
@@ -896,6 +907,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                    }
                     
                    if(chkLaborat.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         psperiksalab=koneksi.prepareStatement("select jns_perawatan_lab.nm_perawatan,periksa_lab.bagian_rs,"+
                             "count(periksa_lab.kd_jenis_prw) as jml, " +
                             "sum(periksa_lab.bagian_rs) as total, "+
@@ -915,6 +927,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rsperiksalab.beforeFirst();
                             while(rsperiksalab.next()){ 
                                 detaillab=0;
+                                koneksi=koneksiDB.condb();
                                 psdetaillab=koneksi.prepareStatement(
                                     "select sum(detail_periksa_lab.bagian_rs) as total from "+
                                     "detail_periksa_lab inner join jns_perawatan_lab inner join reg_periksa inner join "+
@@ -964,6 +977,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                    
                    //pemeriksaan radiologi
                    if(chkRadiologi.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         psperiksaradiologi=koneksi.prepareStatement(
                             "select jns_perawatan_radiologi.nm_perawatan,periksa_radiologi.bagian_rs,"+
                             "count(periksa_radiologi.kd_jenis_prw) as jml, " +

@@ -385,6 +385,7 @@ public final class DlgCariICD9 extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from icd9 order by icd9.kode");
             try{
                 rs=ps.executeQuery();

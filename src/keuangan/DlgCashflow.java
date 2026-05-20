@@ -314,6 +314,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
        try{   
             tabMode.addRow(new Object[]{"A. Kas Awal : ","",""});     
             tabMode.addRow(new Object[]{"","Rekening","Saldo Awal"});
+            koneksi=koneksiDB.condb();
             rs=koneksi.prepareStatement("select rekening.kd_rek, rekening.nm_rek, sum(rekeningtahun.saldo_awal) "+
                                            "from rekening inner join rekeningtahun "+
                                            "on rekening.kd_rek=rekeningtahun.kd_rek "+
@@ -367,6 +368,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
             tabMode.addRow(new Object[]{"","Rekening","Kas Masuk"});
             i=1;
             penerimaan=0;
+            koneksi=koneksiDB.condb();
             rs=koneksi.prepareStatement("select detailjurnal.kd_rek, rekening.nm_rek,(sum(detailjurnal.kredit)-sum(detailjurnal.debet)) as ttlkredit "+
                                             " from jurnal inner join detailjurnal inner join rekening "+
                                             " on jurnal.no_jurnal=detailjurnal.no_jurnal "+
@@ -388,6 +390,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 i++;
             } 
             /*
+            koneksi=koneksiDB.condb();
             rs=koneksi.prepareStatement("select detailjurnal.kd_rek, rekening.nm_rek,(sum(detailjurnal.kredit)-sum(detailjurnal.debet)) as ttlkredit "+
                                             " from jurnal inner join detailjurnal inner join rekening "+
                                             " on jurnal.no_jurnal=detailjurnal.no_jurnal "+
@@ -420,6 +423,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
             tabMode.addRow(new Object[]{"","Rekening","Kas Keluar"});
             i=1;
             pengeluaran=0;
+            koneksi=koneksiDB.condb();
             rs=koneksi.prepareStatement("select detailjurnal.kd_rek, rekening.nm_rek,(sum(detailjurnal.debet)-sum(detailjurnal.kredit)) as ttldebet "+
                                             " from jurnal inner join detailjurnal inner join rekening "+
                                             " on jurnal.no_jurnal=detailjurnal.no_jurnal "+

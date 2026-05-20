@@ -881,6 +881,7 @@ public final class InventoryCariResepLuar extends javax.swing.JDialog {
         }else if(tbResep.getSelectedRow()>-1){
             if(!tbResep.getValueAt(tbResep.getSelectedRow(),0).toString().equals("")){
                 try{  
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement("select resep_luar.no_resep,resep_luar.tgl_perawatan,resep_luar.jam,reg_periksa.kd_pj,"+
                             " resep_luar.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,resep_luar.kd_dokter,dokter.nm_dokter "+
                             " from resep_luar inner join reg_periksa on resep_luar.no_rawat=reg_periksa.no_rawat "+
@@ -892,6 +893,7 @@ public final class InventoryCariResepLuar extends javax.swing.JDialog {
                         if(rs.next()){
                             i=0;
                             Sequel.queryu("delete from temporary_resep where temp37='"+akses.getalamatip()+"'");
+                            koneksi=koneksiDB.condb();
                             ps2=koneksi.prepareStatement(
                                 "select databarang.kode_brng,databarang.nama_brng,resep_luar_obat.jml,kodesatuan.satuan,"+
                                 "resep_luar_obat.aturan_pakai from resep_luar_obat inner join databarang on resep_luar_obat.kode_brng=databarang.kode_brng "+
@@ -916,6 +918,7 @@ public final class InventoryCariResepLuar extends javax.swing.JDialog {
                                 }
                             }
 
+                            koneksi=koneksiDB.condb();
                             psracikan=koneksi.prepareStatement(
                                     "select resep_luar_racikan.no_racik,resep_luar_racikan.nama_racik,"+
                                     "resep_luar_racikan.kd_racik,metode_racik.nm_racik as metode,"+
@@ -928,6 +931,7 @@ public final class InventoryCariResepLuar extends javax.swing.JDialog {
                                 rsracikan=psracikan.executeQuery();
                                 while(rsracikan.next()){
                                     rincianobat="";
+                                    koneksi=koneksiDB.condb();
                                     ps2=koneksi.prepareStatement(
                                         "select databarang.kode_brng,databarang.nama_brng,resep_luar_racikan_detail.jml,kodesatuan.satuan from "+
                                         "resep_luar_racikan_detail inner join databarang on resep_luar_racikan_detail.kode_brng=databarang.kode_brng "+
@@ -1098,6 +1102,7 @@ public final class InventoryCariResepLuar extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select resep_luar.no_resep,resep_luar.tgl_perawatan,resep_luar.jam,resep_luar.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,resep_luar.kd_dokter,dokter.nm_dokter "+
                     "from resep_luar inner join reg_periksa on resep_luar.no_rawat=reg_periksa.no_rawat "+
@@ -1126,6 +1131,7 @@ public final class InventoryCariResepLuar extends javax.swing.JDialog {
                         rs.getString("nm_dokter")
                     });
                     tabMode.addRow(new Object[]{"","Jumlah","Nama Obat","Aturan Pakai"});                
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select databarang.kode_brng,databarang.nama_brng,resep_luar_obat.jml,kodesatuan.satuan,"+
                         "resep_luar_obat.aturan_pakai from resep_luar_obat inner join databarang on resep_luar_obat.kode_brng=databarang.kode_brng "+
@@ -1149,6 +1155,7 @@ public final class InventoryCariResepLuar extends javax.swing.JDialog {
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     psracikan=koneksi.prepareStatement(
                             "select resep_luar_racikan.no_racik,resep_luar_racikan.nama_racik,"+
                             "resep_luar_racikan.kd_racik,metode_racik.nm_racik as metode,"+
@@ -1164,6 +1171,7 @@ public final class InventoryCariResepLuar extends javax.swing.JDialog {
                                 "",rsracikan.getString("jml_dr")+" "+rsracikan.getString("metode"),rsracikan.getString("no_racik")+". "+rsracikan.getString("nama_racik")+", Keterangan : "+rsracikan.getString("keterangan"),rsracikan.getString("aturan_pakai")
                             });
                             
+                            koneksi=koneksiDB.condb();
                             ps2=koneksi.prepareStatement(
                                 "select databarang.kode_brng,databarang.nama_brng,resep_luar_racikan_detail.jml,kodesatuan.satuan from "+
                                 "resep_luar_racikan_detail inner join databarang on resep_luar_racikan_detail.kode_brng=databarang.kode_brng "+
@@ -1221,6 +1229,7 @@ public final class InventoryCariResepLuar extends javax.swing.JDialog {
         Valid.tabelKosong(tabmodeUbahRacikan);
         try {
             try {
+                koneksi=koneksiDB.condb();
                 ps2=koneksi.prepareStatement(
                         "select resep_luar_obat.kode_brng,databarang.nama_brng,resep_luar_obat.jml,resep_luar_obat.aturan_pakai from resep_luar_obat "+
                         "inner join databarang on resep_luar_obat.kode_brng=databarang.kode_brng where resep_luar_obat.no_resep=?");
@@ -1250,6 +1259,7 @@ public final class InventoryCariResepLuar extends javax.swing.JDialog {
         Valid.tabelKosong(tabmodeUbahRacikan2);
         try {
             try {
+                koneksi=koneksiDB.condb();
                 ps2=koneksi.prepareStatement(
                         "select resep_luar_racikan.no_racik,resep_luar_racikan.nama_racik,resep_luar_racikan.aturan_pakai from resep_luar_racikan where resep_luar_racikan.no_resep=?");
                 ps2.setString(1,NoResepUbah4.getText());

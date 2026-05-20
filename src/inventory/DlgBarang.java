@@ -2445,6 +2445,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         if(aktifkanbatch.equals("no")){
             try {
                 if(TCari.getText().trim().equals("")){
+                    koneksi=koneksiDB.condb();
                     ps = koneksi.prepareStatement(
                             "select databarang.kode_brng, databarang.nama_brng,databarang.kode_satbesar,satuanbesar.satuan as satuanbesar, "
                             + " databarang.isi,databarang.kode_sat,kodesatuan.satuan,databarang.letak_barang,databarang.dasar,databarang.h_beli,"
@@ -2461,6 +2462,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             + " inner join kategori_barang on databarang.kode_kategori=kategori_barang.kode "
                             + " where databarang.status='1' order by databarang.nama_brng");
                 }else{
+                    koneksi=koneksiDB.condb();
                     ps = koneksi.prepareStatement(
                             "select databarang.kode_brng, databarang.nama_brng,databarang.kode_satbesar,satuanbesar.satuan as satuanbesar, "
                             + " databarang.isi,databarang.kode_sat,kodesatuan.satuan,databarang.letak_barang,databarang.dasar,databarang.h_beli,"
@@ -2550,6 +2552,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             }
         }else if(aktifkanbatch.equals("yes")){
             try {
+                koneksi=koneksiDB.condb();
                 ps = koneksi.prepareStatement(
                       "select data_batch.kode_brng, databarang.nama_brng,databarang.kode_satbesar,satuanbesar.satuan as satuanbesar, "
                     + " databarang.kode_sat,kodesatuan.satuan,databarang.letak_barang,data_batch.dasar,data_batch.h_beli,"
@@ -2653,6 +2656,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                 qrystok="select sum(stok) from gudangbarang where kode_brng=? and kd_bangsal=? and no_batch='' and no_faktur=''";
             }
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps = koneksi.prepareStatement(
                         "select databarang.kode_brng, databarang.nama_brng,databarang.kode_satbesar,satuanbesar.satuan as satuanbesar, "
                         + " databarang.isi,databarang.kode_sat,kodesatuan.satuan,databarang.letak_barang,databarang.dasar,databarang.h_beli,"
@@ -2669,6 +2673,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         + " inner join kategori_barang on databarang.kode_kategori=kategori_barang.kode "
                         + " where databarang.status='1' order by databarang.nama_brng");
             }else{
+                koneksi=koneksiDB.condb();
                 ps = koneksi.prepareStatement(
                         "select databarang.kode_brng, databarang.nama_brng,databarang.kode_satbesar,satuanbesar.satuan as satuanbesar, "
                         + " databarang.isi,databarang.kode_sat,kodesatuan.satuan,databarang.letak_barang,databarang.dasar,databarang.h_beli,"
@@ -2742,12 +2747,14 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         rs.getString("golongan")
                     });
                     
+                    koneksi=koneksiDB.condb();
                     ps2 = koneksi.prepareStatement("select bangsal.kd_bangsal,bangsal.nm_bangsal from bangsal");
                     try {
                         rs2 = ps2.executeQuery();
                         totalstok = 0;
                         while (rs2.next()) {
                             stokgudang = 0;
+                            koneksi=koneksiDB.condb();
                             ps3 = koneksi.prepareStatement(qrystok);
                             try {
                                 ps3.setString(1, rs.getString(1));
@@ -2808,6 +2815,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                 qrystok="select sum(gudangbarang.stok) from gudangbarang where gudangbarang.kode_brng=? and gudangbarang.kd_bangsal=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''";
             }
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps = koneksi.prepareStatement(
                         "select databarang.kode_brng, databarang.nama_brng,databarang.kode_satbesar,satuanbesar.satuan as satuanbesar, "
                         + " databarang.isi,databarang.kode_sat,kodesatuan.satuan,databarang.letak_barang,databarang.dasar,databarang.h_beli,"
@@ -2824,6 +2832,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         + " inner join kategori_barang on databarang.kode_kategori=kategori_barang.kode "
                         + " where databarang.status='1' order by databarang.nama_brng");
             }else{
+                koneksi=koneksiDB.condb();
                 ps = koneksi.prepareStatement(
                         "select databarang.kode_brng, databarang.nama_brng,databarang.kode_satbesar,satuanbesar.satuan as satuanbesar, "
                         + " databarang.isi,databarang.kode_sat,kodesatuan.satuan,databarang.letak_barang,databarang.dasar,databarang.h_beli,"
@@ -2897,6 +2906,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         rs.getString("golongan")
                     });
                     stokgudang = 0;
+                    koneksi=koneksiDB.condb();
                     ps3 = koneksi.prepareStatement(qrystok);
                     try {
                         ps3.setString(1, rs.getString(1));
@@ -2944,6 +2954,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             if(aktifkanbatch.equals("yes")){
                 Valid.tabelKosong(tabMode);
                 try {
+                    koneksi=koneksiDB.condb();
                     ps4 = koneksi.prepareStatement(
                             "select databarang.kode_brng, databarang.nama_brng,databarang.kode_satbesar,satuanbesar.satuan as satuanbesar, "
                             + " databarang.isi,databarang.kode_sat,kodesatuan.satuan,databarang.letak_barang,data_batch.dasar,data_batch.h_beli,"
@@ -3021,6 +3032,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             }else{
                 Valid.tabelKosong(tabMode);
                 try {
+                    koneksi=koneksiDB.condb();
                     ps4 = koneksi.prepareStatement(
                             "select databarang.kode_brng, databarang.nama_brng,databarang.kode_satbesar,satuanbesar.satuan as satuanbesar, "
                             + " databarang.isi,databarang.kode_sat,kodesatuan.satuan,databarang.letak_barang,databarang.dasar,databarang.h_beli,"
@@ -3193,6 +3205,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                 Valid.textKosong(kdjns,"Kode Jenis");
                             }else{
                                 try{
+                                    koneksi=koneksiDB.condb();
                                     rs=koneksi.prepareStatement("select * from setpenjualan where setpenjualan.kdjns='"+kdjns.getText()+"'").executeQuery();
                                     if(rs.next()){
                                         ralan.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("ralan") / 100)),100)));
@@ -3220,6 +3233,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             break;
                         case "Umum":
                             try{
+                                koneksi=koneksiDB.condb();
                                 rs=koneksi.prepareStatement("select * from setpenjualanumum").executeQuery();
                                 if(rs.next()){
                                     ralan.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("ralan") / 100)),100)));
@@ -3248,6 +3262,7 @@ private void KapasitasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                 Valid.textKosong(Kd,"Kode Barang");
                             }else{
                                 try{
+                                    koneksi=koneksiDB.condb();
                                     rs=koneksi.prepareStatement("select * from setpenjualanperbarang where setpenjualanperbarang.kode_brng='"+Kd.getText()+"'").executeQuery();
                                     if(rs.next()){
                                         ralan.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("ralan") / 100)),100)));

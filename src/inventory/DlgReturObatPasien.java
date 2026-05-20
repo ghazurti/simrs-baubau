@@ -541,6 +541,7 @@ public final class DlgReturObatPasien extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{        
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement("select returpasien.tanggal, returpasien.no_rawat,concat(reg_periksa.no_rkm_medis,' ',pasien.nm_pasien) as pasien,"+
                       " concat(returpasien.kode_brng,' ',databarang.nama_brng) as barang, returpasien.jml,returpasien.kode_brng,returpasien.no_batch,returpasien.no_faktur "+
                       "from returpasien inner join reg_periksa inner join pasien inner join databarang "+
@@ -548,6 +549,7 @@ public final class DlgReturObatPasien extends javax.swing.JDialog {
                       "and returpasien.kode_brng=databarang.kode_brng "+
                       "where returpasien.tanggal between ? and ? order by returpasien.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement("select returpasien.tanggal, returpasien.no_rawat,concat(reg_periksa.no_rkm_medis,' ',pasien.nm_pasien) as pasien,"+
                       " concat(returpasien.kode_brng,' ',databarang.nama_brng) as barang, returpasien.jml,returpasien.kode_brng,returpasien.no_batch,returpasien.no_faktur "+
                       "from returpasien inner join reg_periksa inner join pasien inner join databarang "+

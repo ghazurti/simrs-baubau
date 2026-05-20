@@ -493,6 +493,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void prosesCari() {
         try {
             Valid.tabelKosong(tabMode);  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select ipsrsbarang.kode_brng, ipsrsbarang.nama_brng, kodesatuan.satuan, ipsrsbarang.jenis "+
                     "from ipsrsbarang inner join kodesatuan on ipsrsbarang.kode_sat=kodesatuan.kode_sat "+
@@ -507,6 +508,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 while(rs.next()){
                     jumlah=0;
                     total=0;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select sum(ipsrsdetailpengeluaran.jumlah) as jumlah,sum(ipsrsdetailpengeluaran.total) as total "+
                         "from ipsrsdetailpengeluaran inner join ipsrspengeluaran on ipsrsdetailpengeluaran.no_keluar=ipsrspengeluaran.no_keluar "+

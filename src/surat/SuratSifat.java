@@ -661,6 +661,7 @@ public final class SuratSifat extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from surat_sifat where kd like ? "+
                     "or sifat like ? order by kd");
             try {

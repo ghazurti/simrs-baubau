@@ -338,6 +338,7 @@ public final class RMCariKeluhan extends javax.swing.JDialog {
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pemeriksaan_ralan.tgl_perawatan,pemeriksaan_ralan.jam_rawat,pemeriksaan_ralan.keluhan "+
                     "from pemeriksaan_ralan where pemeriksaan_ralan.no_rawat=? and "+
@@ -368,6 +369,7 @@ public final class RMCariKeluhan extends javax.swing.JDialog {
         }
         
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pemeriksaan_ranap.tgl_perawatan,pemeriksaan_ranap.jam_rawat,pemeriksaan_ranap.keluhan "+
                     "from pemeriksaan_ranap where pemeriksaan_ranap.no_rawat=? and "+

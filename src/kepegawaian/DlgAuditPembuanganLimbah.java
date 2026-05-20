@@ -1082,6 +1082,7 @@ public final class DlgAuditPembuanganLimbah extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_pembuangan_limbah.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_pembuangan_limbah.tanggal,audit_pembuangan_limbah.pemisahan_limbah_oleh_penghasil_limbah,"+
                     "audit_pembuangan_limbah.limbah_infeksius_dimasukkan_kantong_kuning,audit_pembuangan_limbah.limbah_noninfeksius_dimasukkan_kantong_hitam,"+
@@ -1091,6 +1092,7 @@ public final class DlgAuditPembuanganLimbah extends javax.swing.JDialog {
                     "inner join ruang_audit_kepatuhan on audit_pembuangan_limbah.id_ruang=ruang_audit_kepatuhan.id_ruang "+
                     "where audit_pembuangan_limbah.tanggal between ? and ? order by audit_pembuangan_limbah.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_pembuangan_limbah.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_pembuangan_limbah.tanggal,audit_pembuangan_limbah.pemisahan_limbah_oleh_penghasil_limbah,"+
                     "audit_pembuangan_limbah.limbah_infeksius_dimasukkan_kantong_kuning,audit_pembuangan_limbah.limbah_noninfeksius_dimasukkan_kantong_hitam,"+

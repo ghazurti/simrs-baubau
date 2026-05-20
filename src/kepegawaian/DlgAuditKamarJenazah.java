@@ -859,6 +859,7 @@ public final class DlgAuditKamarJenazah extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select audit_kamar_jenazah.tanggal,audit_kamar_jenazah.audit1,"+
                     "audit_kamar_jenazah.audit2,audit_kamar_jenazah.audit3,"+

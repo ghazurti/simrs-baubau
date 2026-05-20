@@ -775,6 +775,7 @@ private void MnDetailCicilanActionPerformed(java.awt.event.ActionEvent evt) {//G
             }else if(StatusLunas.getSelectedIndex()==2){
                 status=" and piutang_pasien.status='Belum Lunas' ";
             }
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select piutang_pasien.no_rawat, piutang_pasien.tgl_piutang, concat(piutang_pasien.no_rkm_medis,' ',pasien.nm_pasien), "+
                    "piutang_pasien.status,piutang_pasien.totalpiutang, piutang_pasien.uangmuka, piutang_pasien.sisapiutang, piutang_pasien.tgltempo,penjab.png_jawab "+

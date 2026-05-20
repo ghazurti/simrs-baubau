@@ -848,6 +848,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         if(tbDiagnosa.getSelectedRow()!= -1){
             try {
                 Valid.tabelKosong(tabModeNilaiRS);
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select diagnosa_pasien.no_rawat,sum(billing.totalbiaya) as biaya from diagnosa_pasien inner join reg_periksa on diagnosa_pasien.no_rawat=reg_periksa.no_rawat "+
                         "inner join billing on diagnosa_pasien.no_rawat=billing.no_rawat "+
@@ -858,6 +859,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     rs=ps.executeQuery();
                     if(rs.next()){
                         diag="";
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit from diagnosa_pasien where diagnosa_pasien.no_rawat=? and diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas>'1'");
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -877,6 +879,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
                         
                         pros="";
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement("select prosedur_pasien.kode from prosedur_pasien where prosedur_pasien.no_rawat=? and prosedur_pasien.status='Ranap'");
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -910,6 +913,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     }
                 }
                 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select diagnosa_pasien.no_rawat,sum(billing.totalbiaya) as biaya from diagnosa_pasien inner join reg_periksa on diagnosa_pasien.no_rawat=reg_periksa.no_rawat "+
                         "inner join billing on diagnosa_pasien.no_rawat=billing.no_rawat "+
@@ -920,6 +924,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     rs=ps.executeQuery();
                     if(rs.next()){
                         diag="";
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit from diagnosa_pasien where diagnosa_pasien.no_rawat=? and diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas>'1'");
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -939,6 +944,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
                         
                         pros="";
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement("select prosedur_pasien.kode from prosedur_pasien where prosedur_pasien.no_rawat=? and prosedur_pasien.status='Ranap'");
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -973,6 +979,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                 }
                 
                 Valid.tabelKosong(tabModeNilaiINACBG);
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select diagnosa_pasien.no_rawat,inacbg_grouping_stage1.tarif as biaya from diagnosa_pasien inner join reg_periksa on diagnosa_pasien.no_rawat=reg_periksa.no_rawat "+
                         "inner join bridging_sep on reg_periksa.no_rawat=bridging_sep.no_rawat inner join inacbg_grouping_stage1 on inacbg_grouping_stage1.no_sep=bridging_sep.no_sep "+
@@ -983,6 +990,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     rs=ps.executeQuery();
                     if(rs.next()){
                         diag="";
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit from diagnosa_pasien where diagnosa_pasien.no_rawat=? and diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas>'1'");
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1002,6 +1010,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
                         
                         pros="";
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement("select prosedur_pasien.kode from prosedur_pasien where prosedur_pasien.no_rawat=? and prosedur_pasien.status='Ranap'");
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1035,6 +1044,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     }
                 }
                 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select diagnosa_pasien.no_rawat,inacbg_grouping_stage1.tarif as biaya from diagnosa_pasien inner join reg_periksa on diagnosa_pasien.no_rawat=reg_periksa.no_rawat "+
                         "inner join bridging_sep on reg_periksa.no_rawat=bridging_sep.no_rawat inner join inacbg_grouping_stage1 on inacbg_grouping_stage1.no_sep=bridging_sep.no_sep "+
@@ -1045,6 +1055,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     rs=ps.executeQuery();
                     if(rs.next()){
                         diag="";
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit from diagnosa_pasien where diagnosa_pasien.no_rawat=? and diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas>'1'");
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1064,6 +1075,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         }
                         
                         pros="";
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement("select prosedur_pasien.kode from prosedur_pasien where prosedur_pasien.no_rawat=? and prosedur_pasien.status='Ranap'");
                         try {
                             ps2.setString(1,rs.getString("no_rawat"));
@@ -1315,6 +1327,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
         Valid.tabelKosong(tabMode);
         try{      
+            koneksi=koneksiDB.condb();
             ps= koneksi.prepareStatement(
                 "select kamar_inap.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,bangsal.nm_bangsal,kamar.kd_kamar,reg_periksa.biaya_reg,kamar_inap.diagnosa_awal "+
                 "from kamar_inap inner join reg_periksa on kamar_inap.no_rawat=reg_periksa.no_rawat inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -1419,6 +1432,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     Deposit=Sequel.cariIsiAngka("select sum(deposit.besar_deposit) from deposit where deposit.no_rawat=? ",rs.getString("no_rawat"));
                     ttlDeposit=ttlDeposit+Deposit;
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select ranap_gabung.no_rawat2 from ranap_gabung where ranap_gabung.no_rawat=?");   
                     try {
@@ -1489,6 +1503,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     diag="";
                     perkiraantarif=0;
                     pros="Aman";
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select perkiraan_biaya_ranap.kd_penyakit,perkiraan_biaya_ranap.tarif from perkiraan_biaya_ranap where perkiraan_biaya_ranap.no_rawat=?");  
                     try{
@@ -1588,6 +1603,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     private void tampildiagnosa() {
         try{
             Valid.tabelKosong(tabModeDiagnosa);
+            koneksi=koneksiDB.condb();
             pspenyakit=koneksi.prepareStatement(
                     "select penyakit.kd_penyakit,penyakit.nm_penyakit,penyakit.ciri_ciri,penyakit.keterangan,kategori_penyakit.nm_kategori,kategori_penyakit.ciri_umum "+
                     "from kategori_penyakit inner join penyakit on penyakit.kd_ktg=kategori_penyakit.kd_ktg "+(Diagnosa.getText().trim().equals("")?"":"where penyakit.kd_penyakit like ? or "+

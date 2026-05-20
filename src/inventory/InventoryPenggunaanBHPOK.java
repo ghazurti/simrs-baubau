@@ -427,6 +427,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select beri_obat_operasi.tanggal,beri_obat_operasi.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,beri_obat_operasi.kd_obat,obatbhp_ok.nm_obat,kodesatuan.satuan,"+
                 "beri_obat_operasi.hargasatuan,beri_obat_operasi.jumlah,(beri_obat_operasi.hargasatuan*beri_obat_operasi.jumlah) as total from beri_obat_operasi inner join obatbhp_ok "+
                 "on beri_obat_operasi.kd_obat=obatbhp_ok.kd_obat inner join kodesatuan on obatbhp_ok.kode_sat=kodesatuan.kode_sat inner join reg_periksa on beri_obat_operasi.no_rawat=reg_periksa.no_rawat "+

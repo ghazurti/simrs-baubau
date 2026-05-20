@@ -974,6 +974,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
         tbBilling.setDefaultRenderer(Object.class, new WarnaTable());
         
         try {
+            koneksi=koneksiDB.condb();
             psset_tarif=koneksi.prepareStatement(
                     "select set_tarif.poli_ralan,set_tarif.cara_bayar_ralan,set_tarif.cara_bayar_radiologi,"+
                     "set_tarif.kelas_radiologi,set_tarif.cara_bayar_lab,set_tarif.kelas_lab from set_tarif");
@@ -1019,6 +1020,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
         }
         
         try {
+            koneksi=koneksiDB.condb();
             psrekening=koneksi.prepareStatement(sqlpsrekening);
             try {
                 rsrekening=psrekening.executeQuery();
@@ -3570,6 +3572,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
         if(statushapus==true){
             try {
                 Valid.tabelKosong(tabModeAkunBayar);
+                koneksi=koneksiDB.condb();
                 psakunbayar=koneksi.prepareStatement(
                         "select akun_bayar.nama_bayar,akun_bayar.kd_rek,akun_bayar.ppn from akun_bayar "+
                         "inner join detail_nota_jalan on akun_bayar.nama_bayar=detail_nota_jalan.nama_bayar "+
@@ -3633,6 +3636,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                     });
                 }
 
+                koneksi=koneksiDB.condb();
                 psakunbayar=koneksi.prepareStatement("select * from akun_bayar where nama_bayar like ? order by nama_bayar");
                 try{
                     psakunbayar.setString(1,"%"+TCari.getText()+"%");
@@ -3660,6 +3664,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
         try{  
             if(Sequel.cariInteger("select count(*) from rawat_jl_dr where rawat_jl_dr.no_rawat=? and rawat_jl_dr.stts_bayar='Belum'",TNoRw.getText())>0){
                 Valid.tabelKosong(TabModeTindakanDr);
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select rawat_jl_dr.kd_jenis_prw, jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                     "rawat_jl_dr.biaya_rawat, rawat_jl_dr.bhp, rawat_jl_dr.material,"+
@@ -3754,6 +3759,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                 }            
 
                 if(poli_ralan.equals("Yes")&&cara_bayar_ralan.equals("Yes")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                         "jns_perawatan.total_byrdr,jns_perawatan.total_byrpr,jns_perawatan.total_byrdrpr,jns_perawatan.bhp,jns_perawatan.material,"+
                         "jns_perawatan.tarif_tindakandr,jns_perawatan.tarif_tindakanpr,jns_perawatan.kso,jns_perawatan.menejemen from jns_perawatan inner join kategori_perawatan "+
@@ -3794,6 +3800,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }
                     }
                 }else if(poli_ralan.equals("No")&&cara_bayar_ralan.equals("Yes")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan.total_byrdr,jns_perawatan.total_byrpr,jns_perawatan.total_byrdrpr,jns_perawatan.bhp,jns_perawatan.material,"+
                        "jns_perawatan.tarif_tindakandr,jns_perawatan.tarif_tindakanpr,jns_perawatan.kso,jns_perawatan.menejemen from jns_perawatan inner join kategori_perawatan "+
@@ -3831,6 +3838,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }
                     }
                 }else if(poli_ralan.equals("Yes")&&cara_bayar_ralan.equals("No")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan.total_byrdr,jns_perawatan.total_byrpr,jns_perawatan.total_byrdrpr,jns_perawatan.bhp,jns_perawatan.material,"+
                        "jns_perawatan.tarif_tindakandr,jns_perawatan.tarif_tindakanpr,jns_perawatan.kso,jns_perawatan.menejemen from jns_perawatan inner join kategori_perawatan "+
@@ -3868,6 +3876,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }
                     }
                 }else if(poli_ralan.equals("No")&&cara_bayar_ralan.equals("No")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan.total_byrdr,jns_perawatan.total_byrpr,jns_perawatan.total_byrdrpr,jns_perawatan.bhp,jns_perawatan.material,"+
                        "jns_perawatan.tarif_tindakandr,jns_perawatan.tarif_tindakanpr,jns_perawatan.kso,jns_perawatan.menejemen from jns_perawatan inner join kategori_perawatan "+
@@ -3912,6 +3921,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
         try{    
             if(Sequel.cariInteger("select count(*) from rawat_jl_pr where no_rawat=? and stts_bayar='Belum'",TNoRw.getText())>0){
                 Valid.tabelKosong(TabModeTindakanPr);
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select rawat_jl_pr.kd_jenis_prw, jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                     "rawat_jl_pr.biaya_rawat, rawat_jl_pr.bhp, rawat_jl_pr.material,"+
@@ -4006,6 +4016,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                 }
                 
                 if(poli_ralan.equals("Yes")&&cara_bayar_ralan.equals("Yes")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                         "jns_perawatan.total_byrdr,jns_perawatan.total_byrpr,jns_perawatan.total_byrdrpr,jns_perawatan.bhp,jns_perawatan.material,"+
                         "jns_perawatan.tarif_tindakandr,jns_perawatan.tarif_tindakanpr,jns_perawatan.kso,jns_perawatan.menejemen from jns_perawatan inner join kategori_perawatan "+
@@ -4046,6 +4057,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }
                     }
                 }else if(poli_ralan.equals("No")&&cara_bayar_ralan.equals("Yes")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan.total_byrdr,jns_perawatan.total_byrpr,jns_perawatan.total_byrdrpr,jns_perawatan.bhp,jns_perawatan.material,"+
                        "jns_perawatan.tarif_tindakandr,jns_perawatan.tarif_tindakanpr,jns_perawatan.kso,jns_perawatan.menejemen from jns_perawatan inner join kategori_perawatan "+
@@ -4083,6 +4095,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }
                     }
                 }else if(poli_ralan.equals("Yes")&&cara_bayar_ralan.equals("No")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan.total_byrdr,jns_perawatan.total_byrpr,jns_perawatan.total_byrdrpr,jns_perawatan.bhp,jns_perawatan.material,"+
                        "jns_perawatan.tarif_tindakandr,jns_perawatan.tarif_tindakanpr,jns_perawatan.kso,jns_perawatan.menejemen from jns_perawatan inner join kategori_perawatan "+
@@ -4120,6 +4133,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }
                     }
                 }else if(poli_ralan.equals("No")&&cara_bayar_ralan.equals("No")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan.total_byrdr,jns_perawatan.total_byrpr,jns_perawatan.total_byrdrpr,jns_perawatan.bhp,jns_perawatan.material,"+
                        "jns_perawatan.tarif_tindakandr,jns_perawatan.tarif_tindakanpr,jns_perawatan.kso,jns_perawatan.menejemen from jns_perawatan inner join kategori_perawatan "+
@@ -4164,6 +4178,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
         try{                      
             if(Sequel.cariInteger("select count(*) from rawat_jl_drpr where no_rawat=? and stts_bayar='Belum'",TNoRw.getText())>0){
                 Valid.tabelKosong(TabModeTindakanDrPr);
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select rawat_jl_drpr.kd_jenis_prw, jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                     "rawat_jl_drpr.biaya_rawat, rawat_jl_drpr.bhp, rawat_jl_drpr.material,"+
@@ -4258,6 +4273,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                 }
                 
                 if(poli_ralan.equals("Yes")&&cara_bayar_ralan.equals("Yes")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                         "jns_perawatan.total_byrdr,jns_perawatan.total_byrpr,jns_perawatan.total_byrdrpr,jns_perawatan.bhp,jns_perawatan.material,"+
                         "jns_perawatan.tarif_tindakandr,jns_perawatan.tarif_tindakanpr,jns_perawatan.kso,jns_perawatan.menejemen from jns_perawatan inner join kategori_perawatan "+
@@ -4298,6 +4314,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }
                     }
                 }else if(poli_ralan.equals("No")&&cara_bayar_ralan.equals("Yes")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan.total_byrdr,jns_perawatan.total_byrpr,jns_perawatan.total_byrdrpr,jns_perawatan.bhp,jns_perawatan.material,"+
                        "jns_perawatan.tarif_tindakandr,jns_perawatan.tarif_tindakanpr,jns_perawatan.kso,jns_perawatan.menejemen from jns_perawatan inner join kategori_perawatan "+
@@ -4335,6 +4352,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }
                     }
                 }else if(poli_ralan.equals("Yes")&&cara_bayar_ralan.equals("No")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan.total_byrdr,jns_perawatan.total_byrpr,jns_perawatan.total_byrdrpr,jns_perawatan.bhp,jns_perawatan.material,"+
                        "jns_perawatan.tarif_tindakandr,jns_perawatan.tarif_tindakanpr,jns_perawatan.kso,jns_perawatan.menejemen from jns_perawatan inner join kategori_perawatan "+
@@ -4372,6 +4390,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }
                     }
                 }else if(poli_ralan.equals("No")&&cara_bayar_ralan.equals("No")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan.total_byrdr,jns_perawatan.total_byrpr,jns_perawatan.total_byrdrpr,jns_perawatan.bhp,jns_perawatan.material,"+
                        "jns_perawatan.tarif_tindakandr,jns_perawatan.tarif_tindakanpr,jns_perawatan.kso,jns_perawatan.menejemen from jns_perawatan inner join kategori_perawatan "+
@@ -4418,6 +4437,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                     "on permintaan_radiologi.noorder=permintaan_pemeriksaan_radiologi.noorder where permintaan_radiologi.no_rawat=? "+
                     "and permintaan_pemeriksaan_radiologi.stts_bayar='Belum'",TNoRw.getText())>0){
                 Valid.tabelKosong(TabModeRadiologi);
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select jns_perawatan_radiologi.kd_jenis_prw,jns_perawatan_radiologi.nm_perawatan,jns_perawatan_radiologi.total_byr,"+
                     "jns_perawatan_radiologi.bagian_rs,jns_perawatan_radiologi.bhp,jns_perawatan_radiologi.tarif_perujuk,"+
@@ -4515,6 +4535,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                 }
                 
                 if(cara_bayar_radiologi.equals("Yes")&&kelas_radiologi.equals("No")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement(
                         "select jns_perawatan_radiologi.kd_jenis_prw,jns_perawatan_radiologi.nm_perawatan,jns_perawatan_radiologi.total_byr,"+
                         "jns_perawatan_radiologi.bagian_rs,jns_perawatan_radiologi.bhp,jns_perawatan_radiologi.tarif_perujuk,"+
@@ -4549,6 +4570,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }                
                     }
                 }else if(cara_bayar_radiologi.equals("No")&&kelas_radiologi.equals("No")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement(
                         "select jns_perawatan_radiologi.kd_jenis_prw,jns_perawatan_radiologi.nm_perawatan,jns_perawatan_radiologi.total_byr,"+
                         "jns_perawatan_radiologi.bagian_rs,jns_perawatan_radiologi.bhp,jns_perawatan_radiologi.tarif_perujuk,"+
@@ -4581,6 +4603,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }                
                     }
                 }else if(cara_bayar_radiologi.equals("Yes")&&kelas_radiologi.equals("Yes")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement(
                         "select jns_perawatan_radiologi.kd_jenis_prw,jns_perawatan_radiologi.nm_perawatan,jns_perawatan_radiologi.total_byr,"+
                         "jns_perawatan_radiologi.bagian_rs,jns_perawatan_radiologi.bhp,jns_perawatan_radiologi.tarif_perujuk,"+
@@ -4617,6 +4640,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }                
                     }
                 }else if(cara_bayar_radiologi.equals("No")&&kelas_radiologi.equals("Yes")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement(
                         "select jns_perawatan_radiologi.kd_jenis_prw,jns_perawatan_radiologi.nm_perawatan,jns_perawatan_radiologi.total_byr,"+
                         "jns_perawatan_radiologi.bagian_rs,jns_perawatan_radiologi.bhp,jns_perawatan_radiologi.tarif_perujuk,"+
@@ -4669,6 +4693,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                     "on permintaan_lab.noorder=permintaan_pemeriksaan_labmb.noorder where permintaan_lab.no_rawat=? "+
                     "and permintaan_pemeriksaan_labmb.stts_bayar='Belum'",TNoRw.getText()))>0){
                 Valid.tabelKosong(TabModeLaborat);
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                     "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
@@ -4702,6 +4727,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                     }                
                 }
                 
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                     "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
@@ -4735,6 +4761,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                     }                
                 }
                 
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                     "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
@@ -4832,6 +4859,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                 }
                 
                 if(cara_bayar_lab.equals("Yes")&&kelas_lab.equals("No")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement(
                         "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                         "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
@@ -4866,6 +4894,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }                
                     }
                 }else if(cara_bayar_lab.equals("No")&&kelas_lab.equals("No")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement(
                         "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                         "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
@@ -4898,6 +4927,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }                
                     }
                 }else if(cara_bayar_lab.equals("Yes")&&kelas_lab.equals("Yes")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement(
                         "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                         "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
@@ -4934,6 +4964,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         }                
                     }
                 }else if(cara_bayar_lab.equals("No")&&kelas_lab.equals("Yes")){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement(
                         "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                         "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
@@ -4983,6 +5014,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                     "on permintaan_lab.noorder=permintaan_detail_permintaan_labmb.noorder where permintaan_lab.no_rawat=? "+
                     "and permintaan_detail_permintaan_labmb.stts_bayar='Belum'",TNoRw.getText()))>0){
                 Valid.tabelKosong(TabModeDetailLaborat);
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select template_laboratorium.id_template,template_laboratorium.Pemeriksaan,template_laboratorium.biaya_item,"+
                     "template_laboratorium.bagian_rs,template_laboratorium.bhp,template_laboratorium.bagian_perujuk,"+
@@ -5015,6 +5047,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         pstindakan.close();
                     }                
                 }
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select template_laboratorium.id_template,template_laboratorium.Pemeriksaan,template_laboratorium.biaya_item,"+
                     "template_laboratorium.bagian_rs,template_laboratorium.bhp,template_laboratorium.bagian_perujuk,"+
@@ -5115,6 +5148,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         TabModeDetailLaborat.addRow(new Object[]{
                             false,"",tbLaborat.getValueAt(i,2).toString(),0,0,0,0,0,0,0,0,"0000-00-00","00:00:00","",""
                         });
+                        koneksi=koneksiDB.condb();
                         pstindakan=koneksi.prepareStatement(
                             "select template_laboratorium.id_template,template_laboratorium.Pemeriksaan,template_laboratorium.biaya_item,"+
                             "template_laboratorium.bagian_rs,template_laboratorium.bhp,template_laboratorium.bagian_perujuk,"+
@@ -5155,6 +5189,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
     public void tampilDetailLaboratBayar() {         
         try{  
             Valid.tabelKosong(TabModeDetailLaboratBayar);
+            koneksi=koneksiDB.condb();
             pstindakan=koneksi.prepareStatement(
                 "select template_laboratorium.id_template,template_laboratorium.Pemeriksaan,template_laboratorium.biaya_item,"+
                 "template_laboratorium.bagian_rs,template_laboratorium.bhp,template_laboratorium.bagian_perujuk,"+
@@ -5195,6 +5230,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
     private void tampilDrBayar() {
         try{  
             Valid.tabelKosong(TabModeTindakanDrBayar);
+            koneksi=koneksiDB.condb();
             pstindakan=koneksi.prepareStatement(
                 "select rawat_jl_dr.kd_jenis_prw, jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                 "rawat_jl_dr.biaya_rawat, rawat_jl_dr.bhp, rawat_jl_dr.material,"+
@@ -5234,6 +5270,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
     private void tampilPrBayar() {
         try{  
             Valid.tabelKosong(TabModeTindakanPrBayar);
+            koneksi=koneksiDB.condb();
             pstindakan=koneksi.prepareStatement(
                 "select rawat_jl_pr.kd_jenis_prw, jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                 "rawat_jl_pr.biaya_rawat, rawat_jl_pr.bhp, rawat_jl_pr.material,"+
@@ -5273,6 +5310,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
     private void tampilDrPrBayar() {
         try{  
             Valid.tabelKosong(TabModeTindakanDrPrBayar);
+            koneksi=koneksiDB.condb();
             pstindakan=koneksi.prepareStatement(
                 "select rawat_jl_drpr.kd_jenis_prw, jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                 "rawat_jl_drpr.biaya_rawat, rawat_jl_drpr.bhp, rawat_jl_drpr.material,rawat_jl_drpr.tarif_tindakandr,"+
@@ -5327,6 +5365,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
     private void tampilbilling() {
         Valid.tabelKosong(tabModeBilling);
         try{   
+            koneksi=koneksiDB.condb();
             psreg=koneksi.prepareStatement(
                     "select reg_periksa.no_rkm_medis,reg_periksa.tgl_registrasi,reg_periksa.no_rkm_medis,"+
                     "reg_periksa.kd_poli,reg_periksa.no_rawat,reg_periksa.biaya_reg,current_time() as jam "+
@@ -5342,6 +5381,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                         tabModeBilling.addRow(new Object[]{"No.Nota",": "+NoNota,"",null,null,null,"-"});                
                     }
                     
+                    koneksi=koneksiDB.condb();
                     pscaripoli=koneksi.prepareStatement(sqlpscaripoli);
                     try{
                         pscaripoli.setString(1,rsreg.getString("kd_poli"));
@@ -5364,6 +5404,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                     tabModeBilling.addRow(new Object[]{"Tanggal & Jam",": "+rsreg.getString("tgl_registrasi")+" "+rsreg.getString("jam"),"",null,null,null,"-"});
                     tabModeBilling.addRow(new Object[]{"No.RM",": "+TNoRM.getText(),"",null,null,null,"-"});
                     tabModeBilling.addRow(new Object[]{"Nama Pasien",": "+TPasien.getText(),"",null,null,null,"-"});
+                    koneksi=koneksiDB.condb();
                     pscarialamat=koneksi.prepareStatement(sqlpscarialamat); 
                     try{
                         pscarialamat.setString(1,TNoRM.getText());
@@ -5385,6 +5426,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                     //cari dokter yang menangandi  
 
                     if(centangdokterralan.equals("Yes")){
+                        koneksi=koneksiDB.condb();
                         psdokterralan=koneksi.prepareStatement(sqlpsdokterralan);
                         try{
                             psdokterralan.setString(1,TNoRw.getText());
@@ -6035,6 +6077,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                     });
                     //simpan billing
                     for(i=8;i<tbBilling.getRowCount();i++){  
+                        koneksi=koneksiDB.condb();
                         psbiling=koneksi.prepareStatement(sqlpsbiling);
                         try {
                             psbiling.setInt(1,i);
@@ -6624,6 +6667,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                     if(chkPoli.isSelected()==true){
                         if(Sequel.queryu2tf("delete from permintaan_registrasi where no_rawat=?",1,new String[]{TNoRw.getText()})==true){
                             try {
+                                koneksi=koneksiDB.condb();
                                 psbiling=koneksi.prepareStatement(sqlpsbiling);
                                 try {
                                     psbiling.setInt(1,i);
@@ -6674,6 +6718,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                                 tbTindakanDrBayar.getValueAt(i,11).toString(),tbTindakanDrBayar.getValueAt(i,12).toString(),TNoRw.getText(),tbTindakanDrBayar.getValueAt(i,1).toString()
                               })==true){
                                 try {
+                                    koneksi=koneksiDB.condb();
                                     psbiling=koneksi.prepareStatement(sqlpsbiling);
                                     try {
                                         psbiling.setInt(1,i);
@@ -6719,6 +6764,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                                 tbTindakanDrBayar.getValueAt(i,11).toString(),tbTindakanDrBayar.getValueAt(i,12).toString(),TNoRw.getText(),tbTindakanDrBayar.getValueAt(i,1).toString()
                               })==true){
                                 try {
+                                    koneksi=koneksiDB.condb();
                                     psbiling=koneksi.prepareStatement(sqlpsbiling);
                                     try {
                                         psbiling.setInt(1,i);
@@ -6770,6 +6816,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                                 tbTindakanPrBayar.getValueAt(i,11).toString(),tbTindakanPrBayar.getValueAt(i,12).toString(),TNoRw.getText(),tbTindakanPrBayar.getValueAt(i,1).toString()
                               })==true){
                                 try {
+                                    koneksi=koneksiDB.condb();
                                     psbiling=koneksi.prepareStatement(sqlpsbiling);
                                     try {
                                         psbiling.setInt(1,i);
@@ -6815,6 +6862,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                                 tbTindakanPrBayar.getValueAt(i,11).toString(),tbTindakanPrBayar.getValueAt(i,12).toString(),TNoRw.getText(),tbTindakanPrBayar.getValueAt(i,1).toString()
                               })==true){
                                 try {
+                                    koneksi=koneksiDB.condb();
                                     psbiling=koneksi.prepareStatement(sqlpsbiling);
                                     try {
                                         psbiling.setInt(1,i);
@@ -6866,6 +6914,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                                 tbTindakanDrPrBayar.getValueAt(i,11).toString(),tbTindakanDrPrBayar.getValueAt(i,12).toString(),TNoRw.getText(),tbTindakanDrPrBayar.getValueAt(i,1).toString()
                               })==true){
                                 try {
+                                    koneksi=koneksiDB.condb();
                                     psbiling=koneksi.prepareStatement(sqlpsbiling);
                                     try {
                                         psbiling.setInt(1,i);
@@ -6911,6 +6960,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                                 tbTindakanDrPrBayar.getValueAt(i,11).toString(),tbTindakanDrPrBayar.getValueAt(i,12).toString(),TNoRw.getText(),tbTindakanDrPrBayar.getValueAt(i,1).toString()
                               })==true){
                                 try {
+                                    koneksi=koneksiDB.condb();
                                     psbiling=koneksi.prepareStatement(sqlpsbiling);
                                     try {
                                         psbiling.setInt(1,i);
@@ -6961,6 +7011,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                             tbRadiologiBayar.getValueAt(i,13).toString(),tbRadiologiBayar.getValueAt(i,1).toString()
                           })==true){
                             try {
+                                koneksi=koneksiDB.condb();
                                 psbiling=koneksi.prepareStatement(sqlpsbiling);
                                 try {
                                     psbiling.setInt(1,i);
@@ -7013,6 +7064,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                             tbLaboratBayar.getValueAt(i,13).toString(),tbLaboratBayar.getValueAt(i,1).toString()
                           })==true){
                             try {
+                                koneksi=koneksiDB.condb();
                                 psbiling=koneksi.prepareStatement(sqlpsbiling);
                                 try {
                                     psbiling.setInt(1,i);
@@ -7066,6 +7118,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                             tbDetailLaboratBayar.getValueAt(i,13).toString(),tbDetailLaboratBayar.getValueAt(i,1).toString()
                           })==true){
                             try {
+                                koneksi=koneksiDB.condb();
                                 psbiling=koneksi.prepareStatement(sqlpsbiling);
                                 try {
                                     psbiling.setInt(1,i);
@@ -7119,6 +7172,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                             tbObatBayar.getValueAt(i,6).toString(),tbObatBayar.getValueAt(i,7).toString(),TNoRw.getText(),tbObatBayar.getValueAt(i,1).toString()
                           })==true){
                             try {
+                                koneksi=koneksiDB.condb();
                                 psbiling=koneksi.prepareStatement(sqlpsbiling);
                                 try {
                                     psbiling.setInt(1,i);
@@ -7165,6 +7219,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
                 if(ppnobat>0){
                     if(ppnralan.getTampilPPNRalan().equals("Yes")){
                         try {
+                            koneksi=koneksiDB.condb();
                             psbiling=koneksi.prepareStatement(sqlpsbiling);
                             try {
                                 psbiling.setInt(1,i);
@@ -7525,6 +7580,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
     private void tampilRadiologiBayar() {
         try{  
             Valid.tabelKosong(TabModeRadiologiBayar);
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select jns_perawatan_radiologi.kd_jenis_prw,jns_perawatan_radiologi.nm_perawatan,jns_perawatan_radiologi.total_byr,"+
                     "jns_perawatan_radiologi.bagian_rs,jns_perawatan_radiologi.bhp,jns_perawatan_radiologi.tarif_perujuk,"+
@@ -7565,6 +7621,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
     private void tampilLaboratBayar() {
         try{  
             Valid.tabelKosong(TabModeLaboratBayar);
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                     "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
@@ -7605,6 +7662,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
     private void tampilObat(){
         try{  
             Valid.tabelKosong(TabModeObat);
+            koneksi=koneksiDB.condb();
             pstindakan=koneksi.prepareStatement(
                     "select detail_pemberian_obat.kode_brng,databarang.nama_brng,detail_pemberian_obat.jml,detail_pemberian_obat.total,"+
                     "(detail_pemberian_obat.h_beli*detail_pemberian_obat.jml) as hpp,detail_pemberian_obat.tgl_perawatan,detail_pemberian_obat.jam "+
@@ -7642,6 +7700,7 @@ public class DlgBilingParsialRalan extends javax.swing.JDialog {
     private void tampilObatBayar(){
         try{  
             Valid.tabelKosong(TabModeObatBayar);
+            koneksi=koneksiDB.condb();
             pstindakan=koneksi.prepareStatement(
                     "select detail_pemberian_obat.kode_brng,databarang.nama_brng,detail_pemberian_obat.jml,detail_pemberian_obat.total,"+
                     "(detail_pemberian_obat.h_beli*detail_pemberian_obat.jml) as hpp,detail_pemberian_obat.tgl_perawatan,detail_pemberian_obat.jam "+

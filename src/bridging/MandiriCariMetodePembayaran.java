@@ -373,6 +373,7 @@ public final class MandiriCariMetodePembayaran extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from metode_pembayaran_bankmandiri order by metode_pembayaran_bankmandiri.kode_metode");
             try {
                 rs=ps.executeQuery();

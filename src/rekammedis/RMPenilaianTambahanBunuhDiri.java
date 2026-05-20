@@ -2159,6 +2159,7 @@ public final class RMPenilaianTambahanBunuhDiri extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,penilaian_tambahan_bunuh_diri.tanggal,"+
                     "penilaian_tambahan_bunuh_diri.statik_hidup_sendiri,penilaian_tambahan_bunuh_diri.statik_skorhidup_sendiri,penilaian_tambahan_bunuh_diri.statik_upaya_suicide,"+
@@ -2178,6 +2179,7 @@ public final class RMPenilaianTambahanBunuhDiri extends javax.swing.JDialog {
                     "inner join petugas on penilaian_tambahan_bunuh_diri.nip=petugas.nip where "+
                     "penilaian_tambahan_bunuh_diri.tanggal between ? and ? order by penilaian_tambahan_bunuh_diri.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,penilaian_tambahan_bunuh_diri.tanggal,"+
                     "penilaian_tambahan_bunuh_diri.statik_hidup_sendiri,penilaian_tambahan_bunuh_diri.statik_skorhidup_sendiri,penilaian_tambahan_bunuh_diri.statik_upaya_suicide,"+
@@ -2337,6 +2339,7 @@ public final class RMPenilaianTambahanBunuhDiri extends javax.swing.JDialog {
 
     private void isPsien() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select pasien.nm_pasien,pasien.jk,pasien.tgl_lahir as lahir from pasien where pasien.no_rkm_medis=?");
             try {
                 ps.setString(1,TNoRM.getText());

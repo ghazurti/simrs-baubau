@@ -771,6 +771,7 @@ private void KeteranganKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select kdjns, nama, keterangan from jenis where  kdjns like ? or nama like ? or keterangan like ? order by nama ");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

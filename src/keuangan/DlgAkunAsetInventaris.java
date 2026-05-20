@@ -756,6 +756,7 @@ private void BtnPoliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select akun_aset_inventaris.id_jenis,inventaris_jenis.nama_jenis,akun_aset_inventaris.kd_rek,rekening.nm_rek "+
                     "from akun_aset_inventaris inner join rekening on akun_aset_inventaris.kd_rek=rekening.kd_rek "+

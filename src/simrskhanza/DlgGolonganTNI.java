@@ -498,6 +498,7 @@ public class DlgGolonganTNI extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from golongan_tni where nama_golongan like ? ");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

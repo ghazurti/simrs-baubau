@@ -298,6 +298,7 @@ public final class InformasiTarifLab extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,penjab.png_jawab "+
                     "from jns_perawatan_lab inner join penjab on penjab.kd_pj=jns_perawatan_lab.kd_pj where jns_perawatan_lab.status='1' and "+
@@ -314,6 +315,7 @@ public final class InformasiTarifLab extends javax.swing.JDialog {
                     tabMode.addRow(new Object[]{
                         rs.getString(1),rs.getString(2),Valid.SetAngka(rs.getDouble(3)),rs.getString(4)
                     });
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select template_laboratorium.Pemeriksaan,template_laboratorium.biaya_item from template_laboratorium "+
                             "where template_laboratorium.kd_jenis_prw=? order by template_laboratorium.urut");

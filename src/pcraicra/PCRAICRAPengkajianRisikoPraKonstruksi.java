@@ -3744,6 +3744,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select pcra_icra_pengkajian_risiko_prakonstruksi.no_proyek,pcra_icra_pengkajian_risiko_prakonstruksi.nama_proyek,pcra_icra_pengkajian_risiko_prakonstruksi.lokasi_proyek,pcra_icra_pengkajian_risiko_prakonstruksi.mulai_proyek,pcra_icra_pengkajian_risiko_prakonstruksi.perkiraan_selesai,"+
                         "pcra_icra_pengkajian_risiko_prakonstruksi.deskripsi_pekerjaan,pcra_icra_pengkajian_risiko_prakonstruksi.penangung_jawab_proyek,pcra_icra_pengkajian_risiko_prakonstruksi.pelaksana_proyek,pcra_icra_pengkajian_risiko_prakonstruksi.kode_aktivitas,pcra_icra_jenis_aktivitas_proyek.nama_aktivitas,"+
@@ -3756,6 +3757,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
                         "inner join pcra_icra_jenis_aktivitas_proyek on pcra_icra_jenis_aktivitas_proyek.kode_aktivitas=pcra_icra_pengkajian_risiko_prakonstruksi.kode_aktivitas inner join pcra_icra_kelas_risiko_pencegahan on pcra_icra_kelas_risiko_pencegahan.kode_kelas=pcra_icra_pengkajian_risiko_prakonstruksi.kode_kelas_risiko "+
                         "where pcra_icra_pengkajian_risiko_prakonstruksi.tanggal_pengkajian between ? and ?");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select pcra_icra_pengkajian_risiko_prakonstruksi.no_proyek,pcra_icra_pengkajian_risiko_prakonstruksi.nama_proyek,pcra_icra_pengkajian_risiko_prakonstruksi.lokasi_proyek,pcra_icra_pengkajian_risiko_prakonstruksi.mulai_proyek,pcra_icra_pengkajian_risiko_prakonstruksi.perkiraan_selesai,"+
                         "pcra_icra_pengkajian_risiko_prakonstruksi.deskripsi_pekerjaan,pcra_icra_pengkajian_risiko_prakonstruksi.penangung_jawab_proyek,pcra_icra_pengkajian_risiko_prakonstruksi.pelaksana_proyek,pcra_icra_pengkajian_risiko_prakonstruksi.kode_aktivitas,pcra_icra_jenis_aktivitas_proyek.nama_aktivitas,"+
@@ -3786,6 +3788,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
                 rs=ps.executeQuery();
                 while(rs.next()){
                     StringBuilder kelompokarea = new StringBuilder();
+                    koneksi=koneksiDB.condb();
                     pscari=koneksi.prepareStatement(
                         "select pcra_icra_lokasi_kelompok_risiko_area.nama_area from pcra_icra_lokasi_kelompok_risiko_area inner join pcra_icra_pengkajian_risiko_prakonstruksi_kelompok_area "+
                         "on pcra_icra_pengkajian_risiko_prakonstruksi_kelompok_area.kode_area=pcra_icra_lokasi_kelompok_risiko_area.kode_area where pcra_icra_pengkajian_risiko_prakonstruksi_kelompok_area.no_pcra=?"
@@ -3812,6 +3815,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
                     }
                     
                     StringBuilder risikokebakaran = new StringBuilder();
+                    koneksi=koneksiDB.condb();
                     pscari=koneksi.prepareStatement(
                         "select pcra_icra_identifkasi_risiko_kebakaran.nama_risiko from pcra_icra_identifkasi_risiko_kebakaran inner join pcra_icra_pengkajian_risiko_prakonstruksi_kebakaran "+
                         "on pcra_icra_pengkajian_risiko_prakonstruksi_kebakaran.kode_risiko=pcra_icra_identifkasi_risiko_kebakaran.kode_risiko where pcra_icra_pengkajian_risiko_prakonstruksi_kebakaran.no_pcra=?"
@@ -3838,6 +3842,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
                     }
                     
                     StringBuilder risikoinfeksi = new StringBuilder();
+                    koneksi=koneksiDB.condb();
                     pscari=koneksi.prepareStatement(
                         "select pcra_icra_identifkasi_risiko_infeksi.nama_risiko from pcra_icra_identifkasi_risiko_infeksi inner join pcra_icra_pengkajian_risiko_prakonstruksi_infeksi "+
                         "on pcra_icra_pengkajian_risiko_prakonstruksi_infeksi.kode_risiko=pcra_icra_identifkasi_risiko_infeksi.kode_risiko where pcra_icra_pengkajian_risiko_prakonstruksi_infeksi.no_pcra=?"
@@ -3864,6 +3869,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
                     }
                     
                     StringBuilder risikokeselamatan = new StringBuilder();
+                    koneksi=koneksiDB.condb();
                     pscari=koneksi.prepareStatement(
                         "select pcra_icra_identifkasi_risiko_keselamatan.nama_risiko from pcra_icra_identifkasi_risiko_keselamatan inner join pcra_icra_pengkajian_risiko_prakonstruksi_keselamatan "+
                         "on pcra_icra_pengkajian_risiko_prakonstruksi_keselamatan.kode_risiko=pcra_icra_identifkasi_risiko_keselamatan.kode_risiko where pcra_icra_pengkajian_risiko_prakonstruksi_keselamatan.no_pcra=?"
@@ -3890,6 +3896,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
                     }
                     
                     StringBuilder risikoutilitas = new StringBuilder();
+                    koneksi=koneksiDB.condb();
                     pscari=koneksi.prepareStatement(
                         "select pcra_icra_identifkasi_risiko_utilitas.nama_risiko from pcra_icra_identifkasi_risiko_utilitas inner join pcra_icra_pengkajian_risiko_prakonstruksi_utilitas "+
                         "on pcra_icra_pengkajian_risiko_prakonstruksi_utilitas.kode_risiko=pcra_icra_identifkasi_risiko_utilitas.kode_risiko where pcra_icra_pengkajian_risiko_prakonstruksi_utilitas.no_pcra=?"
@@ -3916,6 +3923,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
                     }
                     
                     StringBuilder pengendalian = new StringBuilder();
+                    koneksi=koneksiDB.condb();
                     pscari=koneksi.prepareStatement(
                         "select pcra_icra_tindakan_pengendalian.nama_pengendalian from pcra_icra_tindakan_pengendalian inner join pcra_icra_pengkajian_risiko_prakonstruksi_pengendalian "+
                         "on pcra_icra_pengkajian_risiko_prakonstruksi_pengendalian.kode_pengendalian=pcra_icra_tindakan_pengendalian.kode_pengendalian where pcra_icra_pengkajian_risiko_prakonstruksi_pengendalian.no_pcra=?"
@@ -3942,6 +3950,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
                     }
                     
                     StringBuilder persyaratan = new StringBuilder();
+                    koneksi=koneksiDB.condb();
                     pscari=koneksi.prepareStatement(
                         "select pcra_icra_persyaratan_harus_dipenuhi.nama_persyaratan from pcra_icra_persyaratan_harus_dipenuhi inner join pcra_icra_pengkajian_risiko_prakonstruksi_persyaratan "+
                         "on pcra_icra_pengkajian_risiko_prakonstruksi_persyaratan.kode_persyaratan=pcra_icra_persyaratan_harus_dipenuhi.kode_persyaratan where pcra_icra_pengkajian_risiko_prakonstruksi_persyaratan.no_pcra=?"
@@ -4060,6 +4069,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
 
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rkm_medis,pasien.nm_pasien, if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,"+
                     "reg_periksa.tgl_registrasi,reg_periksa.jam_reg "+
@@ -4121,6 +4131,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select pcra_icra_lokasi_kelompok_risiko_area.kode_area,pcra_icra_lokasi_kelompok_risiko_area.nama_area from pcra_icra_lokasi_kelompok_risiko_area");
             try {
                 rs=ps.executeQuery();
@@ -4218,6 +4229,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select pcra_icra_identifkasi_risiko_kebakaran.kode_risiko,pcra_icra_identifkasi_risiko_kebakaran.nama_risiko from pcra_icra_identifkasi_risiko_kebakaran");
             try {
                 rs=ps.executeQuery();
@@ -4315,6 +4327,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select pcra_icra_identifkasi_risiko_infeksi.kode_risiko,pcra_icra_identifkasi_risiko_infeksi.nama_risiko from pcra_icra_identifkasi_risiko_infeksi");
             try {
                 rs=ps.executeQuery();
@@ -4412,6 +4425,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select pcra_icra_identifkasi_risiko_keselamatan.kode_risiko,pcra_icra_identifkasi_risiko_keselamatan.nama_risiko from pcra_icra_identifkasi_risiko_keselamatan");
             try {
                 rs=ps.executeQuery();
@@ -4509,6 +4523,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select pcra_icra_identifkasi_risiko_utilitas.kode_risiko,pcra_icra_identifkasi_risiko_utilitas.nama_risiko from pcra_icra_identifkasi_risiko_utilitas");
             try {
                 rs=ps.executeQuery();
@@ -4606,6 +4621,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select pcra_icra_tindakan_pengendalian.kode_pengendalian,pcra_icra_tindakan_pengendalian.nama_pengendalian from pcra_icra_tindakan_pengendalian");
             try {
                 rs=ps.executeQuery();
@@ -4703,6 +4719,7 @@ public final class PCRAICRAPengkajianRisikoPraKonstruksi extends javax.swing.JDi
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select pcra_icra_persyaratan_harus_dipenuhi.kode_persyaratan,pcra_icra_persyaratan_harus_dipenuhi.nama_persyaratan from pcra_icra_persyaratan_harus_dipenuhi");
             try {
                 rs=ps.executeQuery();

@@ -667,6 +667,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 Valid.textKosong(TCari,"No.Piutang");
             }else {
                  try{
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                         "select piutang_jasa_perusahaan.tgl_piutang,piutang_jasa_perusahaan.jatuh_tempo,petugas.nama,perusahaan_pasien.nama_perusahaan,piutang_jasa_perusahaan.keterangan,piutang_jasa_perusahaan.grand_total,"+
                         "piutang_jasa_perusahaan.persen_jasa_menejemen,piutang_jasa_perusahaan.jasa_menejemen,piutang_jasa_perusahaan.dpp_lain,piutang_jasa_perusahaan.persen_ppn,piutang_jasa_perusahaan.nip,"+
@@ -680,6 +681,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         if(rs.next()){
                             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                             Sequel.queryu("delete from temporary where temp37='"+akses.getalamatip()+"'");
+                            koneksi=koneksiDB.condb();
                             ps2=koneksi.prepareStatement(
                                  "select detail_piutang_jasa_perusahaan.kode_kategori,kategori_piutang_jasa_perusahaan.nama_kategori,detail_piutang_jasa_perusahaan.jml,"+
                                  "detail_piutang_jasa_perusahaan.harga,detail_piutang_jasa_perusahaan.subtotal,detail_piutang_jasa_perusahaan.besar_diskon,"+
@@ -942,6 +944,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select piutang_jasa_perusahaan.no_piutang,piutang_jasa_perusahaan.tgl_piutang,piutang_jasa_perusahaan.jatuh_tempo,piutang_jasa_perusahaan.nip,"+
                 "petugas.nama,piutang_jasa_perusahaan.kode_perusahaan,perusahaan_pasien.nama_perusahaan,piutang_jasa_perusahaan.keterangan,piutang_jasa_perusahaan.grand_total,"+
@@ -971,6 +974,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     tabMode.addRow(new Object[]{
                         "","Kategori","Jml","Harga","Subtotal","Diskon","Total"
                     });
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                          "select detail_piutang_jasa_perusahaan.kode_kategori,kategori_piutang_jasa_perusahaan.nama_kategori,detail_piutang_jasa_perusahaan.jml,"+
                          "detail_piutang_jasa_perusahaan.harga,detail_piutang_jasa_perusahaan.subtotal,detail_piutang_jasa_perusahaan.besar_diskon,"+

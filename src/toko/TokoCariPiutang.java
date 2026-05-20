@@ -991,6 +991,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     }else{
        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
        try {
+           koneksi=koneksiDB.condb();
            pscarijual=koneksi.prepareStatement(
                    "select nota_piutang,sisapiutang from tokopiutang where nota_piutang=?");
            try {
@@ -999,6 +1000,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
               if(rs.next()){
                   Sequel.AutoComitFalse();
                   sukses=true;
+                  koneksi=koneksiDB.condb();
                   pstoko_detail_piutang=koneksi.prepareStatement(
                        "select kode_brng,jumlah from toko_detail_piutang where nota_piutang=? ");
                   try {
@@ -1209,6 +1211,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select tokopiutang.nota_piutang, tokopiutang.tgl_piutang, "+
                 "tokopiutang.nip,petugas.nama,tokopiutang.ongkir,tokopiutang.sisapiutang, "+
                 "tokopiutang.no_member,tokopiutang.nm_member,tokopiutang.catatan, "+
@@ -1247,6 +1250,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     subttlall=0;
                     subttldisc=0;
                     subttlpiutang=0;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select toko_detail_piutang.kode_brng,tokobarang.nama_brng, toko_detail_piutang.kode_sat,"+
                         " kodesatuan.satuan,toko_detail_piutang.h_jual,toko_detail_piutang.jumlah, "+
@@ -1361,6 +1365,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     "<td valign='top' bgcolor='#FFFAF8' align='center' width='13%'>Catatan</td>"+
                     "<td valign='top' bgcolor='#FFFAF8' align='center' width='15%'>Tanggal Tempo</td>"+
                 "</tr>"); 
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select tokopiutang.nota_piutang, tokopiutang.tgl_piutang, "+
                     "tokopiutang.nip,petugas.nama,tokopiutang.ongkir,tokopiutang.sisapiutang, "+
@@ -1419,6 +1424,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                         "<td valign='top' bgcolor='#fdfff9' align='center' width='10%'>Potongan(Rp)</td>"+      
                                         "<td valign='top' bgcolor='#fdfff9' align='center' width='13%'>Total(Rp)</td>"+                                      
                                     "</tr>");
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select toko_detail_piutang.kode_brng,tokobarang.nama_brng, toko_detail_piutang.kode_sat,"+
                         " kodesatuan.satuan,toko_detail_piutang.h_jual,toko_detail_piutang.jumlah, "+

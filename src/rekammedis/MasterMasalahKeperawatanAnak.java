@@ -604,6 +604,7 @@ public class MasterMasalahKeperawatanAnak extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_masalah_keperawatan_anak where master_masalah_keperawatan_anak.kode_masalah like ? or master_masalah_keperawatan_anak.nama_masalah like ? order by master_masalah_keperawatan_anak.kode_masalah");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

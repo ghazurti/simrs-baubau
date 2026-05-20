@@ -1477,6 +1477,7 @@ public class DlgPengaturanRekening extends javax.swing.JDialog {
             Beban_Jasa_Menejemen_Pelayanan_Lab_Kesling="";
             Utang_Jasa_Menejemen_Pelayanan_Lab_Kesling="";
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from set_akun_ralan");
             try {
                 rs=ps.executeQuery();
@@ -1554,6 +1555,7 @@ public class DlgPengaturanRekening extends javax.swing.JDialog {
                 }
             }    
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from set_akun_ranap");
             try {
                 rs=ps.executeQuery();
@@ -1634,6 +1636,7 @@ public class DlgPengaturanRekening extends javax.swing.JDialog {
                 }
             }    
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from set_akun_ranap2");
             try {
                 rs=ps.executeQuery();
@@ -1655,6 +1658,7 @@ public class DlgPengaturanRekening extends javax.swing.JDialog {
                 }
             }  
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from set_akun");
             try {
                 rs=ps.executeQuery();
@@ -1735,6 +1739,7 @@ public class DlgPengaturanRekening extends javax.swing.JDialog {
                 }
             }    
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from set_akun2");
             try {
                 rs=ps.executeQuery();
@@ -2896,6 +2901,7 @@ public class DlgPengaturanRekening extends javax.swing.JDialog {
     private void tampilralan() {
         Valid.tabelKosong(tabModeRalan);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                "select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,penjab.png_jawab,poliklinik.nm_poli "+
                "from jns_perawatan inner join kategori_perawatan on jns_perawatan.kd_kategori=kategori_perawatan.kd_kategori "+
@@ -2909,6 +2915,7 @@ public class DlgPengaturanRekening extends javax.swing.JDialog {
                     kode_beban_kso="";nama_beban_kso="";kode_utang_kso="";nama_utang_kso="";kode_hpp_persediaan="";nama_hpp_persediaan="";kode_persediaan_bhp="";
                     nama_persediaan_bhp="";kode_beban_jasa_sarana="";nama_beban_jasa_sarana="";kode_utang_jasa_sarana="";nama_utang_jasa_sarana="";
                     kode_beban_menejemen="";nama_beban_menejemen="";kode_utang_menejemen="";nama_utang_menejemen="";
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select matrik_akun_jns_perawatan.pendapatan_tindakan,pendapatantindakan.nm_rek as nama_pendapatan_tindakan, "+
                         "matrik_akun_jns_perawatan.beban_jasa_dokter,bebanjasadokter.nm_rek as nama_beban_jasa_dokter,"+
@@ -3006,6 +3013,7 @@ public class DlgPengaturanRekening extends javax.swing.JDialog {
     private void tampilranap() {
         Valid.tabelKosong(tabModeRanap);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                "select jns_perawatan_inap.kd_jenis_prw,jns_perawatan_inap.nm_perawatan,kategori_perawatan.nm_kategori,penjab.png_jawab,bangsal.nm_bangsal, "+
                "jns_perawatan_inap.kelas from jns_perawatan_inap inner join kategori_perawatan on jns_perawatan_inap.kd_kategori=kategori_perawatan.kd_kategori "+
@@ -3019,6 +3027,7 @@ public class DlgPengaturanRekening extends javax.swing.JDialog {
                     kode_beban_kso="";nama_beban_kso="";kode_utang_kso="";nama_utang_kso="";kode_hpp_persediaan="";nama_hpp_persediaan="";kode_persediaan_bhp="";
                     nama_persediaan_bhp="";kode_beban_jasa_sarana="";nama_beban_jasa_sarana="";kode_utang_jasa_sarana="";nama_utang_jasa_sarana="";
                     kode_beban_menejemen="";nama_beban_menejemen="";kode_utang_menejemen="";nama_utang_menejemen="";
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select matrik_akun_jns_perawatan_inap.pendapatan_tindakan,pendapatantindakan.nm_rek as nama_pendapatan_tindakan, "+
                         "matrik_akun_jns_perawatan_inap.beban_jasa_dokter,bebanjasadokter.nm_rek as nama_beban_jasa_dokter,"+

@@ -559,6 +559,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void prosesCari() {
        Valid.tabelKosong(tabMode);      
        try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select ipsrsbarang.kode_brng,ipsrsbarang.nama_brng, "+
                         "kodesatuan.satuan,ipsrsbarang.stok,(ipsrsbarang.stok*ipsrsbarang.harga) as aset "+
                         "from ipsrsbarang inner join kodesatuan on ipsrsbarang.kode_sat=kodesatuan.kode_sat "+
@@ -585,6 +586,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     stok=rs.getDouble("stok");
                     totalstok=rs.getDouble("aset");
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(ipsrsdetailbeli.jumlah), sum(ipsrsdetailbeli.subtotal) "+
                         " from ipsrspembelian inner join ipsrsdetailbeli "+
                         " on ipsrspembelian.no_faktur=ipsrsdetailbeli.no_faktur "+
@@ -611,6 +613,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }          
                     
                     //ipsrspemesanan
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(ipsrsdetailpesan.jumlah), sum(ipsrsdetailpesan.subtotal) "+
                         " from ipsrspemesanan inner join ipsrsdetailpesan "+
                         " on ipsrspemesanan.no_faktur=ipsrsdetailpesan.no_faktur "+
@@ -636,6 +639,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(ipsrsdetailpengeluaran.jumlah), sum(ipsrsdetailpengeluaran.total) "+
                         " from ipsrspengeluaran inner join ipsrsdetailpengeluaran "+
                         " on ipsrspengeluaran.no_keluar=ipsrsdetailpengeluaran.no_keluar "+
@@ -661,6 +665,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(utd_pengambilan_penunjang.jml) as jumlah, "+
                         "sum(utd_pengambilan_penunjang.total) as jumpas "+
                         " from utd_pengambilan_penunjang where utd_pengambilan_penunjang.kode_brng=? and "+
@@ -686,6 +691,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }
                     
                     //ipsrshibah
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(ipsrs_detail_hibah.jumlah), sum(ipsrs_detail_hibah.subtotalhibah) "+
                         " from ipsrs_hibah inner join ipsrs_detail_hibah "+
                         " on ipsrs_hibah.no_hibah=ipsrs_detail_hibah.no_hibah "+
@@ -711,6 +717,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     } 
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(ipsrsopname.real),(ipsrsopname.real*ipsrsopname.h_beli) from ipsrsopname where kode_brng=? and tanggal=?");
                     try {
                         ps2.setString(1,rs.getString(1));

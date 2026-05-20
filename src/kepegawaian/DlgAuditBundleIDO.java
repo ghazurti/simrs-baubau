@@ -965,6 +965,7 @@ public final class DlgAuditBundleIDO extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_bundle_ido.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_bundle_ido.tanggal,audit_bundle_ido.pencukuran_rambut,"+
                     "audit_bundle_ido.antibiotik,audit_bundle_ido.temperature,"+
@@ -972,6 +973,7 @@ public final class DlgAuditBundleIDO extends javax.swing.JDialog {
                     "inner join ruang_audit_kepatuhan on audit_bundle_ido.id_ruang=ruang_audit_kepatuhan.id_ruang "+
                     "where audit_bundle_ido.tanggal between ? and ? order by audit_bundle_ido.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_bundle_ido.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_bundle_ido.tanggal,audit_bundle_ido.pencukuran_rambut,"+
                     "audit_bundle_ido.antibiotik,audit_bundle_ido.temperature,"+

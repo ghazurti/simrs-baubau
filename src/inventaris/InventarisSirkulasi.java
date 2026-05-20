@@ -1310,6 +1310,7 @@ private void tlpKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tlpKe
             if(!InventarisCari.getText().equals("")){
                 inventariscari="inventaris_barang.nama_barang='"+InventarisCari.getText()+"' and ";
             }
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select inventaris_peminjaman.no_inventaris,inventaris.kode_barang,inventaris_barang.nama_barang,inventaris_produsen.nama_produsen,"+
                    "inventaris_merk.nama_merk,inventaris_barang.thn_produksi,inventaris_barang.isbn,inventaris_kategori.nama_kategori,"+
@@ -1398,6 +1399,7 @@ private void tlpKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tlpKe
     
     public void isInventaris(){
         try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                    "select inventaris.no_inventaris,inventaris_barang.kode_barang, inventaris_barang.nama_barang, "+
                    "inventaris_merk.nama_merk,inventaris_jenis.nama_jenis,inventaris.status_barang "+

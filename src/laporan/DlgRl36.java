@@ -398,6 +398,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){  
         try {
             Valid.tabelKosong(tabMode); 
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select paket_operasi.kode_paket,paket_operasi.nm_perawatan from paket_operasi where paket_operasi.kategori='Operasi' "+(TCari.getText().trim().equals("")?"":"and paket_operasi.nm_perawatan like ? ")+"order by paket_operasi.nm_perawatan");  
             try {
                 if(!TCari.getText().trim().equals("")){
@@ -406,6 +407,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 rs=ps.executeQuery();
                 i=1;
                 while(rs.next()){
+                    koneksi=koneksiDB.condb();
                     pscari=koneksi.prepareStatement("select count(operasi.kode_paket) from operasi where operasi.kode_paket=? and operasi.tgl_operasi between ? and ? and operasi.kategori=?");
                     try{
                         pscari.setString(1,rs.getString("kode_paket"));

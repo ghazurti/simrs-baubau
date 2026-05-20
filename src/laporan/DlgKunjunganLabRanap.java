@@ -1077,6 +1077,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,periksa_lab.tgl_periksa,periksa_lab.jam,periksa_lab.dokter_perujuk, " +
                     "dokter.nm_dokter,reg_periksa.no_rkm_medis,pasien.nm_pasien,kamar_inap.kd_kamar,bangsal.nm_bangsal,"+
@@ -1159,6 +1160,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     }
                     diagnosa="";
                     kddiangnosa="";
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select penyakit.kd_penyakit,penyakit.nm_penyakit from penyakit inner join diagnosa_pasien " +
                         "on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit " +
                         "where diagnosa_pasien.no_rawat=? order by prioritas asc limit 1");
@@ -1191,6 +1193,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     }
                     
                     tindakan="";
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select trim(template_laboratorium.Pemeriksaan) from detail_periksa_lab inner join template_laboratorium "+
                         "on template_laboratorium.id_template=detail_periksa_lab.id_template where "+
@@ -1214,6 +1217,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
                     }    
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select trim(jns_perawatan_lab.nm_perawatan) from detail_periksa_labpa inner join jns_perawatan_lab "+
                         "on jns_perawatan_lab.kd_jenis_prw=detail_periksa_labpa.kd_jenis_prw where "+

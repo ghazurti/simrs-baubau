@@ -1826,6 +1826,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                 }else{  
                     Sequel.queryu("delete from temporary_permintaan_labmb");
                     try {
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(
                                 "select permintaan_pemeriksaan_labmb.kd_jenis_prw,jns_perawatan_lab.nm_perawatan "+
                                 "from permintaan_pemeriksaan_labmb inner join jns_perawatan_lab on "+
@@ -1838,6 +1839,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                                 Sequel.menyimpan("temporary_permintaan_labmb","?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?",38,new String[]{
                                     "0",rs2.getString("nm_perawatan"),"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
                                 });
+                                koneksi=koneksiDB.condb();
                                 ps3=koneksi.prepareStatement(
                                         "select permintaan_detail_permintaan_labmb.id_template,template_laboratorium.Pemeriksaan,"+
                                         "template_laboratorium.satuan,template_laboratorium.nilai_rujukan_ld,template_laboratorium.nilai_rujukan_la,"+
@@ -1939,6 +1941,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                     
                     Sequel.queryu("delete from temporary_permintaan_labmb");
                     try {
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(
                                 "select permintaan_pemeriksaan_labmb.kd_jenis_prw,jns_perawatan_lab.nm_perawatan "+
                                 "from permintaan_pemeriksaan_labmb inner join jns_perawatan_lab on "+
@@ -1951,6 +1954,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                                 Sequel.menyimpan("temporary_permintaan_labmb","?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?",38,new String[]{
                                     "0",rs2.getString("nm_perawatan"),"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
                                 });
+                                koneksi=koneksiDB.condb();
                                 ps3=koneksi.prepareStatement(
                                         "select permintaan_detail_permintaan_labmb.id_template,template_laboratorium.Pemeriksaan,"+
                                         "template_laboratorium.satuan,template_laboratorium.nilai_rujukan_ld,template_laboratorium.nilai_rujukan_la,"+
@@ -2279,6 +2283,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
         Valid.tabelKosong(tabMode);
         try {
             semua=CrDokter.getText().trim().equals("")&&CrPoli.getText().trim().equals("")&&TCari.getText().trim().equals("");
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select permintaan_labmb.noorder,permintaan_labmb.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,permintaan_labmb.tgl_permintaan,"+
                     "if(permintaan_labmb.jam_permintaan='00:00:00','',permintaan_labmb.jam_permintaan) as jam_permintaan,reg_periksa.kd_pj,penjab.png_jawab,"+
@@ -2319,6 +2324,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                         rs.getString("nm_poli"),rs.getString("informasi_tambahan"),rs.getString("diagnosa_klinis"),
                         rs.getString("kd_pj"),rs.getString("png_jawab")
                     });
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select permintaan_pemeriksaan_labmb.kd_jenis_prw,jns_perawatan_lab.nm_perawatan "+
                             "from permintaan_pemeriksaan_labmb inner join jns_perawatan_lab on "+
@@ -2331,6 +2337,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                             tabMode.addRow(new Object[]{
                                 "","",rs2.getString("nm_perawatan"),"","","","","","","","Nilai Rujukan L.D.","Nilai Rujukan L.A.","Nilai Rujukan P.D.","Nilai Rujukan P.A.","",""
                             });
+                            koneksi=koneksiDB.condb();
                             ps3=koneksi.prepareStatement(
                                     "select permintaan_detail_permintaan_labmb.id_template,template_laboratorium.Pemeriksaan,"+
                                     "template_laboratorium.satuan,template_laboratorium.nilai_rujukan_ld,template_laboratorium.nilai_rujukan_la,"+
@@ -2389,6 +2396,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
         Valid.tabelKosong(tabMode2);  
         try {
             semua=CrDokter.getText().trim().equals("")&&CrPoli.getText().trim().equals("")&&TCari.getText().trim().equals("");
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select permintaan_labmb.noorder,permintaan_labmb.no_rawat,reg_periksa.no_rkm_medis,"+
                 "pasien.nm_pasien,jns_perawatan_lab.nm_perawatan,template_laboratorium.Pemeriksaan,"+
@@ -2565,6 +2573,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
         try {
             semua=CrDokter2.getText().trim().equals("")&&Kamar.getText().trim().equals("")&&TCari.getText().trim().equals("");
             if(cmbStatus.getSelectedIndex()==0){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select permintaan_labmb.noorder,permintaan_labmb.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,permintaan_labmb.tgl_permintaan,"+
                     "if(permintaan_labmb.jam_permintaan='00:00:00','',permintaan_labmb.jam_permintaan) as jam_permintaan,reg_periksa.kd_pj,penjab.png_jawab,"+
@@ -2584,6 +2593,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                     "pasien.nm_pasien like ? or permintaan_labmb.diagnosa_klinis like ? or penjab.png_jawab like ? )")+
                     "group by permintaan_labmb.noorder order by permintaan_labmb.tgl_permintaan desc,permintaan_labmb.jam_permintaan desc,kamar_inap.tgl_masuk desc,kamar_inap.jam_masuk desc");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select permintaan_labmb.noorder,permintaan_labmb.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,permintaan_labmb.tgl_permintaan,"+
                     "if(permintaan_labmb.jam_permintaan='00:00:00','',permintaan_labmb.jam_permintaan) as jam_permintaan,reg_periksa.kd_pj,penjab.png_jawab,"+
@@ -2628,6 +2638,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                         rs.getString("nm_bangsal"),rs.getString("informasi_tambahan"),rs.getString("diagnosa_klinis"),
                         rs.getString("kd_pj"),rs.getString("png_jawab")
                     });
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select permintaan_pemeriksaan_labmb.kd_jenis_prw,jns_perawatan_lab.nm_perawatan "+
                             "from permintaan_pemeriksaan_labmb inner join jns_perawatan_lab on "+
@@ -2640,6 +2651,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                             tabMode3.addRow(new Object[]{
                                 "","",rs2.getString("nm_perawatan"),"","","","","","","","Nilai Rujukan L.D.","Nilai Rujukan L.A.","Nilai Rujukan P.D.","Nilai Rujukan P.A.","",""
                             });
+                            koneksi=koneksiDB.condb();
                             ps3=koneksi.prepareStatement(
                                     "select permintaan_detail_permintaan_labmb.id_template,template_laboratorium.Pemeriksaan,"+
                                     "template_laboratorium.satuan,template_laboratorium.nilai_rujukan_ld,template_laboratorium.nilai_rujukan_la,"+
@@ -2699,6 +2711,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
         try {
             semua=CrDokter2.getText().trim().equals("")&&Kamar.getText().trim().equals("")&&TCari.getText().trim().equals("");
             if(cmbStatus.getSelectedIndex()==0){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select distinct permintaan_labmb.noorder,permintaan_labmb.no_rawat,reg_periksa.no_rkm_medis,"+
                         "pasien.nm_pasien,jns_perawatan_lab.nm_perawatan,template_laboratorium.Pemeriksaan,"+
@@ -2727,6 +2740,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                         "permintaan_labmb.diagnosa_klinis like ? or penjab.png_jawab like ?)")+
                         "group by permintaan_labmb.noorder,permintaan_detail_permintaan_labmb.id_template order by permintaan_labmb.tgl_permintaan desc,permintaan_labmb.jam_permintaan desc,kamar_inap.tgl_masuk desc,kamar_inap.jam_masuk desc");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select distinct permintaan_labmb.noorder,permintaan_labmb.no_rawat,reg_periksa.no_rkm_medis,"+
                         "pasien.nm_pasien,jns_perawatan_lab.nm_perawatan,template_laboratorium.Pemeriksaan,"+

@@ -933,7 +933,7 @@ public final class DlgPeriksaLaboratorium extends javax.swing.JDialog {
                         tbPemeriksaan.getValueAt(i,2).toString().replaceAll("'","`"),
                         tbPemeriksaan.getValueAt(i,3).toString(),
                         tbPemeriksaan.getValueAt(i,4).toString(),
-                        tbPemeriksaan.getValueAt(i,5).toString(),"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
+                        ketWithFlag(tbPemeriksaan.getValueAt(i,2).toString(), tbPemeriksaan.getValueAt(i,4).toString(), tbPemeriksaan.getValueAt(i,5).toString()),"","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","",""
                     });
                 }                
             }
@@ -1363,6 +1363,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         }
         
         try {
+            koneksi=koneksiDB.condb();
             psset_tarif=koneksi.prepareStatement("select set_tarif.cara_bayar_lab,set_tarif.kelas_lab from set_tarif");
             try {
                 rsset_tarif=psset_tarif.executeQuery();
@@ -1573,6 +1574,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 if(tbTarif.getValueAt(i2,0).toString().equals("true")){
                     tabMode.addRow(new Object[]{false,tbTarif.getValueAt(i2,2).toString(),"","","","","",0,0,0,0,0,0,0,0,""});
                     if(Jk.getText().equals("L")&&(rbDewasa.isSelected()==true)){
+                        koneksi=koneksiDB.condb();
                         pstampil=koneksi.prepareStatement(
                                 "select template_laboratorium.id_template,template_laboratorium.Pemeriksaan,template_laboratorium.satuan,template_laboratorium.nilai_rujukan_ld,template_laboratorium.biaya_item, "+
                                 "template_laboratorium.bagian_rs,template_laboratorium.bhp,template_laboratorium.bagian_perujuk,template_laboratorium.bagian_dokter,template_laboratorium.bagian_laborat,template_laboratorium.kso,template_laboratorium.menejemen "+
@@ -1602,6 +1604,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                             }
                         }                        
                     }else if(Jk.getText().equals("L")&&(rbAnak.isSelected()==true)){
+                        koneksi=koneksiDB.condb();
                         pstampil2=koneksi.prepareStatement(
                                 "select template_laboratorium.id_template,template_laboratorium.Pemeriksaan,template_laboratorium.satuan,template_laboratorium.nilai_rujukan_la,template_laboratorium.biaya_item, "+
                                 "template_laboratorium.bagian_rs,template_laboratorium.bhp,template_laboratorium.bagian_perujuk,template_laboratorium.bagian_dokter,template_laboratorium.bagian_laborat,template_laboratorium.kso,template_laboratorium.menejemen "+
@@ -1631,6 +1634,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                             }
                         }                         
                     }else if(Jk.getText().equals("P")&&(rbDewasa.isSelected()==true)){
+                        koneksi=koneksiDB.condb();
                         pstampil3=koneksi.prepareStatement(
                                 "select template_laboratorium.id_template,template_laboratorium.Pemeriksaan,template_laboratorium.satuan,template_laboratorium.nilai_rujukan_pd,template_laboratorium.biaya_item, "+
                                 "template_laboratorium.bagian_rs,template_laboratorium.bhp,template_laboratorium.bagian_perujuk,template_laboratorium.bagian_dokter,template_laboratorium.bagian_laborat,template_laboratorium.kso,template_laboratorium.menejemen "+
@@ -1660,6 +1664,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                             }
                         }                         
                     }else if(Jk.getText().equals("P")&&(rbAnak.isSelected()==true)){
+                        koneksi=koneksiDB.condb();
                         pstampil4=koneksi.prepareStatement(
                                 "select template_laboratorium.id_template,template_laboratorium.Pemeriksaan,template_laboratorium.satuan,template_laboratorium.nilai_rujukan_pa,template_laboratorium.biaya_item, "+
                                 "template_laboratorium.bagian_rs,template_laboratorium.bhp,template_laboratorium.bagian_perujuk,template_laboratorium.bagian_dokter,template_laboratorium.bagian_laborat,template_laboratorium.kso,template_laboratorium.menejemen "+
@@ -1704,6 +1709,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 if(tbTarif.getValueAt(i2,0).toString().equals("true")){
                     tabMode.addRow(new Object[]{true,tbTarif.getValueAt(i2,2).toString(),"","","","","",0,0,0,0,0,0,0,0,""});
                     if(Jk.getText().equals("L")&&(rbDewasa.isSelected()==true)){
+                        koneksi=koneksiDB.condb();
                         pstampil=koneksi.prepareStatement(
                                 "select template_laboratorium.id_template, template_laboratorium.Pemeriksaan, "+
                                 "template_laboratorium.satuan, template_laboratorium.nilai_rujukan_ld,"+
@@ -1742,6 +1748,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                             }
                         }                        
                     }else if(Jk.getText().equals("L")&&(rbAnak.isSelected()==true)){
+                        koneksi=koneksiDB.condb();
                         pstampil2=koneksi.prepareStatement(
                                 "select template_laboratorium.id_template, template_laboratorium.Pemeriksaan, "+
                                 "template_laboratorium.satuan, template_laboratorium.nilai_rujukan_la,"+
@@ -1780,6 +1787,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                             }
                         }                         
                     }else if(Jk.getText().equals("P")&&(rbDewasa.isSelected()==true)){
+                        koneksi=koneksiDB.condb();
                         pstampil3=koneksi.prepareStatement(
                                 "select template_laboratorium.id_template, template_laboratorium.Pemeriksaan, "+
                                 "template_laboratorium.satuan, template_laboratorium.nilai_rujukan_pd,"+
@@ -1818,6 +1826,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                             }
                         }                         
                     }else if(Jk.getText().equals("P")&&(rbAnak.isSelected()==true)){
+                        koneksi=koneksiDB.condb();
                         pstampil4=koneksi.prepareStatement(
                                 "select template_laboratorium.id_template, template_laboratorium.Pemeriksaan, "+
                                 "template_laboratorium.satuan, template_laboratorium.nilai_rujukan_pa,"+
@@ -1873,6 +1882,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 if(tbTarif.getValueAt(i2,0).toString().equals("true")){
                     System.out.println("Pemeriksaan Laborat : "+tbTarif.getValueAt(i2,1).toString()+" "+tbTarif.getValueAt(i2,2).toString());
                     tabMode.addRow(new Object[]{true,tbTarif.getValueAt(i2,2).toString(),"","","","","",0,0,0,0,0,0,0,0,""});
+                    koneksi=koneksiDB.condb();
                     pstampil=koneksi.prepareStatement(
                             "select template_laboratorium.id_template, template_laboratorium.Pemeriksaan, "+
                             "template_laboratorium.satuan, template_laboratorium.nilai_rujukan_ld,"+
@@ -1959,6 +1969,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             for(i2=0;i2<tbTarif.getRowCount();i2++){ 
                 if(tbTarif.getValueAt(i2,0).toString().equals("true")){
                     tabMode.addRow(new Object[]{true,tbTarif.getValueAt(i2,2).toString(),"","","","","",0,0,0,0,0,0,0,0,""});
+                    koneksi=koneksiDB.condb();
                     pstampil=koneksi.prepareStatement(
                             "select template_laboratorium.id_template, template_laboratorium.Pemeriksaan, "+
                             "template_laboratorium.satuan, template_laboratorium.nilai_rujukan_ld,"+
@@ -2028,6 +2039,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             for(i2=0;i2<tbTarif.getRowCount();i2++){ 
                 if(tbTarif.getValueAt(i2,0).toString().equals("true")){
                     tabMode.addRow(new Object[]{true,tbTarif.getValueAt(i2,2).toString(),"","","","","",0,0,0,0,0,0,0,0,""});
+                    koneksi=koneksiDB.condb();
                     pstampil=koneksi.prepareStatement(
                             "select template_laboratorium.id_template, template_laboratorium.Pemeriksaan, "+
                             "template_laboratorium.satuan, template_laboratorium.nilai_rujukan_ld,"+
@@ -2097,6 +2109,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             for(i2=0;i2<tbTarif.getRowCount();i2++){ 
                 if(tbTarif.getValueAt(i2,0).toString().equals("true")){
                     tabMode.addRow(new Object[]{true,tbTarif.getValueAt(i2,2).toString(),"","","","","",0,0,0,0,0,0,0,0,""});
+                    koneksi=koneksiDB.condb();
                     pstampil=koneksi.prepareStatement(
                             "select template_laboratorium.id_template, template_laboratorium.Pemeriksaan, "+
                             "template_laboratorium.satuan, template_laboratorium.nilai_rujukan_ld,"+
@@ -2164,6 +2177,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             for(i2=0;i2<tbTarif.getRowCount();i2++){ 
                 if(tbTarif.getValueAt(i2,0).toString().equals("true")){
                     tabMode.addRow(new Object[]{true,tbTarif.getValueAt(i2,2).toString(),"","","","","",0,0,0,0,0,0,0,0,""});
+                    koneksi=koneksiDB.condb();
                     pstampil4=koneksi.prepareStatement(
                             "select template_laboratorium.id_template, template_laboratorium.Pemeriksaan,"+
                             "template_laboratorium.biaya_item,template_laboratorium.bagian_rs,"+
@@ -2179,6 +2193,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                         rstampil=pstampil4.executeQuery();
                         while(rstampil.next()){
                             hasil="";satuan="";nn="";keterangan="";
+                            koneksi=koneksiDB.condb();
                             pslica=koneksi.prepareStatement("select temp1,temp2,temp3,temp4,temp5,temp6,temp7 from temporary_permintaan_lab where temp7=? and temp1=?");
                             try {
                                 pslica.setString(1,rstampil.getString("id_template"));
@@ -2241,6 +2256,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                             "from template_laboratorium inner join permintaan_detail_permintaan_lab on "+
                             "permintaan_detail_permintaan_lab.id_template=template_laboratorium.id_template where "+
                             "template_laboratorium.kd_jenis_prw='"+tbTarif.getValueAt(i2,1).toString()+"' and permintaan_detail_permintaan_lab.noorder='"+order+"' order by urut");
+                    koneksi=koneksiDB.condb();
                     pstampil4=koneksi.prepareStatement(
                             "select template_laboratorium.id_template, template_laboratorium.Pemeriksaan,"+
                             "template_laboratorium.biaya_item,template_laboratorium.bagian_rs,"+
@@ -2257,6 +2273,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                         while(rstampil.next()){
                             hasil="";satuan="";nn="";keterangan="";
                             System.out.println("ID Detail Paket Laborat : "+rstampil.getString("id_template")+" Untuk Nomor Order "+order);
+                            koneksi=koneksiDB.condb();
                             pslica=koneksi.prepareStatement("select temp1,temp2,temp3,temp4,temp5,temp6,temp7 from temporary_permintaan_lab where temp7=? and temp1=?");
                             try {
                                 pslica.setString(1,rstampil.getString("id_template"));
@@ -2308,6 +2325,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampilMEDQLAB() { 
         try {
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             pslica=koneksi.prepareStatement("select temporary_permintaan_lab.temp1,temporary_permintaan_lab.temp2,temporary_permintaan_lab.temp3,temporary_permintaan_lab.temp4,temporary_permintaan_lab.temp5 from temporary_permintaan_lab");
             try {
                 rslica=pslica.executeQuery();
@@ -2316,6 +2334,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     keterangan=rslica.getString("temp4");
                     nn=rslica.getString("temp5");
                     
+                    koneksi=koneksiDB.condb();
                     pstampil4=koneksi.prepareStatement(
                             "select template_laboratorium.id_template,template_laboratorium.Pemeriksaan,"+
                             "template_laboratorium.biaya_item,template_laboratorium.bagian_rs,"+
@@ -2411,6 +2430,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void isPsien(){
         Sequel.mengedit("pasien","no_rkm_medis=?","umur=CONCAT(CONCAT(CONCAT(TIMESTAMPDIFF(YEAR, tgl_lahir, CURDATE()), ' Th '),CONCAT(TIMESTAMPDIFF(MONTH, tgl_lahir, CURDATE()) - ((TIMESTAMPDIFF(MONTH, tgl_lahir, CURDATE()) div 12) * 12), ' Bl ')),CONCAT(TIMESTAMPDIFF(DAY, DATE_ADD(DATE_ADD(tgl_lahir,INTERVAL TIMESTAMPDIFF(YEAR, tgl_lahir, CURDATE()) YEAR), INTERVAL TIMESTAMPDIFF(MONTH, tgl_lahir, CURDATE()) - ((TIMESTAMPDIFF(MONTH, tgl_lahir, CURDATE()) div 12) * 12) MONTH), CURDATE()), ' Hr'))",1,new String[]{TNoRM.getText()});
         try {
+            koneksi=koneksiDB.condb();
             pstindakan=koneksi.prepareStatement(
                 "select reg_periksa.no_rkm_medis,reg_periksa.kd_pj,reg_periksa.kd_dokter,dokter.nm_dokter,pasien.nm_pasien,pasien.jk,pasien.umur,"+
                 "concat(pasien.alamat,', ',kelurahan.nm_kel,', ',kecamatan.nm_kec,', ',kabupaten.nm_kab) as alamat "+
@@ -2515,6 +2535,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         TNoRw.setText(norwt);
         this.status=posisi;
         try {
+            koneksi=koneksiDB.condb();
             pssetpj=koneksi.prepareStatement("select set_pjlab.kd_dokterlab from set_pjlab");
             try {                              
                 rssetpj=pssetpj.executeQuery();
@@ -2618,6 +2639,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             }       
             
             if(cara_bayar_lab.equals("Yes")&&kelas_lab.equals("No")){
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                     "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
@@ -2628,6 +2650,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     (Pemeriksaan.getText().trim().equals("")?"":"and (jns_perawatan_lab.kd_jenis_prw like ? or jns_perawatan_lab.nm_perawatan like ?) ")+
                     "order by jns_perawatan_lab.kd_jenis_prw");
             }else if(cara_bayar_lab.equals("No")&&kelas_lab.equals("No")){
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                     "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
@@ -2638,6 +2661,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     (Pemeriksaan.getText().trim().equals("")?"":"and (jns_perawatan_lab.kd_jenis_prw like ? or jns_perawatan_lab.nm_perawatan like ?) ")+
                     "order by jns_perawatan_lab.kd_jenis_prw");
             }else if(cara_bayar_lab.equals("Yes")&&kelas_lab.equals("Yes")){
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                     "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
@@ -2648,6 +2672,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     (Pemeriksaan.getText().trim().equals("")?"":"and (jns_perawatan_lab.kd_jenis_prw like ? or jns_perawatan_lab.nm_perawatan like ?) ")+
                     "order by jns_perawatan_lab.kd_jenis_prw");
             }else if(cara_bayar_lab.equals("No")&&kelas_lab.equals("Yes")){
+                koneksi=koneksiDB.condb();
                 pstindakan=koneksi.prepareStatement(
                     "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                     "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
@@ -2710,6 +2735,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampiltarif(String order) {     
         try{
             Valid.tabelKosong(tabMode2);
+            koneksi=koneksiDB.condb();
             pstindakan=koneksi.prepareStatement(
                 "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,jns_perawatan_lab.total_byr,"+
                 "jns_perawatan_lab.bagian_rs,jns_perawatan_lab.bhp,jns_perawatan_lab.tarif_perujuk,"+
@@ -2750,6 +2776,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         this.status=posisi;
         isRawat();
         try {
+            koneksi=koneksiDB.condb();
             pssetpj=koneksi.prepareStatement("select set_pjlab.kd_dokterlab from set_pjlab");
             try {                              
                 rssetpj=pssetpj.executeQuery();
@@ -2785,6 +2812,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         this.status=posisi;
         isRawat();
         try {
+            koneksi=koneksiDB.condb();
             pssetpj=koneksi.prepareStatement("select set_pjlab.kd_dokterlab from set_pjlab");
             try {                              
                 rssetpj=pssetpj.executeQuery();
@@ -2816,6 +2844,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         this.status=posisi;
         isRawat();
         try {
+            koneksi=koneksiDB.condb();
             pssetpj=koneksi.prepareStatement("select set_pjlab.kd_dokterlab from set_pjlab");
             try {                              
                 rssetpj=pssetpj.executeQuery();
@@ -2847,6 +2876,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         this.status=posisi;
         isRawat();
         try {
+            koneksi=koneksiDB.condb();
             pssetpj=koneksi.prepareStatement("select set_pjlab.kd_dokterlab from set_pjlab");
             try {                              
                 rssetpj=pssetpj.executeQuery();
@@ -2878,6 +2908,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         this.status=posisi;
         isRawat();
         try {
+            koneksi=koneksiDB.condb();
             pssetpj=koneksi.prepareStatement("select set_pjlab.kd_dokterlab from set_pjlab");
             try {                              
                 rssetpj=pssetpj.executeQuery();
@@ -2909,6 +2940,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         this.status=posisi;
         isRawat();
         try {
+            koneksi=koneksiDB.condb();
             pssetpj=koneksi.prepareStatement("select set_pjlab.kd_dokterlab from set_pjlab");
             try {                              
                 rssetpj=pssetpj.executeQuery();
@@ -2940,6 +2972,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         this.status=posisi;
         isRawat();
         try {
+            koneksi=koneksiDB.condb();
             pssetpj=koneksi.prepareStatement("select set_pjlab.kd_dokterlab from set_pjlab");
             try {                              
                 rssetpj=pssetpj.executeQuery();
@@ -2971,6 +3004,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         this.status=posisi;
         isRawat();
         try {
+            koneksi=koneksiDB.condb();
             pssetpj=koneksi.prepareStatement("select set_pjlab.kd_dokterlab from set_pjlab");
             try {                              
                 rssetpj=pssetpj.executeQuery();
@@ -3295,6 +3329,43 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         }
     }
     
+    private String hitungFlag(String nilai, String nilaiRujukan) {
+        if (nilai == null || nilaiRujukan == null) return "";
+        try {
+            double v = Double.parseDouble(nilai.trim().replace(",", "."));
+            String[] parts = nilaiRujukan.split("-");
+            if (parts.length == 2) {
+                double min = Double.parseDouble(parts[0].trim().replace(",", "."));
+                double max = Double.parseDouble(parts[1].trim().replace(",", "."));
+                if (v > max) return "T";
+                if (v < min) return "L";
+            }
+        } catch (Exception ignored) {}
+        return "";
+    }
+
+    private String ketWithFlag(String nilai, String nilaiRujukan, String keterangan) {
+        if (keterangan == null) keterangan = "";
+        String flag = hitungFlag(nilai, nilaiRujukan);
+        if (flag.isEmpty()) {
+            String ketLower = keterangan.toLowerCase().trim();
+            if (ketLower.startsWith("h ") || ketLower.startsWith("l ") || ketLower.startsWith("t ") || 
+                ketLower.equals("h") || ketLower.equals("l") || ketLower.equals("t")) {
+                return keterangan;
+            }
+            if (ketLower.startsWith("h") || ketLower.startsWith("l") || ketLower.startsWith("t")) {
+                return " " + keterangan;
+            }
+            return keterangan;
+        } else {
+            String ketLower = keterangan.toLowerCase().trim();
+            if (ketLower.startsWith(flag.toLowerCase() + " ") || ketLower.equals(flag.toLowerCase())) {
+                return keterangan;
+            }
+            return flag + " " + keterangan;
+        }
+    }
+
     @Override
     public void dispose() {
         executor.shutdownNow();

@@ -518,6 +518,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
            Valid.tabelKosong(tabMode);
+           koneksi=koneksiDB.condb();
            pspenjab=koneksi.prepareStatement("select penjab.kd_pj,penjab.png_jawab from penjab "+(nmpenjab.getText().trim().equals("")?"":"where penjab.png_jawab=? "));
            try {                 
                 if(!nmpenjab.getText().trim().equals("")){
@@ -529,6 +530,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 ttlpiutang=0;ttlsisapiutang=0;
                 while(rspenjab.next()){
                     tabMode.addRow(new Object[]{i+". ",rspenjab.getString("png_jawab"),"",null,null,""});
+                    koneksi=koneksiDB.condb();
                     pspiutang=koneksi.prepareStatement(
                        "select piutang_pasien.no_rawat, piutang_pasien.tgl_piutang, concat(piutang_pasien.no_rkm_medis,' ',pasien.nm_pasien) as pasien, detail_piutang_pasien.totalpiutang, detail_piutang_pasien.sisapiutang, detail_piutang_pasien.tgltempo "+
                        "from piutang_pasien inner join pasien on piutang_pasien.no_rkm_medis=pasien.no_rkm_medis inner join reg_periksa on piutang_pasien.no_rawat=reg_periksa.no_rawat inner join detail_piutang_pasien on piutang_pasien.no_rawat=detail_piutang_pasien.no_rawat "+

@@ -1024,6 +1024,7 @@ public final class DlgAuditPembuanganBendaTajam extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_pembuangan_benda_tajam.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_pembuangan_benda_tajam.tanggal,audit_pembuangan_benda_tajam.setiap_injeksi_needle_langsung_dimasukkan_safety_box,"+
                     "audit_pembuangan_benda_tajam.setiap_pemasangan_iv_canula_langsung_dimasukkan_safety_box,audit_pembuangan_benda_tajam.setiap_benda_tajam_jarum_dimasukkan_safety_box,"+
@@ -1032,6 +1033,7 @@ public final class DlgAuditPembuanganBendaTajam extends javax.swing.JDialog {
                     "inner join ruang_audit_kepatuhan on audit_pembuangan_benda_tajam.id_ruang=ruang_audit_kepatuhan.id_ruang "+
                     "where audit_pembuangan_benda_tajam.tanggal between ? and ? order by audit_pembuangan_benda_tajam.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_pembuangan_benda_tajam.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_pembuangan_benda_tajam.tanggal,audit_pembuangan_benda_tajam.setiap_injeksi_needle_langsung_dimasukkan_safety_box,"+
                     "audit_pembuangan_benda_tajam.setiap_pemasangan_iv_canula_langsung_dimasukkan_safety_box,audit_pembuangan_benda_tajam.setiap_benda_tajam_jarum_dimasukkan_safety_box,"+

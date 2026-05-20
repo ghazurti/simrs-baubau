@@ -397,6 +397,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select kd_bangsal,nm_bangsal from bangsal where kd_bangsal in(select kd_bangsal from kamar) and kd_bangsal like ? or kd_bangsal in(select kd_bangsal from kamar) and nm_bangsal like ? group by kd_bangsal order by nm_bangsal ");
             try {

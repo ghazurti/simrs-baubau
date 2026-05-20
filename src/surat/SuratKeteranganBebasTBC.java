@@ -989,6 +989,7 @@ public final class SuratKeteranganBebasTBC extends javax.swing.JDialog {
         try{
             tgl=" surat_bebas_tbc.tanggalsurat between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' ";
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                      "select surat_bebas_tbc.no_surat,surat_bebas_tbc.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien, "+
                      "surat_bebas_tbc.tanggalsurat,surat_bebas_tbc.kd_dokter,dokter.nm_dokter,surat_bebas_tbc.keperluan "+                   
@@ -997,6 +998,7 @@ public final class SuratKeteranganBebasTBC extends javax.swing.JDialog {
                      "inner join dokter on surat_bebas_tbc.kd_dokter=dokter.kd_dokter "+
                      "where "+tgl+"order by surat_bebas_tbc.no_surat");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                      "select surat_bebas_tbc.no_surat,surat_bebas_tbc.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien, "+
                      "surat_bebas_tbc.tanggalsurat,surat_bebas_tbc.kd_dokter,dokter.nm_dokter,surat_bebas_tbc.keperluan "+                   

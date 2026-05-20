@@ -600,6 +600,7 @@ public class MasterTriasePemeriksaan extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_triase_pemeriksaan where master_triase_pemeriksaan.kode_pemeriksaan like ? or master_triase_pemeriksaan.nama_pemeriksaan like ? order by master_triase_pemeriksaan.kode_pemeriksaan");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

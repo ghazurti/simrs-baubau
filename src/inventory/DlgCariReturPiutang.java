@@ -785,6 +785,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
       Valid.textKosong(TCari,"No.Faktur");
   }else{
      try {
+         koneksi=koneksiDB.condb();
          ps=koneksi.prepareStatement("select no_retur_piutang, kd_bangsal from returpiutang where no_retur_piutang=?");
          try {
             ps.setString(1,tbRetur.getValueAt(tbRetur.getSelectedRow(),0).toString());
@@ -792,6 +793,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             if(rs.next()){
                 Sequel.AutoComitFalse();
                 sukses=true;
+                koneksi=koneksiDB.condb();
                 ps2=koneksi.prepareStatement("select kode_brng,jml_retur,no_batch,no_faktur from detreturpiutang where no_retur_piutang=? ");
                 try {
                     ps2.setString(1,rs.getString(1));
@@ -965,6 +967,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         }
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select returpiutang.no_retur_piutang,returpiutang.tgl_retur, "+
                     "returpiutang.nip,petugas.nama,pasien.no_rkm_medis,pasien.nm_pasien,bangsal.nm_bangsal "+
                     " from returpiutang inner join petugas inner join pasien inner join bangsal "+
@@ -995,6 +998,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         rs.getString(1),rs.getString(2),rs.getString(3)+", "+rs.getString(4),
                         rs.getString(5)+", "+rs.getString(6),"Retur Piutang Ke "+rs.getString(7),"","","","",""
                     });
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select detreturpiutang.nota_piutang,detreturpiutang.kode_brng,databarang.nama_brng, "+
                             "detreturpiutang.kode_sat,kodesatuan.satuan,detreturpiutang.h_retur,detreturpiutang.jml_retur, "+
                             "detreturpiutang.subtotal,detreturpiutang.no_batch,detreturpiutang.no_faktur from detreturpiutang inner join databarang inner join kodesatuan "+

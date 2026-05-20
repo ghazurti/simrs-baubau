@@ -794,6 +794,7 @@ public class PanelDiagnosa extends widget.panelisi {
     private void tampil() {
         Valid.tabelKosong(TabModeDiagnosaPasien);
         try{            
+            koneksi=koneksiDB.condb();
             psdiagnosapasien=koneksi.prepareStatement(
                 "select reg_periksa.tgl_registrasi,diagnosa_pasien.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                 "diagnosa_pasien.kd_penyakit,penyakit.nm_penyakit,diagnosa_pasien.status,diagnosa_pasien.status_penyakit,"+
@@ -927,6 +928,7 @@ public class PanelDiagnosa extends widget.panelisi {
             im=null;
             urut=null;
 
+            koneksi=koneksiDB.condb();
             pspenyakit=koneksi.prepareStatement(
                     "select penyakit.kd_penyakit,penyakit.nm_penyakit,penyakit.ciri_ciri,penyakit.keterangan,kategori_penyakit.nm_kategori,"+
                     "kategori_penyakit.ciri_umum,penyakit.validcode,penyakit.accpdx,penyakit.asterisk,penyakit.im from kategori_penyakit "+
@@ -1015,6 +1017,7 @@ public class PanelDiagnosa extends widget.panelisi {
             urut=null;
             multy=null;
             
+            koneksi=koneksiDB.condb();
             psprosedur=koneksi.prepareStatement(
                     "select * from icd9 "+(Prosedur.getText().trim().equals("")?"":"where kode like ? or deskripsi_panjang like ? or  deskripsi_pendek like ?")+" order by kode");
             try{
@@ -1048,6 +1051,7 @@ public class PanelDiagnosa extends widget.panelisi {
     private void tampil2() {
         Valid.tabelKosong(TabModeTindakanPasien);
         try{            
+            koneksi=koneksiDB.condb();
             pstindakanpasien=koneksi.prepareStatement(
                     "select reg_periksa.tgl_registrasi,prosedur_pasien.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                     "prosedur_pasien.kode,icd9.deskripsi_panjang,prosedur_pasien.status,prosedur_pasien.prioritas,prosedur_pasien.jumlah "+

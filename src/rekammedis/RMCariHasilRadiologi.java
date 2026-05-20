@@ -338,6 +338,7 @@ public final class RMCariHasilRadiologi extends javax.swing.JDialog {
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select hasil_radiologi.tgl_periksa,hasil_radiologi.jam,hasil_radiologi.hasil from hasil_radiologi "+
                     "where hasil_radiologi.no_rawat=? and (hasil_radiologi.tgl_periksa like ? or hasil_radiologi.hasil like ?) "+

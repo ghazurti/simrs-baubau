@@ -824,6 +824,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         Valid.tabelKosong(tabMode);
         try{       
             semua=NmCaraBayar.getText().trim().equals("")&&NmPoli.getText().trim().equals("")&&NmDokter.getText().trim().equals("")&&NmPerusahaan.getText().trim().equals("");
+            koneksi=koneksiDB.condb();
             ps= koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,pasien.jk,reg_periksa.tgl_registrasi, "+
                         "jns_perawatan.nm_perawatan,piutang_pasien.totalpiutang,piutang_pasien.uangmuka,piutang_pasien.status "+

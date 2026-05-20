@@ -414,6 +414,7 @@ public final class DlgRestoreDapurBarang extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try {
+            koneksi=koneksiDB.condb();
             ps = koneksi.prepareStatement(
                         "select dapurbarang.kode_brng, dapurbarang.nama_brng, kodesatuan.satuan, dapurbarang.jenis,dapurbarang.stok,"+
                         "dapurbarang.harga from dapurbarang inner join kodesatuan on dapurbarang.kode_sat=kodesatuan.kode_sat "+

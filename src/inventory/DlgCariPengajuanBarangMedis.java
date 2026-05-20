@@ -912,6 +912,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         try{  
             if(NoPermintaan.getText().trim().equals("")&&Status.getSelectedItem().toString().equals("Semua")&&NmPeg.getText().trim().equals("")&&
                     kdjenis.getText().trim().equals("")&&nmbar.getText().trim().equals("")&&TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select pengajuan_barang_medis.tanggal,pengajuan_barang_medis.no_pengajuan, "+
                         "pengajuan_barang_medis.keterangan,pengajuan_barang_medis.nip,pegawai.nama,pengajuan_barang_medis.status "+
@@ -923,6 +924,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         " and databarang.kdjns=jenis.kdjns "+
                         " where pengajuan_barang_medis.tanggal between ? and ? group by pengajuan_barang_medis.no_pengajuan order by pengajuan_barang_medis.tanggal,pengajuan_barang_medis.no_pengajuan ");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select pengajuan_barang_medis.tanggal,pengajuan_barang_medis.no_pengajuan, "+
                         "pengajuan_barang_medis.keterangan,pengajuan_barang_medis.nip,pegawai.nama,pengajuan_barang_medis.status "+
@@ -1021,6 +1023,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         rs.getString("tanggal"),rs.getString("no_pengajuan"),rs.getString("status"),
                         rs.getString("keterangan"),rs.getString("nip")+" "+rs.getString("nama")
                     });  
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select detail_pengajuan_barang_medis.kode_brng,databarang.nama_brng, "+
                         "detail_pengajuan_barang_medis.kode_sat,kodesatuan.satuan,detail_pengajuan_barang_medis.jumlah,"+

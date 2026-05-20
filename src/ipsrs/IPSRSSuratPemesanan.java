@@ -1431,6 +1431,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select ipsrsbarang.kode_brng, ipsrsbarang.nama_brng,ipsrsbarang.kode_sat, "+
                 " ipsrsbarang.harga from ipsrsbarang inner join ipsrsjenisbarang on ipsrsbarang.jenis=ipsrsjenisbarang.kd_jenis "+
                 " where ipsrsbarang.status='1' order by ipsrsbarang.nama_brng");
@@ -1643,6 +1644,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     
     public void panggilgetData(String nopengajuan){
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select ipsrsbarang.kode_brng, ipsrsbarang.nama_brng,ipsrsbarang.kode_sat,detail_pengajuan_barang_nonmedis.jumlah,detail_pengajuan_barang_nonmedis.total,"+
                 " detail_pengajuan_barang_nonmedis.h_pengajuan from ipsrsbarang inner join ipsrsjenisbarang inner join detail_pengajuan_barang_nonmedis "+

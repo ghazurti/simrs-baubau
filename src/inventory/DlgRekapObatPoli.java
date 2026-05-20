@@ -906,8 +906,10 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
            Valid.tabelKosong(tabMode);
            if(kdpoli.getText().equals("")){
+               koneksi=koneksiDB.condb();
                pspoli=koneksi.prepareStatement("select kd_poli,nm_poli from poliklinik");
            }else{
+               koneksi=koneksiDB.condb();
                pspoli=koneksi.prepareStatement("select kd_poli,nm_poli from poliklinik where concat(kd_poli,nm_poli) like ?");
            }
                 
@@ -921,6 +923,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 ttlbiaya=0;ttlembalase=0;ttltuslah=0;ttltotal=0;
                 while(rspoli.next()){
                     if(nmjns.getText().equals("")&&nmkategori.getText().equals("")&&nmgolongan.getText().equals("")&&nmasal.getText().equals("")&&nmpenjab.getText().equals("")){
+                        koneksi=koneksiDB.condb();
                         psobat=koneksi.prepareStatement(
                             "select detail_pemberian_obat.kode_brng,databarang.nama_brng,sum(detail_pemberian_obat.jml) as jml,"+
                             "(sum(detail_pemberian_obat.total)-sum(detail_pemberian_obat.embalase+detail_pemberian_obat.tuslah)) as biaya,"+
@@ -931,6 +934,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             "where detail_pemberian_obat.status='Ralan' and reg_periksa.tgl_registrasi between ? and ? and reg_periksa.kd_poli=? "+
                             "group by detail_pemberian_obat.kode_brng order by databarang.nama_brng");  
                     }else{
+                        koneksi=koneksiDB.condb();
                         psobat=koneksi.prepareStatement(
                             "select detail_pemberian_obat.kode_brng,databarang.nama_brng,sum(detail_pemberian_obat.jml) as jml,"+
                             "(sum(detail_pemberian_obat.total)-sum(detail_pemberian_obat.embalase+detail_pemberian_obat.tuslah)) as biaya,"+

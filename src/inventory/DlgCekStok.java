@@ -401,6 +401,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private void tampil() {
         try{  
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement("select databarang.kode_brng, databarang.nama_brng,jenis.nama, databarang.kode_sat, "+
                 "databarang."+hppfarmasi+" as dasar from databarang inner join jenis on databarang.kdjns=jenis.kdjns "+
                 " where databarang.status='1' and databarang.kode_brng like ? or "+
@@ -416,6 +417,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 while(rstampil.next()){     
                     stokbarang=0;   
                     if(!nmgudang.getText().equals("")){
+                        koneksi=koneksiDB.condb();
                         psstok=koneksi.prepareStatement("select ifnull(sum(stok),'0') from gudangbarang where kd_bangsal=? and kode_brng=?");
                         try{
                             psstok.setString(1,kdgudang.getText());

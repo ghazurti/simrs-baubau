@@ -2052,6 +2052,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select set_akun.Piutang_BPJS_RVP,set_akun.Kerugian_Klaim_BPJS_RVP,set_akun.Lebih_Bayar_Klaim_BPJS_RVP,"+
                     "set_akun.PPN_Keluaran from set_akun");
@@ -2074,6 +2075,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 }
             }   
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select Tindakan_Ralan,set_akun_ralan.Beban_Jasa_Medik_Dokter_Tindakan_Ralan,set_akun_ralan.Utang_Jasa_Medik_Dokter_Tindakan_Ralan,"+
                     "set_akun_ralan.Beban_Jasa_Medik_Paramedis_Tindakan_Ralan,set_akun_ralan.Utang_Jasa_Medik_Paramedis_Tindakan_Ralan,set_akun_ralan.Beban_KSO_Tindakan_Ralan,"+
@@ -2158,6 +2160,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 }
             } 
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select set_akun_ranap.Tindakan_Ranap,set_akun_ranap.Beban_Jasa_Medik_Dokter_Tindakan_Ranap,set_akun_ranap.Utang_Jasa_Medik_Dokter_Tindakan_Ranap,"+
                     "set_akun_ranap.Beban_Jasa_Medik_Paramedis_Tindakan_Ranap,set_akun_ranap.Utang_Jasa_Medik_Paramedis_Tindakan_Ranap,set_akun_ranap.Beban_KSO_Tindakan_Ranap,"+
@@ -2246,6 +2249,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 }
             } 
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select set_akun_ranap2.Harian_Ranap from set_akun_ranap2");
             try {
                 rs=ps.executeQuery();
@@ -2340,6 +2344,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select rvp_klaim_bpjs.no_rawat,rvp_klaim_bpjs.no_sep,rvp_klaim_bpjs.tanggal_rvp,concat(reg_periksa.no_rkm_medis,' ',pasien.nm_pasien) as namapasien,"+
                    "rvp_klaim_bpjs.totalpiutang,rvp_klaim_bpjs.uangmuka,rvp_klaim_bpjs.sudahdibayar,rvp_klaim_bpjs.sisapiutang,rvp_klaim_bpjs.tarifinacbg,"+

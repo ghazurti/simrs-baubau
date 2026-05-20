@@ -633,6 +633,7 @@ public final class InhealthMapingDokter extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement(
                    "select inhealth_maping_dokter.kd_dokter,dokter.nm_dokter,inhealth_maping_dokter.kd_inhealth "+
                    "from inhealth_maping_dokter inner join dokter on inhealth_maping_dokter.kd_dokter=dokter.kd_dokter where "+

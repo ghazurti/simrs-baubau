@@ -385,6 +385,7 @@ public final class InhealthCariReferensiJenpelRuang extends javax.swing.JDialog 
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                        "select inhealth_jenpel_ruang_rawat.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                        "inhealth_jenpel_ruang_rawat.kode_jenpel_ruang_rawat,inhealth_jenpel_ruang_rawat.nama_jenpel_ruang_rawat, "+

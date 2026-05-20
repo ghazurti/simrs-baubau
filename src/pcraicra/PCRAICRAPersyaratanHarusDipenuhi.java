@@ -587,6 +587,7 @@ public final class PCRAICRAPersyaratanHarusDipenuhi extends javax.swing.JDialog 
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select pcra_icra_persyaratan_harus_dipenuhi.kode_persyaratan,pcra_icra_persyaratan_harus_dipenuhi.nama_persyaratan from pcra_icra_persyaratan_harus_dipenuhi "+(TCari.getText().trim().equals("")?"":"where pcra_icra_persyaratan_harus_dipenuhi.kode_persyaratan like ? or pcra_icra_persyaratan_harus_dipenuhi.nama_persyaratan like ? ")+"order by pcra_icra_persyaratan_harus_dipenuhi.kode_persyaratan"
             );

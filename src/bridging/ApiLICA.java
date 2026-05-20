@@ -59,6 +59,7 @@ public class ApiLICA {
     
     public void kirimRalan(String nopermintaan) {
         try {
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement(
                     "select permintaan_lab.noorder,permintaan_lab.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,permintaan_lab.tgl_permintaan,"+
                     "if(permintaan_lab.jam_permintaan='00:00:00','',permintaan_lab.jam_permintaan) as jam_permintaan,pasien.tgl_lahir,pasien.jk,pasien.alamat,"+
@@ -76,6 +77,7 @@ public class ApiLICA {
                     headers.setContentType(MediaType.APPLICATION_JSON);
                     headers.add("Content-Type","application/json;charset=UTF-8");
                     headers.add("x-api-key",KEY);
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select permintaan_detail_permintaan_lab.id_template,template_laboratorium.Pemeriksaan,"+
                             "template_laboratorium.urut from permintaan_detail_permintaan_lab "+
@@ -158,6 +160,7 @@ public class ApiLICA {
     
     public void kirimRanap(String nopermintaan) {
         try {
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement(
                     "select permintaan_lab.noorder,permintaan_lab.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,permintaan_lab.tgl_permintaan,"+
                     "if(permintaan_lab.jam_permintaan='00:00:00','',permintaan_lab.jam_permintaan) as jam_permintaan,pasien.jk,pasien.alamat,"+
@@ -176,6 +179,7 @@ public class ApiLICA {
                     headers.setContentType(MediaType.APPLICATION_JSON);
                     headers.add("Content-Type","application/json;charset=UTF-8");
                     headers.add("x-api-key",KEY);
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select permintaan_detail_permintaan_lab.id_template,template_laboratorium.Pemeriksaan,"+
                             "template_laboratorium.urut from permintaan_detail_permintaan_lab "+

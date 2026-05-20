@@ -596,6 +596,7 @@ public class K3RSPenyebab extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from k3rs_penyebab where kode_penyebab like ? or penyebab_kecelakaan like ? order by kode_penyebab");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

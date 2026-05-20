@@ -734,6 +734,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(TCari,"No.Faktur");
         }else{
            try {
+               koneksi=koneksiDB.condb();
                pscaribeli=koneksi.prepareStatement("select no_hibah,totalhibah,tgl_hibah from ipsrs_hibah where no_hibah=?");
                try {
                   pscaribeli.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),1).toString());
@@ -742,6 +743,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                       Sequel.AutoComitFalse();
                       sukses=true;
 
+                      koneksi=koneksiDB.condb();
                       ps2=koneksi.prepareStatement("select kode_brng,jumlah from ipsrs_detail_hibah where no_hibah=? ");
                       try {
                           ps2.setString(1,rs.getString(1));
@@ -923,6 +925,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{            
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select ipsrs_hibah.tgl_hibah,ipsrs_hibah.no_hibah,ipsrs_hibah.kode_pemberi,pemberihibah.nama_pemberi, "+
                     "ipsrs_hibah.nip,petugas.nama,ipsrs_hibah.totalhibah,ipsrs_hibah.keterangan from "+
@@ -985,6 +988,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3)+", "+rs.getString(4),
                           rs.getString(5)+", "+rs.getString(6),"","",""
                     });      
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select ipsrs_detail_hibah.kode_brng,ipsrsbarang.nama_brng,ipsrsbarang.jenis,ipsrsjenisbarang.nm_jenis,ipsrs_detail_hibah.jumlah,ipsrs_detail_hibah.h_hibah, "+
                         "ipsrs_detail_hibah.subtotalhibah,ipsrs_detail_hibah.kode_sat from ipsrs_detail_hibah inner join ipsrsbarang on ipsrs_detail_hibah.kode_brng=ipsrsbarang.kode_brng "+

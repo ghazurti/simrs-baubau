@@ -62,6 +62,7 @@ public class ApiSOFTMEDIX {
     
     public void kirimRalan(String nopermintaan) {
         try {
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement(
                     "select permintaan_lab.noorder,permintaan_lab.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,date_format(permintaan_lab.tgl_permintaan,'%d.%m.%Y') as tgl_permintaan,"+
                     "if(permintaan_lab.jam_permintaan='00:00:00','',permintaan_lab.jam_permintaan) as jam_permintaan,date_format(pasien.tgl_lahir,'%d.%m.%Y') as tgl_lahir,pasien.jk,pasien.alamat,"+
@@ -77,6 +78,7 @@ public class ApiSOFTMEDIX {
                 while(rs.next()){
                     headers = new HttpHeaders();
                     headers.setContentType(MediaType.APPLICATION_JSON);
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select permintaan_detail_permintaan_lab.id_template from permintaan_detail_permintaan_lab where permintaan_detail_permintaan_lab.noorder=? order by permintaan_detail_permintaan_lab.id_template desc");
                     try {
@@ -177,6 +179,7 @@ public class ApiSOFTMEDIX {
     
     public void kirimRanap(String nopermintaan) {
         try {
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement(
                     "select permintaan_lab.noorder,permintaan_lab.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,date_format(permintaan_lab.tgl_permintaan,'%d.%m.%Y') as tgl_permintaan,"+
                     "if(permintaan_lab.jam_permintaan='00:00:00','',permintaan_lab.jam_permintaan) as jam_permintaan,pasien.jk,pasien.alamat,"+
@@ -194,6 +197,7 @@ public class ApiSOFTMEDIX {
                 while(rs.next()){
                     headers = new HttpHeaders();
                     headers.setContentType(MediaType.APPLICATION_JSON);
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select permintaan_detail_permintaan_lab.id_template from permintaan_detail_permintaan_lab where permintaan_detail_permintaan_lab.noorder=? order by permintaan_detail_permintaan_lab.id_template desc");
                     try {

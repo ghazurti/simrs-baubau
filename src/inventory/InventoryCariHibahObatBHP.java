@@ -910,6 +910,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(TCari,"pilihan data");
         }else{
            try {
+               koneksi=koneksiDB.condb();
                pscaribeli=koneksi.prepareStatement("select no_hibah, totalnilai, kd_bangsal,tgl_hibah from hibah_obat_bhp where no_hibah=?");
                try {
                   pscaribeli.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),1).toString());
@@ -917,6 +918,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                   if(rs.next()){
                       Sequel.AutoComitFalse();
                       sukses=true;
+                      koneksi=koneksiDB.condb();
                       psdetailhibah_obat_bhp=koneksi.prepareStatement("select kode_brng,jumlah2,no_batch,no_hibah from detailhibah_obat_bhp where no_hibah=? ");
                       try {            
                           psdetailhibah_obat_bhp.setString(1,rs.getString(1));
@@ -1147,6 +1149,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{     
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select hibah_obat_bhp.tgl_hibah,hibah_obat_bhp.no_hibah,hibah_obat_bhp.kode_pemberi,pemberihibah.nama_pemberi, "+
                 "hibah_obat_bhp.nip,petugas.nama,bangsal.nm_bangsal,hibah_obat_bhp.totalhibah,hibah_obat_bhp.totalnilai "+
@@ -1191,6 +1194,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         rs.getString("tgl_hibah"),rs.getString("no_hibah"),rs.getString("kode_pemberi")+", "+rs.getString("nama_pemberi"),
                         rs.getString("nip")+", "+rs.getString("nama"),"Pembelian di "+rs.getString("nm_bangsal") +" :","","","","","",""
                     });    
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select detailhibah_obat_bhp.kode_brng,databarang.nama_brng, "+
                         "detailhibah_obat_bhp.kode_sat,kodesatuan.satuan,detailhibah_obat_bhp.jumlah,detailhibah_obat_bhp.h_hibah, "+

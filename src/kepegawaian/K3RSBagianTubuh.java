@@ -596,6 +596,7 @@ public class K3RSBagianTubuh extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from k3rs_bagian_tubuh where kode_bagian like ? or bagian_tubuh like ? order by kode_bagian");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

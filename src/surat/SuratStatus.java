@@ -661,6 +661,7 @@ public final class SuratStatus extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from surat_status where kd like ? "+
                     "or status like ? order by kd");
             try {

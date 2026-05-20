@@ -873,6 +873,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select ipsrsbarang.kode_brng, concat(ipsrsbarang.nama_brng,' (',ipsrsjenisbarang.nm_jenis,')'),ipsrsbarang.kode_sat,ipsrsbarang.harga "+
                     " from ipsrsbarang inner join ipsrsjenisbarang on ipsrsjenisbarang.kd_jenis=ipsrsbarang.jenis where ipsrsbarang.status='1' order by ipsrsbarang.nama_brng");

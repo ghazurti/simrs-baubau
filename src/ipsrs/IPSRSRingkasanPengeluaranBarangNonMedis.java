@@ -1074,6 +1074,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
        Valid.tabelKosong(tabMode);
         try{     
             tagihan=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select ipsrsdetailpengeluaran.kode_brng,ipsrsbarang.nama_brng,ipsrsjenisbarang.nm_jenis as namajenis, "+
                     "ipsrsdetailpengeluaran.kode_sat,kodesatuan.satuan,sum(ipsrsdetailpengeluaran.jumlah) as jumlah,sum(ipsrsdetailpengeluaran.total) as total "+
                     " from ipsrspengeluaran inner join petugas inner join kodesatuan inner join ipsrsjenisbarang  "+

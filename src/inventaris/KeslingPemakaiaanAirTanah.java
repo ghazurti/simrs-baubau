@@ -881,6 +881,7 @@ private void NmPetugasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select kesling_pemakaian_air_tanah.nip,petugas.nama,kesling_pemakaian_air_tanah.tanggal,"+
                    "kesling_pemakaian_air_tanah.meteran,kesling_pemakaian_air_tanah.jumlahharian,kesling_pemakaian_air_tanah.keterangan "+

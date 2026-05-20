@@ -540,6 +540,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
        Valid.tabelKosong(tabMode);      
        try{   
             if(nmbar.getText().trim().equals("")&&TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select toko_riwayat_barang.kode_brng,tokobarang.nama_brng,"+
                     "toko_riwayat_barang.stok_awal,toko_riwayat_barang.masuk,"+
@@ -550,6 +551,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     "inner join tokobarang on toko_riwayat_barang.kode_brng=tokobarang.kode_brng where "+
                     "toko_riwayat_barang.tanggal between ? and ? order by toko_riwayat_barang.tanggal,toko_riwayat_barang.jam ");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select toko_riwayat_barang.kode_brng,tokobarang.nama_brng,"+
                     "toko_riwayat_barang.stok_awal,toko_riwayat_barang.masuk,"+

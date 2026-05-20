@@ -1224,6 +1224,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             if(NoPermintaan.getText().equals("")&&NmBangsal.getText().equals("")&&NmPeg.getText().equals("")&&nmjenis.getText().equals("")&&
                  nmkategori.getText().equals("")&&nmgolongan.getText().equals("")&&nmbar.getText().equals("")&&TCari.getText().equals("")&&
                     Status.getSelectedItem().toString().equals("Semua")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select permintaan_medis.tanggal,permintaan_medis.no_permintaan, "+
                     "permintaan_medis.kd_bangsal,bangsal.nm_bangsal as asal, "+
@@ -1240,6 +1241,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     "inner join bangsal as tujuan on permintaan_medis.kd_bangsaltujuan=tujuan.kd_bangsal "+
                     " where permintaan_medis.tanggal between ? and ? group by permintaan_medis.no_permintaan order by permintaan_medis.tanggal,permintaan_medis.no_permintaan ");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select permintaan_medis.tanggal,permintaan_medis.no_permintaan, "+
                     "permintaan_medis.kd_bangsal,bangsal.nm_bangsal as asal, "+
@@ -1296,6 +1298,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         rs.getString("nip")+" "+rs.getString("nama"),rs.getString("tujuan")+" ( "+rs.getString("status")+" )"
                     });  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select detail_permintaan_medis.kode_brng,databarang.nama_brng, "+
                             "detail_permintaan_medis.kode_sat,kodesatuan.satuan,"+

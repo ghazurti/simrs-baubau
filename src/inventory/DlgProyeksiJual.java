@@ -828,6 +828,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
        Valid.tabelKosong(tabMode);      
        try{   
             if(Jenisjual.getSelectedItem().toString().equals("Semua")&nmasal.getText().equals("")&&nmjns.getText().equals("")&&nmkategori.getText().equals("")&&nmgolongan.getText().equals("")&&TCari.getText().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select penjualan.tgl_jual,penjualan.nota_jual,detailjual.kode_brng,databarang.nama_brng,kodesatuan.satuan,detailjual.h_jual,detailjual.jumlah, "+
                         "detailjual.subtotal,detailjual.dis,detailjual.bsr_dis,detailjual.tambahan,detailjual.total, detailjual.h_beli,(detailjual.h_beli * detailjual.jumlah) as total_asal, "+
@@ -841,6 +842,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         "inner join golongan_barang on golongan_barang.kode=databarang.kode_golongan "+
                         "where penjualan.status='Sudah Dibayar' and penjualan.tgl_jual between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' order by penjualan.tgl_jual,penjualan.nota_jual");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select penjualan.tgl_jual,penjualan.nota_jual,detailjual.kode_brng,databarang.nama_brng,kodesatuan.satuan,detailjual.h_jual,detailjual.jumlah, "+
                         "detailjual.subtotal,detailjual.dis,detailjual.bsr_dis,detailjual.tambahan,detailjual.total, detailjual.h_beli,(detailjual.h_beli * detailjual.jumlah) as total_asal, "+

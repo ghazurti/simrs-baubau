@@ -815,6 +815,7 @@ public final class ApotekBPJSDaftarPermintaanResepIterasi extends javax.swing.JD
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select bridging_resep_apotek_bpjs.no_sep,bridging_sep.no_rawat,bridging_sep.nomr,bridging_sep.nama_pasien,bridging_sep.no_kartu,permintaan_resep_iterasi_bpjs.no_resep_awal,bridging_resep_apotek_bpjs.tgl_resep as tgl_resep_awal,"+
                 "permintaan_resep_iterasi_bpjs.no_resep,permintaan_resep_iterasi_bpjs.status_iter,bridging_sep.nmdpdjp,resep_obat.tgl_peresepan,if(resep_obat.tgl_penyerahan='0000-00-00','',resep_obat.tgl_penyerahan) as tgl_penyerahan,"+
@@ -864,6 +865,7 @@ public final class ApotekBPJSDaftarPermintaanResepIterasi extends javax.swing.JD
     private void panggilPhoto() {
         if((TabData.isVisible()==true)&&(TabData.getSelectedIndex()==1)){
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select bukti_penyerahan_resep_obat.photo from bukti_penyerahan_resep_obat where bukti_penyerahan_resep_obat.no_resep=?");
                 try {
                     ps.setString(1,tbResep.getValueAt(tbResep.getSelectedRow(),7).toString());
@@ -896,6 +898,7 @@ public final class ApotekBPJSDaftarPermintaanResepIterasi extends javax.swing.JD
     private void panggilresep(){
         Valid.tabelKosong(tabModeDetail);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select resep_dokter_racikan_detail.no_racik,resep_dokter_racikan_detail.kode_brng,databarang.nama_brng,resep_dokter_racikan.aturan_pakai,"+
                 "resep_dokter_racikan_detail.jml from resep_dokter_racikan_detail inner join databarang on resep_dokter_racikan_detail.kode_brng=databarang.kode_brng "+
@@ -924,6 +927,7 @@ public final class ApotekBPJSDaftarPermintaanResepIterasi extends javax.swing.JD
         }
 
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select resep_dokter.kode_brng,databarang.nama_brng,resep_dokter.aturan_pakai,resep_dokter.jml from resep_dokter "+
                 "inner join databarang on databarang.kode_brng=resep_dokter.kode_brng where resep_dokter.no_resep=?"

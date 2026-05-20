@@ -377,6 +377,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                "select DATE_FORMAT(reg_periksa.tgl_registrasi, '%y-%m-%d'),count(DATE_FORMAT(reg_periksa.tgl_registrasi, '%y-%m-%d')) as jumlah from reg_periksa "+
                "where tgl_registrasi between ? and ? group by DATE_FORMAT(reg_periksa.tgl_registrasi, '%y-%m-%d')");

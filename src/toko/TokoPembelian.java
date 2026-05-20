@@ -1127,6 +1127,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         retail=null;
         
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select tokobarang.kode_brng,tokobarang.nama_brng,tokobarang.kode_sat,tokobarang.h_beli from tokobarang where tokobarang.status='1' "+
                 (TCari.getText().trim().equals("")?"":"and (tokobarang.kode_brng like ? or tokobarang.nama_brng like ? or tokobarang.jenis like ?) ")+
@@ -1240,6 +1241,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
             if(Valid.SetAngka(tbDokter.getValueAt(baris,0).toString())>0){
                 if(tbDokter.getValueAt(baris,4).toString().equals("true")){
                     try {
+                        koneksi=koneksiDB.condb();
                         rs=koneksi.prepareStatement("select * from tokosetharga").executeQuery();
                         if(rs.next()){
                             hargappn=0;
@@ -1283,23 +1285,29 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
              file.createNewFile();
              fileWriter = new FileWriter(file);
              StringBuilder iyembuilder = new StringBuilder();
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement("select * from akun_bayar order by akun_bayar.nama_bayar");
              try{
                  rs=ps.executeQuery();
                  AkunBayar.removeAllItems();
-                 while(rs.next()){    
-                     AkunBayar.addItem(rs.getString(1).replaceAll("\"",""));
-                     iyembuilder.append("{\"NamaAkun\":\"").append(rs.getString(1).replaceAll("\"","")).append("\",\"KodeRek\":\"").append(rs.getString(2)).append("\",\"PPN\":\"").append(rs.getDouble(3)).append("\"},");
+                 while(rs.next()){
+                     String nm = mapper.writeValueAsString(rs.getString(1));
+                     nm = nm.substring(1, nm.length()-1);
+                     String kd = mapper.writeValueAsString(rs.getString(2));
+                     kd = kd.substring(1, kd.length()-1);
+                     AkunBayar.addItem(nm);
+                     iyembuilder.append("{\"NamaAkun\":\"").append(nm).append("\",\"KodeRek\":\"").append(kd).append("\",\"PPN\":\"").append(rs.getDouble(3)).append("\"},");
                  }
              }catch (Exception e) {
+                 iyembuilder.setLength(0);
                  System.out.println("Notifikasi : "+e);
              } finally{
                  if(rs != null){
                      rs.close();
-                 } 
+                 }
                  if(ps != null){
                      ps.close();
-                 } 
+                 }
              }
              
              if (iyembuilder.length() > 0) {

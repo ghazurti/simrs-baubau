@@ -815,6 +815,7 @@ private void TAlamatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_T
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select perpustakaan_penerbit.kode_penerbit,perpustakaan_penerbit.nama_penerbit,perpustakaan_penerbit.alamat_penerbit,perpustakaan_penerbit.no_telp,perpustakaan_penerbit.email,perpustakaan_penerbit.website_penerbit from perpustakaan_penerbit "+
                 (TCari.getText().trim().equals("")?"":"where perpustakaan_penerbit.kode_penerbit like ? or perpustakaan_penerbit.nama_penerbit like ? or perpustakaan_penerbit.alamat_penerbit like ? or perpustakaan_penerbit.no_telp like ? or "+

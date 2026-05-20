@@ -652,6 +652,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 Valid.textKosong(TCari,"pilihan data");
             }else{
                 try {
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement("select inventaris_detail_titip_faktur.no_faktur from inventaris_detail_titip_faktur where inventaris_detail_titip_faktur.no_tagihan=?");
                     try {
                        ps.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString().trim());
@@ -823,6 +824,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                  cari=" and (inventaris_titip_faktur.no_tagihan like '%"+TCari.getText()+"%' or petugas.nama like '%"+TCari.getText()+"%' or inventaris_titip_faktur.keterangan like '%"+TCari.getText()+"%' or inventaris_detail_titip_faktur.no_faktur like '%"+TCari.getText()+"%' or inventaris_suplier.nama_suplier like '%"+TCari.getText()+"%' ) ";
              }
              
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement(
                      "select inventaris_titip_faktur.no_tagihan,inventaris_titip_faktur.tanggal,inventaris_titip_faktur.nip,petugas.nama as petugas,"+
                      "inventaris_titip_faktur.keterangan,inventaris_titip_faktur.status from inventaris_titip_faktur "+
@@ -841,6 +843,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     tabMode.addRow(new Object[]{
                         "","Tgl.Tempo","No.Faktur","Nama Suplier","Sisa Hutang"
                     });
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select inventaris_pemesanan.tgl_tempo,inventaris_pemesanan.no_faktur,inventaris_pemesanan.kode_suplier,inventaris_suplier.nama_suplier,inventaris_pemesanan.tagihan,"+
                         "(SELECT ifnull(SUM(besar_bayar),0) FROM bayar_pemesanan_inventaris where bayar_pemesanan_inventaris.no_faktur=inventaris_pemesanan.no_faktur) as bayar from inventaris_titip_faktur "+

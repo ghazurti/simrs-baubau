@@ -913,6 +913,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select toko_pengajuan_barang.tanggal,toko_pengajuan_barang.no_pengajuan, "+
                     "toko_pengajuan_barang.keterangan,toko_pengajuan_barang.nip,pegawai.nama,toko_pengajuan_barang.status "+
@@ -1003,6 +1004,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         rs.getString("tanggal"),rs.getString("no_pengajuan"),rs.getString("status"),
                         rs.getString("keterangan"),rs.getString("nip")+" "+rs.getString("nama")
                     });   
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select toko_detail_pengajuan_barang.kode_brng,tokobarang.nama_brng, "+
                         "toko_detail_pengajuan_barang.kode_sat,kodesatuan.satuan,toko_detail_pengajuan_barang.jumlah,"+

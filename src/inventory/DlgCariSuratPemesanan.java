@@ -1196,6 +1196,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
             Sequel.queryu("delete from temporary where temp37='"+akses.getalamatip()+"'");
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select date_format(surat_pemesanan_medis.tanggal,'%d/%m/%Y') as tanggal,surat_pemesanan_medis.no_pemesanan, "+
                     "surat_pemesanan_medis.kode_suplier,datasuplier.nama_suplier, "+
@@ -1237,6 +1238,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         param.put("kabidkeu",KabidKeu.getText());
                         param.put("logo",Sequel.cariGambar("select setting.logo from setting"));
                         
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement("select detail_surat_pemesanan_medis.kode_brng,databarang.nama_brng,databarang.kode_sat as satuan2, "+
                             "detail_surat_pemesanan_medis.kode_sat,kodesatuan.satuan,detail_surat_pemesanan_medis.jumlah,detail_surat_pemesanan_medis.h_pesan, "+
                             "detail_surat_pemesanan_medis.subtotal,detail_surat_pemesanan_medis.dis,detail_surat_pemesanan_medis.besardis,detail_surat_pemesanan_medis.total,"+
@@ -1480,6 +1482,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select surat_pemesanan_medis.tanggal,surat_pemesanan_medis.no_pemesanan, "+
                     "surat_pemesanan_medis.kode_suplier,datasuplier.nama_suplier, "+
@@ -1526,6 +1529,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         rs.getString("no_pemesanan"),"","","","","","","",""
                     });  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select detail_surat_pemesanan_medis.kode_brng,databarang.nama_brng, "+
                         "detail_surat_pemesanan_medis.kode_sat,kodesatuan.satuan,detail_surat_pemesanan_medis.jumlah,detail_surat_pemesanan_medis.h_pesan, "+
                         "detail_surat_pemesanan_medis.subtotal,detail_surat_pemesanan_medis.dis,detail_surat_pemesanan_medis.besardis,detail_surat_pemesanan_medis.total,"+

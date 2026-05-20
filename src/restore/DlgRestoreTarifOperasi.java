@@ -421,6 +421,7 @@ public final class DlgRestoreTarifOperasi extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                         "select paket_operasi.kode_paket, paket_operasi.nm_perawatan,paket_operasi.kategori,"+
                        "paket_operasi.operator1, paket_operasi.operator2, paket_operasi.operator3, "+

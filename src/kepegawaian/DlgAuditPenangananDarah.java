@@ -1024,6 +1024,7 @@ public final class DlgAuditPenangananDarah extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_penanganan_darah.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_penanganan_darah.tanggal,audit_penanganan_darah.menggunakan_apd_waktu_membuang_darah,"+
                     "audit_penanganan_darah.komponen_darah_tidak_ada_dilantai,audit_penanganan_darah.membuang_darah_pada_tempat_ditentukan,"+
@@ -1032,6 +1033,7 @@ public final class DlgAuditPenangananDarah extends javax.swing.JDialog {
                     "inner join ruang_audit_kepatuhan on audit_penanganan_darah.id_ruang=ruang_audit_kepatuhan.id_ruang "+
                     "where audit_penanganan_darah.tanggal between ? and ? order by audit_penanganan_darah.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_penanganan_darah.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_penanganan_darah.tanggal,audit_penanganan_darah.menggunakan_apd_waktu_membuang_darah,"+
                     "audit_penanganan_darah.komponen_darah_tidak_ada_dilantai,audit_penanganan_darah.membuang_darah_pada_tempat_ditentukan,"+

@@ -445,6 +445,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             tigapuluh=0;
             satujam=0;
             lebihsatujam=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select reg_periksa.no_rkm_medis,pasien.nm_pasien,dokter.nm_dokter,poliklinik.nm_poli," +
                 "reg_periksa.tgl_registrasi,reg_periksa.jam_reg,pemeriksaan_ralan.tgl_perawatan,pemeriksaan_ralan.jam_rawat," +

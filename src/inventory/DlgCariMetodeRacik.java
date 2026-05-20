@@ -390,6 +390,7 @@ public final class DlgCariMetodeRacik extends javax.swing.JDialog {
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
             i=1;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from metode_racik order by metode_racik.nm_racik ");
             try {
                 rs=ps.executeQuery();

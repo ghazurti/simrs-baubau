@@ -820,6 +820,7 @@ private void NmPetugasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select pengumuman_epasien.nik,pegawai.nama,pengumuman_epasien.tanggal,pengumuman_epasien.pengumuman "+
                    "from pengumuman_epasien inner join pegawai on pengumuman_epasien.nik=pegawai.nik where "+

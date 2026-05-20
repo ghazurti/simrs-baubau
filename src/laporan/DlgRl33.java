@@ -398,6 +398,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select poliklinik.kd_poli,poliklinik.nm_poli from poliklinik " +
                     "where poliklinik.nm_poli like '%gigi%' order by poliklinik.nm_poli");
@@ -406,6 +407,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 i=1;
                 ttl=0;
                 while(rs.next()){
+                    koneksi=koneksiDB.condb();
                     pstindakan=koneksi.prepareStatement(
                         "select jns_perawatan.nm_perawatan,count(jns_perawatan.nm_perawatan) from rawat_jl_dr inner join reg_periksa on rawat_jl_dr.no_rawat=reg_periksa.no_rawat "+
                         "inner join jns_perawatan on rawat_jl_dr.kd_jenis_prw=jns_perawatan.kd_jenis_prw where reg_periksa.kd_poli=? and reg_periksa.tgl_registrasi between ? and ? "+

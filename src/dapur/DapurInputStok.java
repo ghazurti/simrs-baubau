@@ -813,6 +813,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private void ppBelumOpnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppBelumOpnameActionPerformed
         try{
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement(
                 "select dapurbarang.kode_brng, dapurbarang.nama_brng,dapurbarang.jenis, dapurbarang.kode_sat,dapurbarang.harga,dapurbarang.stok from dapurbarang "+
                 " where dapurbarang.kode_brng not in (select dapuropname.kode_brng from dapuropname where dapuropname.tanggal=?) and dapurbarang.status='1' and "+
@@ -852,6 +853,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
     private void ppSudahOpnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppSudahOpnameActionPerformed
         try{
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement(
                 "select dapurbarang.kode_brng, dapurbarang.nama_brng,dapurbarang.jenis, dapurbarang.kode_sat,dapurbarang.harga,dapurbarang.stok from dapurbarang "+
                 " where dapurbarang.kode_brng in (select dapuropname.kode_brng from dapuropname where dapuropname.tanggal=?) and dapurbarang.status='1' and "+
@@ -1094,6 +1096,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                     hargabeli[i],stok[i],selisih[i],nomihilang[i],lebih[i],nomilebih[i]
                 });
             }
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement(
                 "select dapurbarang.kode_brng, dapurbarang.nama_brng,dapurbarang.jenis, dapurbarang.kode_sat, "+
                 "dapurbarang.harga,dapurbarang.stok from dapurbarang where dapurbarang.status='1' "+

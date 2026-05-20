@@ -1118,6 +1118,7 @@ public final class DlgAuditFasilitasKebersihanTangan extends javax.swing.JDialog
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_fasilitas_kebersihan_tangan.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_fasilitas_kebersihan_tangan.tanggal,audit_fasilitas_kebersihan_tangan.audit1,"+
                     "audit_fasilitas_kebersihan_tangan.audit2,audit_fasilitas_kebersihan_tangan.audit3,"+
@@ -1127,6 +1128,7 @@ public final class DlgAuditFasilitasKebersihanTangan extends javax.swing.JDialog
                     "inner join ruang_audit_kepatuhan on audit_fasilitas_kebersihan_tangan.id_ruang=ruang_audit_kepatuhan.id_ruang "+
                     "where audit_fasilitas_kebersihan_tangan.tanggal between ? and ? order by audit_fasilitas_kebersihan_tangan.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_fasilitas_kebersihan_tangan.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_fasilitas_kebersihan_tangan.tanggal,audit_fasilitas_kebersihan_tangan.audit1,"+
                     "audit_fasilitas_kebersihan_tangan.audit2,audit_fasilitas_kebersihan_tangan.audit3,"+

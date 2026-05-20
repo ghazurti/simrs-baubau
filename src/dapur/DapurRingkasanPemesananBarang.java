@@ -1106,6 +1106,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select detail_surat_pemesanan_dapur.kode_brng,dapurbarang.nama_brng,dapurbarang.jenis as namajenis, "+
                     "detail_surat_pemesanan_dapur.kode_sat,kodesatuan.satuan,sum(detail_surat_pemesanan_dapur.jumlah) as jumlah,"+

@@ -604,6 +604,7 @@ public class MasterMenolakAnjuranMedis extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_menolak_anjuran_medis "+(TCari.getText().trim().equals("")?"":"where master_menolak_anjuran_medis.kode_penolakan like ? or master_menolak_anjuran_medis.nama_penolakan like ? ")+" order by master_menolak_anjuran_medis.kode_penolakan");
             try {
                 if(!TCari.getText().trim().equals("")){

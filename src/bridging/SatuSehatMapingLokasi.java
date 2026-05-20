@@ -5749,6 +5749,7 @@ public final class SatuSehatMapingLokasi extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select satu_sehat_mapping_lokasi_ralan.kd_poli,poliklinik.nm_poli,satu_sehat_mapping_lokasi_ralan.id_lokasi_satusehat,"+
                    "satu_sehat_mapping_lokasi_ralan.longitude,satu_sehat_mapping_lokasi_ralan.latitude,satu_sehat_mapping_lokasi_ralan.altittude,"+
@@ -5898,6 +5899,7 @@ public final class SatuSehatMapingLokasi extends javax.swing.JDialog {
     private void tampilkamar() {
         Valid.tabelKosong(tabModeKamar);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select satu_sehat_mapping_lokasi_ranap.kd_kamar,bangsal.nm_bangsal,satu_sehat_mapping_lokasi_ranap.id_lokasi_satusehat,"+
                    "satu_sehat_mapping_lokasi_ranap.longitude,satu_sehat_mapping_lokasi_ranap.latitude,satu_sehat_mapping_lokasi_ranap.altittude,"+
@@ -5941,6 +5943,7 @@ public final class SatuSehatMapingLokasi extends javax.swing.JDialog {
     private void tampilruangok() {
         Valid.tabelKosong(tabModeRuangOK);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select satu_sehat_mapping_lokasi_ruangok.id_lokasi_satusehat,satu_sehat_mapping_lokasi_ruangok.longitude,"+
                    "satu_sehat_mapping_lokasi_ruangok.latitude,satu_sehat_mapping_lokasi_ruangok.altittude,"+
@@ -5975,6 +5978,7 @@ public final class SatuSehatMapingLokasi extends javax.swing.JDialog {
     private void tampilruanglabpk() {
         Valid.tabelKosong(tabModeRuangLabPK);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select satu_sehat_mapping_lokasi_ruanglab.id_lokasi_satusehat,satu_sehat_mapping_lokasi_ruanglab.longitude,"+
                    "satu_sehat_mapping_lokasi_ruanglab.latitude,satu_sehat_mapping_lokasi_ruanglab.altittude,"+
@@ -6009,6 +6013,7 @@ public final class SatuSehatMapingLokasi extends javax.swing.JDialog {
     private void tampilruanglabpa() {
         Valid.tabelKosong(tabModeRuangLabPA);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select satu_sehat_mapping_lokasi_ruanglabpa.id_lokasi_satusehat,satu_sehat_mapping_lokasi_ruanglabpa.longitude,"+
                    "satu_sehat_mapping_lokasi_ruanglabpa.latitude,satu_sehat_mapping_lokasi_ruanglabpa.altittude,"+
@@ -6043,6 +6048,7 @@ public final class SatuSehatMapingLokasi extends javax.swing.JDialog {
     private void tampilruanglabmb() {
         Valid.tabelKosong(tabModeRuangLabMB);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select satu_sehat_mapping_lokasi_ruanglabmb.id_lokasi_satusehat,satu_sehat_mapping_lokasi_ruanglabmb.longitude,"+
                    "satu_sehat_mapping_lokasi_ruanglabmb.latitude,satu_sehat_mapping_lokasi_ruanglabmb.altittude,"+
@@ -6077,6 +6083,7 @@ public final class SatuSehatMapingLokasi extends javax.swing.JDialog {
     private void tampilruangradiologi() {
         Valid.tabelKosong(tabModeRuangRadiologi);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select satu_sehat_mapping_lokasi_ruangrad.id_lokasi_satusehat,satu_sehat_mapping_lokasi_ruangrad.longitude,"+
                    "satu_sehat_mapping_lokasi_ruangrad.latitude,satu_sehat_mapping_lokasi_ruangrad.altittude,"+
@@ -6111,6 +6118,7 @@ public final class SatuSehatMapingLokasi extends javax.swing.JDialog {
     private void tampilruangfarmasi() {
         Valid.tabelKosong(tabModeRuangFarmasi);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select satu_sehat_mapping_lokasi_depo_farmasi.kd_bangsal,bangsal.nm_bangsal,satu_sehat_mapping_lokasi_depo_farmasi.id_lokasi_satusehat,"+
                    "satu_sehat_mapping_lokasi_depo_farmasi.longitude,satu_sehat_mapping_lokasi_depo_farmasi.latitude,satu_sehat_mapping_lokasi_depo_farmasi.altittude,"+

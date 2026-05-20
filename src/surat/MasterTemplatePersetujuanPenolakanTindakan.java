@@ -987,6 +987,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select template_persetujuan_penolakan_tindakan.kode_template,template_persetujuan_penolakan_tindakan.diagnosa,template_persetujuan_penolakan_tindakan.tindakan,"+
                     "template_persetujuan_penolakan_tindakan.indikasi_tindakan,template_persetujuan_penolakan_tindakan.tata_cara,template_persetujuan_penolakan_tindakan.tujuan,"+

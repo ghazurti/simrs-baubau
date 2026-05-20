@@ -752,6 +752,7 @@ private void StokKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_Stok
         total=0;
         totalreal=0;
         try{     
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement(
                 "select tokoopname.kode_brng, tokobarang.nama_brng,tokoopname.dasar,tokobarang.kode_sat,tokoopname.tanggal,tokoopname.stok,"+
                 "tokoopname.real,tokoopname.selisih,(tokoopname.real*tokoopname.dasar) as totalreal,tokoopname.nomihilang,tokoopname.keterangan "+

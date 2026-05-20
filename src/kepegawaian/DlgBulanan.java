@@ -1089,6 +1089,7 @@ public final class DlgBulanan extends javax.swing.JDialog {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         try {
+            koneksi=koneksiDB.condb();
             psketerlambatan=koneksi.prepareStatement("select * from set_keterlambatan");
             try {
                 rsketerlambatan=psketerlambatan.executeQuery();
@@ -1210,6 +1211,7 @@ public final class DlgBulanan extends javax.swing.JDialog {
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select  pegawai.id, pegawai.nik, pegawai.nama, rekap_presensi.shift, rekap_presensi.jam_datang, "+
                 "rekap_presensi.jam_pulang, rekap_presensi.status, rekap_presensi.keterlambatan, rekap_presensi.durasi, "+

@@ -1243,6 +1243,7 @@ public final class DlgOmsetPenerimaan extends javax.swing.JDialog {
         try{    
             Valid.tabelKosong(tabMode);
             rawatjalan=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select DATE_FORMAT(nota_jalan.tanggal,'%Y-%m-%d'),nota_jalan.no_nota,nota_jalan.no_rawat,reg_periksa.no_rkm_medis,"+
                     "pasien.nm_pasien,detail_nota_jalan.nama_bayar,detail_nota_jalan.besar_bayar "+
@@ -1274,6 +1275,7 @@ public final class DlgOmsetPenerimaan extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabMode2);
             rawatinap=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select DATE_FORMAT(nota_inap.tanggal,'%Y-%m-%d'),nota_inap.no_nota,nota_inap.no_rawat,reg_periksa.no_rkm_medis,"+
                     "pasien.nm_pasien,detail_nota_inap.nama_bayar,detail_nota_inap.besar_bayar "+
@@ -1305,6 +1307,7 @@ public final class DlgOmsetPenerimaan extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabMode3);
             jualbebas=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select DATE_FORMAT(penjualan.tgl_jual,'%Y-%m-%d'),penjualan.nota_jual,penjualan.jns_jual,penjualan.no_rkm_medis,"+
                     "penjualan.nm_pasien,penjualan.nama_bayar,(penjualan.ongkir+penjualan.ppn+sum(detailjual.total)) "+
@@ -1335,6 +1338,7 @@ public final class DlgOmsetPenerimaan extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabMode4);
             pemasukanlain=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select DATE_FORMAT(pemasukan_lain.tanggal,'%Y-%m-%d'),pemasukan_lain.no_masuk,pemasukan_lain.keterangan,"+
                     "pemasukan_lain.keperluan,kategori_pemasukan_lain.nama_kategori,pemasukan_lain.besar "+
@@ -1364,6 +1368,7 @@ public final class DlgOmsetPenerimaan extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabMode5);
             deposit=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select DATE_FORMAT(deposit.tgl_deposit,'%Y-%m-%d'),deposit.no_deposit,deposit.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,deposit.nama_bayar, "+
                     "deposit.besar_deposit from deposit inner join reg_periksa on deposit.no_rawat=reg_periksa.no_rawat inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -1392,6 +1397,7 @@ public final class DlgOmsetPenerimaan extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabMode6);
             bayarpiutang=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select DATE_FORMAT(bayar_piutang.tgl_bayar,'%Y-%m-%d'),bayar_piutang.no_rawat,bayar_piutang.no_rkm_medis,pasien.nm_pasien,"+
                     "rekening.nm_rek,rekening2.nm_rek,bayar_piutang.besar_cicilan "+
@@ -1423,6 +1429,7 @@ public final class DlgOmsetPenerimaan extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabMode7);
             bayarpiutanguang=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select DATE_FORMAT(bayar_piutang_lainlain.tgl_bayar,'%Y-%m-%d'),bayar_piutang_lainlain.nota_piutang,bayar_piutang_lainlain.kode_peminjam,"+
                     "peminjampiutang.nama_peminjam,bayar_piutang_lainlain.nama_bayar,bayar_piutang_lainlain.besar_cicilan "+
@@ -1452,6 +1459,7 @@ public final class DlgOmsetPenerimaan extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabMode8);
             bayarpiutangjasa=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select DATE_FORMAT(bayar_piutang_jasa_perusahaan.tgl_bayar,'%Y-%m-%d'),bayar_piutang_jasa_perusahaan.no_piutang,bayar_piutang_jasa_perusahaan.kode_perusahaan,"+
                     "perusahaan_pasien.nama_perusahaan,bayar_piutang_jasa_perusahaan.nama_bayar,bayar_piutang_jasa_perusahaan.besar_cicilan "+
@@ -1481,6 +1489,7 @@ public final class DlgOmsetPenerimaan extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabMode9);
             labkesling=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select DATE_FORMAT(labkesling_pembayaran_pengujian_sampel.tanggal,'%Y-%m-%d'),labkesling_pembayaran_pengujian_sampel.no_pembayaran,labkesling_pembayaran_pengujian_sampel.no_permintaan,"+
                     "labkesling_permintaan_pengujian_sampel.kode_pelanggan,labkesling_pelanggan.nama_pelanggan,labkesling_detail_pembayaran_pengujian_sampel.nama_bayar,labkesling_detail_pembayaran_pengujian_sampel.besar_bayar "+
@@ -1512,6 +1521,7 @@ public final class DlgOmsetPenerimaan extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabMode10);
             jualtoko=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select DATE_FORMAT(tokopenjualan.tgl_jual,'%Y-%m-%d'),tokopenjualan.nota_jual,tokopenjualan.jns_jual,tokopenjualan.no_member,"+
                     "tokopenjualan.nm_member,tokopenjualan.nama_bayar,(tokopenjualan.ongkir+tokopenjualan.ppn+tokopenjualan.total) "+
@@ -1540,6 +1550,7 @@ public final class DlgOmsetPenerimaan extends javax.swing.JDialog {
             
             Valid.tabelKosong(tabMode11);
             bayarpiutangtoko=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select DATE_FORMAT(toko_bayar_piutang.tgl_bayar,'%Y-%m-%d'),toko_bayar_piutang.nota_piutang,"+
                     "toko_bayar_piutang.no_member,tokomember.nama,rekening.nm_rek,toko_bayar_piutang.besar_cicilan "+

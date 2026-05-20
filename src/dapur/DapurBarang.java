@@ -901,6 +901,7 @@ private void btnSatuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                         "select dapurbarang.kode_brng, dapurbarang.nama_brng, kodesatuan.satuan, dapurbarang.jenis,dapurbarang.stok,"+
                         "dapurbarang.harga from dapurbarang inner join kodesatuan on dapurbarang.kode_sat=kodesatuan.kode_sat "+

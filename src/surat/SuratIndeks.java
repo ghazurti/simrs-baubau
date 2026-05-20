@@ -660,6 +660,7 @@ public final class SuratIndeks extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from surat_indeks where kd like ? "+
                     "or indeks like ? order by kd");
             try {

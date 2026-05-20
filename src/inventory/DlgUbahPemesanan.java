@@ -678,6 +678,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
             int reply = JOptionPane.showConfirmDialog(null,"Eeiiiiiits, udah bener belum data yang mau disimpan..??\nBisa jadi stok menjadi tidak sinkron karena data stok sudah digunakan..!!","Konfirmasi",JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {
                 try {
+                    koneksi=koneksiDB.condb();
                     pscaripesan=koneksi.prepareStatement(
                         "select pemesanan.no_faktur, pemesanan.tagihan, pemesanan.kd_bangsal,pemesanan.tgl_faktur,pemesanan.status,pemesanan.no_order,pemesanan.ppn,(pemesanan.total2+pemesanan.meterai) as total from pemesanan where pemesanan.no_faktur=?");
                     try {
@@ -686,6 +687,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         if(rs.next()){
                             sukses=true;
                             Sequel.AutoComitFalse();
+                            koneksi=koneksiDB.condb();
                             psdetailpesan=koneksi.prepareStatement("select kode_brng,jumlah2,no_batch,no_faktur from detailpesan where no_faktur=? ");
                             try {
                                 psdetailpesan.setString(1,rs.getString(1));
@@ -1387,6 +1389,7 @@ private void kdgudangKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         }
         
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select databarang.kode_brng, databarang.nama_brng,databarang.kode_sat, databarang.h_beli, "+
                 " ifnull(date_format(databarang.expire,'%d-%m-%Y'),'00-00-0000'),databarang.kode_satbesar,databarang.isi, "+
                 " (databarang.h_beli*databarang.isi) as hargabesar from databarang inner join jenis on databarang.kdjns=jenis.kdjns "+
@@ -1498,6 +1501,7 @@ private void kdgudangKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     public void isCek(String Faktur){
         try {
             try {
+                koneksi=koneksiDB.condb();
                 rs=koneksi.prepareStatement("select pemesanan.tgl_pesan,pemesanan.no_faktur, "+
                         "pemesanan.kode_suplier,datasuplier.nama_suplier,pemesanan.no_order, "+
                         "pemesanan.nip,petugas.nama,pemesanan.kd_bangsal,bangsal.nm_bangsal,pemesanan.tgl_faktur, "+
@@ -1542,6 +1546,7 @@ private void kdgudangKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                 }
             }
                 
+            koneksi=koneksiDB.condb();
             ps2=koneksi.prepareStatement("select detailpesan.kode_brng,databarang.nama_brng,ifnull(date_format(databarang.expire,'%d-%m-%Y'),'00-00-0000') as expire, "+
                         "detailpesan.kode_sat,kodesatuan.satuan,detailpesan.jumlah,detailpesan.h_pesan,databarang.isi, "+
                         "detailpesan.subtotal,detailpesan.dis,detailpesan.besardis,detailpesan.total,detailpesan.no_batch, "+
@@ -1612,6 +1617,7 @@ private void kdgudangKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         switch (pengaturanharga) {
                             case "Per Jenis":
                                 try{
+                                    koneksi=koneksiDB.condb();
                                     rs=koneksi.prepareStatement("select * from setpenjualan where setpenjualan.kdjns='"+
                                             Sequel.cariIsi("select databarang.kdjns from databarang where databarang.kode_brng='"+
                                                     tbDokter.getValueAt(baris,2).toString()+
@@ -1712,6 +1718,7 @@ private void kdgudangKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                 }   break;
                             case "Umum":
                                 try{
+                                    koneksi=koneksiDB.condb();
                                     rs=koneksi.prepareStatement("select * from setpenjualanumum").executeQuery();
                                     if(rs.next()){
                                         if(tbDokter.getValueAt(baris,1).toString().equals(tbDokter.getValueAt(baris,4).toString())){
@@ -1809,6 +1816,7 @@ private void kdgudangKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                 }   break;
                             case "Per Barang":
                                 try{
+                                    koneksi=koneksiDB.condb();
                                     rs=koneksi.prepareStatement("select * from setpenjualanperbarang where setpenjualanperbarang.kode_brng='"+tbDokter.getValueAt(baris,2).toString()+"'").executeQuery();
                                     if(rs.next()){
                                         if(tbDokter.getValueAt(baris,1).toString().equals(tbDokter.getValueAt(baris,4).toString())){
@@ -1999,6 +2007,7 @@ private void kdgudangKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         switch (pengaturanharga) {
                             case "Per Jenis":
                                 try{
+                                    koneksi=koneksiDB.condb();
                                     rs=koneksi.prepareStatement("select * from setpenjualan where setpenjualan.kdjns='"+
                                             Sequel.cariIsi("select databarang.kdjns from databarang where databarang.kode_brng='"+
                                                     tbDokter.getValueAt(baris,2).toString()+
@@ -2099,6 +2108,7 @@ private void kdgudangKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                 }   break;
                             case "Umum":
                                 try{
+                                    koneksi=koneksiDB.condb();
                                     rs=koneksi.prepareStatement("select * from setpenjualanumum").executeQuery();
                                     if(rs.next()){
                                         if(tbDokter.getValueAt(baris,1).toString().equals(tbDokter.getValueAt(baris,4).toString())){
@@ -2196,6 +2206,7 @@ private void kdgudangKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                 }   break;
                             case "Per Barang":
                                 try{
+                                    koneksi=koneksiDB.condb();
                                     rs=koneksi.prepareStatement("select * from setpenjualanperbarang where setpenjualanperbarang.kode_brng='"+tbDokter.getValueAt(baris,2).toString()+"'").executeQuery();
                                     if(rs.next()){
                                         if(tbDokter.getValueAt(baris,1).toString().equals(tbDokter.getValueAt(baris,4).toString())){

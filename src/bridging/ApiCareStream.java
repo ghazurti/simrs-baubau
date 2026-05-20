@@ -54,6 +54,7 @@ public class ApiCareStream {
     
     public void kirimRalan(String nopermintaan) {
         try {
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement(
                     "select permintaan_radiologi.noorder,permintaan_radiologi.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,permintaan_radiologi.tgl_permintaan,"+
                     "if(permintaan_radiologi.jam_permintaan='00:00:00','',permintaan_radiologi.jam_permintaan) as jam_permintaan,pasien.tgl_lahir,pasien.jk,pasien.alamat,"+
@@ -133,6 +134,7 @@ public class ApiCareStream {
     
     public void kirimRanap(String nopermintaan) {
         try {
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement(
                     "select permintaan_radiologi.noorder,permintaan_radiologi.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,permintaan_radiologi.tgl_permintaan,"+
                     "if(permintaan_radiologi.jam_permintaan='00:00:00','',permintaan_radiologi.jam_permintaan) as jam_permintaan,pasien.jk,pasien.alamat,"+

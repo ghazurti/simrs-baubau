@@ -1184,6 +1184,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             tabMode.addRow(new Object[]{jumlah[i],kodebarang[i],namabarang[i],satuan[i],ganti[i],h_beli[i],subtotal[i],diskon[i],besardiskon[i],jmltotal[i],dasar[i],distributor[i],grosir[i],retail[i]});
         }
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select tokobarang.kode_brng,tokobarang.nama_brng,tokobarang.kode_sat,tokobarang.h_beli from tokobarang where tokobarang.status='1' "+
                     (TCari.getText().trim().equals("")?"":"and (tokobarang.kode_brng like ? or tokobarang.nama_brng like ? or tokobarang.jenis like ?) ")+
@@ -1301,6 +1302,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         Meterai.setText(Valid.SetAngka2(meterai));
         try{
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select toko_detail_surat_pemesanan.kode_brng,tokobarang.nama_brng,(toko_detail_surat_pemesanan.total/toko_detail_surat_pemesanan.jumlah) as dasar, "+
                 "toko_detail_surat_pemesanan.kode_sat,toko_detail_surat_pemesanan.jumlah,toko_detail_surat_pemesanan.h_pesan, "+
@@ -1338,6 +1340,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             if(Valid.SetAngka(tbDokter.getValueAt(baris,0).toString())>0){
                 if(tbDokter.getValueAt(baris,4).toString().equals("true")){
                     try {
+                        koneksi=koneksiDB.condb();
                         rs=koneksi.prepareStatement("select * from tokosetharga").executeQuery();
                         if(rs.next()){
                             hargappn=0;

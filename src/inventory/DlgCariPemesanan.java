@@ -1217,6 +1217,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
           int reply = JOptionPane.showConfirmDialog(rootPane,"Eeiiiiiits, yakin mau dihapus...??","Konfirmasi",JOptionPane.YES_NO_OPTION);
           if (reply == JOptionPane.YES_OPTION) {
               try {
+                  koneksi=koneksiDB.condb();
                   pscaripesan=koneksi.prepareStatement(
                         "select pemesanan.no_faktur, pemesanan.tagihan, pemesanan.kd_bangsal,pemesanan.tgl_faktur,pemesanan.status,pemesanan.no_order,pemesanan.ppn,(pemesanan.total2+pemesanan.meterai) as total from pemesanan where pemesanan.no_faktur=?");
                   try {
@@ -1225,6 +1226,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                      if(rs.next()){
                          Sequel.AutoComitFalse();
                          sukses=true;
+                         koneksi=koneksiDB.condb();
                          psdetailpesan=koneksi.prepareStatement("select detailpesan.kode_brng,detailpesan.jumlah2,detailpesan.no_batch,detailpesan.no_faktur from detailpesan where detailpesan.no_faktur=? ");
                          try {
                              psdetailpesan.setString(1,rs.getString(1));
@@ -1628,6 +1630,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                          " detailpesan.no_batch like '%"+TCari.getText()+"%' or industrifarmasi.nama_industri like '%"+TCari.getText()+"%' or pemesanan.no_order like '%"+TCari.getText()+"%' or jenis.nama like '%"+TCari.getText()+"%') ";
             }
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select pemesanan.tgl_pesan,pemesanan.no_faktur,pemesanan.kode_suplier,datasuplier.nama_suplier,pemesanan.nip,petugas.nama,bangsal.nm_bangsal,"+
                 "pemesanan.tgl_faktur,pemesanan.tgl_tempo,pemesanan.status,pemesanan.total2,pemesanan.ppn,pemesanan.meterai,pemesanan.tagihan,pemesanan.no_order "+
@@ -1646,6 +1649,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                           rs.getString(5)+", "+rs.getString(6),"Pengadaan di "+rs.getString(7) +" :","","","","","","",""
                     });  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select detailpesan.kode_brng,databarang.nama_brng,detailpesan.kode_sat,kodesatuan.satuan,detailpesan.jumlah,detailpesan.h_pesan, "+
                         "detailpesan.subtotal,detailpesan.dis,detailpesan.besardis,detailpesan.total,detailpesan.no_batch,industrifarmasi.nama_industri,detailpesan.kadaluarsa "+
@@ -1794,6 +1798,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     "<td valign='top' bgcolor='#FFFAFA' align='center' width='65px'>PPN(Rp)</td>").append(
                     "<td valign='top' bgcolor='#FFFAFA' align='center' width='85px'>Tagihan(Rp)</td>").append(
                 "</tr>"); 
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select pemesanan.tgl_pesan,pemesanan.no_faktur,pemesanan.kode_suplier,datasuplier.nama_suplier,pemesanan.nip,petugas.nama,bangsal.nm_bangsal,"+
                 "pemesanan.tgl_faktur,pemesanan.tgl_tempo,pemesanan.status,pemesanan.total2,pemesanan.ppn,pemesanan.meterai,pemesanan.tagihan,pemesanan.no_order "+
@@ -1824,6 +1829,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                             "<td valign='top' align='right'>").append(rs.getString("tagihan")).append("</td>").append(
                         "</tr>");  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select detailpesan.kode_brng,databarang.nama_brng,detailpesan.kode_sat,kodesatuan.satuan,detailpesan.jumlah,detailpesan.h_pesan, "+
                         "detailpesan.subtotal,detailpesan.dis,detailpesan.besardis,detailpesan.total,detailpesan.no_batch,industrifarmasi.nama_industri,detailpesan.kadaluarsa "+
@@ -1957,6 +1963,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void panggilPhoto() {
         if(FormPhoto.isVisible()==true){
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select bukti_pemesanan.photo from bukti_pemesanan where bukti_pemesanan.no_faktur=?");
                 try {
                     ps.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());

@@ -1173,6 +1173,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(TCari,"No.Nota");
         }else{
             try {
+                koneksi=koneksiDB.condb();
                 pscarijual=koneksi.prepareStatement(
                        "select penjualan.nota_jual,penjualan.kd_bangsal,penjualan.status,penjualan.kd_rek,penjualan.ongkir,penjualan.ppn from penjualan where penjualan.nota_jual=?");
                 try {
@@ -1184,6 +1185,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         
                         if(rs.getString("status").equals("Sudah Dibayar")){
                             if(akses.getkode().equals("Admin Utama")){
+                                koneksi=koneksiDB.condb();
                                 psdetailjual=koneksi.prepareStatement(
                                      "select detailjual.kode_brng,detailjual.jumlah,detailjual.no_batch,detailjual.no_faktur from detailjual where detailjual.nota_jual=? ");
                                 try {
@@ -1283,6 +1285,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select set_nota.cetaknotasimpanpenjualan,set_nota.verifikasi_penjualan_di_kasir from set_nota");
             try {
                 rs=ps.executeQuery();
@@ -1316,6 +1319,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         }
         
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select set_akun.Penjualan_Obat,set_akun.HPP_Obat_Jual_Bebas,set_akun.Persediaan_Obat_Jual_Bebas,set_akun.PPN_Keluaran from set_akun");
             try {
                 rs=ps.executeQuery();
@@ -1557,6 +1561,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 Valid.textKosong(TCari,"No.Nota");
         }else{
             try {
+               koneksi=koneksiDB.condb();
                pscarijual=koneksi.prepareStatement(
                        "select penjualan.nota_jual,penjualan.kd_bangsal,penjualan.status,penjualan.no_rkm_medis,penjualan.nm_pasien,penjualan.tgl_jual,penjualan.ongkir,penjualan.ppn from penjualan where penjualan.nota_jual=?");
                try {
@@ -1596,6 +1601,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                          Sequel.AutoComitFalse();
                          sukses=true;
 
+                         koneksi=koneksiDB.condb();
                          psdetailjual=koneksi.prepareStatement(
                              "select detailjual.kode_brng,detailjual.jumlah,detailjual.no_batch,detailjual.no_faktur from detailjual where detailjual.nota_jual=? ");
                          try {
@@ -1794,6 +1800,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         Valid.tabelKosong(tabMode);
         try{
             ttljual=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select penjualan.nota_jual, penjualan.tgl_jual, "+
                     "penjualan.nip,petugas.nama,penjualan.no_rkm_medis,penjualan.nm_pasien, "+
                     "penjualan.keterangan, penjualan.jns_jual, penjualan.ongkir,bangsal.nm_bangsal,penjualan.status,penjualan.ppn,penjualan.nama_bayar "+
@@ -1826,6 +1833,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     });
                     ttlppn=ttlppn+rs.getDouble(12);
                     ttlongkir=ttlongkir+rs.getDouble(9);
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select detailjual.kode_brng,databarang.nama_brng, detailjual.kode_sat,"+
                             " kodesatuan.satuan,detailjual.h_jual, detailjual.jumlah, "+
                             " detailjual.subtotal, detailjual.dis, detailjual.bsr_dis,"+
@@ -1940,6 +1948,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     "<td valign='top' bgcolor='#FFFAFA' align='center' width='7%'>PPN</td>").append(
                     "<td valign='top' bgcolor='#FFFAFA' align='center' width='7%'>Ongkos Kirim</td>").append(
                 "</tr>"); 
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select penjualan.nota_jual, penjualan.tgl_jual, "+
                     "penjualan.nip,petugas.nama,penjualan.ongkir,penjualan.ppn, "+
                     "penjualan.no_rkm_medis,penjualan.nm_pasien,penjualan.nama_bayar, "+
@@ -2005,6 +2014,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                         "<td valign='top' bgcolor='#fdfff9' align='center' width='11%'>Aturan Pakai</td>").append(       
                                         "<td valign='top' bgcolor='#fdfff9' align='center' width='5%'>No.Batch</td>").append(                                        
                                     "</tr>");
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select detailjual.kode_brng,databarang.nama_brng, detailjual.kode_sat,"+
                             " kodesatuan.satuan,detailjual.h_jual, detailjual.jumlah, "+
                             " detailjual.subtotal, detailjual.dis, detailjual.bsr_dis,"+
@@ -2070,6 +2080,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                             ps2.close();
                         }
                     }
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select obat_racikan_jual.no_racik,obat_racikan_jual.nama_racik,"+
                             "obat_racikan_jual.kd_racik,metode_racik.nm_racik as metode,"+
@@ -2089,6 +2100,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                     "<td valign='top' align='left' colspan='3'>").append(rs2.getString("keterangan")).append("</td>").append(
                                     "<td valign='top' align='left' colspan='2'>").append(rs2.getString("aturan_pakai")).append("</td>").append(
                                 "</tr>");
+                            koneksi=koneksiDB.condb();
                             ps3=koneksi.prepareStatement("select detailjual.kode_brng,databarang.nama_brng, detailjual.kode_sat,"+
                                     " kodesatuan.satuan,detailjual.h_jual, detailjual.jumlah, "+
                                     " detailjual.subtotal, detailjual.dis, detailjual.bsr_dis,"+
@@ -2233,6 +2245,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
              file.createNewFile();
              fileWriter = new FileWriter(file);
              StringBuilder iyembuilder = new StringBuilder();
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement("select * from akun_bayar order by akun_bayar.nama_bayar");
              try{
                  rs=ps.executeQuery();

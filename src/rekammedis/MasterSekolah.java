@@ -604,6 +604,7 @@ public class MasterSekolah extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_sekolah where master_sekolah.kd_sekolah like ? or master_sekolah.nm_sekolah like ? order by master_sekolah.kd_sekolah");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

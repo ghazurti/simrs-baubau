@@ -1144,6 +1144,7 @@ private void BtnPerusahaanActionPerformed(java.awt.event.ActionEvent evt) {//GEN
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select bayar_piutang_jasa_perusahaan.tgl_bayar, bayar_piutang_jasa_perusahaan.kode_perusahaan,perusahaan_pasien.nama_perusahaan, bayar_piutang_jasa_perusahaan.besar_cicilan,"+
                     "bayar_piutang_jasa_perusahaan.keterangan, bayar_piutang_jasa_perusahaan.no_piutang,bayar_piutang_jasa_perusahaan.kd_rek,bayar_piutang_jasa_perusahaan.nama_bayar from bayar_piutang_jasa_perusahaan "+
@@ -1259,6 +1260,7 @@ private void BtnPerusahaanActionPerformed(java.awt.event.ActionEvent evt) {//GEN
              file.createNewFile();
              fileWriter = new FileWriter(file);
              StringBuilder iyembuilder = new StringBuilder();
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement("select * from akun_bayar order by akun_bayar.nama_bayar");
              try{
                  rs=ps.executeQuery();

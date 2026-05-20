@@ -1968,6 +1968,7 @@ public final class DlgStokPasien extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{    
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select stok_obat_pasien.tanggal,stok_obat_pasien.jam, stok_obat_pasien.no_rawat,concat(reg_periksa.no_rkm_medis,' ',pasien.nm_pasien),"+
                     "concat(stok_obat_pasien.kode_brng,' ',databarang.nama_brng), stok_obat_pasien.jumlah, concat(stok_obat_pasien.kd_bangsal,' ',bangsal.nm_bangsal), "+
@@ -1982,6 +1983,7 @@ public final class DlgStokPasien extends javax.swing.JDialog {
                     "inner join bangsal on stok_obat_pasien.kd_bangsal=bangsal.kd_bangsal "+
                     "where stok_obat_pasien.tanggal between ? and ? order by stok_obat_pasien.tanggal");    
             }else{
+                koneksi=koneksiDB.condb();
                 pstampil=koneksi.prepareStatement(
                     "select stok_obat_pasien.tanggal,stok_obat_pasien.jam, stok_obat_pasien.no_rawat,concat(reg_periksa.no_rkm_medis,' ',pasien.nm_pasien),"+
                     "concat(stok_obat_pasien.kode_brng,' ',databarang.nama_brng), stok_obat_pasien.jumlah, concat(stok_obat_pasien.kd_bangsal,' ',bangsal.nm_bangsal), "+

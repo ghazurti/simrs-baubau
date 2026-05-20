@@ -566,6 +566,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
        Valid.tabelKosong(tabMode);      
        try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select tokobarang.kode_brng,tokobarang.nama_brng, "+
                         "kodesatuan.satuan,tokobarang.stok,(tokobarang.stok*tokobarang."+hpptoko+") as totalstok "+
                         "from tokobarang inner join kodesatuan on tokobarang.kode_sat=kodesatuan.kode_sat "+
@@ -596,6 +597,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     stok=rs.getDouble("stok");
                     totalstok=rs.getDouble("totalstok");
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(toko_detail_beli.jumlah), sum(toko_detail_beli.total) "+
                         " from tokopembelian inner join toko_detail_beli "+
                         " on tokopembelian.no_faktur=toko_detail_beli.no_faktur "+
@@ -622,6 +624,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     }          
                     
                     //tokopemesanan
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(toko_detail_pesan.jumlah), sum(toko_detail_pesan.total) "+
                         " from tokopemesanan inner join toko_detail_pesan "+
                         " on tokopemesanan.no_faktur=toko_detail_pesan.no_faktur "+
@@ -647,6 +650,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(toko_detail_jual.jumlah), sum(toko_detail_jual.total) "+
                         " from tokopenjualan inner join toko_detail_jual "+
                         " on tokopenjualan.nota_jual=toko_detail_jual.nota_jual "+
@@ -672,6 +676,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(toko_detail_piutang.jumlah), sum(toko_detail_piutang.total) "+
                         " from tokopiutang inner join toko_detail_piutang "+
                         " on tokopiutang.nota_piutang=toko_detail_piutang.nota_piutang "+
@@ -697,6 +702,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(toko_detail_returbeli.jml_retur), sum(toko_detail_returbeli.total) "+
                         " from tokoreturbeli inner join toko_detail_returbeli "+
                         " on tokoreturbeli.no_retur_beli=toko_detail_returbeli.no_retur_beli "+
@@ -722,6 +728,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(toko_detail_returjual.jml_retur), sum(toko_detail_returjual.total) "+
                         " from tokoreturjual inner join toko_detail_returjual "+
                         " on tokoreturjual.no_retur_jual=toko_detail_returjual.no_retur_jual "+
@@ -747,6 +754,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(toko_detail_returpiutang.jml_retur), sum(toko_detail_returpiutang.total) "+
                         " from tokoreturpiutang inner join toko_detail_returpiutang "+
                         " on tokoreturpiutang.no_retur_piutang=toko_detail_returpiutang.no_retur_piutang "+
@@ -772,6 +780,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select sum(tokoopname.real),(tokoopname.real*tokoopname.dasar) from tokoopname where kode_brng=? and tanggal=?");
                     try {
                         ps2.setString(1,rs.getString(1));

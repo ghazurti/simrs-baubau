@@ -759,6 +759,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(TCari,"No.Faktur");
         }else{
            try {
+               koneksi=koneksiDB.condb();
                pscaribeli=koneksi.prepareStatement("select dapurpembelian.no_faktur,dapurpembelian.tagihan,dapurpembelian.tgl_beli,dapurpembelian.kd_rek,dapurpembelian.ppn,(dapurpembelian.total+dapurpembelian.meterai) as total from dapurpembelian where dapurpembelian.no_faktur=?");
                try {
                   pscaribeli.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),1).toString());
@@ -766,6 +767,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                   if(rs.next()){
                       Sequel.AutoComitFalse();
                       sukses=true;
+                      koneksi=koneksiDB.condb();
                       psdapurdetailbeli=koneksi.prepareStatement("select dapurdetailbeli.kode_brng,dapurdetailbeli.jumlah from dapurdetailbeli where dapurdetailbeli.no_faktur=? ");
                       try {
                           psdapurdetailbeli.setString(1,rs.getString(1));
@@ -917,6 +919,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{            
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select dapurpembelian.tgl_beli,dapurpembelian.no_faktur, "+
                     "dapurpembelian.kode_suplier,dapursuplier.nama_suplier, "+
                     "dapurpembelian.nip,petugas.nama,dapurpembelian.subtotal,dapurpembelian.potongan,dapurpembelian.total, "+
@@ -955,6 +958,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3)+", "+rs.getString(4),
                           rs.getString(5)+", "+rs.getString(6),"Pembelian :","","","","","","",""
                     });      
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select dapurdetailbeli.kode_brng,dapurbarang.nama_brng, "+
                         "dapurdetailbeli.kode_sat,kodesatuan.satuan,dapurdetailbeli.jumlah,dapurdetailbeli.harga, "+
                         "dapurdetailbeli.subtotal,dapurdetailbeli.dis,dapurdetailbeli.besardis,dapurdetailbeli.total "+

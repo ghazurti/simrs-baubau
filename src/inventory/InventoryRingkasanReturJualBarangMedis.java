@@ -1120,6 +1120,7 @@ public class InventoryRingkasanReturJualBarangMedis extends javax.swing.JDialog 
         }
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select detreturjual.kode_brng,databarang.nama_brng,jenis.nama as namajenis,detreturjual.kode_sat,kodesatuan.satuan,sum(detreturjual.jml_retur) as jumlah,sum(detreturjual.subtotal) as total "+
                 "from returjual inner join petugas on returjual.nip=petugas.nip inner join pasien on returjual.no_rkm_medis=pasien.no_rkm_medis inner join bangsal on returjual.kd_bangsal=bangsal.kd_bangsal "+

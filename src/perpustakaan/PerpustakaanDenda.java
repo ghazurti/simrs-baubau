@@ -632,6 +632,7 @@ public class PerpustakaanDenda extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from perpustakaan_denda "+(TCari.getText().trim().equals("")?"":"where perpustakaan_denda.kode_denda like ? or perpustakaan_denda.jenis_denda like ? ")+" order by perpustakaan_denda.kode_denda");
             try {
                 if(!TCari.getText().trim().equals("")){

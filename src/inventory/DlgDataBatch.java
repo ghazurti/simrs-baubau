@@ -1730,6 +1730,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         Valid.tabelKosong(tabMode);
         try {
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps = koneksi.prepareStatement("select data_batch.kode_brng, databarang.nama_brng, "
                     + " data_batch.no_faktur,data_batch.no_batch,data_batch.tgl_beli, data_batch.dasar,data_batch.h_beli,"
                     + " data_batch.ralan,data_batch.kelas1,data_batch.kelas2,data_batch.kelas3,"
@@ -1738,6 +1739,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     + " from data_batch inner join databarang on data_batch.kode_brng=databarang.kode_brng "
                     + " where data_batch.tgl_beli between ? and ? order by databarang.nama_brng");
             }else{
+                koneksi=koneksiDB.condb();
                 ps = koneksi.prepareStatement("select data_batch.kode_brng, databarang.nama_brng, "
                     + " data_batch.no_faktur,data_batch.no_batch,data_batch.tgl_beli, data_batch.dasar,data_batch.h_beli,"
                     + " data_batch.ralan,data_batch.kelas1,data_batch.kelas2,data_batch.kelas3,"
@@ -1881,6 +1883,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                                 Valid.textKosong(Kd,"Kode Jenis");
                             }else{
                                 try{
+                                    koneksi=koneksiDB.condb();
                                     rs=koneksi.prepareStatement("select * from setpenjualan where kdjns='"+kodejenis+"'").executeQuery();
                                     if(rs.next()){
                                         ralan.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("ralan") / 100)),100)));
@@ -1908,6 +1911,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                             break;
                         case "Umum":
                             try{
+                                koneksi=koneksiDB.condb();
                                 rs=koneksi.prepareStatement("select * from setpenjualanumum").executeQuery();
                                 if(rs.next()){
                                     ralan.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("ralan") / 100)),100)));
@@ -1936,6 +1940,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                                 Valid.textKosong(Kd,"Kode Barang");
                             }else{
                                 try{
+                                    koneksi=koneksiDB.condb();
                                     rs=koneksi.prepareStatement("select * from setpenjualanperbarang where kode_brng='"+Kd.getText()+"'").executeQuery();
                                     if(rs.next()){
                                         ralan.setText(Double.toString(Valid.roundUp(Double.parseDouble(beli.getText()) + (Double.parseDouble(beli.getText()) * (rs.getDouble("ralan") / 100)),100)));

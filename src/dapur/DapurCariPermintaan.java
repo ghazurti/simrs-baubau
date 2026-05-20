@@ -805,6 +805,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select permintaan_dapur.tanggal,permintaan_dapur.no_permintaan, "+
                     "permintaan_dapur.ruang,permintaan_dapur.nip,pegawai.nama,permintaan_dapur.status "+
@@ -838,6 +839,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         rs.getString("tanggal"),rs.getString("no_permintaan"),rs.getString("ruang"),
                         rs.getString("nip")+" "+rs.getString("nama"),rs.getString("status")
                     });   
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                                 "select detail_permintaan_dapur.kode_brng,dapurbarang.nama_brng, "+
                                 "detail_permintaan_dapur.kode_sat,kodesatuan.satuan,"+

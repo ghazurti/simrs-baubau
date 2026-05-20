@@ -333,6 +333,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try{            
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select id_template, pemeriksaan,nilai_rujukan,bagian_rs,bhp,bagian_perujuk,bagian_dokter,petugas_utd,kso,menejemen,biaya_item,urut "+
                         "from template_utd where kd_jenis_prw=? order by urut");
             try {

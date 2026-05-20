@@ -481,6 +481,7 @@ private void MakBukuKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_M
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{ 
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from perpustakaan_set_peminjaman ");
             try {
                 rs=ps.executeQuery();

@@ -593,6 +593,7 @@ public class InventarisRuang extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from inventaris_ruang where id_ruang like ? "+
                 "or nama_ruang like ? order by id_ruang");
             try {

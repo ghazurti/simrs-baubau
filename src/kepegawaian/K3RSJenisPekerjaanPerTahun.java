@@ -397,6 +397,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select kode_pekerjaan,jenis_pekerjaan from k3rs_jenis_pekerjaan where jenis_pekerjaan like ? order by jenis_pekerjaan");
             try {

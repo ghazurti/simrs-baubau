@@ -924,6 +924,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
         if(row!= -1){
             try {
                 kdrek.setText(tabMode.getValueAt(row,0).toString());
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select rekening.nm_rek, rekening.tipe, rekening.balance from rekening where rekening.kd_rek=?");
                 try {
                     ps.setString(1,kdrek.getText());

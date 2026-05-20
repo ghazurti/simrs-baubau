@@ -539,6 +539,7 @@ public final class InformasiTelusurKunjunganPasien extends javax.swing.JDialog {
             Valid.tabelKosong(tabMode);
             Valid.tabelKosong(tabModeRegistrasi);
             try{     
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select pasien.no_rkm_medis, pasien.nm_pasien, pasien.no_ktp,pasien.umur, pasien.jk,pasien.tmp_lahir, pasien.tgl_lahir,pasien.nm_ibu, "+
                     "concat(pasien.alamat,', ',kelurahan.nm_kel,', ',kecamatan.nm_kec,', ',kabupaten.nm_kab,', ',propinsi.nm_prop) as alamat,pasien.no_tlp "+
@@ -586,6 +587,7 @@ public final class InformasiTelusurKunjunganPasien extends javax.swing.JDialog {
             Valid.tabelKosong(tabModeRegistrasi);
             i=0;
             try{ 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,reg_periksa.tgl_registrasi,reg_periksa.jam_reg,reg_periksa.status_lanjut,"+
                     "reg_periksa.kd_dokter,dokter.nm_dokter,reg_periksa.umurdaftar,reg_periksa.sttsumur,"+
@@ -623,6 +625,7 @@ public final class InformasiTelusurKunjunganPasien extends javax.swing.JDialog {
                             rs.getString("kd_dokter"),rs.getString("nm_dokter"),rs.getString("umurdaftar")+" "+rs.getString("sttsumur"),
                             rs.getString("kd_poli")+" "+rs.getString("nm_poli"),rs.getString("png_jawab"),kdpenyakit+" "+namapenyakit
                         });
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(
                                 "select rujukan_internal_poli.kd_dokter,dokter.nm_dokter,"+
                                 "rujukan_internal_poli.kd_poli,poliklinik.nm_poli from rujukan_internal_poli "+
@@ -665,6 +668,7 @@ public final class InformasiTelusurKunjunganPasien extends javax.swing.JDialog {
                                 
                         }    
                         
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(
                                 "select kamar_inap.tgl_masuk,kamar_inap.jam_masuk,kamar_inap.kd_kamar,bangsal.nm_bangsal "+
                                 "from kamar_inap inner join kamar inner join bangsal on kamar_inap.kd_kamar=kamar.kd_kamar "+

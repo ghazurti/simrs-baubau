@@ -365,6 +365,7 @@ public final class PCRAICRACariKelasRisikoPencegahan extends javax.swing.JDialog
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select pcra_icra_kelas_risiko_pencegahan.kode_kelas,pcra_icra_kelas_risiko_pencegahan.nama_kelas from pcra_icra_kelas_risiko_pencegahan");   
             try {
                 rs=ps.executeQuery();

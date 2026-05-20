@@ -66,6 +66,7 @@ public class ApiBRI {
     
     public ApiBRI(){
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select set_akun_bankbri.kd_rek,rekening.nm_rek,aes_decrypt(set_akun_bankbri.consumer_key,'nur') as consumer_key,"+
                    "aes_decrypt(set_akun_bankbri.consumer_secret,'windi') as consumer_secret,aes_decrypt(set_akun_bankbri.institution_code,'nur') as institution_code,"+

@@ -387,6 +387,7 @@ public final class IPSRSCariJenis extends javax.swing.JDialog {
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from ipsrsjenisbarang order by ipsrsjenisbarang.nm_jenis ");
             try {
                 rs=ps.executeQuery();

@@ -1437,6 +1437,7 @@ public final class RMPenilaianDerajatDehidrasi extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,penilaian_dehidrasi.tanggal,"+
                     "penilaian_dehidrasi.penilaian1,penilaian_dehidrasi.penilaian_nilai1,"+
@@ -1452,6 +1453,7 @@ public final class RMPenilaianDerajatDehidrasi extends javax.swing.JDialog {
                     "inner join dokter on penilaian_dehidrasi.kd_dokter=dokter.kd_dokter where "+
                     "penilaian_dehidrasi.tanggal between ? and ? order by penilaian_dehidrasi.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,penilaian_dehidrasi.tanggal,"+
                     "penilaian_dehidrasi.penilaian1,penilaian_dehidrasi.penilaian_nilai1,"+
@@ -1559,6 +1561,7 @@ public final class RMPenilaianDerajatDehidrasi extends javax.swing.JDialog {
     
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rkm_medis,pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,reg_periksa.tgl_registrasi,reg_periksa.jam_reg from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat=?");
             try {

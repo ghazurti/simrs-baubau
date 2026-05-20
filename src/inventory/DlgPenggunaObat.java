@@ -902,6 +902,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode); 
             if(nmjns.getText().equals("")&&nmkategori.getText().equals("")&&nmgolongan.getText().equals("")&&TCari.getText().equals("")){
+                koneksi=koneksiDB.condb();
                 psbarang=koneksi.prepareStatement(
                     "select databarang.kode_brng,databarang.nama_brng,kode_sat from databarang "+
                     "inner join jenis on databarang.kdjns=jenis.kdjns "+
@@ -909,6 +910,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     "inner join golongan_barang on golongan_barang.kode=databarang.kode_golongan "+
                     "where databarang.status='1' order by nama_brng");
             }else{
+                koneksi=koneksiDB.condb();
                 psbarang=koneksi.prepareStatement(
                     "select databarang.kode_brng,databarang.nama_brng,kode_sat from databarang "+
                     "inner join jenis on databarang.kdjns=jenis.kdjns "+
@@ -969,6 +971,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 i=1;
                 while(rsbarang.next()){
                     tabMode.addRow(new Object[]{rsbarang.getString("kode_brng"),rsbarang.getString("nama_brng"),rsbarang.getString("kode_sat"),"","","","",""});
+                    koneksi=koneksiDB.condb();
                     pspasien=koneksi.prepareStatement(sqlsub);
                     try {
                         pspasien.setString(1,rsbarang.getString("kode_brng"));
@@ -978,6 +981,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         while(rspasien.next()){
                             noresep="";
                             dokter="";
+                            koneksi=koneksiDB.condb();
                             psresep=koneksi.prepareStatement(
                                     "select resep_obat.no_resep,dokter.nm_dokter from resep_obat inner join dokter on resep_obat.kd_dokter=dokter.kd_dokter "+
                                     "where resep_obat.tgl_perawatan=? and resep_obat.jam=? and resep_obat.no_rawat=?");

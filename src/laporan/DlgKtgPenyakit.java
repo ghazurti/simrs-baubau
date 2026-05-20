@@ -686,6 +686,7 @@ public final class DlgKtgPenyakit extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from kategori_penyakit "+(TCari.getText().trim().equals("")?"":"where kategori_penyakit.kd_ktg like ? or kategori_penyakit.nm_kategori like ? or kategori_penyakit.ciri_umum like ? ")+"order by kategori_penyakit.kd_ktg");
             try {
                 if(!TCari.getText().trim().equals("")){

@@ -661,6 +661,7 @@ public final class SuratRak extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from surat_rak where kd like ? "+
                     "or rak like ? order by kd");
             try {

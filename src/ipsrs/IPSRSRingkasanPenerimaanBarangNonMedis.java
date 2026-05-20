@@ -1200,6 +1200,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
        Valid.tabelKosong(tabMode);
         try{   
             tagihan=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select ipsrsdetailpesan.kode_brng,ipsrsbarang.nama_brng,ipsrsjenisbarang.nm_jenis as namajenis, "+
                     "ipsrsdetailpesan.kode_sat,kodesatuan.satuan,sum(ipsrsdetailpesan.jumlah) as jumlah,sum(ipsrsdetailpesan.total) as total "+

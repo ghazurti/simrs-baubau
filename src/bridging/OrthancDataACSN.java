@@ -289,6 +289,7 @@ public final class OrthancDataACSN extends javax.swing.JDialog {
     public void tampil(String poli) {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select permintaan_radiologi.noorder,permintaan_pemeriksaan_radiologi.kd_jenis_prw,jns_perawatan_radiologi.nm_perawatan,permintaan_radiologi.tgl_permintaan,"+
                     "permintaan_radiologi.jam_permintaan from permintaan_radiologi inner join permintaan_pemeriksaan_radiologi on permintaan_radiologi.noorder=permintaan_pemeriksaan_radiologi.noorder "+

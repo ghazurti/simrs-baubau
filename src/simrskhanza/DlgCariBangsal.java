@@ -387,6 +387,7 @@ public final class DlgCariBangsal extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from bangsal where bangsal.status='1' order by bangsal.nm_bangsal");
             try {
                 rs=ps.executeQuery();

@@ -621,6 +621,7 @@ public final class DlgPaymentPoint extends javax.swing.JDialog {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
         Valid.tabelKosong(tabMode);
         try{        
+            koneksi=koneksiDB.condb();
             psjamshift=koneksi.prepareStatement("select * from closing_kasir");
             try {
                 rsjamshift=psjamshift.executeQuery();
@@ -630,6 +631,7 @@ public final class DlgPaymentPoint extends javax.swing.JDialog {
                 sore=0;
                 malam=0;
                 while(rsjamshift.next()){ 
+                    koneksi=koneksiDB.condb();
                     ps= koneksi.prepareStatement(
                             "select no_nota,tgl_bayar,nama_pasien,jumlah_bayar,petugas from tagihan_sadewa "+
                             "where tgl_bayar between ? and ? and nama_pasien like ? or "+

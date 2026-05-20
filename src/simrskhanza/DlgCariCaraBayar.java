@@ -524,6 +524,7 @@ public final class DlgCariCaraBayar extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from penjab where penjab.status='1'");
             try{           
                 rs=ps.executeQuery();
@@ -628,6 +629,7 @@ public final class DlgCariCaraBayar extends javax.swing.JDialog {
     private void panggilPhoto() {
         if(FormPhoto.isVisible()==true){
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select penjab_dokumen_kerjasama.photo,date_format(penjab_dokumen_kerjasama.kerjasama_berakhir,'%d-%m-%Y') as tanggal from penjab_dokumen_kerjasama where penjab_dokumen_kerjasama.kd_pj=?");
                 try {
                     ps.setString(1,tbKamar.getValueAt(tbKamar.getSelectedRow(),1).toString());

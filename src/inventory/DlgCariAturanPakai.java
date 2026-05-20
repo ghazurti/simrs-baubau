@@ -384,6 +384,7 @@ public final class DlgCariAturanPakai extends javax.swing.JDialog {
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_aturan_pakai order by aturan ");
             try {
                 rs=ps.executeQuery();

@@ -1876,6 +1876,7 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
             param.put("fingerpasien",Sequel.cariIsi("select sha1(sidikjaripasien.sidikjari) from sidikjaripasien where sidikjaripasien.no_rkm_medis=?",TNoRM.getText()));
 
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select resume_pasien.keluhan_utama,resume_pasien.diagnosa_utama,resume_pasien.kd_diagnosa_utama,resume_pasien.diagnosa_sekunder,resume_pasien.kd_diagnosa_sekunder,"+
                     "resume_pasien.diagnosa_sekunder2,resume_pasien.kd_diagnosa_sekunder2,resume_pasien.diagnosa_sekunder3,resume_pasien.kd_diagnosa_sekunder3,resume_pasien.diagnosa_sekunder4,"+
@@ -2153,6 +2154,7 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.tgl_registrasi,reg_periksa.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien, "+
                     "resume_pasien.kd_dokter,dokter.nm_dokter,resume_pasien.kondisi_pulang,resume_pasien.keluhan_utama,resume_pasien.jalannya_penyakit, "+
@@ -2165,6 +2167,7 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
                     "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis inner join dokter on resume_pasien.kd_dokter=dokter.kd_dokter "+
                     "where reg_periksa.tgl_registrasi between ? and ? order by reg_periksa.tgl_registrasi");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.tgl_registrasi,reg_periksa.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien, "+
                     "resume_pasien.kd_dokter,dokter.nm_dokter,resume_pasien.kondisi_pulang,resume_pasien.keluhan_utama,resume_pasien.jalannya_penyakit, "+
@@ -2290,6 +2293,7 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
 
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rkm_medis,concat(pasien.nm_pasien,' (',reg_periksa.umurdaftar,' ',reg_periksa.sttsumur,')') as pasien,reg_periksa.tgl_registrasi from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat=?");
             try {
@@ -2325,6 +2329,7 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
         isForm();
         Kondisi.requestFocus();
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select diagnosa_pasien.kd_penyakit,penyakit.nm_penyakit,diagnosa_pasien.prioritas "+
                     "from diagnosa_pasien inner join penyakit on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit "+
@@ -2373,6 +2378,7 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
         } 
         
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select prosedur_pasien.kode,icd9.deskripsi_panjang, prosedur_pasien.prioritas "+
                     "from prosedur_pasien inner join icd9 on prosedur_pasien.kode=icd9.kode "+
@@ -2418,6 +2424,7 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
         // Auto-isi dokter dari reg_periksa
         if(KdDokter.getText().isEmpty()){
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.kd_dokter,dokter.nm_dokter from reg_periksa "+
                     "inner join dokter on reg_periksa.kd_dokter=dokter.kd_dokter where reg_periksa.no_rawat=?");
@@ -2441,6 +2448,7 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
 
         // Auto-isi keluhan, pemeriksaan penunjang, jalannya penyakit dari pemeriksaan_ralan
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select group_concat(distinct keluhan order by tgl_perawatan,jam_rawat separator '\n') as keluhan,"+
                 "group_concat(distinct pemeriksaan order by tgl_perawatan,jam_rawat separator '\n') as pemeriksaan,"+
@@ -2470,6 +2478,7 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
         // Auto-isi obat pulang dari resep_pulang
         if(Obat2an.getText().isEmpty()){
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select group_concat(concat(databarang.nama_brng,' ',resep_pulang.jml_barang,' ',resep_pulang.dosis) separator ', ') as obat "+
                     "from resep_pulang inner join databarang on databarang.kode_brng=resep_pulang.kode_brng "+

@@ -1129,6 +1129,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening where rekening.level='0' "+
                     (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+
@@ -1146,6 +1147,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
                     tabMode.addRow(new Object[]{
                         rs.getString(1),rs.getString(2),rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4)
                     });
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 where subrekening.kd_rek=? and rekening.level='1' "+
                         (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+"order by rekening.kd_rek");
@@ -1162,6 +1164,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
                             tabMode.addRow(new Object[]{
                                 rs2.getString(1),rs2.getString(2)," "+rs2.getString(1)," "+rs2.getString(2),rs2.getString(3),rs2.getString(4)
                             });         
+                            koneksi=koneksiDB.condb();
                             ps3=koneksi.prepareStatement(
                                 "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 where subrekening.kd_rek=? and rekening.level='1' "+
                                 (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+"order by rekening.kd_rek");
@@ -1178,6 +1181,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
                                     tabMode.addRow(new Object[]{
                                         rs3.getString(1),rs3.getString(2),"  "+rs3.getString(1),"  "+rs3.getString(2),rs3.getString(3),rs3.getString(4)
                                     });      
+                                    koneksi=koneksiDB.condb();
                                     ps4=koneksi.prepareStatement(
                                         "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 where subrekening.kd_rek=? and rekening.level='1' "+
                                         (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+"order by rekening.kd_rek");
@@ -1194,6 +1198,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
                                             tabMode.addRow(new Object[]{
                                                 rs4.getString(1),rs4.getString(2),"   "+rs4.getString(1),"   "+rs4.getString(2),rs4.getString(3),rs4.getString(4)
                                             });     
+                                            koneksi=koneksiDB.condb();
                                             ps5=koneksi.prepareStatement(
                                                 "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 where subrekening.kd_rek=? and rekening.level='1' "+
                                                 (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+"order by rekening.kd_rek");
@@ -1210,6 +1215,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
                                                     tabMode.addRow(new Object[]{
                                                         rs5.getString(1),rs5.getString(2),"    "+rs5.getString(1),"    "+rs5.getString(2),rs5.getString(3),rs5.getString(4)
                                                     });  
+                                                    koneksi=koneksiDB.condb();
                                                     ps6=koneksi.prepareStatement(
                                                         "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 where subrekening.kd_rek=? and rekening.level='1' "+
                                                         (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+"order by rekening.kd_rek");
@@ -1226,6 +1232,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
                                                             tabMode.addRow(new Object[]{
                                                                 rs6.getString(1),rs6.getString(2),"     "+rs6.getString(1),"     "+rs6.getString(2),rs6.getString(3),rs6.getString(4)
                                                             });
+                                                            koneksi=koneksiDB.condb();
                                                             ps7=koneksi.prepareStatement(
                                                                 "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 where subrekening.kd_rek=? and rekening.level='1' "+
                                                                 (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+"order by rekening.kd_rek");
@@ -1242,6 +1249,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
                                                                     tabMode.addRow(new Object[]{
                                                                         rs7.getString(1),rs7.getString(2),"      "+rs7.getString(1),"      "+rs7.getString(2),rs7.getString(3),rs7.getString(4)
                                                                     });
+                                                                    koneksi=koneksiDB.condb();
                                                                     ps8=koneksi.prepareStatement(
                                                                         "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 where subrekening.kd_rek=? and rekening.level='1' "+
                                                                         (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+"order by rekening.kd_rek");
@@ -1258,6 +1266,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
                                                                             tabMode.addRow(new Object[]{
                                                                                 rs8.getString(1),rs8.getString(2),"       "+rs8.getString(1),"       "+rs8.getString(2),rs8.getString(3),rs8.getString(4)
                                                                             });
+                                                                            koneksi=koneksiDB.condb();
                                                                             ps9=koneksi.prepareStatement(
                                                                                 "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 where subrekening.kd_rek=? and rekening.level='1' "+
                                                                                 (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+"order by rekening.kd_rek");
@@ -1274,6 +1283,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
                                                                                     tabMode.addRow(new Object[]{
                                                                                         rs9.getString(1),rs9.getString(2),"        "+rs9.getString(1),"        "+rs9.getString(2),rs9.getString(3),rs9.getString(4)
                                                                                     });
+                                                                                    koneksi=koneksiDB.condb();
                                                                                     ps10=koneksi.prepareStatement(
                                                                                         "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 where subrekening.kd_rek=? and rekening.level='1' "+
                                                                                         (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+"order by rekening.kd_rek");
@@ -1290,6 +1300,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
                                                                                             tabMode.addRow(new Object[]{
                                                                                                 rs10.getString(1),rs10.getString(2),"         "+rs10.getString(1),"         "+rs10.getString(2),rs10.getString(3),rs10.getString(4)
                                                                                             });
+                                                                                            koneksi=koneksiDB.condb();
                                                                                             ps11=koneksi.prepareStatement(
                                                                                                 "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 where subrekening.kd_rek=? and rekening.level='1' "+
                                                                                                 (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+"order by rekening.kd_rek");
@@ -1306,6 +1317,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
                                                                                                     tabMode.addRow(new Object[]{
                                                                                                         rs11.getString(1),rs11.getString(2),"          "+rs11.getString(1),"          "+rs11.getString(2),rs11.getString(3),rs11.getString(4)
                                                                                                     });
+                                                                                                    koneksi=koneksiDB.condb();
                                                                                                     ps12=koneksi.prepareStatement(
                                                                                                         "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 where subrekening.kd_rek=? and rekening.level='1' "+
                                                                                                         (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+"order by rekening.kd_rek");
@@ -1322,6 +1334,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
                                                                                                             tabMode.addRow(new Object[]{
                                                                                                                 rs12.getString(1),rs12.getString(2),"           "+rs12.getString(1),"           "+rs12.getString(2),rs12.getString(3),rs12.getString(4)
                                                                                                             });
+                                                                                                            koneksi=koneksiDB.condb();
                                                                                                             ps13=koneksi.prepareStatement(
                                                                                                                 "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening inner join subrekening on rekening.kd_rek=subrekening.kd_rek2 where subrekening.kd_rek=? and rekening.level='1' "+
                                                                                                                 (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+"order by rekening.kd_rek");
@@ -1494,6 +1507,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
     private void tampil2() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance from rekening "+(TCari.getText().trim().equals("")?"":"where rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ? ")+"order by rekening.kd_rek");
             try {            

@@ -589,6 +589,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 cari=" and (inventaris_titip_faktur.no_tagihan like '%"+TCari.getText()+"%' or petugas.nama like '%"+TCari.getText()+"%' or inventaris_titip_faktur.keterangan like '%"+TCari.getText()+"%' or inventaris_detail_titip_faktur.no_faktur like '%"+TCari.getText()+"%' or inventaris_suplier.nama_suplier like '%"+TCari.getText()+"%' ) ";
             }
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                      "select inventaris_titip_faktur.no_tagihan,inventaris_titip_faktur.tanggal,inventaris_titip_faktur.nip,petugas.nama,"+
                      "inventaris_titip_faktur.keterangan,inventaris_titip_faktur.status,sum(inventaris_pemesanan.tagihan) as tagihan from inventaris_titip_faktur "+
@@ -601,6 +602,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 rs=ps.executeQuery();
                 while(rs.next()){
                     bayar=0;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select (SELECT ifnull(SUM(besar_bayar),0) FROM bayar_pemesanan_inventaris where bayar_pemesanan_inventaris.no_faktur=inventaris_pemesanan.no_faktur) as bayar "+
                         "from inventaris_detail_titip_faktur inner join inventaris_pemesanan on inventaris_detail_titip_faktur.no_faktur=inventaris_pemesanan.no_faktur "+

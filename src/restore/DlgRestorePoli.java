@@ -403,6 +403,7 @@ public final class DlgRestorePoli extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select kd_poli, nm_poli, registrasi, registrasilama "+
                 " from poliklinik where status='0' and kd_poli like ? or "+
                 " status='0' and nm_poli like ? order by nm_poli");

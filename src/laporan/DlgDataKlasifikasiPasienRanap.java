@@ -929,6 +929,7 @@ public final class DlgDataKlasifikasiPasienRanap extends javax.swing.JDialog {
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select data_klasifikasi_pasien_ranap.tanggal,data_klasifikasi_pasien_ranap.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                     "data_klasifikasi_pasien_ranap.Minimal,data_klasifikasi_pasien_ranap.Partial,data_klasifikasi_pasien_ranap.Total,"+

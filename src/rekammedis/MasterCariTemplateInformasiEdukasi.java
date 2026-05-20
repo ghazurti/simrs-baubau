@@ -353,6 +353,7 @@ public final class MasterCariTemplateInformasiEdukasi extends javax.swing.JDialo
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select * from template_pelaksanaan_informasi_edukasi "+(TCari.getText().trim().equals("")?"":"where template_pelaksanaan_informasi_edukasi.no_template like ? or template_pelaksanaan_informasi_edukasi.materi_edukasi like ?")+" order by template_pelaksanaan_informasi_edukasi.no_template"
             );

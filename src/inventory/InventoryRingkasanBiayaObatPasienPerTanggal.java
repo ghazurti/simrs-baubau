@@ -1101,6 +1101,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             if(!kdgolongan.getText().trim().equals("")){
                 golonganbarang=" and databarang.kode_golongan='"+kdgolongan.getText()+"' ";
             }
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select detail_pemberian_obat.tgl_perawatan,detail_pemberian_obat.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                 "concat(pasien.alamat,', ',kelurahan.nm_kel,', ',kecamatan.nm_kec,', ',kabupaten.nm_kab,', ',propinsi.nm_prop) as alamat,"+

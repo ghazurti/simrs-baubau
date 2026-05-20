@@ -338,6 +338,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void prosesCari() {
         try {
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select reg_periksa.tgl_registrasi from reg_periksa inner join pengurangan_biaya on reg_periksa.no_rawat=pengurangan_biaya.no_rawat where reg_periksa.tgl_registrasi between ? and ? group by reg_periksa.tgl_registrasi");
             try {
                 ps.setString(1,Valid.SetTgl(TglBeli1.getSelectedItem()+""));
@@ -347,11 +348,13 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 i=1;
                 while(rs.next()){
                     tabMode.addRow(new Object[]{i+".",rs.getString("tgl_registrasi"),"","",null});
+                    koneksi=koneksiDB.condb();
                     pspasien=koneksi.prepareStatement("select reg_periksa.no_rawat,pasien.nm_pasien from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat in (select pengurangan_biaya.no_rawat from pengurangan_biaya) and reg_periksa.tgl_registrasi=?");
                     try{
                         pspasien.setString(1,rs.getString("tgl_registrasi"));
                         rspasien=pspasien.executeQuery();
                         while(rspasien.next()){       
+                            koneksi=koneksiDB.condb();
                             pstambahan=koneksi.prepareStatement("select pengurangan_biaya.nama_pengurangan,pengurangan_biaya.besar_pengurangan from pengurangan_biaya where pengurangan_biaya.no_rawat=?");
                             try {
                                 pstambahan.setString(1,rspasien.getString("no_rawat"));

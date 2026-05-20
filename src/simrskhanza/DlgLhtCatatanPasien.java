@@ -489,6 +489,7 @@ private void MnCatatanPasienActionPerformed(java.awt.event.ActionEvent evt) {//G
     public void tampil(){
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select catatan_pasien.no_rkm_medis,pasien.nm_pasien,catatan_pasien.catatan "+
                        "from catatan_pasien inner join pasien on catatan_pasien.no_rkm_medis=pasien.no_rkm_medis where "+
                        "catatan_pasien.no_rkm_medis like ? or pasien.nm_pasien like ? or catatan_pasien.catatan like ? order by catatan_pasien.no_rkm_medis");

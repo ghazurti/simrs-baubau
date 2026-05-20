@@ -455,6 +455,7 @@ public final class DlgRestoreObat extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try {
+            koneksi=koneksiDB.condb();
             ps = koneksi.prepareStatement("select databarang.kode_brng, databarang.nama_brng, "
                         + " databarang.kode_sat,kodesatuan.satuan,databarang.letak_barang, databarang.h_beli,"
                         + " databarang.ralan,databarang.kelas1,databarang.kelas2,databarang.kelas3,"

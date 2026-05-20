@@ -359,6 +359,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select ipsrssuplier.kode_suplier, ipsrssuplier.nama_suplier, "+
                     " ipsrssuplier.alamat,ipsrssuplier.kota, ipsrssuplier.no_telp,"+

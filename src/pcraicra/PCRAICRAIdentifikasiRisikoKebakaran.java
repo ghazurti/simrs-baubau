@@ -587,6 +587,7 @@ public final class PCRAICRAIdentifikasiRisikoKebakaran extends javax.swing.JDial
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select pcra_icra_identifkasi_risiko_kebakaran.kode_risiko,pcra_icra_identifkasi_risiko_kebakaran.nama_risiko from pcra_icra_identifkasi_risiko_kebakaran "+(TCari.getText().trim().equals("")?"":"where pcra_icra_identifkasi_risiko_kebakaran.kode_risiko like ? or pcra_icra_identifkasi_risiko_kebakaran.nama_risiko like ? ")+"order by pcra_icra_identifkasi_risiko_kebakaran.kode_risiko"
             );

@@ -1778,6 +1778,7 @@ public final class RMPenilaianLanjutanSkriningFungsional extends javax.swing.JDi
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,penilaian_lanjutan_skrining_fungsional.tanggal,"+
                     "penilaian_lanjutan_skrining_fungsional.penilaian_skrining_skala1,penilaian_lanjutan_skrining_fungsional.penilaian_skrining_nilai1,"+
@@ -1797,6 +1798,7 @@ public final class RMPenilaianLanjutanSkriningFungsional extends javax.swing.JDi
                     "inner join petugas on penilaian_lanjutan_skrining_fungsional.nip=petugas.nip where "+
                     "penilaian_lanjutan_skrining_fungsional.tanggal between ? and ? order by penilaian_lanjutan_skrining_fungsional.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,penilaian_lanjutan_skrining_fungsional.tanggal,"+
                     "penilaian_lanjutan_skrining_fungsional.penilaian_skrining_skala1,penilaian_lanjutan_skrining_fungsional.penilaian_skrining_nilai1,"+
@@ -1927,6 +1929,7 @@ public final class RMPenilaianLanjutanSkriningFungsional extends javax.swing.JDi
 
     private void isPsien() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select pasien.nm_pasien,pasien.jk,date_format(pasien.tgl_lahir,'%d-%m-%Y') as lahir from pasien where pasien.no_rkm_medis=?");
             try {
                 ps.setString(1,TNoRM.getText());

@@ -156,6 +156,7 @@ public final class LabKeslingBayarTagihanPengujianSampel extends javax.swing.JDi
         DibayarOleh.setDocument(new batasInput((int)60).getKata(DibayarOleh)); 
         
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select set_akun2.Suspen_Piutang_Pelayanan_Lab_Kesling from set_akun2"
             );
@@ -179,6 +180,7 @@ public final class LabKeslingBayarTagihanPengujianSampel extends javax.swing.JDi
         }
         
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select set_nota.cetaknotasimpanlabkesling,set_nota.tampilkan_tombol_nota_labkesling from set_nota"
             );
@@ -1123,6 +1125,7 @@ private void BtnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
              file.createNewFile();
              fileWriter = new FileWriter(file);
              StringBuilder iyembuilder = new StringBuilder();
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement("select * from akun_bayar order by akun_bayar.nama_bayar");
              try{
                  rs=ps.executeQuery();

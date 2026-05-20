@@ -1375,6 +1375,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         }
         
         try {
+            koneksi=koneksiDB.condb();
             psresep=koneksi.prepareStatement(
                 "select databarang.kode_brng, databarang.nama_brng,jenis.nama, databarang.kode_sat,"+
                 "databarang.letak_barang,industrifarmasi.nama_industri "+
@@ -1574,6 +1575,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         }
         
         try {
+            koneksi=koneksiDB.condb();
             psresep=koneksi.prepareStatement(
                 "select databarang.kode_brng,databarang.nama_brng,jenis.nama,databarang.kode_sat,"+
                 "databarang.letak_barang,industrifarmasi.nama_industri,databarang.kapasitas "+

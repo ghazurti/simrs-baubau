@@ -417,6 +417,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             pspoli=koneksi.prepareStatement("select poliklinik.kd_poli,poliklinik.nm_poli from poliklinik "+(TCari.getText().trim().equals("")?"":"where poliklinik.nm_poli like ? "));
             try {
                 if(!TCari.getText().trim().equals("")){
@@ -428,6 +429,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 ttltotal=0;
                 while(rspoli.next()){
                     tabMode.addRow(new Object[]{rspoli.getString(2),null,null});
+                    koneksi=koneksiDB.condb();
                     psdokter=koneksi.prepareStatement("select dokter.kd_dokter,dokter.nm_dokter from reg_periksa inner join dokter on dokter.kd_dokter=reg_periksa.kd_dokter where reg_periksa.kd_poli=? and reg_periksa.tgl_registrasi=? group by dokter.kd_dokter");
                     try {
                         i=1;
@@ -435,6 +437,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         psdokter.setString(2,Valid.SetTgl(Tgl1.getSelectedItem()+""));
                         rsdokter=psdokter.executeQuery();
                         while(rsdokter.next()){
+                            koneksi=koneksiDB.condb();
                             psjamshift=koneksi.prepareStatement("select * from closing_kasir where shift like ?");
                             try{
                                 psjamshift.setString(1,"%"+CmbStatus.getSelectedItem().toString().replaceAll("Semua","")+"%");
@@ -442,6 +445,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                 jmlpas=0;
                                 total=0;
                                 while(rsjamshift.next()){                                    
+                                    koneksi=koneksiDB.condb();
                                     psmasuk=koneksi.prepareStatement(
                                             "select sum(besar_bayar) total,count(DISTINCT reg_periksa.no_rawat) pasien,nama_bayar "+
                                             "from detail_nota_jalan inner join reg_periksa inner join nota_jalan "+

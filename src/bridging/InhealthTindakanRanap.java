@@ -685,6 +685,7 @@ public final class InhealthTindakanRanap extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement(
                    "select inhealth_tindakan_ranap.kd_jenis_prw,jns_perawatan_inap.nm_perawatan,jns_perawatan_inap.total_byrdr,jns_perawatan_inap.total_byrpr,jns_perawatan_inap.total_byrdrpr,inhealth_tindakan_ranap.kd_inhealth "+
                    "from inhealth_tindakan_ranap inner join jns_perawatan_inap on inhealth_tindakan_ranap.kd_jenis_prw=jns_perawatan_inap.kd_jenis_prw  where "+

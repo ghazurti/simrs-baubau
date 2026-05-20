@@ -365,6 +365,7 @@ public final class PCRAICRACariJenisAktivitasProyek extends javax.swing.JDialog 
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select pcra_icra_jenis_aktivitas_proyek.kode_aktivitas,pcra_icra_jenis_aktivitas_proyek.nama_aktivitas from pcra_icra_jenis_aktivitas_proyek");   
             try {
                 rs=ps.executeQuery();

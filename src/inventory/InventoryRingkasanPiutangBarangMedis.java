@@ -1235,6 +1235,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
 
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select detailpiutang.kode_brng,databarang.nama_brng, detailpiutang.kode_sat,kodesatuan.satuan,jenis.nama as namajenis,sum(detailpiutang.jumlah) as jumlah,sum(detailpiutang.total) as total "+
                 "from piutang inner join petugas on piutang.nip=petugas.nip inner join bangsal on piutang.kd_bangsal=bangsal.kd_bangsal inner join detailpiutang on piutang.nota_piutang=detailpiutang.nota_piutang "+

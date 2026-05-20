@@ -256,6 +256,7 @@ public final class PCareCekKartu extends javax.swing.JDialog {
         try{
             KdPPK.setText(akses.getkodeppkbpjs());
             NmPPK.setText(akses.getnamars());      
+            koneksi=koneksiDB.condb();
             pssetalamat=koneksi.prepareStatement("select * from set_alamat_pasien");
             try {
                 rs=pssetalamat.executeQuery();
@@ -280,6 +281,7 @@ public final class PCareCekKartu extends javax.swing.JDialog {
                 }
             }
             
+            koneksi=koneksiDB.condb();
             pskelengkapan=koneksi.prepareStatement("select * from set_kelengkapan_data_pasien");
             try {
                 rs=pskelengkapan.executeQuery();
@@ -334,6 +336,7 @@ public final class PCareCekKartu extends javax.swing.JDialog {
                 }
             }
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from set_urut_no_rkm_medis");
             try {
                 rs=ps.executeQuery();
@@ -4465,6 +4468,7 @@ public final class PCareCekKartu extends javax.swing.JDialog {
                 Valid.SetTgl(DTPLahir,Valid.SetTgl(response.path("tglLahir").asText()));
                 ProviderPeserta.setText(response.path("kdProviderPst").path("kdProvider").asText());
                 TUmur.setText("0 Tahun");
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                    "select pasien.no_rkm_medis, pasien.nm_pasien, pasien.no_ktp, pasien.jk, "+
                    "pasien.tmp_lahir, pasien.tgl_lahir,pasien.nm_ibu, pasien.alamat,kelurahan.nm_kel,kecamatan.nm_kec,kabupaten.nm_kab,propinsi.nm_prop,"+
@@ -4535,6 +4539,7 @@ public final class PCareCekKartu extends javax.swing.JDialog {
                                 break;
                         } 
                         if(tampilkantni.equals("Yes")){
+                            koneksi=koneksiDB.condb();
                             pstni=koneksi.prepareStatement(
                                 "select pasien_tni.no_rkm_medis,pasien_tni.golongan_tni,golongan_tni.nama_golongan,"+
                                 "pasien_tni.satuan_tni,satuan_tni.nama_satuan,pasien_tni.pangkat_tni,"+
@@ -4569,6 +4574,7 @@ public final class PCareCekKartu extends javax.swing.JDialog {
                                 }
                             }
 
+                            koneksi=koneksiDB.condb();
                             pspolri=koneksi.prepareStatement(
                                 "select pasien_polri.no_rkm_medis,pasien_polri.golongan_polri,golongan_polri.nama_golongan,"+
                                 "pasien_polri.satuan_polri,satuan_polri.nama_satuan,pasien_polri.pangkat_polri,"+
@@ -4867,6 +4873,7 @@ public final class PCareCekKartu extends javax.swing.JDialog {
     
     private void isPoli(){
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select poliklinik.registrasi,poliklinik.registrasilama from poliklinik where poliklinik.kd_poli=? order by poliklinik.nm_poli");
             try{            
                 ps.setString(1,kdpoli.getText().trim());
@@ -4950,6 +4957,7 @@ public final class PCareCekKartu extends javax.swing.JDialog {
     
     private void inputRegistrasi(){
        try {
+            koneksi=koneksiDB.condb();
             pscariumur=koneksi.prepareStatement(
                 "select TIMESTAMPDIFF(YEAR, tgl_lahir, CURDATE()) as tahun, "+
                 "(TIMESTAMPDIFF(MONTH, tgl_lahir, CURDATE()) - ((TIMESTAMPDIFF(MONTH, tgl_lahir, CURDATE()) div 12) * 12)) as bulan, "+

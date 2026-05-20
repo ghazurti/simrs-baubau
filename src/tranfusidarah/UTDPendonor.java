@@ -1570,6 +1570,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                         "order by utd_pendonor.no_pendonor desc limit "+cmbHlm.getSelectedItem().toString();
                 }
             }
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(sql);
             try {
                 rs=ps.executeQuery();

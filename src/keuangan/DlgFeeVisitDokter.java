@@ -98,11 +98,13 @@ public class DlgFeeVisitDokter extends javax.swing.JDialog {
         kddokter.setDocument(new batasInput((byte)10).getKata(kddokter));
                 
         try {            
+            koneksi=koneksiDB.condb();
             pskamar=koneksi.prepareStatement(
                     "select kamar_inap.no_rawat,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,kamar_inap.tgl_masuk,kamar_inap.tgl_keluar "+
                     "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
                     "reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj and kamar_inap.kd_kamar=kamar.kd_kamar and kamar.kd_bangsal=bangsal.kd_bangsal "+
                     "where kamar_inap.tgl_keluar between ? and ? and kamar_inap.tgl_keluar<>'0000-00-00' group by kamar_inap.kd_kamar, kamar_inap.no_rawat");
+            koneksi=koneksiDB.condb();
             psvisit=koneksi.prepareStatement(
                     "select count(rawat_inap_dr.kd_jenis_prw) as jml,"+
                     "sum(rawat_inap_dr.bhp)as bhp,"+
@@ -114,6 +116,7 @@ public class DlgFeeVisitDokter extends javax.swing.JDialog {
                     "on jns_perawatan_inap.kd_jenis_prw=rawat_inap_dr.kd_jenis_prw where "+
                     "rawat_inap_dr.tarif_tindakandr>0 and rawat_inap_dr.kd_dokter=? "+
                     "and rawat_inap_dr.no_rawat=? and jns_perawatan_inap.nm_perawatan like '%visit%' ");
+            koneksi=koneksiDB.condb();
             psbyphone=koneksi.prepareStatement(
                     "select count(rawat_inap_dr.kd_jenis_prw) as jml,"+
                     "sum(rawat_inap_dr.bhp)as bhp,"+

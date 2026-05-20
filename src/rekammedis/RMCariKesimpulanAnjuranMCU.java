@@ -384,6 +384,7 @@ public final class RMCariKesimpulanAnjuranMCU extends javax.swing.JDialog {
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select master_kesimpulan_anjuran_mcu.kesimpulan,master_kesimpulan_anjuran_mcu.anjuran from master_kesimpulan_anjuran_mcu order by master_kesimpulan_anjuran_mcu.anjuran ");
             try {
                 rs=ps.executeQuery();

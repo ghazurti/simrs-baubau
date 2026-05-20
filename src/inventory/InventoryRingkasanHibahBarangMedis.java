@@ -1308,6 +1308,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{     
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select detailhibah_obat_bhp.kode_brng,databarang.nama_brng,databarang.kode_sat,kodesatuan.satuan,jenis.nama as namajenis,sum(detailhibah_obat_bhp.jumlah2) as jumlah,sum(detailhibah_obat_bhp.subtotaldiakui) as total "+
                     "from hibah_obat_bhp inner join pemberihibah on hibah_obat_bhp.kode_pemberi=pemberihibah.kode_pemberi inner join petugas on hibah_obat_bhp.nip=petugas.nip inner join bangsal on hibah_obat_bhp.kd_bangsal=bangsal.kd_bangsal "+

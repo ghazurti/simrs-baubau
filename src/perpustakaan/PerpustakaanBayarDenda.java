@@ -1403,6 +1403,7 @@ public class PerpustakaanBayarDenda extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select perpustakaan_bayar_denda_harian.tgl_denda,perpustakaan_bayar_denda_harian.no_anggota,perpustakaan_anggota.nama_anggota,"+
                 "perpustakaan_inventaris.no_inventaris,perpustakaan_buku.kode_buku, perpustakaan_buku.judul_buku, "+
@@ -1454,6 +1455,7 @@ public class PerpustakaanBayarDenda extends javax.swing.JDialog {
     private void tampil2() {
         Valid.tabelKosong(tabMode2);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select perpustakaan_bayar_denda.tgl_denda,perpustakaan_bayar_denda.no_anggota,perpustakaan_anggota.nama_anggota,"+
                 "perpustakaan_inventaris.no_inventaris,perpustakaan_buku.kode_buku, perpustakaan_buku.judul_buku, "+
@@ -1555,6 +1557,7 @@ public class PerpustakaanBayarDenda extends javax.swing.JDialog {
     
     private void isInventaris(){
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                "select perpustakaan_inventaris.no_inventaris,perpustakaan_buku.kode_buku, perpustakaan_buku.judul_buku, "+
                 "perpustakaan_inventaris.harga from perpustakaan_inventaris inner join perpustakaan_buku on "+

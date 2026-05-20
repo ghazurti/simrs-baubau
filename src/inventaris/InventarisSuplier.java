@@ -851,6 +851,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select inventaris_suplier.kode_suplier, inventaris_suplier.nama_suplier, "+
                     " inventaris_suplier.alamat,inventaris_suplier.kota, inventaris_suplier.no_telp,"+
                     " inventaris_suplier.nama_bank,inventaris_suplier.rekening from inventaris_suplier "+

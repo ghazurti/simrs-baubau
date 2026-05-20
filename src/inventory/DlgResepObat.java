@@ -1854,6 +1854,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             Sequel.queryu("delete from temporary_resep where temp37='"+akses.getalamatip()+"'");
             try {
                 i=0;
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select databarang.nama_brng,aturan_pakai.aturan,detail_pemberian_obat.jml,kodesatuan.satuan "+
                     "from resep_obat inner join reg_periksa inner join "+
@@ -1887,6 +1888,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     }
                 }
                 
+                koneksi=koneksiDB.condb();
                 psracikan=koneksi.prepareStatement(
                     "select obat_racikan.no_racik,obat_racikan.nama_racik,obat_racikan.tgl_perawatan,obat_racikan.jam," +
                     "obat_racikan.no_rawat,obat_racikan.aturan_pakai,obat_racikan.jml_dr,metode_racik.nm_racik " +
@@ -1902,6 +1904,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     rsracikan=psracikan.executeQuery();
                     while(rsracikan.next()){
                         rincianobat="";
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(
                             "select databarang.nama_brng,detail_pemberian_obat.jml from "+
                             "detail_pemberian_obat inner join databarang inner join detail_obat_racikan "+
@@ -1998,6 +2001,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             Sequel.queryu("delete from temporary_resep where temp37='"+akses.getalamatip()+"'");
             try {
                 i=0;
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select detail_pemberian_obat.tgl_perawatan,detail_pemberian_obat.jam,databarang.kode_sat, "+
                     "detail_pemberian_obat.kode_brng,detail_pemberian_obat.jml,detail_pemberian_obat.total,"+
@@ -2114,6 +2118,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             Sequel.queryu("delete from temporary_resep where temp37='"+akses.getalamatip()+"'");
             try {
                 i=0;
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select databarang.nama_brng,aturan_pakai.aturan,detail_pemberian_obat.jml,kodesatuan.satuan "+
                     "from resep_obat inner join reg_periksa inner join "+
@@ -2147,6 +2152,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     }
                 }
                 
+                koneksi=koneksiDB.condb();
                 psracikan=koneksi.prepareStatement(
                     "select obat_racikan.no_racik,obat_racikan.nama_racik,obat_racikan.tgl_perawatan,obat_racikan.jam," +
                     "obat_racikan.no_rawat,obat_racikan.aturan_pakai,obat_racikan.jml_dr,metode_racik.nm_racik " +
@@ -2162,6 +2168,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     rsracikan=psracikan.executeQuery();
                     while(rsracikan.next()){
                         rincianobat="";
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(
                             "select databarang.nama_brng,detail_pemberian_obat.jml from "+
                             "detail_pemberian_obat inner join databarang inner join detail_obat_racikan "+
@@ -2378,6 +2385,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select resep_obat.no_resep,resep_obat.tgl_perawatan,resep_obat.jam,"+
                 "resep_obat.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,resep_obat.kd_dokter,dokter.nm_dokter "+
@@ -2409,6 +2417,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                         rs.getString("nm_dokter")
                     });
                     tabMode.addRow(new Object[]{"","Nama Obat","Jumlah x Harga + Embalase + Tuslah = Total","Aturan Pakai"});                
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select databarang.kode_brng,databarang.nama_brng,detail_pemberian_obat.jml,detail_pemberian_obat.biaya_obat,detail_pemberian_obat.embalase,detail_pemberian_obat.tuslah,detail_pemberian_obat.total "+
                         "from detail_pemberian_obat inner join databarang on detail_pemberian_obat.kode_brng=databarang.kode_brng where detail_pemberian_obat.tgl_perawatan=? and detail_pemberian_obat.jam=? and detail_pemberian_obat.no_rawat=? "+
@@ -2444,6 +2453,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     psracikan=koneksi.prepareStatement(
                             "select obat_racikan.no_racik,obat_racikan.nama_racik,obat_racikan.kd_racik,metode_racik.nm_racik as metode,obat_racikan.jml_dr,obat_racikan.aturan_pakai,obat_racikan.keterangan "+
                             "from obat_racikan inner join metode_racik on obat_racikan.kd_racik=metode_racik.kd_racik where obat_racikan.tgl_perawatan=? and obat_racikan.jam=? and obat_racikan.no_rawat=? ");
@@ -2459,6 +2469,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                                 rsracikan.getString("aturan_pakai")
                             });
                             
+                            koneksi=koneksiDB.condb();
                             ps2=koneksi.prepareStatement(
                                 "select databarang.kode_brng,databarang.nama_brng,detail_pemberian_obat.jml,detail_pemberian_obat.biaya_obat,detail_pemberian_obat.embalase,detail_pemberian_obat.tuslah,detail_pemberian_obat.total "+
                                 "from detail_pemberian_obat inner join databarang on detail_pemberian_obat.kode_brng=databarang.kode_brng inner join detail_obat_racikan on detail_pemberian_obat.kode_brng=detail_obat_racikan.kode_brng and "+
@@ -2638,6 +2649,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         Valid.tabelKosong(tabmodeUbahRacikan);
         try {
             try {
+                koneksi=koneksiDB.condb();
                 ps2=koneksi.prepareStatement(
                         "select detail_pemberian_obat.tgl_perawatan,detail_pemberian_obat.jam,detail_pemberian_obat.no_rawat,"+
                         "detail_pemberian_obat.kode_brng,databarang.nama_brng from detail_pemberian_obat "+
@@ -2677,6 +2689,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         Valid.tabelKosong(tabmodeUbahRacikan2);
         try {
             try {
+                koneksi=koneksiDB.condb();
                 ps2=koneksi.prepareStatement(
                         "select obat_racikan.tgl_perawatan,obat_racikan.jam,obat_racikan.no_rawat,"+
                         "obat_racikan.no_racik,obat_racikan.nama_racik,"+
@@ -2739,6 +2752,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void panggilPhoto() {
         if((TabData.isVisible()==true)&&(TabData.getSelectedIndex()==1)){
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select bukti_penyerahan_resep_obat.photo from bukti_penyerahan_resep_obat where bukti_penyerahan_resep_obat.no_resep=?");
                 try {
                     ps.setString(1,NoResep.getText());
@@ -2771,6 +2785,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void panggilTelaah() {
         if((TabData.isVisible()==true)&&(TabData.getSelectedIndex()==0)){
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select telaah_farmasi.no_resep,telaah_farmasi.resep_identifikasi_pasien,telaah_farmasi.resep_ket_identifikasi_pasien,"+
                         "telaah_farmasi.resep_tepat_obat,telaah_farmasi.resep_ket_tepat_obat,telaah_farmasi.resep_tepat_dosis,telaah_farmasi.resep_ket_tepat_dosis,"+

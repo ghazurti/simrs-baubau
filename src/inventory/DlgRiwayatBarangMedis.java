@@ -644,6 +644,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 protected Void doInBackground() throws Exception {
                     try{   
                         if(nmbar.getText().trim().equals("")&&NmGudang.getText().trim().equals("")&&TCari.getText().trim().equals("")){
+                            koneksi=koneksiDB.condb();
                             ps=koneksi.prepareStatement(
                                  "select riwayat_barang_medis.kode_brng,databarang.nama_brng,"+
                                  "riwayat_barang_medis.stok_awal,riwayat_barang_medis.masuk,"+
@@ -657,6 +658,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                  "inner join databarang on riwayat_barang_medis.kode_brng=databarang.kode_brng "+
                                  "where riwayat_barang_medis.tanggal between ? and ? order by riwayat_barang_medis.tanggal,riwayat_barang_medis.jam ");
                         }else{
+                            koneksi=koneksiDB.condb();
                             ps=koneksi.prepareStatement(
                                  "select riwayat_barang_medis.kode_brng,databarang.nama_brng,"+
                                  "riwayat_barang_medis.stok_awal,riwayat_barang_medis.masuk,"+

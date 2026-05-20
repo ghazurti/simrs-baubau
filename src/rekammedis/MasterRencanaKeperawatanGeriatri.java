@@ -714,6 +714,7 @@ public class MasterRencanaKeperawatanGeriatri extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select master_masalah_keperawatan_geriatri.kode_masalah,master_masalah_keperawatan_geriatri.nama_masalah,"+
                     "master_rencana_keperawatan_geriatri.kode_rencana,master_rencana_keperawatan_geriatri.rencana_keperawatan from master_rencana_keperawatan_geriatri "+

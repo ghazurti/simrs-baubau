@@ -850,6 +850,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select ipsrssuplier.kode_suplier,ipsrssuplier.nama_suplier,ipsrssuplier.alamat,ipsrssuplier.kota,ipsrssuplier.no_telp,ipsrssuplier.nama_bank,ipsrssuplier.rekening from ipsrssuplier "+
                 (TCari.getText().trim().equals("")?"":"where ipsrssuplier.kode_suplier like ? or ipsrssuplier.nama_suplier like ? or ipsrssuplier.alamat like ? or ipsrssuplier.kota like ? or "+

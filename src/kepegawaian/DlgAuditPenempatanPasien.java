@@ -1128,6 +1128,7 @@ public final class DlgAuditPenempatanPasien extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_penempatan_pasien.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_penempatan_pasien.tanggal,audit_penempatan_pasien.audit1,"+
                     "audit_penempatan_pasien.audit2,audit_penempatan_pasien.audit3,"+
@@ -1137,6 +1138,7 @@ public final class DlgAuditPenempatanPasien extends javax.swing.JDialog {
                     "inner join ruang_audit_kepatuhan on audit_penempatan_pasien.id_ruang=ruang_audit_kepatuhan.id_ruang "+
                     "where audit_penempatan_pasien.tanggal between ? and ? order by audit_penempatan_pasien.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_penempatan_pasien.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_penempatan_pasien.tanggal,audit_penempatan_pasien.audit1,"+
                     "audit_penempatan_pasien.audit2,audit_penempatan_pasien.audit3,"+

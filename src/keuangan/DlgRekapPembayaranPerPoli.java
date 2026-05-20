@@ -408,6 +408,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             pspoli=koneksi.prepareStatement("select poliklinik.kd_poli,poliklinik.nm_poli from poliklinik "+(TCari.getText().trim().equals("")?"":"where poliklinik.nm_poli like ? "));
             try {
                 if(!TCari.getText().trim().equals("")){
@@ -419,6 +420,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 ttljmlpas=0;
                 ttltotal=0;
                 while(rspoli.next()){
+                    koneksi=koneksiDB.condb();
                     psmasuk=koneksi.prepareStatement(
                             "select sum(detail_nota_jalan.besar_bayar),count(DISTINCT reg_periksa.no_rawat) from detail_nota_jalan inner join reg_periksa "+
                             "on reg_periksa.no_rawat=detail_nota_jalan.no_rawat where reg_periksa.kd_poli=? and reg_periksa.status_lanjut='Ralan' and "+

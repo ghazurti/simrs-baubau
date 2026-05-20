@@ -596,6 +596,7 @@ public class K3RSDampakCidera extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from k3rs_dampak_cidera where kode_dampak like ? or dampak_cidera like ? order by kode_dampak");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

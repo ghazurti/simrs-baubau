@@ -337,6 +337,7 @@ public final class RMCariDiet extends javax.swing.JDialog {
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select detail_beri_diet.tanggal, detail_beri_diet.waktu, diet.nama_diet "+
                     "from detail_beri_diet INNER JOIN diet ON detail_beri_diet.kd_diet=diet.kd_diet where "+

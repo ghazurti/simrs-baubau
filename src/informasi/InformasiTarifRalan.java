@@ -411,6 +411,7 @@ public final class InformasiTarifRalan extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan.total_byrdr,penjab.png_jawab,poliklinik.nm_poli "+
                        "from jns_perawatan inner join kategori_perawatan inner join penjab inner join poliklinik  "+
@@ -457,6 +458,7 @@ public final class InformasiTarifRalan extends javax.swing.JDialog {
     private void tampil2() {
         Valid.tabelKosong(tabMode2);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan.total_byrpr,penjab.png_jawab,poliklinik.nm_poli "+
                        "from jns_perawatan inner join kategori_perawatan inner join penjab inner join poliklinik  "+
@@ -503,6 +505,7 @@ public final class InformasiTarifRalan extends javax.swing.JDialog {
     private void tampil3() {
         Valid.tabelKosong(tabMode3);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select jns_perawatan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,"+
                        "jns_perawatan.total_byrdrpr,penjab.png_jawab,poliklinik.nm_poli "+
                        "from jns_perawatan inner join kategori_perawatan inner join penjab inner join poliklinik  "+

@@ -542,6 +542,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
        Valid.tabelKosong(tabMode);      
        try{   
             if(nmbar.getText().trim().equals("")&&TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select ipsrs_riwayat_barang.kode_brng,ipsrsbarang.nama_brng,"+
                     "ipsrs_riwayat_barang.stok_awal,ipsrs_riwayat_barang.masuk,"+
@@ -552,6 +553,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     "inner join ipsrsbarang on ipsrs_riwayat_barang.kode_brng=ipsrsbarang.kode_brng where "+
                     "ipsrs_riwayat_barang.tanggal between ? and ? order by ipsrs_riwayat_barang.tanggal,ipsrs_riwayat_barang.jam ");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select ipsrs_riwayat_barang.kode_brng,ipsrsbarang.nama_brng,"+
                     "ipsrs_riwayat_barang.stok_awal,ipsrs_riwayat_barang.masuk,"+

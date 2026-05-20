@@ -409,6 +409,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){  
         try {
             Valid.tabelKosong(tabMode);   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select paket_operasi.kode_paket,paket_operasi.nm_perawatan from paket_operasi where paket_operasi.kategori='Kebidanan' "+(TCari.getText().trim().equals("")?"":"and paket_operasi.nm_perawatan like ? ")+" order by paket_operasi.nm_perawatan"); 
             try{
                 if(!TCari.getText().trim().equals("")){
@@ -417,6 +418,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 rs=ps.executeQuery();
                 i=1;
                 while(rs.next()){
+                    koneksi=koneksiDB.condb();
                     psrujukanrs=koneksi.prepareStatement(
                         "select count(operasi.kode_paket) from operasi inner join rujuk_masuk on rujuk_masuk.no_rawat=operasi.no_rawat where operasi.kode_paket=? "+
                         "and operasi.tgl_operasi between ? and ? and (rujuk_masuk.perujuk like '%rs%' or rujuk_masuk.perujuk like '%rumah sakit%') "
@@ -441,6 +443,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
                     }
 
+                    koneksi=koneksiDB.condb();
                     psrujukanbidan=koneksi.prepareStatement(
                         "select count(operasi.kode_paket) from operasi inner join rujuk_masuk on rujuk_masuk.no_rawat=operasi.no_rawat where operasi.kode_paket=? "+
                         "and operasi.tgl_operasi between ? and ? and (rujuk_masuk.perujuk like '%bidan%' or rujuk_masuk.perujuk like '%Amd.Keb%') "
@@ -465,6 +468,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
                     }   
 
+                    koneksi=koneksiDB.condb();
                     psrujukanpuskesmas=koneksi.prepareStatement(
                         "select count(operasi.kode_paket) from operasi inner join rujuk_masuk on rujuk_masuk.no_rawat=operasi.no_rawat where operasi.kode_paket=? and rujuk_masuk.perujuk like '%puskesmas%' and operasi.tgl_operasi between ? and ? "
                     );
@@ -488,6 +492,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
                     }   
 
+                    koneksi=koneksiDB.condb();
                     psrujukansemua=koneksi.prepareStatement(
                         "select count(operasi.kode_paket) from operasi inner join rujuk_masuk on rujuk_masuk.no_rawat=operasi.no_rawat where operasi.kode_paket=? and operasi.tgl_operasi between ? and ? "
                     );
@@ -511,6 +516,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
                     } 
 
+                    koneksi=koneksiDB.condb();
                     psrujukanmati=koneksi.prepareStatement(
                         "select count(operasi.kode_paket) from operasi inner join rujuk_masuk on rujuk_masuk.no_rawat=operasi.no_rawat inner join reg_periksa on rujuk_masuk.no_rawat=reg_periksa.no_rawat "+
                         "inner join pasien_mati on reg_periksa.no_rkm_medis=pasien_mati.no_rkm_medis where operasi.kode_paket=? and operasi.tgl_operasi between ? and ?"
@@ -535,6 +541,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
                     } 
 
+                    koneksi=koneksiDB.condb();
                     psnonrujuktotal=koneksi.prepareStatement(
                         "select count(operasi.kode_paket) from operasi where operasi.no_rawat not in(select rujuk_masuk.no_rawat from rujuk_masuk) and operasi.kode_paket=? and operasi.tgl_operasi between ? and ? "
                     );
@@ -558,6 +565,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
                     } 
                         
+                    koneksi=koneksiDB.condb();
                     psnonrujukmati=koneksi.prepareStatement(
                         "select count(operasi.kode_paket) from operasi,reg_periksa,pasien_mati where operasi.no_rawat not in(select rujuk_masuk.no_rawat from rujuk_masuk) "+
                         "and reg_periksa.no_rkm_medis=pasien_mati.no_rkm_medis and operasi.kode_paket=? and operasi.tgl_operasi between ? and ? "
@@ -582,6 +590,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
                     }   
 
+                    koneksi=koneksiDB.condb();
                     psdirujuk=koneksi.prepareStatement(
                         "select count(operasi.kode_paket) from operasi inner join rujuk on rujuk.no_rawat=operasi.no_rawat where operasi.kode_paket=? and operasi.tgl_operasi between ? and ? "
                     );

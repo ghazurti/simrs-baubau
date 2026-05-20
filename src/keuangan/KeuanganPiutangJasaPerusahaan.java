@@ -1295,6 +1295,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select * from kategori_piutang_jasa_perusahaan order by kategori_piutang_jasa_perusahaan.kode_kategori");
             try {  

@@ -308,6 +308,7 @@ public final class InformasiTarifOperasi extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{    
+            koneksi=koneksiDB.condb();
             pstampil=koneksi.prepareStatement("select paket_operasi.kode_paket, paket_operasi.nm_perawatan,(paket_operasi.operator1+paket_operasi.operator2+paket_operasi.operator3+"+
                            "paket_operasi.asisten_operator1+paket_operasi.asisten_operator2+paket_operasi.instrumen+"+
                            "paket_operasi.dokter_anak+paket_operasi.perawaat_resusitas+"+

@@ -1101,6 +1101,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
         try{
             if(NoPermintaan.getText().trim().equals("")&&Status.getSelectedItem().toString().equals("Semua")&&NmPeg.getText().trim().equals("")&&
                     kdjenis.getText().trim().equals("")&&nmbar.getText().trim().equals("")&&TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select detail_pengajuan_barang_medis.kode_brng,databarang.nama_brng,kodesatuan.satuan,jenis.nama as namajenis,"+
                         "sum(detail_pengajuan_barang_medis.jumlah2) as jumlah,sum(detail_pengajuan_barang_medis.total) as total,databarang.kode_sat "+
@@ -1110,6 +1111,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         "inner join kodesatuan on databarang.kode_sat=kodesatuan.kode_sat inner join jenis on databarang.kdjns=jenis.kdjns "+
                         "where pengajuan_barang_medis.tanggal between ? and ? group by detail_pengajuan_barang_medis.kode_brng "+order);
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select detail_pengajuan_barang_medis.kode_brng,databarang.nama_brng,kodesatuan.satuan,jenis.nama as namajenis,"+
                         "sum(detail_pengajuan_barang_medis.jumlah2) as jumlah,sum(detail_pengajuan_barang_medis.total) as total,databarang.kode_sat "+

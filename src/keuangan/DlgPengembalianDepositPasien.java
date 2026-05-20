@@ -589,6 +589,7 @@ public final class DlgPengembalianDepositPasien extends javax.swing.JDialog {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
         Valid.tabelKosong(tabMode);
         try{        
+            koneksi=koneksiDB.condb();
             ps= koneksi.prepareStatement(
                 "select pengembalian_deposit.tanggal,pengembalian_deposit.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,pengembalian_deposit.besar_pengembalian,pengembalian_deposit.petugas from pengembalian_deposit "+
                 "inner join reg_periksa on reg_periksa.no_rawat=pengembalian_deposit.no_rawat inner join pasien on pasien.no_rkm_medis=reg_periksa.no_rkm_medis "+

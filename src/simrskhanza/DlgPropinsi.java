@@ -515,6 +515,7 @@ public class DlgPropinsi extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select propinsi.nm_prop,propinsi.kd_prop from propinsi");
             try {
                 rs=ps.executeQuery();
@@ -574,6 +575,7 @@ public class DlgPropinsi extends javax.swing.JDialog {
             }
             myObj.close();
             if(tabMode.getRowCount()==0){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select propinsi.nm_prop,propinsi.kd_prop from propinsi where propinsi.nm_prop like ?");
                 try {
                     ps.setString(1,"%"+TCari.getText().trim()+"%");

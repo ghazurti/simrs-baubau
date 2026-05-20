@@ -4256,6 +4256,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
 
     private void isPasien() {
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pasien.no_rkm_medis,pasien.nm_pasien,pasien.jk,pasien.tmp_lahir,pasien.tgl_lahir,pasien.agama,"+
                     "bahasa_pasien.nama_bahasa,cacat_fisik.nama_cacat,pasien.gol_darah,pasien.nm_ibu,pasien.stts_nikah,pasien.pnd, "+
@@ -4304,6 +4305,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         Valid.tabelKosong(tabModeRegistrasi);
         try{   
             if(R1.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,reg_periksa.tgl_registrasi,reg_periksa.jam_reg,reg_periksa.status_lanjut,"+
                     "reg_periksa.kd_dokter,dokter.nm_dokter,reg_periksa.umurdaftar,reg_periksa.sttsumur,"+
@@ -4311,6 +4313,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     "inner join poliklinik on reg_periksa.kd_poli=poliklinik.kd_poli inner join penjab on reg_periksa.kd_pj=penjab.kd_pj  "+
                     "where reg_periksa.stts<>'Batal' and reg_periksa.no_rkm_medis=? order by reg_periksa.tgl_registrasi desc limit 5");
             }else if(R2.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,reg_periksa.tgl_registrasi,reg_periksa.jam_reg,reg_periksa.status_lanjut,"+
                     "reg_periksa.kd_dokter,dokter.nm_dokter,reg_periksa.umurdaftar,reg_periksa.sttsumur,"+
@@ -4318,6 +4321,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     "inner join poliklinik on reg_periksa.kd_poli=poliklinik.kd_poli inner join penjab  on reg_periksa.kd_pj=penjab.kd_pj  "+
                     "where reg_periksa.stts<>'Batal' and reg_periksa.no_rkm_medis=? order by reg_periksa.tgl_registrasi");
             }else if(R3.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,reg_periksa.tgl_registrasi,reg_periksa.jam_reg,reg_periksa.status_lanjut,"+
                     "reg_periksa.kd_dokter,dokter.nm_dokter,reg_periksa.umurdaftar,reg_periksa.sttsumur,"+
@@ -4326,6 +4330,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     "where reg_periksa.stts<>'Batal' and reg_periksa.no_rkm_medis=? and "+
                     "reg_periksa.tgl_registrasi between ? and ? order by reg_periksa.tgl_registrasi");
             }else if(R4.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,reg_periksa.tgl_registrasi,reg_periksa.jam_reg,reg_periksa.status_lanjut,"+
                     "reg_periksa.kd_dokter,dokter.nm_dokter,reg_periksa.umurdaftar,reg_periksa.sttsumur,"+
@@ -4356,6 +4361,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         rs.getString("kd_dokter"),rs.getString("nm_dokter"),rs.getString("umurdaftar")+" "+rs.getString("sttsumur"),
                         rs.getString("kd_poli")+" "+rs.getString("nm_poli"),rs.getString("png_jawab")
                     });
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select rujukan_internal_poli.kd_dokter,dokter.nm_dokter,rujukan_internal_poli.kd_poli,poliklinik.nm_poli "+
                             "from rujukan_internal_poli inner join dokter on rujukan_internal_poli.kd_dokter=dokter.kd_dokter "+
@@ -4391,6 +4397,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             dpjp=rs.getString("nm_dokter");
                         }
                     }                        
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select kamar_inap.tgl_masuk,kamar_inap.jam_masuk,kamar_inap.kd_kamar,bangsal.nm_bangsal "+
                             "from kamar_inap inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar inner join bangsal  "+
@@ -4449,6 +4456,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try{   
             htmlContent = new StringBuilder();
             if(R1.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_reg,reg_periksa.no_rawat,reg_periksa.tgl_registrasi,reg_periksa.jam_reg,"+
                     "reg_periksa.kd_dokter,dokter.nm_dokter,poliklinik.nm_poli,reg_periksa.p_jawab,reg_periksa.almt_pj,"+
@@ -4458,6 +4466,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     "inner join poliklinik on reg_periksa.kd_poli=poliklinik.kd_poli inner join penjab on reg_periksa.kd_pj=penjab.kd_pj "+
                     "where reg_periksa.stts<>'Batal' and reg_periksa.no_rkm_medis=? order by reg_periksa.tgl_registrasi desc limit 5");
             }else if(R2.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_reg,reg_periksa.no_rawat,reg_periksa.tgl_registrasi,reg_periksa.jam_reg,"+
                     "reg_periksa.kd_dokter,dokter.nm_dokter,poliklinik.nm_poli,reg_periksa.p_jawab,reg_periksa.almt_pj,"+
@@ -4468,6 +4477,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj "+
                     "where reg_periksa.stts<>'Batal' and reg_periksa.no_rkm_medis=? order by reg_periksa.tgl_registrasi");
             }else if(R3.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_reg,reg_periksa.no_rawat,reg_periksa.tgl_registrasi,reg_periksa.jam_reg,"+
                     "reg_periksa.kd_dokter,dokter.nm_dokter,poliklinik.nm_poli,reg_periksa.p_jawab,reg_periksa.almt_pj,"+
@@ -4479,6 +4489,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     "where reg_periksa.stts<>'Batal' and reg_periksa.no_rkm_medis=? and "+
                     "reg_periksa.tgl_registrasi between ? and ? order by reg_periksa.tgl_registrasi");
             }else if(R4.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_reg,reg_periksa.no_rawat,reg_periksa.tgl_registrasi,reg_periksa.jam_reg,"+
                     "reg_periksa.kd_dokter,dokter.nm_dokter,poliklinik.nm_poli,reg_periksa.p_jawab,reg_periksa.almt_pj,"+
@@ -4507,6 +4518,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                 urut=1;
                 rs=ps.executeQuery();
                 while(rs.next()){
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select poliklinik.nm_poli,dokter.nm_dokter from rujukan_internal_poli "+
                         "inner join poliklinik on rujukan_internal_poli.kd_poli=poliklinik.kd_poli "+
@@ -4573,6 +4585,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     );
                     if(rs.getString("status_lanjut").equals("Ranap")){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs3=koneksi.prepareStatement(
                                 "select dokter.nm_dokter from dpjp_ranap inner join dokter on dpjp_ranap.kd_dokter=dokter.kd_dokter where dpjp_ranap.no_rawat='"+rs.getString("no_rawat")+"'").executeQuery();
                             if(rs3.next()){
@@ -4790,6 +4803,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     menampilkanBerkasDigital(rs.getString("no_rawat"));
                     if(chkCatatanDokter.isSelected()==true){
                         try {
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                     "select catatan_perawatan.tanggal,catatan_perawatan.jam,catatan_perawatan.kd_dokter,dokter.nm_dokter,"+
                                     "catatan_perawatan.catatan from catatan_perawatan inner join dokter on catatan_perawatan.kd_dokter=dokter.kd_dokter "+
@@ -4856,6 +4870,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan tindakan rawat jalan dokter
                     if(chkTindakanRalanDokter.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                     "select rawat_jl_dr.kd_jenis_prw,jns_perawatan.nm_perawatan,dokter.nm_dokter,rawat_jl_dr.biaya_rawat, "+
                                     "rawat_jl_dr.tgl_perawatan,rawat_jl_dr.jam_rawat from rawat_jl_dr inner join jns_perawatan on rawat_jl_dr.kd_jenis_prw=jns_perawatan.kd_jenis_prw "+
@@ -4901,6 +4916,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan tindakan rawat jalan paramedis
                     if(chkTindakanRalanParamedis.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                     "select rawat_jl_pr.kd_jenis_prw,jns_perawatan.nm_perawatan,petugas.nama,rawat_jl_pr.biaya_rawat, "+
                                     "rawat_jl_pr.tgl_perawatan,rawat_jl_pr.jam_rawat from rawat_jl_pr inner join jns_perawatan on rawat_jl_pr.kd_jenis_prw=jns_perawatan.kd_jenis_prw "+
@@ -4946,6 +4962,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan tindakan rawat jalan dokter paramedis
                     if(chkTindakanRalanDokterParamedis.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                     "select rawat_jl_drpr.kd_jenis_prw,jns_perawatan.nm_perawatan,dokter.nm_dokter,petugas.nama,rawat_jl_drpr.biaya_rawat, "+
                                     "rawat_jl_drpr.tgl_perawatan,rawat_jl_drpr.jam_rawat from rawat_jl_drpr inner join jns_perawatan on rawat_jl_drpr.kd_jenis_prw=jns_perawatan.kd_jenis_prw "+
@@ -4994,6 +5011,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan tindakan rawat inap dokter
                     if(chkTindakanRanapDokter.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                     "select rawat_inap_dr.tgl_perawatan,rawat_inap_dr.jam_rawat,"+
                                     "rawat_inap_dr.kd_jenis_prw,jns_perawatan_inap.nm_perawatan,"+
@@ -5041,6 +5059,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan tindakan rawat inap paramedis
                     if(chkTindakanRanapParamedis.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                     "select rawat_inap_pr.tgl_perawatan,rawat_inap_pr.jam_rawat,"+
                                     "rawat_inap_pr.kd_jenis_prw,jns_perawatan_inap.nm_perawatan,"+
@@ -5088,6 +5107,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan tindakan rawat inap Dokter paramedis
                     if(chkTindakanRanapDokterParamedis.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                     "select rawat_inap_drpr.tgl_perawatan,rawat_inap_drpr.jam_rawat,rawat_inap_drpr.kd_jenis_prw,"+
                                     "jns_perawatan_inap.nm_perawatan,dokter.nm_dokter,petugas.nama,rawat_inap_drpr.biaya_rawat "+
@@ -5137,6 +5157,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan penggunaan kamar
                     if(chkPenggunaanKamar.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                     "select kamar_inap.kd_kamar,bangsal.nm_bangsal,kamar_inap.tgl_masuk, kamar_inap.tgl_keluar, "+
                                     "kamar_inap.stts_pulang,kamar_inap.lama,kamar_inap.jam_masuk,kamar_inap.jam_keluar,"+
@@ -5186,6 +5207,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan operasi/vk
                     if(chkOperasiVK.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                     "select operasi.tgl_operasi,operasi.jenis_anasthesi,operasi.operator1, operasi.operator2, operasi.operator3, operasi.asisten_operator1,"+
                                     "operasi.asisten_operator2,operasi.asisten_operator3,operasi.biayaasisten_operator3, operasi.instrumen, operasi.dokter_anak, operasi.perawaat_resusitas, "+
@@ -5314,6 +5336,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         }
                        
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                     "select laporan_operasi.tanggal,laporan_operasi.diagnosa_preop,laporan_operasi.diagnosa_postop,laporan_operasi.jaringan_dieksekusi,laporan_operasi.selesaioperasi,laporan_operasi.permintaan_pa,laporan_operasi.laporan_operasi,"+
                                     "laporan_operasi.nomor_implan from laporan_operasi where no_rawat='"+rs.getString("no_rawat")+"' group by no_rawat,tanggal order by tanggal").executeQuery();
@@ -5382,6 +5405,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan pemeriksaan radiologi
                     if(chkPemeriksaanRadiologi.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                  "select periksa_radiologi.tgl_periksa,periksa_radiologi.jam,periksa_radiologi.kd_jenis_prw, "+
                                  "jns_perawatan_radiologi.nm_perawatan,petugas.nama,periksa_radiologi.biaya,periksa_radiologi.dokter_perujuk,"+
@@ -5438,6 +5462,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
 
                         //hasil pemeriksaan radiologi
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                  "select hasil_radiologi.tgl_periksa,hasil_radiologi.jam,hasil_radiologi.hasil from hasil_radiologi where hasil_radiologi.no_rawat='"+rs.getString("no_rawat")+"' order by hasil_radiologi.tgl_periksa,hasil_radiologi.jam").executeQuery();
                             if(rs2.next()){                                    
@@ -5472,6 +5497,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
 
                         //gambar pemeriksaan radiologi
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                  "select gambar_radiologi.tgl_periksa,gambar_radiologi.jam,gambar_radiologi.lokasi_gambar from gambar_radiologi where gambar_radiologi.no_rawat='"+rs.getString("no_rawat")+"' order by gambar_radiologi.tgl_periksa,gambar_radiologi.jam").executeQuery();
                             if(rs2.next()){                                    
@@ -5508,6 +5534,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan pemeriksaan laborat
                     if(chkPemeriksaanLaborat.isSelected()==true){
                         try {
+                            koneksi=koneksiDB.condb();
                             rs4=koneksi.prepareStatement(
                                  "select periksa_lab.tgl_periksa,periksa_lab.jam from periksa_lab where periksa_lab.kategori<>'PA' and periksa_lab.no_rawat='"+rs.getString("no_rawat")+"' "+
                                  "group by concat(periksa_lab.no_rawat,periksa_lab.tgl_periksa,periksa_lab.jam) order by periksa_lab.tgl_periksa,periksa_lab.jam").executeQuery();
@@ -5528,6 +5555,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                 w=1;
                                 while(rs4.next()){
                                     try{
+                                        koneksi=koneksiDB.condb();
                                         rs2=koneksi.prepareStatement(
                                              "select periksa_lab.kd_jenis_prw, "+
                                              "jns_perawatan_lab.nm_perawatan,petugas.nama,periksa_lab.biaya,periksa_lab.dokter_perujuk,dokter.nm_dokter "+
@@ -5566,6 +5594,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                             biayaperawatan=biayaperawatan+rs2.getDouble("biaya");
                                             
                                             try {
+                                                koneksi=koneksiDB.condb();
                                                 rs3=koneksi.prepareStatement(
                                                     "select template_laboratorium.Pemeriksaan, detail_periksa_lab.nilai,"+
                                                     "template_laboratorium.satuan,detail_periksa_lab.nilai_rujukan,detail_periksa_lab.biaya_item,"+
@@ -5651,6 +5680,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                         }
 
                                         try {
+                                            koneksi=koneksiDB.condb();
                                             rs3=koneksi.prepareStatement("select saran_kesan_lab.saran,saran_kesan_lab.kesan from saran_kesan_lab where saran_kesan_lab.no_rawat='"+rs.getString("no_rawat")+"' and saran_kesan_lab.tgl_periksa='"+rs4.getString("tgl_periksa")+"' and saran_kesan_lab.jam='"+rs4.getString("jam")+"'").executeQuery();
                                             if(rs3.next()){      
                                                 htmlContent.append(
@@ -5693,6 +5723,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         }
 
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                  "select periksa_lab.tgl_periksa,periksa_lab.jam,periksa_lab.kd_jenis_prw, "+
                                  "jns_perawatan_lab.nm_perawatan,petugas.nama,periksa_lab.biaya,periksa_lab.dokter_perujuk,dokter.nm_dokter "+
@@ -5727,6 +5758,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                     ); 
                                     biayaperawatan=biayaperawatan+rs2.getDouble("biaya");
                                     try {
+                                        koneksi=koneksiDB.condb();
                                         rs3=koneksi.prepareStatement(
                                             "select detail_periksa_labpa.diagnosa_klinik,detail_periksa_labpa.makroskopik,detail_periksa_labpa.mikroskopik,detail_periksa_labpa.kesimpulan,detail_periksa_labpa.kesan from detail_periksa_labpa "+
                                             "where detail_periksa_labpa.no_rawat='"+rs.getString("no_rawat")+"' and detail_periksa_labpa.kd_jenis_prw='"+rs2.getString("kd_jenis_prw")+"' and "+
@@ -5800,6 +5832,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan pemberian obat
                     if(chkPemberianObat.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                 "select detail_pemberian_obat.tgl_perawatan,detail_pemberian_obat.jam,databarang.kode_sat, "+
                                 "detail_pemberian_obat.kode_brng,detail_pemberian_obat.jml,detail_pemberian_obat.total,"+
@@ -5846,6 +5879,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         }
                         
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                 "select databarang.kode_brng,databarang.nama_brng,detreturjual.kode_sat,detreturjual.h_retur, "+
                              "(detreturjual.jml_retur * -1) as jumlah,(detreturjual.subtotal * -1) as total from detreturjual "+
@@ -5890,6 +5924,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan penggunaan obat operasi
                     if(chkPenggunaanObatOperasi.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                 "select beri_obat_operasi.tanggal,beri_obat_operasi.kd_obat,beri_obat_operasi.hargasatuan,obatbhp_ok.kode_sat, "+
                                 "beri_obat_operasi.jumlah, obatbhp_ok.nm_obat,(beri_obat_operasi.hargasatuan*beri_obat_operasi.jumlah) as total "+
@@ -5936,6 +5971,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan resep pulang
                     if(chkResepPulang.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                 "select resep_pulang.kode_brng,databarang.nama_brng,resep_pulang.dosis,resep_pulang.jml_barang, "+
                                 "databarang.kode_sat,resep_pulang.dosis,resep_pulang.total from resep_pulang inner join databarang "+
@@ -5996,6 +6032,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan tambahan biaya
                     if(chkTambahanBiaya.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                 "select nama_biaya, besar_biaya from tambahan_biaya where no_rawat='"+rs.getString("no_rawat")+"' order by nama_biaya").executeQuery();
                             if(rs2.next()){                                    
@@ -6035,6 +6072,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan potongan biaya
                     if(chkPotonganBiaya.isSelected()==true){
                         try{
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                 "select nama_pengurangan, (-1*besar_pengurangan) as besar_pengurangan from pengurangan_biaya where no_rawat='"+rs.getString("no_rawat")+"' order by nama_pengurangan").executeQuery();
                             if(rs2.next()){                                    
@@ -6081,6 +6119,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     //menampilkan resume perawatan
                     if(chkResume.isSelected()==true){
                         try {
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                 "select resume_pasien.kd_dokter,dokter.nm_dokter,resume_pasien.kondisi_pulang,resume_pasien.keluhan_utama, "+
                                 "resume_pasien.jalannya_penyakit,resume_pasien.pemeriksaan_penunjang,resume_pasien.hasil_laborat,resume_pasien.diagnosa_utama,resume_pasien.kd_diagnosa_utama, "+
@@ -6176,6 +6215,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             }
                         }
                         try {
+                            koneksi=koneksiDB.condb();
                             rs2=koneksi.prepareStatement(
                                 "select resume_pasien_ranap.kd_dokter,dokter.nm_dokter,resume_pasien_ranap.diagnosa_awal,resume_pasien_ranap.alasan,resume_pasien_ranap.keluhan_utama,resume_pasien_ranap.pemeriksaan_fisik,"+
                                 "resume_pasien_ranap.jalannya_penyakit,resume_pasien_ranap.pemeriksaan_penunjang,resume_pasien_ranap.hasil_laborat,resume_pasien_ranap.tindakan_dan_operasi,resume_pasien_ranap.obat_di_rs,"+
@@ -6322,6 +6362,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                 );
                             }else if(rs.getString("status_lanjut").equals("Ranap")){
                                 try{
+                                    koneksi=koneksiDB.condb();
                                     rs3=koneksi.prepareStatement(
                                         "select dpjp_ranap.kd_dokter,dokter.nm_dokter from dpjp_ranap inner join dokter on dpjp_ranap.kd_dokter=dokter.kd_dokter where dpjp_ranap.no_rawat='"+rs.getString("no_rawat")+"'").executeQuery();
                                     if(rs3.next()){
@@ -6389,6 +6430,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                 }
                             }else if(rs.getString("status_lanjut").equals("Ranap")){
                                 try{
+                                    koneksi=koneksiDB.condb();
                                     rs3=koneksi.prepareStatement(
                                         "select dpjp_ranap.kd_dokter,dokter.nm_dokter from dpjp_ranap inner join dokter on dpjp_ranap.kd_dokter=dokter.kd_dokter where dpjp_ranap.no_rawat='"+rs.getString("no_rawat")+"'").executeQuery();
                                     if(rs3.next()){
@@ -6463,6 +6505,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             }else if(rs.getString("status_lanjut").equals("Ranap")){
                                 System.out.println("ESign : "+esign+" Sertisign : "+sertisign);
                                 try{
+                                    koneksi=koneksiDB.condb();
                                     rs3=koneksi.prepareStatement(
                                         "select dpjp_ranap.kd_dokter,dokter.nm_dokter from dpjp_ranap inner join dokter on dpjp_ranap.kd_dokter=dokter.kd_dokter where dpjp_ranap.no_rawat='"+rs.getString("no_rawat")+"'").executeQuery();
                                     if(rs3.next()){
@@ -6558,19 +6601,23 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             append("<td valign='middle' bgcolor='#FFFAF8' align='center' width='84%'>S.O.A.P.I.E</td>").
                         append("</tr>");     
             if(R1.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_reg,reg_periksa.no_rawat,reg_periksa.tgl_registrasi,reg_periksa.status_lanjut "+
                     "from reg_periksa where reg_periksa.stts<>'Batal' and reg_periksa.no_rkm_medis=? order by reg_periksa.tgl_registrasi desc limit 5");
             }else if(R2.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_reg,reg_periksa.no_rawat,reg_periksa.tgl_registrasi,reg_periksa.status_lanjut "+
                     "from reg_periksa where reg_periksa.stts<>'Batal' and reg_periksa.no_rkm_medis=? order by reg_periksa.tgl_registrasi");
             }else if(R3.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_reg,reg_periksa.no_rawat,reg_periksa.tgl_registrasi,reg_periksa.status_lanjut "+
                     "from reg_periksa where reg_periksa.stts<>'Batal' and reg_periksa.no_rkm_medis=? and "+
                     "reg_periksa.tgl_registrasi between ? and ? order by reg_periksa.tgl_registrasi");
             }else if(R4.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select reg_periksa.no_reg,reg_periksa.no_rawat,reg_periksa.tgl_registrasi,reg_periksa.status_lanjut "+
                     "from reg_periksa where reg_periksa.stts<>'Batal' and reg_periksa.no_rkm_medis=? and reg_periksa.no_rawat=?");
@@ -6597,6 +6644,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                     append("<td valign='top' align='center'>").
                                         append("<table width='100%' border='0' align='center' cellpadding='2px' cellspacing='0'>");
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                                 "select pemeriksaan_ralan.tgl_perawatan,pemeriksaan_ralan.jam_rawat,pemeriksaan_ralan.suhu_tubuh,pemeriksaan_ralan.tensi,pemeriksaan_ralan.nadi,pemeriksaan_ralan.respirasi,"+
                                 "pemeriksaan_ralan.tinggi,pemeriksaan_ralan.berat,pemeriksaan_ralan.gcs,pemeriksaan_ralan.spo2,pemeriksaan_ralan.kesadaran,pemeriksaan_ralan.keluhan, "+
@@ -6641,6 +6689,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         }
                     }
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                                 "select pemeriksaan_ranap.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                                 "pemeriksaan_ranap.tgl_perawatan,pemeriksaan_ranap.jam_rawat,pemeriksaan_ranap.suhu_tubuh,pemeriksaan_ranap.tensi, " +
@@ -6731,6 +6780,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     "<td valign='top' bgcolor='#FFFAF8' align='center' width='8%'>PPN</td>").append(
                 "</tr>"); 
             if(R1.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select penjualan.nota_jual, penjualan.tgl_jual, "+
                     "penjualan.nip,petugas.nama, "+
                     "penjualan.no_rkm_medis,penjualan.nm_pasien,penjualan.nama_bayar, "+
@@ -6739,6 +6789,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     " inner join bangsal on penjualan.kd_bangsal=bangsal.kd_bangsal "+
                     " where penjualan.status='Sudah Dibayar' and penjualan.no_rkm_medis=? order by penjualan.tgl_jual desc limit 5");
             }else if(R2.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select penjualan.nota_jual, penjualan.tgl_jual, "+
                     "penjualan.nip,petugas.nama, "+
                     "penjualan.no_rkm_medis,penjualan.nm_pasien,penjualan.nama_bayar, "+
@@ -6747,6 +6798,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     " inner join bangsal on penjualan.kd_bangsal=bangsal.kd_bangsal "+
                     " where penjualan.status='Sudah Dibayar' and penjualan.no_rkm_medis=? order by penjualan.tgl_jual ");
             }else if(R3.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select penjualan.nota_jual, penjualan.tgl_jual, "+
                     "penjualan.nip,petugas.nama, "+
                     "penjualan.no_rkm_medis,penjualan.nm_pasien,penjualan.nama_bayar, "+
@@ -6756,6 +6808,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     " where penjualan.status='Sudah Dibayar' and penjualan.no_rkm_medis=? and penjualan.tgl_jual between ? and ? "+
                     " order by penjualan.tgl_jual ");
             }else if(R4.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select penjualan.nota_jual, penjualan.tgl_jual, "+
                     "penjualan.nip,petugas.nama, "+
                     "penjualan.no_rkm_medis,penjualan.nm_pasien,penjualan.nama_bayar, "+
@@ -6812,6 +6865,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                         "<td valign='top' bgcolor='#fdfff9' align='center' width='11%'>Aturan Pakai</td>").append(       
                                         "<td valign='top' bgcolor='#fdfff9' align='center' width='5%'>No.Batch</td>").append(                                        
                                     "</tr>");
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select detailjual.kode_brng,databarang.nama_brng, detailjual.kode_sat,"+
                             " kodesatuan.satuan,detailjual.h_jual, detailjual.jumlah, "+
@@ -6857,6 +6911,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             ps2.close();
                         }
                     }
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select obat_racikan_jual.no_racik,obat_racikan_jual.nama_racik,"+
                             "obat_racikan_jual.kd_racik,metode_racik.nm_racik as metode,"+
@@ -6877,6 +6932,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                     "<td valign='top' align='left' colspan='2'>").append(rs2.getString("aturan_pakai")).append("</td>").append(
                                 "</tr>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement("select detailjual.kode_brng,databarang.nama_brng, detailjual.kode_sat,"+
                                     " kodesatuan.satuan,detailjual.h_jual, detailjual.jumlah, "+
                                     " detailjual.subtotal, detailjual.dis, detailjual.bsr_dis,"+
@@ -6965,6 +7021,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     "<td valign='top' bgcolor='#FFFAF8' align='center' width='23%'>Asal Barang</td>").append(
                 "</tr>"); 
             if(R1.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select piutang.nota_piutang, piutang.tgl_piutang, "+
                     "piutang.nip,petugas.nama, piutang.no_rkm_medis,piutang.nm_pasien,piutang.jns_jual,"+
@@ -6972,6 +7029,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     " inner join bangsal on piutang.kd_bangsal=bangsal.kd_bangsal where piutang.no_rkm_medis=? "+
                     " order by piutang.tgl_piutang desc limit 5");
             }else if(R2.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select piutang.nota_piutang, piutang.tgl_piutang, "+
                     "piutang.nip,petugas.nama, piutang.no_rkm_medis,piutang.nm_pasien,piutang.jns_jual,"+
@@ -6979,6 +7037,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     " inner join bangsal on piutang.kd_bangsal=bangsal.kd_bangsal where piutang.no_rkm_medis=? "+
                     " order by piutang.tgl_piutang order by penjualan.tgl_jual ");
             }else if(R3.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select piutang.nota_piutang, piutang.tgl_piutang, "+
                     "piutang.nip,petugas.nama, piutang.no_rkm_medis,piutang.nm_pasien,piutang.jns_jual,"+
@@ -6986,6 +7045,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     " inner join bangsal on piutang.kd_bangsal=bangsal.kd_bangsal where piutang.no_rkm_medis=? "+
                     " and piutang.tgl_piutang between ? and ? order by piutang.tgl_piutang ");
             }else if(R4.isSelected()==true){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select piutang.nota_piutang, piutang.tgl_piutang, "+
                     "piutang.nip,petugas.nama, piutang.no_rkm_medis,piutang.nm_pasien,piutang.jns_jual,"+
@@ -7035,6 +7095,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                         "<td valign='top' bgcolor='#fdfff9' align='center' width='12%'>Total(Rp)</td>").append(          
                                         "<td valign='top' bgcolor='#fdfff9' align='center' width='8%'>No.Batch</td>").append(                                        
                                     "</tr>");
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select detailpiutang.kode_brng,databarang.nama_brng, detailpiutang.kode_sat,"+
                             " kodesatuan.satuan,detailpiutang.h_jual, detailpiutang.jumlah, "+
                             " detailpiutang.subtotal, detailpiutang.dis, detailpiutang.bsr_dis,"+
@@ -7104,6 +7165,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try{
             htmlContent = new StringBuilder();
             try{
+                koneksi=koneksiDB.condb();
                 rs3=koneksi.prepareStatement(
                      "select * from retensi_pasien where no_rkm_medis='"+NoRM.getText().trim()+"' order by tgl_retensi").executeQuery();
                 if(rs3.next()){                                    
@@ -7271,6 +7333,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             if(chkTriase.isSelected()==true){
                 //triase primer
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select data_triase_igdprimer.keluhan_utama,data_triase_igdprimer.kebutuhan_khusus,data_triase_igdprimer.catatan,"+
                             "data_triase_igdprimer.plan,data_triase_igdprimer.tanggaltriase,data_triase_igdprimer.nik,data_triase_igd.tekanan_darah,"+
@@ -7322,6 +7385,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         );
 
                         try {
+                            koneksi=koneksiDB.condb();
                             rs3=koneksi.prepareStatement(
                                 "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                 "from master_triase_pemeriksaan inner join master_triase_skala1 on master_triase_pemeriksaan.kode_pemeriksaan=master_triase_skala1.kode_pemeriksaan "+
@@ -7343,6 +7407,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                                 "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0'>"
                                     );
                                     try {
+                                        koneksi=koneksiDB.condb();
                                         rs4=koneksi.prepareStatement(
                                             "select master_triase_skala1.pengkajian_skala1 from master_triase_skala1 inner join data_triase_igddetail_skala1 "+
                                             "on master_triase_skala1.kode_skala1=data_triase_igddetail_skala1.kode_skala1 where "+
@@ -7379,6 +7444,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         }
 
                         try {
+                            koneksi=koneksiDB.condb();
                             rs3=koneksi.prepareStatement(
                                 "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                 "from master_triase_pemeriksaan inner join master_triase_skala2 on master_triase_pemeriksaan.kode_pemeriksaan=master_triase_skala2.kode_pemeriksaan "+
@@ -7399,6 +7465,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                                 "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0'>"
                                     );
                                     try {
+                                        koneksi=koneksiDB.condb();
                                         rs4=koneksi.prepareStatement(
                                             "select master_triase_skala2.pengkajian_skala2 from master_triase_skala2 inner join data_triase_igddetail_skala2 "+
                                             "on master_triase_skala2.kode_skala2=data_triase_igddetail_skala2.kode_skala2 where "+
@@ -7469,6 +7536,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
 
                 //triase sekunder
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select data_triase_igdsekunder.anamnesa_singkat,data_triase_igdsekunder.catatan,"+
                             "data_triase_igdsekunder.plan,data_triase_igdsekunder.tanggaltriase,data_triase_igdsekunder.nik,data_triase_igd.tekanan_darah,"+
@@ -7516,6 +7584,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         );
 
                         try {
+                            koneksi=koneksiDB.condb();
                             rs3=koneksi.prepareStatement(
                                 "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                 "from master_triase_pemeriksaan inner join master_triase_skala3 on master_triase_pemeriksaan.kode_pemeriksaan=master_triase_skala3.kode_pemeriksaan "+
@@ -7536,6 +7605,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                                 "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0'>"
                                     );
                                     try {
+                                        koneksi=koneksiDB.condb();
                                         rs4=koneksi.prepareStatement(
                                             "select master_triase_skala3.pengkajian_skala3 from master_triase_skala3 inner join data_triase_igddetail_skala3 "+
                                             "on master_triase_skala3.kode_skala3=data_triase_igddetail_skala3.kode_skala3 where "+
@@ -7572,6 +7642,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         }
 
                         try {
+                            koneksi=koneksiDB.condb();
                             rs3=koneksi.prepareStatement(
                                 "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                 "from master_triase_pemeriksaan inner join master_triase_skala4 on master_triase_pemeriksaan.kode_pemeriksaan=master_triase_skala4.kode_pemeriksaan "+
@@ -7592,6 +7663,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                                 "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0'>"
                                     );
                                     try {
+                                        koneksi=koneksiDB.condb();
                                         rs4=koneksi.prepareStatement(
                                             "select master_triase_skala4.pengkajian_skala4 from master_triase_skala4 inner join data_triase_igddetail_skala4 "+
                                             "on master_triase_skala4.kode_skala4=data_triase_igddetail_skala4.kode_skala4 where "+
@@ -7628,6 +7700,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                         }
 
                         try {
+                            koneksi=koneksiDB.condb();
                             rs3=koneksi.prepareStatement(
                                 "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                 "from master_triase_pemeriksaan inner join master_triase_skala5 on master_triase_pemeriksaan.kode_pemeriksaan=master_triase_skala5.kode_pemeriksaan "+
@@ -7648,6 +7721,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                                 "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0'>"
                                     );
                                     try {
+                                        koneksi=koneksiDB.condb();
                                         rs4=koneksi.prepareStatement(
                                             "select master_triase_skala5.pengkajian_skala5 from master_triase_skala5 inner join data_triase_igddetail_skala5 "+
                                             "on master_triase_skala5.kode_skala5=data_triase_igddetail_skala5.kode_skala5 where "+
@@ -7725,6 +7799,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanKeperawatanIGD.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_awal_keperawatan_igd.tanggal,penilaian_awal_keperawatan_igd.informasi,"+
                         "penilaian_awal_keperawatan_igd.keluhan_utama,penilaian_awal_keperawatan_igd.rpd,penilaian_awal_keperawatan_igd.rpo,penilaian_awal_keperawatan_igd.status_kehamilan,penilaian_awal_keperawatan_igd.gravida,penilaian_awal_keperawatan_igd.para,"+
@@ -7929,6 +8004,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                           "<tr>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_masalah_keperawatan_igd.nama_masalah from master_masalah_keperawatan_igd "+
                                     "inner join penilaian_awal_keperawatan_igd_masalah on penilaian_awal_keperawatan_igd_masalah.kode_masalah=master_masalah_keperawatan_igd.kode_masalah "+
@@ -7946,6 +8022,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             htmlContent.append("</td>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_rencana_keperawatan_igd.rencana_keperawatan from master_rencana_keperawatan_igd "+
                                     "inner join penilaian_awal_keperawatan_ralan_rencana_igd on penilaian_awal_keperawatan_ralan_rencana_igd.kode_rencana=master_rencana_keperawatan_igd.kode_rencana "+
@@ -7990,6 +8067,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try{
             if(chkAsuhanKeperawatanRalan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_awal_keperawatan_ralan.tanggal,penilaian_awal_keperawatan_ralan.informasi,penilaian_awal_keperawatan_ralan.td,penilaian_awal_keperawatan_ralan.nadi,penilaian_awal_keperawatan_ralan.rr,penilaian_awal_keperawatan_ralan.suhu,penilaian_awal_keperawatan_ralan.bb,penilaian_awal_keperawatan_ralan.tb,"+
                         "penilaian_awal_keperawatan_ralan.nadi,penilaian_awal_keperawatan_ralan.rr,penilaian_awal_keperawatan_ralan.suhu,penilaian_awal_keperawatan_ralan.gcs,penilaian_awal_keperawatan_ralan.bb,penilaian_awal_keperawatan_ralan.tb,penilaian_awal_keperawatan_ralan.bmi,penilaian_awal_keperawatan_ralan.keluhan_utama,"+
@@ -8204,6 +8282,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                           "<tr>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_masalah_keperawatan.nama_masalah from master_masalah_keperawatan "+
                                     "inner join penilaian_awal_keperawatan_ralan_masalah on penilaian_awal_keperawatan_ralan_masalah.kode_masalah=master_masalah_keperawatan.kode_masalah "+
@@ -8221,6 +8300,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             htmlContent.append("</td>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_rencana_keperawatan.rencana_keperawatan from master_rencana_keperawatan "+
                                     "inner join penilaian_awal_keperawatan_ralan_rencana on penilaian_awal_keperawatan_ralan_rencana.kode_rencana=master_rencana_keperawatan.kode_rencana "+
@@ -8265,6 +8345,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try{
             if(chkAsuhanKeperawatanRalanGeriatri.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_awal_keperawatan_ralan_geriatri.tanggal,penilaian_awal_keperawatan_ralan_geriatri.informasi,penilaian_awal_keperawatan_ralan_geriatri.td,penilaian_awal_keperawatan_ralan_geriatri.nadi,penilaian_awal_keperawatan_ralan_geriatri.rr,penilaian_awal_keperawatan_ralan_geriatri.suhu,penilaian_awal_keperawatan_ralan_geriatri.bb,penilaian_awal_keperawatan_ralan_geriatri.tb,"+
                         "penilaian_awal_keperawatan_ralan_geriatri.nadi,penilaian_awal_keperawatan_ralan_geriatri.rr,penilaian_awal_keperawatan_ralan_geriatri.suhu,penilaian_awal_keperawatan_ralan_geriatri.gcs,penilaian_awal_keperawatan_ralan_geriatri.bb,penilaian_awal_keperawatan_ralan_geriatri.tb,penilaian_awal_keperawatan_ralan_geriatri.bmi,penilaian_awal_keperawatan_ralan_geriatri.keluhan_utama,"+
@@ -8555,6 +8636,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                           "<tr>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_masalah_keperawatan_geriatri.nama_masalah from master_masalah_keperawatan_geriatri "+
                                     "inner join penilaian_awal_keperawatan_ralan_masalah_geriatri on penilaian_awal_keperawatan_ralan_masalah_geriatri.kode_masalah=master_masalah_keperawatan_geriatri.kode_masalah "+
@@ -8572,6 +8654,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             htmlContent.append("</td>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_rencana_keperawatan_geriatri.rencana_keperawatan from master_rencana_keperawatan_geriatri "+
                                     "inner join penilaian_awal_keperawatan_ralan_rencana_geriatri on penilaian_awal_keperawatan_ralan_rencana_geriatri.kode_rencana=master_rencana_keperawatan_geriatri.kode_rencana "+
@@ -8616,6 +8699,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try{
             if(chkAsuhanKeperawatanRalanGigi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_awal_keperawatan_gigi.tanggal,penilaian_awal_keperawatan_gigi.informasi,penilaian_awal_keperawatan_gigi.td,penilaian_awal_keperawatan_gigi.nadi,penilaian_awal_keperawatan_gigi.rr,penilaian_awal_keperawatan_gigi.suhu,penilaian_awal_keperawatan_gigi.bb,"+
                             "penilaian_awal_keperawatan_gigi.tb,penilaian_awal_keperawatan_gigi.bmi,penilaian_awal_keperawatan_gigi.keluhan_utama,penilaian_awal_keperawatan_gigi.riwayat_penyakit,penilaian_awal_keperawatan_gigi.ket_riwayat_penyakit,"+
@@ -8821,6 +8905,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                           "<tr>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_masalah_keperawatan_gigi.nama_masalah from master_masalah_keperawatan_gigi "+
                                     "inner join penilaian_awal_keperawatan_gigi_masalah on penilaian_awal_keperawatan_gigi_masalah.kode_masalah=master_masalah_keperawatan_gigi.kode_masalah "+
@@ -8838,6 +8923,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             htmlContent.append("</td>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_rencana_keperawatan_gigi.rencana_keperawatan from master_rencana_keperawatan_gigi "+
                                     "inner join penilaian_awal_keperawatan_ralan_rencana_gigi on penilaian_awal_keperawatan_ralan_rencana_gigi.kode_rencana=master_rencana_keperawatan_gigi.kode_rencana "+
@@ -8882,6 +8968,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanKeperawatanRalanBayi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_awal_keperawatan_ralan_bayi.tanggal,penilaian_awal_keperawatan_ralan_bayi.informasi,penilaian_awal_keperawatan_ralan_bayi.td,penilaian_awal_keperawatan_ralan_bayi.nadi,penilaian_awal_keperawatan_ralan_bayi.rr,penilaian_awal_keperawatan_ralan_bayi.suhu,penilaian_awal_keperawatan_ralan_bayi.gcs,"+
                             "penilaian_awal_keperawatan_ralan_bayi.bb,penilaian_awal_keperawatan_ralan_bayi.tb,penilaian_awal_keperawatan_ralan_bayi.lp,penilaian_awal_keperawatan_ralan_bayi.lk,penilaian_awal_keperawatan_ralan_bayi.ld,penilaian_awal_keperawatan_ralan_bayi.keluhan_utama,"+
@@ -8992,12 +9079,14 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                               "<td width='5%' bgcolor='#FFFAF8' align='center' valign='middle'>6</td>").append(
                                           "</tr>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_imunisasi.kode_imunisasi,master_imunisasi.nama_imunisasi from master_imunisasi inner join riwayat_imunisasi on riwayat_imunisasi.kode_imunisasi=master_imunisasi.kode_imunisasi "+
                                     "where riwayat_imunisasi.no_rkm_medis='"+NoRM.getText().trim()+"' group by master_imunisasi.kode_imunisasi order by master_imunisasi.kode_imunisasi").executeQuery();
                                 while(rs3.next()){
                                     ke1="";ke2="";ke3="";ke4="";ke5="";ke6="";
                                     try {
+                                        koneksi=koneksiDB.condb();
                                         rs4=koneksi.prepareStatement("select * from riwayat_imunisasi where riwayat_imunisasi.no_rkm_medis='"+NoRM.getText().trim()+"' and riwayat_imunisasi.kode_imunisasi='"+rs3.getString("kode_imunisasi")+"'").executeQuery();
                                         while(rs4.next()){
                                             if(rs4.getInt("no_imunisasi")==1){
@@ -9246,6 +9335,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                           "<tr>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_masalah_keperawatan_anak.nama_masalah from master_masalah_keperawatan_anak "+
                                     "inner join penilaian_awal_keperawatan_ralan_bayi_masalah on penilaian_awal_keperawatan_ralan_bayi_masalah.kode_masalah=master_masalah_keperawatan_anak.kode_masalah "+
@@ -9263,6 +9353,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             htmlContent.append("</td>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_rencana_keperawatan_anak.rencana_keperawatan from master_rencana_keperawatan_anak "+
                                     "inner join penilaian_awal_keperawatan_ralan_rencana_anak on penilaian_awal_keperawatan_ralan_rencana_anak.kode_rencana=master_rencana_keperawatan_anak.kode_rencana "+
@@ -9307,6 +9398,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanKeperawatanRalanKandungan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_awal_keperawatan_kebidanan.tanggal,penilaian_awal_keperawatan_kebidanan.informasi,penilaian_awal_keperawatan_kebidanan.td,penilaian_awal_keperawatan_kebidanan.nadi,penilaian_awal_keperawatan_kebidanan.rr,"+
                             "penilaian_awal_keperawatan_kebidanan.suhu,penilaian_awal_keperawatan_kebidanan.bb,penilaian_awal_keperawatan_kebidanan.gcs,penilaian_awal_keperawatan_kebidanan.tb,penilaian_awal_keperawatan_kebidanan.bmi,penilaian_awal_keperawatan_kebidanan.lila,"+
@@ -9463,6 +9555,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                           "</tr>");
                             try {
                                 w=1;
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select * from riwayat_persalinan_pasien where riwayat_persalinan_pasien.no_rkm_medis='"+NoRM.getText().trim()+"' order by riwayat_persalinan_pasien.tgl_thn").executeQuery();
                                 while(rs3.next()){
@@ -9669,6 +9762,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanKeperawatanRalanKandungan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "Select penilaian_awal_keperawatan_ralan_psikiatri.no_rawat,penilaian_awal_keperawatan_ralan_psikiatri.tanggal,penilaian_awal_keperawatan_ralan_psikiatri.informasi,"+
                             "penilaian_awal_keperawatan_ralan_psikiatri.keluhan_utama,penilaian_awal_keperawatan_ralan_psikiatri.rkd_sakit_sejak,penilaian_awal_keperawatan_ralan_psikiatri.rkd_keluhan,"+
@@ -9987,6 +10081,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                           "<tr>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_masalah_keperawatan_psikiatri.nama_masalah from master_masalah_keperawatan_psikiatri "+
                                     "inner join penilaian_awal_keperawatan_ralan_masalah_psikiatri on penilaian_awal_keperawatan_ralan_masalah_psikiatri.kode_masalah=master_masalah_keperawatan_psikiatri.kode_masalah "+
@@ -10004,6 +10099,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             htmlContent.append("</td>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_rencana_keperawatan_psikiatri.rencana_keperawatan from master_rencana_keperawatan_psikiatri "+
                                     "inner join penilaian_awal_keperawatan_ralan_rencana_psikiatri on penilaian_awal_keperawatan_ralan_rencana_psikiatri.kode_rencana=master_rencana_keperawatan_psikiatri.kode_rencana "+
@@ -10048,6 +10144,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanFisioterapi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_fisioterapi.tanggal,penilaian_fisioterapi.informasi,penilaian_fisioterapi.keluhan_utama,penilaian_fisioterapi.rps,"+
                             "penilaian_fisioterapi.rpd,penilaian_fisioterapi.td,penilaian_fisioterapi.hr,penilaian_fisioterapi.rr,penilaian_fisioterapi.suhu,"+
@@ -10258,6 +10355,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisIGD.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_igd.tanggal,penilaian_medis_igd.kd_dokter,penilaian_medis_igd.anamnesis,penilaian_medis_igd.hubungan,penilaian_medis_igd.keluhan_utama,penilaian_medis_igd.rps,"+
                             "penilaian_medis_igd.rpk,penilaian_medis_igd.rpd,penilaian_medis_igd.rpo,penilaian_medis_igd.alergi,penilaian_medis_igd.keadaan,penilaian_medis_igd.gcs,penilaian_medis_igd.kesadaran,"+
@@ -10415,6 +10513,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_ralan.tanggal,penilaian_medis_ralan.kd_dokter,penilaian_medis_ralan.anamnesis,penilaian_medis_ralan.hubungan,"+
                             "penilaian_medis_ralan.keluhan_utama,penilaian_medis_ralan.rps,penilaian_medis_ralan.rpd,penilaian_medis_ralan.rpk,penilaian_medis_ralan.rpo,"+
@@ -10583,6 +10682,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanKandungan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_ralan_kandungan.tanggal,penilaian_medis_ralan_kandungan.kd_dokter,penilaian_medis_ralan_kandungan.anamnesis,penilaian_medis_ralan_kandungan.hubungan,"+
                             "penilaian_medis_ralan_kandungan.keluhan_utama,penilaian_medis_ralan_kandungan.rps,penilaian_medis_ralan_kandungan.rpk,penilaian_medis_ralan_kandungan.rpd,penilaian_medis_ralan_kandungan.rpo,"+
@@ -10761,6 +10861,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanBayi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_ralan_anak.tanggal,penilaian_medis_ralan_anak.kd_dokter,penilaian_medis_ralan_anak.anamnesis,penilaian_medis_ralan_anak.hubungan,"+
                             "penilaian_medis_ralan_anak.keluhan_utama,penilaian_medis_ralan_anak.rps,penilaian_medis_ralan_anak.rpk,penilaian_medis_ralan_anak.rpd,penilaian_medis_ralan_anak.rpo,"+
@@ -10930,6 +11031,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try{
             if(chkAsuhanMedisRalanTHT.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_ralan_tht.tanggal,penilaian_medis_ralan_tht.kd_dokter,penilaian_medis_ralan_tht.anamnesis,penilaian_medis_ralan_tht.hubungan,penilaian_medis_ralan_tht.keluhan_utama,"+
                             "penilaian_medis_ralan_tht.rps,penilaian_medis_ralan_tht.rpd,penilaian_medis_ralan_tht.rpo,penilaian_medis_ralan_tht.alergi,penilaian_medis_ralan_tht.td,penilaian_medis_ralan_tht.nadi,"+
@@ -11090,6 +11192,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkUjiFungsiKFR.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select uji_fungsi_kfr.tanggal,uji_fungsi_kfr.diagnosis_fungsional,uji_fungsi_kfr.diagnosis_medis,uji_fungsi_kfr.hasil_didapat,"+
                             "uji_fungsi_kfr.kesimpulan,uji_fungsi_kfr.rekomedasi,uji_fungsi_kfr.kd_dokter,dokter.nm_dokter "+
@@ -11171,6 +11274,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try{
             if(chkDiagnosaPenyakit.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select diagnosa_pasien.kd_penyakit,penyakit.nm_penyakit, diagnosa_pasien.status "+
                             "from diagnosa_pasien inner join penyakit on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit "+
@@ -11206,6 +11310,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
 
             if(chkProsedurTindakan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select prosedur_pasien.kode,icd9.deskripsi_panjang, prosedur_pasien.status "+
                             "from prosedur_pasien inner join icd9 "+
@@ -11248,6 +11353,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHemodialisa.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hemodialisa.tanggal,hemodialisa.lama,hemodialisa.akses,hemodialisa.dialist,hemodialisa.transfusi,hemodialisa.penarikan, "+
                             "hemodialisa.qb,hemodialisa.qd,hemodialisa.ureum,hemodialisa.hb,hemodialisa.hbsag,creatinin,hemodialisa.hiv,hemodialisa.hcv,hemodialisa.lain, "+
@@ -11326,6 +11432,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //SOAP Ralan
             if(chkPemeriksaanRalan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select pemeriksaan_ralan.tgl_perawatan,pemeriksaan_ralan.jam_rawat,pemeriksaan_ralan.suhu_tubuh,pemeriksaan_ralan.tensi,pemeriksaan_ralan.nadi,pemeriksaan_ralan.respirasi,"+
                             "pemeriksaan_ralan.tinggi,pemeriksaan_ralan.berat,pemeriksaan_ralan.spo2,pemeriksaan_ralan.gcs,pemeriksaan_ralan.kesadaran,pemeriksaan_ralan.keluhan, "+
@@ -11474,6 +11581,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan obstetri Ralan
             if(chkPemeriksaanObstetriRalan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select pemeriksaan_obstetri_ralan.tgl_perawatan,pemeriksaan_obstetri_ralan.jam_rawat,pemeriksaan_obstetri_ralan.tinggi_uteri,pemeriksaan_obstetri_ralan.janin,pemeriksaan_obstetri_ralan.letak, " +
                             "pemeriksaan_obstetri_ralan.panggul,pemeriksaan_obstetri_ralan.denyut,pemeriksaan_obstetri_ralan.kontraksi, " +
@@ -11606,6 +11714,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan genekologi Ralan
             if(chkPemeriksaanGenekologiRalan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select pemeriksaan_ginekologi_ralan.tgl_perawatan,pemeriksaan_ginekologi_ralan.jam_rawat,pemeriksaan_ginekologi_ralan.inspeksi,pemeriksaan_ginekologi_ralan.inspeksi_vulva,pemeriksaan_ginekologi_ralan.inspekulo_gine, " +
                             "pemeriksaan_ginekologi_ralan.fluxus_gine,pemeriksaan_ginekologi_ralan.fluor_gine,pemeriksaan_ginekologi_ralan.vulva_inspekulo, " +
@@ -11710,6 +11819,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //catatan keperawatan rawat jalan
             if(chkCatatanKeperawatanRalan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_keperawatan_ralan.tanggal,catatan_keperawatan_ralan.jam,catatan_keperawatan_ralan.uraian,catatan_keperawatan_ralan.nip,petugas.nama from catatan_keperawatan_ralan "+
                             "inner join petugas on catatan_keperawatan_ralan.nip=petugas.nip where catatan_keperawatan_ralan.no_rawat='"+norawat+"' order by catatan_keperawatan_ralan.tanggal,catatan_keperawatan_ralan.jam").executeQuery();
@@ -11763,6 +11873,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan observasi IGD
             if(chkCatatanObservasiIGD.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_observasi_igd.tgl_perawatan,catatan_observasi_igd.jam_rawat,catatan_observasi_igd.gcs,"+
                             "catatan_observasi_igd.td,catatan_observasi_igd.hr,catatan_observasi_igd.rr,catatan_observasi_igd.suhu,catatan_observasi_igd.spo2,"+
@@ -11824,6 +11935,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan observasi CHBP
             if(chkCatatanObservasiCHBP.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_observasi_chbp.tgl_perawatan,catatan_observasi_chbp.jam_rawat,catatan_observasi_chbp.td,catatan_observasi_chbp.hr,catatan_observasi_chbp.suhu,"+
                             "catatan_observasi_chbp.djj,catatan_observasi_chbp.his,catatan_observasi_chbp.ppv,catatan_observasi_chbp.keterangan,catatan_observasi_chbp.nip,petugas.nama "+
@@ -11888,6 +12000,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan observasi Induksi Persalinan
             if(chkCatatanObservasiInduksiPersalinan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_observasi_induksi_persalinan.tgl_perawatan,catatan_observasi_induksi_persalinan.jam_rawat,catatan_observasi_induksi_persalinan.obat,"+
                             "catatan_observasi_induksi_persalinan.cairan,catatan_observasi_induksi_persalinan.dosis,catatan_observasi_induksi_persalinan.his,catatan_observasi_induksi_persalinan.djj,catatan_observasi_induksi_persalinan.keterangan,"+
@@ -11945,6 +12058,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan Cek GDS
             if(chkCatatanCekGDS.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select catatan_cek_gds.tgl_perawatan,catatan_cek_gds.jam_rawat,catatan_cek_gds.gdp,"+
                         "catatan_cek_gds.insulin,catatan_cek_gds.obat_gula,catatan_cek_gds.nip,petugas.nama "+
@@ -12000,6 +12114,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan Keseimbangan Cairan
             if(chkCatatanKeseimbanganCairan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select catatan_keseimbangan_cairan.tgl_perawatan,catatan_keseimbangan_cairan.jam_rawat,catatan_keseimbangan_cairan.infus,"+
                         "catatan_keseimbangan_cairan.tranfusi,catatan_keseimbangan_cairan.minum,catatan_keseimbangan_cairan.urine,catatan_keseimbangan_cairan.drain,"+
@@ -12070,6 +12185,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan cairan hemodialisa
             if(chkCatatanCairanHemodialisa.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_cairan_hemodialisa.tgl_perawatan,catatan_cairan_hemodialisa.jam_rawat,catatan_cairan_hemodialisa.minum,"+
                             "catatan_cairan_hemodialisa.infus,catatan_cairan_hemodialisa.tranfusi,catatan_cairan_hemodialisa.sisa_priming,catatan_cairan_hemodialisa.wash_out,"+
@@ -12139,6 +12255,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan penilaian ulang nyeri
             if(chkPenilaianUlangNyeri.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_ulang_nyeri.tanggal,penilaian_ulang_nyeri.nyeri,penilaian_ulang_nyeri.provokes,penilaian_ulang_nyeri.ket_provokes,penilaian_ulang_nyeri.quality,"+
                         "penilaian_ulang_nyeri.ket_quality,penilaian_ulang_nyeri.lokasi,penilaian_ulang_nyeri.menyebar,penilaian_ulang_nyeri.skala_nyeri,"+
@@ -12203,6 +12320,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan monitoring reaksi tranfusi
             if(chkMonitoringReaksiTranfusi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select monitoring_reaksi_tranfusi.tgl_perawatan,monitoring_reaksi_tranfusi.jam_rawat,monitoring_reaksi_tranfusi.produk_darah,"+
                             "monitoring_reaksi_tranfusi.no_kantong,monitoring_reaksi_tranfusi.lokasi_insersi,monitoring_reaksi_tranfusi.td,monitoring_reaksi_tranfusi.hr,"+
@@ -12276,6 +12394,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanKeperawatanRanapKandungan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_awal_keperawatan_kebidanan_ranap.tanggal,penilaian_awal_keperawatan_kebidanan_ranap.informasi,"+
                             "penilaian_awal_keperawatan_kebidanan_ranap.tiba_diruang_rawat,penilaian_awal_keperawatan_kebidanan_ranap.cara_masuk,penilaian_awal_keperawatan_kebidanan_ranap.keluhan,"+
@@ -12455,6 +12574,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                                         "</tr>");
                                         try {
                                             w=1;
+                                            koneksi=koneksiDB.condb();
                                             rs3=koneksi.prepareStatement(
                                                 "select * from riwayat_persalinan_pasien where riwayat_persalinan_pasien.no_rkm_medis='"+NoRM.getText().trim()+"' order by riwayat_persalinan_pasien.tgl_thn").executeQuery();
                                             while(rs3.next()){
@@ -12915,6 +13035,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRanap.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_ranap.tanggal,penilaian_medis_ranap.kd_dokter,penilaian_medis_ranap.anamnesis,penilaian_medis_ranap.hubungan,"+
                             "penilaian_medis_ranap.keluhan_utama,penilaian_medis_ranap.rps,penilaian_medis_ranap.rpk,penilaian_medis_ranap.rpd,penilaian_medis_ranap.rpo,"+
@@ -13094,6 +13215,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRanapKandungan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_ranap_kandungan.tanggal,penilaian_medis_ranap_kandungan.kd_dokter,penilaian_medis_ranap_kandungan.anamnesis,"+
                             "penilaian_medis_ranap_kandungan.hubungan,penilaian_medis_ranap_kandungan.keluhan_utama,penilaian_medis_ranap_kandungan.rps,"+
@@ -13283,6 +13405,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkChecklistPreOperasi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select checklist_pre_operasi.tanggal,checklist_pre_operasi.sncn,checklist_pre_operasi.tindakan,checklist_pre_operasi.kd_dokter_bedah,"+
                             "dokterbedah.nm_dokter as dokterbedah,checklist_pre_operasi.kd_dokter_anestesi,dokteranestesi.nm_dokter as dokteranestesi,checklist_pre_operasi.identitas,"+
@@ -13403,6 +13526,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSignInSebelumAnestesi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.tgl_lahir,pasien.jk,signin_sebelum_anestesi.tanggal,"+
                             "signin_sebelum_anestesi.sncn,signin_sebelum_anestesi.tindakan,signin_sebelum_anestesi.kd_dokter_bedah,dokterbedah.nm_dokter as dokterbedah,"+
@@ -13504,6 +13628,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkTimeOutSebelumInsisi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.tgl_lahir,pasien.jk,timeout_sebelum_insisi.tanggal,"+
                             "timeout_sebelum_insisi.sncn,timeout_sebelum_insisi.tindakan,timeout_sebelum_insisi.kd_dokter_bedah,dokterbedah.nm_dokter as dokterbedah,"+
@@ -13638,6 +13763,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSignOutSebelumMenutupLuka.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.tgl_lahir,pasien.jk,signout_sebelum_menutup_luka.tanggal,"+
                             "signout_sebelum_menutup_luka.sncn,signout_sebelum_menutup_luka.tindakan,signout_sebelum_menutup_luka.kd_dokter_bedah,dokterbedah.nm_dokter as dokterbedah,"+
@@ -13761,6 +13887,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkChecklistPostOperasi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,pasien.tgl_lahir,pasien.jk,checklist_post_operasi.tanggal,"+
                             "checklist_post_operasi.sncn,checklist_post_operasi.tindakan,checklist_post_operasi.kd_dokter_bedah,dokterbedah.nm_dokter as dokterbedah,"+
@@ -13888,6 +14015,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanPreOperasi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_pre_operasi.tanggal,penilaian_pre_operasi.kd_dokter,penilaian_pre_operasi.ringkasan_klinik,penilaian_pre_operasi.pemeriksaan_fisik,"+
                             "penilaian_pre_operasi.pemeriksaan_diagnostik,penilaian_pre_operasi.diagnosa_pre_operasi,penilaian_pre_operasi.rencana_tindakan_bedah,"+
@@ -14010,6 +14138,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanPreAnestesi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_pre_anestesi.tanggal,penilaian_pre_anestesi.kd_dokter,penilaian_pre_anestesi.tanggal_operasi,penilaian_pre_anestesi.diagnosa,penilaian_pre_anestesi.rencana_tindakan,penilaian_pre_anestesi.tb,"+
                             "penilaian_pre_anestesi.bb,penilaian_pre_anestesi.td,penilaian_pre_anestesi.io2,penilaian_pre_anestesi.nadi,penilaian_pre_anestesi.pernapasan,penilaian_pre_anestesi.suhu,"+
@@ -14165,6 +14294,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkCatatanAnastesiSedasi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_anestesi_sedasi.kd_dokter_anestesi,dokteranestesi.nm_dokter as dokteranestesi,"+
                             "catatan_anestesi_sedasi.nip_perawat_anestesi,petugasanestesi.nama as petugasanestesi,catatan_anestesi_sedasi.kd_dokter_bedah,dokterbedah.nm_dokter as dokterbedah,"+
@@ -14374,6 +14504,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkRekonsiliasiObat.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select rekonsiliasi_obat.no_rekonsiliasi,rekonsiliasi_obat.tanggal_wawancara,rekonsiliasi_obat.rekonsiliasi_obat_saat,"+
                         "rekonsiliasi_obat.alergi_obat,rekonsiliasi_obat.manifestasi_alergi,rekonsiliasi_obat.dampak_alergi,rekonsiliasi_obat.nip,"+
@@ -14429,6 +14560,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             
                             try {
                                 w=1;
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                         "select * from rekonsiliasi_obat_detail_obat where rekonsiliasi_obat_detail_obat.no_rekonsiliasi='"+rs2.getString("no_rekonsiliasi")+"'").executeQuery();
                                 while(rs3.next()){
@@ -14461,6 +14593,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             );
                             
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                         "select rekonsiliasi_obat_konfirmasi.diterima_farmasi,rekonsiliasi_obat_konfirmasi.dikonfirmasi_apoteker,rekonsiliasi_obat_konfirmasi.nip,petugas.nama,"+
                                         "rekonsiliasi_obat_konfirmasi.diserahkan_pasien from rekonsiliasi_obat_konfirmasi inner join petugas on rekonsiliasi_obat_konfirmasi.nip=petugas.nip "+
@@ -14514,6 +14647,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkKonselingFarmasi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select konseling_farmasi.tanggal,konseling_farmasi.diagnosa,konseling_farmasi.obat_pemakaian,konseling_farmasi.riwayat_alergi,konseling_farmasi.keluhan,"+
                         "konseling_farmasi.pernah_datang,konseling_farmasi.tindak_lanjut,konseling_farmasi.nip,petugas.nama "+
@@ -14587,6 +14721,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkPelayananInformasiObat.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select pelayanan_informasi_obat.no_permintaan,pelayanan_informasi_obat.tanggal,pelayanan_informasi_obat.metode,pelayanan_informasi_obat.penanya,"+
                         "pelayanan_informasi_obat.status_penanya,pelayanan_informasi_obat.no_telp_penanya,pelayanan_informasi_obat.jenis_pertanyaan,pelayanan_informasi_obat.keterangan_jenis_pertanyaan,"+
@@ -14674,6 +14809,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkKonsultasiMedik.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select konsultasi_medik.no_permintaan,konsultasi_medik.tanggal as tanggalkonsultasi,konsultasi_medik.jenis_permintaan,"+
                         "konsultasi_medik.kd_dokter,dokterkonsul.nm_dokter as dokterkonsul,konsultasi_medik.kd_dokter_dikonsuli,dokterdikonsuli.nm_dokter as dokterdikonsuli,"+
@@ -14747,6 +14883,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkTransferAntarRuang.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select transfer_pasien_antar_ruang.tanggal_masuk,transfer_pasien_antar_ruang.tanggal_pindah,transfer_pasien_antar_ruang.asal_ruang,"+
                         "transfer_pasien_antar_ruang.ruang_selanjutnya,transfer_pasien_antar_ruang.diagnosa_utama,transfer_pasien_antar_ruang.diagnosa_sekunder,"+
@@ -14904,6 +15041,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHasilPemeriksaanUSG.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hasil_pemeriksaan_usg.kd_dokter,dokter.nm_dokter,hasil_pemeriksaan_usg.diagnosa_klinis,hasil_pemeriksaan_usg.kiriman_dari,"+
                             "hasil_pemeriksaan_usg.hta,hasil_pemeriksaan_usg.kantong_gestasi,hasil_pemeriksaan_usg.ukuran_bokongkepala,"+
@@ -15018,6 +15156,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkPerencanaanPemulangan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select perencanaan_pemulangan.rencana_pulang,perencanaan_pemulangan.alasan_masuk,perencanaan_pemulangan.diagnosa_medis,perencanaan_pemulangan.pengaruh_ri_pasien_dan_keluarga,"+
                             "perencanaan_pemulangan.keterangan_pengaruh_ri_pasien_dan_keluarga,perencanaan_pemulangan.pengaruh_ri_pekerjaan_sekolah,perencanaan_pemulangan.keterangan_pengaruh_ri_pekerjaan_sekolah,"+
@@ -15176,6 +15315,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkPemeriksaanRanap.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select pemeriksaan_ranap.suhu_tubuh,pemeriksaan_ranap.tensi,pemeriksaan_ranap.nadi,pemeriksaan_ranap.respirasi," +
                             "pemeriksaan_ranap.tinggi,pemeriksaan_ranap.berat,pemeriksaan_ranap.spo2,pemeriksaan_ranap.gcs,pemeriksaan_ranap.kesadaran,pemeriksaan_ranap.keluhan,pemeriksaan_ranap.penilaian,pemeriksaan_ranap.rtl," +
@@ -15323,6 +15463,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan pemeriksaan obstetri rawat inap
             if(chkPemeriksaanObstetriRanap.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select pemeriksaan_obstetri_ranap.tgl_perawatan,pemeriksaan_obstetri_ranap.jam_rawat,pemeriksaan_obstetri_ranap.tinggi_uteri,pemeriksaan_obstetri_ranap.janin,pemeriksaan_obstetri_ranap.letak, " +
                             "pemeriksaan_obstetri_ranap.panggul,pemeriksaan_obstetri_ranap.denyut,pemeriksaan_obstetri_ranap.kontraksi, " +
@@ -15449,6 +15590,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan pemeriksaan genekologi rawat inap
             if(chkPemeriksaanGenekologiRanap.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select pemeriksaan_ginekologi_ranap.tgl_perawatan,pemeriksaan_ginekologi_ranap.jam_rawat,pemeriksaan_ginekologi_ranap.inspeksi,pemeriksaan_ginekologi_ranap.inspeksi_vulva,pemeriksaan_ginekologi_ranap.inspekulo_gine, " +
                             "pemeriksaan_ginekologi_ranap.fluxus_gine,pemeriksaan_ginekologi_ranap.fluor_gine,pemeriksaan_ginekologi_ranap.vulva_inspekulo, " +
@@ -15553,6 +15695,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan observasi rawat inap
             if(chkCatatanObservasiRanap.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_observasi_ranap.tgl_perawatan,catatan_observasi_ranap.jam_rawat,catatan_observasi_ranap.gcs,"+
                             "catatan_observasi_ranap.td,catatan_observasi_ranap.hr,catatan_observasi_ranap.rr,catatan_observasi_ranap.suhu,catatan_observasi_ranap.spo2,"+
@@ -15614,6 +15757,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan observasi rawat inap kebidanan
             if(chkCatatanObservasiRanapKebidanan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_observasi_ranap_kebidanan.tgl_perawatan,catatan_observasi_ranap_kebidanan.jam_rawat,catatan_observasi_ranap_kebidanan.gcs,"+
                             "catatan_observasi_ranap_kebidanan.td,catatan_observasi_ranap_kebidanan.hr,catatan_observasi_ranap_kebidanan.rr,catatan_observasi_ranap_kebidanan.suhu,"+
@@ -15690,6 +15834,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan observasi rawat inap post partum
             if(chkCatatanObservasiRanapPostPartum.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_observasi_ranap_postpartum.tgl_perawatan,catatan_observasi_ranap_postpartum.jam_rawat,catatan_observasi_ranap_postpartum.gcs,"+
                             "catatan_observasi_ranap_postpartum.td,catatan_observasi_ranap_postpartum.hr,catatan_observasi_ranap_postpartum.rr,catatan_observasi_ranap_postpartum.suhu,catatan_observasi_ranap_postpartum.spo2,"+
@@ -15766,6 +15911,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan observasi Bayi
             if(chkCatatanObservasiBayi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_observasi_bayi.tgl_perawatan,catatan_observasi_bayi.jam_rawat,catatan_observasi_bayi.gcs,catatan_observasi_bayi.td,catatan_observasi_bayi.hr,"+
                             "catatan_observasi_bayi.rr,catatan_observasi_bayi.suhu,catatan_observasi_bayi.spo2,catatan_observasi_bayi.nch,catatan_observasi_bayi.ikterik_status,"+
@@ -15848,6 +15994,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan observasi hemodialisa
             if(chkCatatanObservasiHemodialisa.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_observasi_hemodialisa.tgl_perawatan,catatan_observasi_hemodialisa.jam_rawat,catatan_observasi_hemodialisa.qb,catatan_observasi_hemodialisa.qd,"+
                             "catatan_observasi_hemodialisa.tekanan_arteri,catatan_observasi_hemodialisa.tekanan_vena,catatan_observasi_hemodialisa.tmp,catatan_observasi_hemodialisa.ufr,catatan_observasi_hemodialisa.tensi,"+
@@ -15926,6 +16073,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan observasi restrain non farmakologi
             if(chkCatatanObservasiRestrainNonFarmakologi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_observasi_restrain_nonfarma.tgl_perawatan,catatan_observasi_restrain_nonfarma.jam_rawat,"+
                             "catatan_observasi_restrain_nonfarma.tangan_kiri,catatan_observasi_restrain_nonfarma.tangan_kanan,catatan_observasi_restrain_nonfarma.kaki_kiri,"+
@@ -15997,6 +16145,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan observasi ventilator
             if(chkCatatanObservasiVentilator.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_observasi_ventilator.tgl_perawatan,catatan_observasi_ventilator.jam_rawat,catatan_observasi_ventilator.mode,"+
                             "catatan_observasi_ventilator.vt,catatan_observasi_ventilator.pakar,catatan_observasi_ventilator.rr,catatan_observasi_ventilator.reefps,catatan_observasi_ventilator.ee,"+
@@ -16060,6 +16209,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan Keperawatan Rawat Inap
             if(chkCatatanKeperawatanRanap.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_keperawatan_ranap.tanggal,catatan_keperawatan_ranap.jam,catatan_keperawatan_ranap.uraian,catatan_keperawatan_ranap.nip,petugas.nama from catatan_keperawatan_ranap "+
                             "inner join petugas on catatan_keperawatan_ranap.nip=petugas.nip where catatan_keperawatan_ranap.no_rawat='"+norawat+"' order by catatan_keperawatan_ranap.tanggal,catatan_keperawatan_ranap.jam").executeQuery();
@@ -16113,6 +16263,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan skrining nutrisi dewasa
             if(chkSkriningNutrisiDewasa.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_nutrisi_dewasa.tanggal,skrining_nutrisi_dewasa.td,skrining_nutrisi_dewasa.hr,skrining_nutrisi_dewasa.rr,skrining_nutrisi_dewasa.suhu,"+
                             "skrining_nutrisi_dewasa.bb,skrining_nutrisi_dewasa.tbpb,skrining_nutrisi_dewasa.spo2,skrining_nutrisi_dewasa.alergi,"+
@@ -16201,6 +16352,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan skrining nutrisi lansia
             if(chkSkriningNutrisiLansia.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_nutrisi_lansia.tanggal,skrining_nutrisi_lansia.td,skrining_nutrisi_lansia.hr,skrining_nutrisi_lansia.rr,skrining_nutrisi_lansia.suhu,"+
                             "skrining_nutrisi_lansia.bb,skrining_nutrisi_lansia.tbpb,skrining_nutrisi_lansia.spo2,skrining_nutrisi_lansia.alergi,"+
@@ -16313,6 +16465,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan skrining nutrisi anak
             if(chkSkriningNutrisiAnak.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_nutrisi_anak.td,skrining_nutrisi_anak.hr,skrining_nutrisi_anak.rr,skrining_nutrisi_anak.suhu,"+
                             "skrining_nutrisi_anak.bb,skrining_nutrisi_anak.tbpb,skrining_nutrisi_anak.spo2,skrining_nutrisi_anak.alergi,"+
@@ -16416,6 +16569,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan skrining gizi kehamilan
             if(chkSkriningGiziKehamilan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_gizi_kehamilan.tanggal,skrining_gizi_kehamilan.parameter1,skrining_gizi_kehamilan.skor1,"+
                             "skrining_gizi_kehamilan.parameter2,skrining_gizi_kehamilan.skor2,skrining_gizi_kehamilan.parameter3,"+
@@ -16506,6 +16660,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             
             if(chkSkriningGiziLanjut.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_gizi.tanggal,skrining_gizi.skrining_bb,skrining_gizi.skrining_tb,skrining_gizi.alergi,"+
                             "skrining_gizi.parameter_imt,skrining_gizi.skor_imt,skrining_gizi.parameter_bb,skrining_gizi.skor_bb,skrining_gizi.parameter_penyakit,"+
@@ -16574,6 +16729,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan asuhan gizi
             if(chkAsuhanGizi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select asuhan_gizi.tanggal,asuhan_gizi.antropometri_bb,asuhan_gizi.antropometri_tb,asuhan_gizi.antropometri_imt,asuhan_gizi.antropometri_lla,"+
                             "asuhan_gizi.antropometri_tl,asuhan_gizi.antropometri_ulna,asuhan_gizi.antropometri_bbideal,asuhan_gizi.antropometri_bbperu,"+
@@ -16682,6 +16838,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan monitoring gizi
             if(chkMonitoringGizi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select monitoring_asuhan_gizi.tanggal,monitoring_asuhan_gizi.monitoring,monitoring_asuhan_gizi.evaluasi,"+
                             "monitoring_asuhan_gizi.nip,petugas.nama from monitoring_asuhan_gizi inner join petugas on monitoring_asuhan_gizi.nip=petugas.nip where "+
@@ -16731,6 +16888,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan catatan ADIME gizi
             if(chkCatatanADIMEGizi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_adime_gizi.tanggal,catatan_adime_gizi.asesmen,catatan_adime_gizi.diagnosis,catatan_adime_gizi.intervensi,"+
                             "catatan_adime_gizi.monitoring,catatan_adime_gizi.evaluasi,catatan_adime_gizi.instruksi,catatan_adime_gizi.nip,petugas.nama "+
@@ -16800,6 +16958,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanPsikolog.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_psikologi.tanggal,penilaian_psikologi.nip,penilaian_psikologi.anamnesis,penilaian_psikologi.dikirim_dari,"+
                             "penilaian_psikologi.tujuan_pemeriksaan,penilaian_psikologi.ket_anamnesis,penilaian_psikologi.rupa,penilaian_psikologi.bentuk_tubuh,"+
@@ -16930,6 +17089,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanKeperawatanRanap.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_awal_keperawatan_ranap.tanggal,penilaian_awal_keperawatan_ranap.informasi,penilaian_awal_keperawatan_ranap.ket_informasi,penilaian_awal_keperawatan_ranap.tiba_diruang_rawat,"+
                             "penilaian_awal_keperawatan_ranap.kasus_trauma,penilaian_awal_keperawatan_ranap.cara_masuk,penilaian_awal_keperawatan_ranap.rps,penilaian_awal_keperawatan_ranap.rpd,penilaian_awal_keperawatan_ranap.rpk,penilaian_awal_keperawatan_ranap.rpo,"+
@@ -17675,6 +17835,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                           "<tr>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_masalah_keperawatan.nama_masalah from master_masalah_keperawatan "+
                                     "inner join penilaian_awal_keperawatan_ranap_masalah on penilaian_awal_keperawatan_ranap_masalah.kode_masalah=master_masalah_keperawatan.kode_masalah "+
@@ -17692,6 +17853,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             htmlContent.append("</td>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_rencana_keperawatan.rencana_keperawatan from master_rencana_keperawatan "+
                                     "inner join penilaian_awal_keperawatan_ranap_rencana on penilaian_awal_keperawatan_ranap_rencana.kode_rencana=master_rencana_keperawatan.kode_rencana "+
@@ -17736,6 +17898,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkBerkasDigital.isSelected()==true){
                 try{
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select master_berkas_digital.nama,berkas_digital_perawatan.lokasi_file "+
                         "from berkas_digital_perawatan inner join master_berkas_digital "+
@@ -17793,6 +17956,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try{
             if(chkAsuhanMedisRalanPsikiatri.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_ralan_psikiatrik.tanggal,penilaian_medis_ralan_psikiatrik.kd_dokter,penilaian_medis_ralan_psikiatrik.anamnesis,penilaian_medis_ralan_psikiatrik.hubungan,"+
                             "penilaian_medis_ralan_psikiatrik.keluhan_utama,penilaian_medis_ralan_psikiatrik.rps,penilaian_medis_ralan_psikiatrik.rpk,penilaian_medis_ralan_psikiatrik.rpd,penilaian_medis_ralan_psikiatrik.rpo,"+
@@ -17973,6 +18137,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanPenyakitDalam.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_medis_ralan_penyakit_dalam.tanggal,penilaian_medis_ralan_penyakit_dalam.kd_dokter,penilaian_medis_ralan_penyakit_dalam.anamnesis,penilaian_medis_ralan_penyakit_dalam.hubungan,"+
                         "penilaian_medis_ralan_penyakit_dalam.keluhan_utama,penilaian_medis_ralan_penyakit_dalam.rps,penilaian_medis_ralan_penyakit_dalam.rpd,penilaian_medis_ralan_penyakit_dalam.rpo,penilaian_medis_ralan_penyakit_dalam.alergi,"+
@@ -18142,6 +18307,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanGeriatri.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_medis_ralan_geriatri.tanggal,penilaian_medis_ralan_geriatri.kd_dokter,dokter.nm_dokter,penilaian_medis_ralan_geriatri.anamnesis,penilaian_medis_ralan_geriatri.hubungan,penilaian_medis_ralan_geriatri.keluhan_utama,"+
                         "penilaian_medis_ralan_geriatri.rps,penilaian_medis_ralan_geriatri.rpd,penilaian_medis_ralan_geriatri.rpo,penilaian_medis_ralan_geriatri.alergi,penilaian_medis_ralan_geriatri.tulang_belakang,"+
@@ -18335,6 +18501,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanMata.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_medis_ralan_mata.tanggal,penilaian_medis_ralan_mata.kd_dokter,penilaian_medis_ralan_mata.anamnesis,penilaian_medis_ralan_mata.hubungan,"+
                         "penilaian_medis_ralan_mata.keluhan_utama,penilaian_medis_ralan_mata.rps,penilaian_medis_ralan_mata.rpd,penilaian_medis_ralan_mata.rpo,penilaian_medis_ralan_mata.alergi,"+
@@ -18582,6 +18749,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanNeurologi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_medis_ralan_neurologi.tanggal,penilaian_medis_ralan_neurologi.kd_dokter,penilaian_medis_ralan_neurologi.anamnesis,penilaian_medis_ralan_neurologi.hubungan,penilaian_medis_ralan_neurologi.keluhan_utama,"+
                         "penilaian_medis_ralan_neurologi.rps,penilaian_medis_ralan_neurologi.rpd,penilaian_medis_ralan_neurologi.rpo,penilaian_medis_ralan_neurologi.alergi,penilaian_medis_ralan_neurologi.kesadaran,"+
@@ -18751,6 +18919,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanOrthopedi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_medis_ralan_orthopedi.tanggal,penilaian_medis_ralan_orthopedi.kd_dokter,penilaian_medis_ralan_orthopedi.anamnesis,penilaian_medis_ralan_orthopedi.hubungan,penilaian_medis_ralan_orthopedi.keluhan_utama,"+
                         "penilaian_medis_ralan_orthopedi.rps,penilaian_medis_ralan_orthopedi.rpd,penilaian_medis_ralan_orthopedi.rpo,penilaian_medis_ralan_orthopedi.alergi,penilaian_medis_ralan_orthopedi.kesadaran,"+
@@ -18931,6 +19100,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanBedah.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_medis_ralan_bedah.tanggal,penilaian_medis_ralan_bedah.kd_dokter,penilaian_medis_ralan_bedah.anamnesis,penilaian_medis_ralan_bedah.hubungan,penilaian_medis_ralan_bedah.keluhan_utama,"+
                         "penilaian_medis_ralan_bedah.rps,penilaian_medis_ralan_bedah.rpd,penilaian_medis_ralan_bedah.rpo,penilaian_medis_ralan_bedah.alergi,penilaian_medis_ralan_bedah.kesadaran,"+
@@ -19112,6 +19282,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             //menampilkan PEWS
             if(chkPemantauanPEWSAnak.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select pemantauan_pews_anak.tanggal,pemantauan_pews_anak.parameter_perilaku,pemantauan_pews_anak.skor_perilaku,pemantauan_pews_anak.parameter_crt_atau_warna_kulit,"+
                             "pemantauan_pews_anak.skor_crt_atau_warna_kulit,pemantauan_pews_anak.parameter_perespirasi,pemantauan_pews_anak.skor_perespirasi,pemantauan_pews_anak.skor_total,"+
@@ -19177,6 +19348,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             
             if(chkPemantauanPEWSDewasa.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select pemantauan_pews_dewasa.tanggal,pemantauan_pews_dewasa.parameter_laju_respirasi,pemantauan_pews_dewasa.skor_laju_respirasi,pemantauan_pews_dewasa.parameter_saturasi_oksigen,"+
                             "pemantauan_pews_dewasa.skor_saturasi_oksigen,pemantauan_pews_dewasa.parameter_suplemen_oksigen,pemantauan_pews_dewasa.skor_suplemen_oksigen,pemantauan_pews_dewasa.parameter_tekanan_darah_sistolik,"+
@@ -19301,6 +19473,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             
             if(chkPemantauanMOEWSObstetri.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select pemantauan_meows_obstetri.tanggal,pemantauan_meows_obstetri.parameter_pernapasan,pemantauan_meows_obstetri.skor_pernapasan,"+
                             "pemantauan_meows_obstetri.parameter_saturasi,pemantauan_meows_obstetri.skor_saturasi,pemantauan_meows_obstetri.parameter_temperatur,"+
@@ -19441,6 +19614,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             
             if(chkPemantauanEWSNeonatus.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select pemantauan_ews_neonatus.tanggal,pemantauan_ews_neonatus.parameter1,pemantauan_ews_neonatus.skor1,pemantauan_ews_neonatus.parameter2,pemantauan_ews_neonatus.skor2,pemantauan_ews_neonatus.parameter3,"+
                             "pemantauan_ews_neonatus.skor3,pemantauan_ews_neonatus.parameter4,pemantauan_ews_neonatus.skor4,pemantauan_ews_neonatus.parameter5,pemantauan_ews_neonatus.skor5,"+
@@ -19582,6 +19756,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanLanjutanRisikoJatuhDewasa.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_lanjutan_resiko_jatuh_dewasa.penilaian_jatuhmorse_skala1,penilaian_lanjutan_resiko_jatuh_dewasa.penilaian_jatuhmorse_nilai1,"+
                             "penilaian_lanjutan_resiko_jatuh_dewasa.penilaian_jatuhmorse_skala2,penilaian_lanjutan_resiko_jatuh_dewasa.penilaian_jatuhmorse_nilai2,"+
@@ -19682,6 +19857,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanLanjutanRisikoJatuhLansia.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_lanjutan_resiko_jatuh_lansia.tanggal,penilaian_lanjutan_resiko_jatuh_lansia.penilaian_jatuhmorse_skala1,penilaian_lanjutan_resiko_jatuh_lansia.penilaian_jatuhmorse_nilai1,"+
                             "penilaian_lanjutan_resiko_jatuh_lansia.penilaian_jatuhmorse_skala2,penilaian_lanjutan_resiko_jatuh_lansia.penilaian_jatuhmorse_nilai2,"+
@@ -19786,6 +19962,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanLanjutanRisikoJatuhAnak.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_lanjutan_resiko_jatuh_anak.penilaian_humptydumpty_skala1,penilaian_lanjutan_resiko_jatuh_anak.penilaian_humptydumpty_nilai1,"+
                             "penilaian_lanjutan_resiko_jatuh_anak.penilaian_humptydumpty_skala2,penilaian_lanjutan_resiko_jatuh_anak.penilaian_humptydumpty_nilai2,"+
@@ -19892,6 +20069,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanLanjutanRisikoJatuhPsikiatri.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_lanjutan_resiko_jatuh_psikiatri.penilaian_jatuhedmonson_skala1,penilaian_lanjutan_resiko_jatuh_psikiatri.penilaian_jatuhedmonson_nilai1,"+
                             "penilaian_lanjutan_resiko_jatuh_psikiatri.penilaian_jatuhedmonson_skala2,penilaian_lanjutan_resiko_jatuh_psikiatri.penilaian_jatuhedmonson_nilai2,"+
@@ -19992,6 +20170,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanRisikoDekubitus.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_risiko_dekubitus.tanggal,penilaian_risiko_dekubitus.kondisi_fisik,penilaian_risiko_dekubitus.kondisi_fisik_nilai,"+
                             "penilaian_risiko_dekubitus.status_mental,penilaian_risiko_dekubitus.status_mental_nilai,penilaian_risiko_dekubitus.aktifitas,"+
@@ -20076,6 +20255,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanTambahanGeriatri.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_tambahan_geriatri.nik,pegawai.nama,penilaian_tambahan_geriatri.asal_masuk,penilaian_tambahan_geriatri.kondisi_masuk,penilaian_tambahan_geriatri.keterangan_kondisi_masuk,"+
                             "penilaian_tambahan_geriatri.anamnesis,penilaian_tambahan_geriatri.diagnosa_medis,penilaian_tambahan_geriatri.riwayat_immuno_telinga,penilaian_tambahan_geriatri.riwayat_immuno_sinus,"+
@@ -20258,6 +20438,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try{
             if(chkPenilaianPasienTerminal.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_pasien_terminal.tanggal,penilaian_pasien_terminal.diagnosa,penilaian_pasien_terminal.rps,penilaian_pasien_terminal.rpd,penilaian_pasien_terminal.keadaan_umum,"+
                         "penilaian_pasien_terminal.kesadaran,penilaian_pasien_terminal.td,penilaian_pasien_terminal.nadi,penilaian_pasien_terminal.suhu,"+
@@ -20356,6 +20537,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try{
             if(chkPenilaianKorbanKekerasan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_korban_kekerasan.nip,pegawai.nama,penilaian_korban_kekerasan.tanggal,penilaian_korban_kekerasan.informasi,penilaian_korban_kekerasan.hubungan_dengan_pasien,penilaian_korban_kekerasan.jumlah_saudara,penilaian_korban_kekerasan.kondisi_keluaga,"+
                         "penilaian_korban_kekerasan.hubungan_orang_terdekat,penilaian_korban_kekerasan.kekerasan_yang_dialami,penilaian_korban_kekerasan.tempat_kejadian,penilaian_korban_kekerasan.lama_kekerasan,penilaian_korban_kekerasan.periode_kekerasan,penilaian_korban_kekerasan.seberapa_sering_mengalami,"+
@@ -20466,6 +20648,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkPenilaianPasienPenyakitMenular.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_pasien_penyakit_menular.tanggal,penilaian_pasien_penyakit_menular.kd_dokter,penilaian_pasien_penyakit_menular.anamnesis,penilaian_pasien_penyakit_menular.hubungan,"+
                             "penilaian_pasien_penyakit_menular.pasien_mengetahui_kondisi_penyakitnya,penilaian_pasien_penyakit_menular.penyakit_sama_serumah,penilaian_pasien_penyakit_menular.riwayat_kontak,"+
@@ -20566,6 +20749,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkEdukasiPasienTerintegrasiRawatJalan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select edukasi_pasien_keluarga_rj.tanggal,edukasi_pasien_keluarga_rj.bicara,edukasi_pasien_keluarga_rj.keterangan_bicara,edukasi_pasien_keluarga_rj.bahasa_sehari,"+
                         "edukasi_pasien_keluarga_rj.perlu_penerjemah,edukasi_pasien_keluarga_rj.keterangan_penerjemah,edukasi_pasien_keluarga_rj.bahasa_isyarat,"+
@@ -20710,6 +20894,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanTambahanBunuhDiri.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_tambahan_bunuh_diri.tanggal,penilaian_tambahan_bunuh_diri.statik_hidup_sendiri,penilaian_tambahan_bunuh_diri.statik_skorhidup_sendiri,penilaian_tambahan_bunuh_diri.statik_upaya_suicide,"+
                             "penilaian_tambahan_bunuh_diri.statik_skorupaya_suicide,penilaian_tambahan_bunuh_diri.statik_keluarga_suicide,penilaian_tambahan_bunuh_diri.statik_skorkeluarga_suicide,"+
@@ -20869,6 +21054,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanTambahanPerilakuKekerasan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_tambahan_perilaku_kekerasan.tanggal,penilaian_tambahan_perilaku_kekerasan.statik_insiden_kekerasan_baru_ini,penilaian_tambahan_perilaku_kekerasan.statik_skorinsiden_kekerasan_baru_ini,"+
                             "penilaian_tambahan_perilaku_kekerasan.statik_riwayat_penggunaan_senjata,penilaian_tambahan_perilaku_kekerasan.statik_skorriwayat_penggunaan_senjata,"+
@@ -21050,6 +21236,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanTambahanMelarikanDiri.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_tambahan_beresiko_melarikan_diri.tanggal,penilaian_tambahan_beresiko_melarikan_diri.statik_riwayat_melarikan_diri,penilaian_tambahan_beresiko_melarikan_diri.statik_skorriwayat_melarikan_diri,"+
                             "penilaian_tambahan_beresiko_melarikan_diri.statik_riwayat_penolakan_pengobatan,penilaian_tambahan_beresiko_melarikan_diri.statik_skorriwayat_penolakan_pengobatan,"+
@@ -21233,6 +21420,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkPenilaianPasienKeracunan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_pasien_keracunan.tanggal,penilaian_pasien_keracunan.kd_dokter,penilaian_pasien_keracunan.anamnesis,penilaian_pasien_keracunan.hubungan,penilaian_pasien_keracunan.tempat_kejadian,"+
                             "penilaian_pasien_keracunan.keterangan_tempat_kejadian,penilaian_pasien_keracunan.keluhan,penilaian_pasien_keracunan.riwayat_penyakit_sekarang,penilaian_pasien_keracunan.hamil,"+
@@ -21381,6 +21569,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanBedahMulut.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_ralan_bedah_mulut.tanggal,penilaian_medis_ralan_bedah_mulut.kd_dokter,penilaian_medis_ralan_bedah_mulut.anamnesis,penilaian_medis_ralan_bedah_mulut.hubungan,"+
                             "penilaian_medis_ralan_bedah_mulut.keluhan_utama,penilaian_medis_ralan_bedah_mulut.rps,penilaian_medis_ralan_bedah_mulut.rpk,penilaian_medis_ralan_bedah_mulut.alergi,penilaian_medis_ralan_bedah_mulut.keadaan,"+
@@ -21580,6 +21769,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanPenyakitMulut.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_ralan_penyakit_mulut.tanggal,penilaian_medis_ralan_penyakit_mulut.kd_dokter,penilaian_medis_ralan_penyakit_mulut.anamnesis,penilaian_medis_ralan_penyakit_mulut.hubungan,"+
                             "penilaian_medis_ralan_penyakit_mulut.keluhan_utama,penilaian_medis_ralan_penyakit_mulut.rps,penilaian_medis_ralan_penyakit_mulut.rpk,penilaian_medis_ralan_penyakit_mulut.alergi,penilaian_medis_ralan_penyakit_mulut.keadaan,"+
@@ -21779,6 +21969,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkChecklistKriteriaMasukHCU.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select checklist_kriteria_masuk_hcu.tanggal,checklist_kriteria_masuk_hcu.kardiologi1,checklist_kriteria_masuk_hcu.kardiologi2,checklist_kriteria_masuk_hcu.kardiologi3,"+
                         "checklist_kriteria_masuk_hcu.kardiologi4,checklist_kriteria_masuk_hcu.kardiologi5,checklist_kriteria_masuk_hcu.kardiologi6,"+
@@ -21986,6 +22177,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkChecklistKriteriaKeluarHCU.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select checklist_kriteria_keluar_hcu.tanggal,checklist_kriteria_keluar_hcu.kriteria1,checklist_kriteria_keluar_hcu.kriteria2,checklist_kriteria_keluar_hcu.kriteria3,"+
                         "checklist_kriteria_keluar_hcu.kriteria4,checklist_kriteria_keluar_hcu.kriteria5,checklist_kriteria_keluar_hcu.kriteria6,"+
@@ -22111,6 +22303,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkDokumentasiTindakanESWL.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,hasil_tindakan_eswl.mulai,"+
                             "hasil_tindakan_eswl.selesai,hasil_tindakan_eswl.kd_dokter,hasil_tindakan_eswl.nip,hasil_tindakan_eswl.diagnosa,hasil_tindakan_eswl.tindakan,hasil_tindakan_eswl.obat_analgesik,"+
@@ -22214,6 +22407,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkChecklistKriteriaMasukICU.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select checklist_kriteria_masuk_icu.tanggal,checklist_kriteria_masuk_icu.prioritas1_1,checklist_kriteria_masuk_icu.prioritas1_2,checklist_kriteria_masuk_icu.prioritas1_3,"+
                         "checklist_kriteria_masuk_icu.prioritas1_4,checklist_kriteria_masuk_icu.prioritas1_5,checklist_kriteria_masuk_icu.prioritas1_6,"+
@@ -22516,6 +22710,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkChecklistKriteriaKeluarICU.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select checklist_kriteria_keluar_icu.tanggal,checklist_kriteria_keluar_icu.kriteria1,checklist_kriteria_keluar_icu.kriteria2,checklist_kriteria_keluar_icu.kriteria3,"+
                         "checklist_kriteria_keluar_icu.kriteria4,checklist_kriteria_keluar_icu.kriteria5,checklist_kriteria_keluar_icu.kriteria6,"+
@@ -22640,6 +22835,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkFollowUpDBD.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select follow_up_dbd.tgl_perawatan,follow_up_dbd.jam_rawat,follow_up_dbd.hemoglobin,"+
                             "follow_up_dbd.hematokrit,follow_up_dbd.leokosit,follow_up_dbd.trombosit,follow_up_dbd.terapi_cairan,"+
@@ -22704,6 +22900,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanLanjutanRisikoJatuhNeonatus.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_risiko_jatuh_neonatus.tanggal,penilaian_risiko_jatuh_neonatus.intervensi1,penilaian_risiko_jatuh_neonatus.intervensi2,"+
                         "penilaian_risiko_jatuh_neonatus.intervensi3,penilaian_risiko_jatuh_neonatus.intervensi4,penilaian_risiko_jatuh_neonatus.intervensi5,"+
@@ -22897,6 +23094,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanLanjutanRisikoJatuhGeriatri.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_lanjutan_resiko_jatuh_geriatri.tanggal,penilaian_lanjutan_resiko_jatuh_geriatri.penilaian_jatuh_skala1,penilaian_lanjutan_resiko_jatuh_geriatri.penilaian_jatuh_nilai1,"+
                             "penilaian_lanjutan_resiko_jatuh_geriatri.penilaian_jatuh_skala2,penilaian_lanjutan_resiko_jatuh_geriatri.penilaian_jatuh_nilai2,penilaian_lanjutan_resiko_jatuh_geriatri.penilaian_jatuh_skala3,"+
@@ -23023,6 +23221,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanLanjutanSkriningFungsional.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_lanjutan_skrining_fungsional.penilaian_skrining_skala1,penilaian_lanjutan_skrining_fungsional.penilaian_skrining_nilai1,"+
                             "penilaian_lanjutan_skrining_fungsional.penilaian_skrining_skala2,penilaian_lanjutan_skrining_fungsional.penilaian_skrining_nilai2,"+
@@ -23145,6 +23344,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanKulitKelamin.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,penilaian_medis_ralan_kulitdankelamin.tanggal,"+
                         "penilaian_medis_ralan_kulitdankelamin.kd_dokter,penilaian_medis_ralan_kulitdankelamin.anamnesis,penilaian_medis_ralan_kulitdankelamin.hubungan,penilaian_medis_ralan_kulitdankelamin.keluhan_utama,penilaian_medis_ralan_kulitdankelamin.rps,penilaian_medis_ralan_kulitdankelamin.rpd,penilaian_medis_ralan_kulitdankelamin.rpo,penilaian_medis_ralan_kulitdankelamin.rpk,"+
@@ -23300,6 +23500,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkPenilaianLevelKecemasanRanapAnak.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_level_kecemasan_ranap_anak.tanggal,penilaian_level_kecemasan_ranap_anak.cemas,penilaian_level_kecemasan_ranap_anak.firasat_buruk,penilaian_level_kecemasan_ranap_anak.takut_pikiran_sendiri,"+
                         "penilaian_level_kecemasan_ranap_anak.mudah_tersinggung,penilaian_level_kecemasan_ranap_anak.merasa_tegang,penilaian_level_kecemasan_ranap_anak.lesu,"+
@@ -23885,6 +24086,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisHemodialisa.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_hemodialisa.kd_dokter,penilaian_medis_hemodialisa.anamnesis,penilaian_medis_hemodialisa.hubungan,penilaian_medis_hemodialisa.ruangan,"+
                             "penilaian_medis_hemodialisa.alergi,penilaian_medis_hemodialisa.nyeri,penilaian_medis_hemodialisa.status_nutrisi,penilaian_medis_hemodialisa.hipertensi,"+
@@ -24131,6 +24333,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanKedokteranFisik.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_ralan_rehab_medik.tanggal,penilaian_medis_ralan_rehab_medik.kd_dokter,penilaian_medis_ralan_rehab_medik.anamnesis,penilaian_medis_ralan_rehab_medik.hubungan,penilaian_medis_ralan_rehab_medik.keluhan_utama,"+
                             "penilaian_medis_ralan_rehab_medik.rps,penilaian_medis_ralan_rehab_medik.rpd,penilaian_medis_ralan_rehab_medik.alergi,penilaian_medis_ralan_rehab_medik.kesadaran,penilaian_medis_ralan_rehab_medik.nyeri,penilaian_medis_ralan_rehab_medik.skala_nyeri,"+
@@ -24308,6 +24511,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisIGDPsikiatri.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_ralan_gawat_darurat_psikiatri.kd_dokter,penilaian_medis_ralan_gawat_darurat_psikiatri.anamnesis,penilaian_medis_ralan_gawat_darurat_psikiatri.hubungan,penilaian_medis_ralan_gawat_darurat_psikiatri.keluhan_utama,"+
                             "penilaian_medis_ralan_gawat_darurat_psikiatri.gejala_menyertai,penilaian_medis_ralan_gawat_darurat_psikiatri.faktor_pencetus,penilaian_medis_ralan_gawat_darurat_psikiatri.riwayat_penyakit_dahulu,"+
@@ -24576,6 +24780,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanTerapiWicara.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_terapi_wicara.tanggal,penilaian_terapi_wicara.diagnosa_terapi_wicara,penilaian_terapi_wicara.diagnosa_medis,penilaian_terapi_wicara.anamnesa,penilaian_terapi_wicara.suhu,penilaian_terapi_wicara.rr,penilaian_terapi_wicara.nadi,penilaian_terapi_wicara.td,"+
                             "penilaian_terapi_wicara.perilaku_adaptif_kontak_mata,penilaian_terapi_wicara.perilaku_adaptif_atensi,penilaian_terapi_wicara.perilaku_adaptif_perilaku,penilaian_terapi_wicara.kemampuan_bahasa_bicara_spontan,penilaian_terapi_wicara.kemampuan_bahasa_pemahaman_bahasa,"+
@@ -24832,6 +25037,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkPengkajianRestrain.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select pengkajian_restrain.tanggal,pengkajian_restrain.gcs,pengkajian_restrain.refleka_cahaya_ka,pengkajian_restrain.refleka_cahaya_ki,"+
                             "pengkajian_restrain.ukuran_pupil_ka,pengkajian_restrain.ukuran_pupil_ki,pengkajian_restrain.td,pengkajian_restrain.suhu,pengkajian_restrain.rr,"+
@@ -24968,6 +25174,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanParu.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_medis_ralan_paru.tanggal,penilaian_medis_ralan_paru.kd_dokter,penilaian_medis_ralan_paru.anamnesis,penilaian_medis_ralan_paru.hubungan,penilaian_medis_ralan_paru.keluhan_utama,"+
                         "penilaian_medis_ralan_paru.rps,penilaian_medis_ralan_paru.rpd,penilaian_medis_ralan_paru.rpo,penilaian_medis_ralan_paru.alergi,penilaian_medis_ralan_paru.kesadaran,"+
@@ -25142,6 +25349,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkCatatanPersalinan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select catatan_persalinan.mulai,catatan_persalinan.selesai,catatan_persalinan.kd_dokter,catatan_persalinan.nip,catatan_persalinan.catatan,catatan_persalinan.waktu_persalinan_kala_1,"+
                         "catatan_persalinan.waktu_persalinan_kala_2,catatan_persalinan.waktu_persalinan_kala_3,catatan_persalinan.waktu_persalinan_jumlah,catatan_persalinan.perineum,"+
@@ -25262,6 +25470,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkorAldrettePascaAnestesi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skor_aldrette_pasca_anestesi.tanggal,skor_aldrette_pasca_anestesi.penilaian_skala1,skor_aldrette_pasca_anestesi.penilaian_nilai1,"+
                             "skor_aldrette_pasca_anestesi.penilaian_skala2,skor_aldrette_pasca_anestesi.penilaian_nilai2,skor_aldrette_pasca_anestesi.penilaian_skala3,"+
@@ -25354,6 +25563,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkorStewardPascaAnestesi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skor_steward_pasca_anestesi.tanggal,skor_steward_pasca_anestesi.penilaian_skala1,skor_steward_pasca_anestesi.penilaian_nilai1,"+
                             "skor_steward_pasca_anestesi.penilaian_skala2,skor_steward_pasca_anestesi.penilaian_nilai2,skor_steward_pasca_anestesi.penilaian_skala3,"+
@@ -25435,6 +25645,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkorBromagePascaAnestesi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skor_bromage_pasca_anestesi.tanggal,skor_bromage_pasca_anestesi.penilaian_skala1,skor_bromage_pasca_anestesi.penilaian_nilai1,skor_bromage_pasca_anestesi.keluar,"+
                             "skor_bromage_pasca_anestesi.instruksi,skor_bromage_pasca_anestesi.kd_dokter,dokter.nm_dokter,skor_bromage_pasca_anestesi.nip,petugas.nama "+
@@ -25501,6 +25712,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanPreInduksi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_pre_induksi.tanggal,penilaian_pre_induksi.kd_dokter,penilaian_pre_induksi.tensi,penilaian_pre_induksi.nadi,penilaian_pre_induksi.rr,penilaian_pre_induksi.suhu,penilaian_pre_induksi.ekg,"+
                             "penilaian_pre_induksi.lain_lain,penilaian_pre_induksi.asesmen,penilaian_pre_induksi.perencanaan,penilaian_pre_induksi.infus_perifier,penilaian_pre_induksi.cvc,"+
@@ -25684,6 +25896,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHasilPemeriksaanUSGUrologi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hasil_pemeriksaan_usg_urologi.kd_dokter,dokter.nm_dokter,hasil_pemeriksaan_usg_urologi.diagnosa_klinis,hasil_pemeriksaan_usg_urologi.kiriman_dari,"+
                             "hasil_pemeriksaan_usg_urologi.kiriman_dari,hasil_pemeriksaan_usg_urologi.ginjal_kanan,hasil_pemeriksaan_usg_urologi.ginjal_kiri,hasil_pemeriksaan_usg_urologi.vesica_urinaria,"+
@@ -25778,6 +25991,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHasilPemeriksaanUSGGynecologi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hasil_pemeriksaan_usg_gynecologi.tanggal,hasil_pemeriksaan_usg_gynecologi.kd_dokter,dokter.nm_dokter,hasil_pemeriksaan_usg_gynecologi.diagnosa_klinis,hasil_pemeriksaan_usg_gynecologi.kiriman_dari,"+
                             "hasil_pemeriksaan_usg_gynecologi.uterus,hasil_pemeriksaan_usg_gynecologi.parametrium,hasil_pemeriksaan_usg_gynecologi.ovarium,"+
@@ -25876,6 +26090,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHasilPemeriksaanEKG.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hasil_pemeriksaan_ekg.tanggal,hasil_pemeriksaan_ekg.kd_dokter,dokter.nm_dokter,hasil_pemeriksaan_ekg.diagnosa_klinis,"+
                             "hasil_pemeriksaan_ekg.kiriman_dari,hasil_pemeriksaan_ekg.irama,hasil_pemeriksaan_ekg.laju_jantung,hasil_pemeriksaan_ekg.gelombangp,"+
@@ -25966,6 +26181,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkPenatalaksanaanTerapiOkupasi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penatalaksanaan_terapi_okupasi.tanggal,penatalaksanaan_terapi_okupasi.nip,penatalaksanaan_terapi_okupasi.keluhan_utama,penatalaksanaan_terapi_okupasi.rpd,"+
                             "penatalaksanaan_terapi_okupasi.rps,penatalaksanaan_terapi_okupasi.anamnesa_general,penatalaksanaan_terapi_okupasi.tanda_vital,penatalaksanaan_terapi_okupasi.pemeriksaan_penunjang,"+
@@ -26081,6 +26297,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHasilPemeriksaanUSGNeonatus.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hasil_pemeriksaan_usg_neonatus.tanggal,hasil_pemeriksaan_usg_neonatus.kd_dokter,dokter.nm_dokter,hasil_pemeriksaan_usg_neonatus.diagnosa_klinis,"+
                             "hasil_pemeriksaan_usg_neonatus.kiriman_dari,hasil_pemeriksaan_usg_neonatus.ventrikal_sinistra,hasil_pemeriksaan_usg_neonatus.ventrikal_dextra,hasil_pemeriksaan_usg_neonatus.kesan,"+
@@ -26177,6 +26394,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHasilPemeriksaanEndoskopiFaringLaring.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hasil_endoskopi_faring_laring.tanggal,hasil_endoskopi_faring_laring.kd_dokter,dokter.nm_dokter,hasil_endoskopi_faring_laring.diagnosa_klinis,hasil_endoskopi_faring_laring.kiriman_dari,"+
                             "hasil_endoskopi_faring_laring.faring_uvula,hasil_endoskopi_faring_laring.faring_arkus_faring,hasil_endoskopi_faring_laring.faring_dinding_posterior,"+
@@ -26327,6 +26545,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHasilPemeriksaanEndoskopiHidung.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hasil_endoskopi_hidung.tanggal,hasil_endoskopi_hidung.kd_dokter,dokter.nm_dokter,hasil_endoskopi_hidung.diagnosa_klinis,hasil_endoskopi_hidung.kiriman_dari,"+
                             "hasil_endoskopi_hidung.kondisi_hidung_kanan,hasil_endoskopi_hidung.kondisi_hidung_kiri,hasil_endoskopi_hidung.kavum_nasi_kanan,"+
@@ -26461,6 +26680,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHasilPemeriksaanEndoskopiTelinga.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hasil_endoskopi_telinga.tanggal,hasil_endoskopi_telinga.kd_dokter,dokter.nm_dokter,hasil_endoskopi_telinga.diagnosa_klinis,"+
                             "hasil_endoskopi_telinga.kiriman_dari,hasil_endoskopi_telinga.bentuk_liang_telinga_kanan,hasil_endoskopi_telinga.bentuk_liang_telinga_kiri,"+
@@ -26638,6 +26858,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanKeperawatanRanapNeonatus.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_awal_keperawatan_ranap_neonatus.no_rawat,penilaian_awal_keperawatan_ranap_neonatus.tanggal,penilaian_awal_keperawatan_ranap_neonatus.asal_pasien,penilaian_awal_keperawatan_ranap_neonatus.cara_masuk,"+
                             "penilaian_awal_keperawatan_ranap_neonatus.diperoleh_dari,penilaian_awal_keperawatan_ranap_neonatus.hubungan_dengan_pasien,penilaian_awal_keperawatan_ranap_neonatus.keluhan_utama,penilaian_awal_keperawatan_ranap_neonatus.prenatal_g,"+
@@ -27186,6 +27407,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                           "<tr>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_masalah_keperawatan_neonatus.nama_masalah from master_masalah_keperawatan_neonatus "+
                                     "inner join penilaian_awal_keperawatan_ranap_neonatus_masalah on penilaian_awal_keperawatan_ranap_neonatus_masalah.kode_masalah=master_masalah_keperawatan_neonatus.kode_masalah "+
@@ -27203,6 +27425,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             htmlContent.append("</td>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_rencana_keperawatan_neonatus.rencana_keperawatan from master_rencana_keperawatan_neonatus "+
                                     "inner join penilaian_awal_keperawatan_ranap_neonatus_rencana on penilaian_awal_keperawatan_ranap_neonatus_rencana.kode_rencana=master_rencana_keperawatan_neonatus.kode_rencana "+
@@ -27247,6 +27470,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkPenilaianPasienImunitasRendah.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_pasien_imunitas_rendah.tanggal,penilaian_pasien_imunitas_rendah.kd_dokter,penilaian_pasien_imunitas_rendah.anamnesis,penilaian_pasien_imunitas_rendah.hubungan,penilaian_pasien_imunitas_rendah.pasien_mengetahui_kondisi_penyakitnya,"+
                         "penilaian_pasien_imunitas_rendah.kebutuhan_ruang_perawatan,penilaian_pasien_imunitas_rendah.riwayat_penyakit_keluhan,penilaian_pasien_imunitas_rendah.riwayat_penyakit_keluarga,penilaian_pasien_imunitas_rendah.riwayat_alergi,"+
@@ -27336,6 +27560,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningMerokokUsiaRemaja.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_perilaku_merokok_sekolah_remaja.kelas,skrining_perilaku_merokok_sekolah_remaja.kd_sekolah,master_sekolah.nm_sekolah,"+
                             "skrining_perilaku_merokok_sekolah_remaja.nip,petugas.nama,skrining_perilaku_merokok_sekolah_remaja.tanggal,"+
@@ -27529,6 +27754,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningKekerasanPadaPerempuan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_kekerasan_pada_perempuan.nip,petugas.nama,skrining_kekerasan_pada_perempuan.tanggal,skrining_kekerasan_pada_perempuan.menggambarkan_hubungan,skrining_kekerasan_pada_perempuan.skor_menggambarkan_hubungan,"+
                             "skrining_kekerasan_pada_perempuan.berdebat_dengan_pasangan,skrining_kekerasan_pada_perempuan.skor_berdebat_dengan_pasangan,skrining_kekerasan_pada_perempuan.pertengkaran_membuat_sedih,"+
@@ -27668,6 +27894,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningObesitas.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_obesitas.tanggal,skrining_obesitas.kebiasaan_makan_manis,skrining_obesitas.aktifitas_fisik_setiap_hari,skrining_obesitas.istirahat_cukup,skrining_obesitas.risiko_merokok,"+
                             "skrining_obesitas.riwayat_minum_alkohol_merokok_keluarga,skrining_obesitas.riwayat_penggunaan_obat_steroid,skrining_obesitas.berat_badan,skrining_obesitas.tinggi_badan,"+
@@ -27807,6 +28034,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningRisikoKankerPayudara.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_risiko_kanker_payudara.nip,petugas.nama,skrining_risiko_kanker_payudara.tanggal,skrining_risiko_kanker_payudara.faktor_risiko_awal1,skrining_risiko_kanker_payudara.nilai_risiko_awal1,"+
                             "skrining_risiko_kanker_payudara.faktor_risiko_awal2,skrining_risiko_kanker_payudara.nilai_risiko_awal2,skrining_risiko_kanker_payudara.faktor_risiko_awal3,"+
@@ -28158,6 +28386,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningRisikoKankerParu.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_risiko_kanker_paru.nip,petugas.nama,skrining_risiko_kanker_paru.tanggal,skrining_risiko_kanker_paru.jenis_kelamin,skrining_risiko_kanker_paru.nilai_jenis_kelamin,skrining_risiko_kanker_paru.umur,"+
                             "skrining_risiko_kanker_paru.nilai_umur,skrining_risiko_kanker_paru.pernah_kanker,skrining_risiko_kanker_paru.nilai_pernah_kanker,skrining_risiko_kanker_paru.ada_keluarga_kanker,"+
@@ -28290,6 +28519,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningGigiMulutRemaja.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_kesehatan_gigi_mulut_remaja.nip,petugas.nama,skrining_kesehatan_gigi_mulut_remaja.tanggal,skrining_kesehatan_gigi_mulut_remaja.pernah_pemeriksaan_gigimulut,"+
                             "skrining_kesehatan_gigi_mulut_remaja.jumlah_gigi_tumbuh,skrining_kesehatan_gigi_mulut_remaja.kondisi_kebersihan_gigimulut,skrining_kesehatan_gigi_mulut_remaja.punya_gigi_berlubang,"+
@@ -28428,6 +28658,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningTBC.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_tbc.nip,petugas.nama,skrining_tbc.tanggal,skrining_tbc.berat_badan,skrining_tbc.tinggi_badan,skrining_tbc.imt,skrining_tbc.kasifikasi_imt,skrining_tbc.lingkar_pinggang,"+
                             "skrining_tbc.risiko_lingkar_pinggang,skrining_tbc.riwayat_kontak_tbc,skrining_tbc.jenis_kontak_tbc,skrining_tbc.faktor_resiko_pernah_terdiagnosa_tbc,skrining_tbc.keterangan_pernah_terdiagnosa,"+
@@ -28637,6 +28868,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningPUMA.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_puma.nip,petugas.nama,skrining_puma.tanggal,skrining_puma.jk,skrining_puma.nilai_jk,"+
                             "skrining_puma.usia,skrining_puma.nilai_usia,skrining_puma.pernah_merokok,"+
@@ -28772,6 +29004,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisMCU.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_mcu.tanggal,penilaian_mcu.informasi,penilaian_mcu.rps,penilaian_mcu.rpk,penilaian_mcu.rpd,penilaian_mcu.alergi,penilaian_mcu.keadaan,penilaian_mcu.kesadaran,penilaian_mcu.td,"+
                             "penilaian_mcu.nadi,penilaian_mcu.rr,penilaian_mcu.tb,penilaian_mcu.bb,penilaian_mcu.suhu,penilaian_mcu.submandibula,penilaian_mcu.axilla,penilaian_mcu.supraklavikula,"+
@@ -29156,6 +29389,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanKeperawatanRanapBayi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_awal_keperawatan_ranap_bayi.tanggal,penilaian_awal_keperawatan_ranap_bayi.informasi,penilaian_awal_keperawatan_ranap_bayi.ket_informasi,"+
                             "penilaian_awal_keperawatan_ranap_bayi.tiba_diruang_rawat,penilaian_awal_keperawatan_ranap_bayi.rps,penilaian_awal_keperawatan_ranap_bayi.rpd,penilaian_awal_keperawatan_ranap_bayi.rpk,penilaian_awal_keperawatan_ranap_bayi.rpo,"+
@@ -29275,12 +29509,14 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                               "<td width='5%' bgcolor='#FFFAF8' align='center' valign='middle'>6</td>").append(
                                           "</tr>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_imunisasi.kode_imunisasi,master_imunisasi.nama_imunisasi from master_imunisasi inner join riwayat_imunisasi on riwayat_imunisasi.kode_imunisasi=master_imunisasi.kode_imunisasi "+
                                     "where riwayat_imunisasi.no_rkm_medis='"+NoRM.getText().trim()+"' group by master_imunisasi.kode_imunisasi order by master_imunisasi.kode_imunisasi").executeQuery();
                                 while(rs3.next()){
                                     ke1="";ke2="";ke3="";ke4="";ke5="";ke6="";
                                     try {
+                                        koneksi=koneksiDB.condb();
                                         rs4=koneksi.prepareStatement("select * from riwayat_imunisasi where riwayat_imunisasi.no_rkm_medis='"+NoRM.getText().trim()+"' and riwayat_imunisasi.kode_imunisasi='"+rs3.getString("kode_imunisasi")+"'").executeQuery();
                                         while(rs4.next()){
                                             if(rs4.getInt("no_imunisasi")==1){
@@ -29765,6 +30001,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                           "<tr>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_masalah_keperawatan_anak.nama_masalah from master_masalah_keperawatan_anak "+
                                     "inner join penilaian_awal_keperawatan_ranap_bayi_masalah on penilaian_awal_keperawatan_ranap_bayi_masalah.kode_masalah=master_masalah_keperawatan_anak.kode_masalah "+
@@ -29782,6 +30019,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                             htmlContent.append("</td>").append(
                                                "<td valign='top'>");
                             try {
+                                koneksi=koneksiDB.condb();
                                 rs3=koneksi.prepareStatement(
                                     "select master_rencana_keperawatan_anak.rencana_keperawatan from master_rencana_keperawatan_anak "+
                                     "inner join penilaian_awal_keperawatan_ranap_bayi_rencana on penilaian_awal_keperawatan_ranap_bayi_rencana.kode_rencana=master_rencana_keperawatan_anak.kode_rencana "+
@@ -29826,6 +30064,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningAdiksiNikotin.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select skrining_adiksi_nikotin.nip,petugas.nama,skrining_adiksi_nikotin.tanggal,skrining_adiksi_nikotin.rokok_dihisap,skrining_adiksi_nikotin.nilai_rokok_dihisap,skrining_adiksi_nikotin.menyalakan_rokok,"+
                         "skrining_adiksi_nikotin.nilai_menyalakan_rokok,skrining_adiksi_nikotin.tidak_rela,skrining_adiksi_nikotin.nilai_tidak_rela,skrining_adiksi_nikotin.jam_pertama,"+
@@ -29944,6 +30183,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningThalasemia.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select skrining_thalassemia.tanggal,skrining_thalassemia.transfusi_darah,skrining_thalassemia.rutin_transfusi,skrining_thalassemia.saudara_thalassemia,skrining_thalassemia.tumbuh_kembang_terlambat,"+
                         "skrining_thalassemia.anemia,skrining_thalassemia.ikterus,skrining_thalassemia.perut_buncit,skrining_thalassemia.gizi_kurang,skrining_thalassemia.facies_cooley,skrining_thalassemia.nip,petugas.nama,"+
@@ -30068,6 +30308,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningInstrumenSDQ.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select skrining_instrumen_sdq.tanggal,skrining_instrumen_sdq.pernyataansdq1,skrining_instrumen_sdq.nilai_sdq1,skrining_instrumen_sdq.pernyataansdq2,skrining_instrumen_sdq.nilai_sdq2,"+
                         "skrining_instrumen_sdq.pernyataansdq3,skrining_instrumen_sdq.nilai_sdq3,skrining_instrumen_sdq.pernyataansdq4,skrining_instrumen_sdq.nilai_sdq4,"+
@@ -30344,6 +30585,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningInstrumenSRQ.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select skrining_instrumen_srq.nip,petugas.nama,skrining_instrumen_srq.tanggal,"+
                         "skrining_instrumen_srq.pernyataansrq1,skrining_instrumen_srq.nilai_srq1,skrining_instrumen_srq.pernyataansrq2,skrining_instrumen_srq.nilai_srq2,skrining_instrumen_srq.pernyataansrq3,"+
@@ -30549,6 +30791,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkChecklistPemberianFibrinolitik.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select checklist_pemberian_fibrinolitik.tanggal,checklist_pemberian_fibrinolitik.kontra_indikasi1,checklist_pemberian_fibrinolitik.keterangan_kontra_indikasi1,checklist_pemberian_fibrinolitik.kontra_indikasi2,checklist_pemberian_fibrinolitik.keterangan_kontra_indikasi2,"+
                         "checklist_pemberian_fibrinolitik.kontra_indikasi3,checklist_pemberian_fibrinolitik.keterangan_kontra_indikasi3,checklist_pemberian_fibrinolitik.kontra_indikasi4,checklist_pemberian_fibrinolitik.keterangan_kontra_indikasi4,checklist_pemberian_fibrinolitik.nip,"+
@@ -30748,6 +30991,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningKankerKolorektal.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select skrining_kanker_kolorektal.tanggal,skrining_kanker_kolorektal.riwayat_polip_adenomatosa,skrining_kanker_kolorektal.riwayat_bab_berdarah,skrining_kanker_kolorektal.riwayat_reseksi_kuratif,skrining_kanker_kolorektal.colok_dubur,"+
                         "skrining_kanker_kolorektal.riwayat_kolorektal_keluarga,skrining_kanker_kolorektal.darah_samar_feses,skrining_kanker_kolorektal.rujuk_faskes_lanjut,skrining_kanker_kolorektal.kesimpulan,skrining_kanker_kolorektal.keterangan_kesimpulan,"+
@@ -30832,6 +31076,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanPsikologiKlinis.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_psikologi_klinis.tanggal,penilaian_psikologi_klinis.nip,penilaian_psikologi_klinis.anamnesis,penilaian_psikologi_klinis.dikirim_dari,penilaian_psikologi_klinis.tujuan_pemeriksaan,"+
                             "penilaian_psikologi_klinis.ket_anamnesis,penilaian_psikologi_klinis.keluhan_utama,penilaian_psikologi_klinis.riwayat_penyakit,penilaian_psikologi_klinis.riwayat_keluhan,penilaian_psikologi_klinis.permasalahan_saat_ini,"+
@@ -31106,6 +31351,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRanapNeonatus.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_ranap_neonatus.no_rkm_medis_ibu,ibupasien.nm_pasien as nama_ibu,ibupasien.tgl_lahir as lahiribu,ibupasien.no_ktp as ktpibu,penilaian_medis_ranap_neonatus.tanggal,penilaian_medis_ranap_neonatus.kd_dokter,dokter.nm_dokter,penilaian_medis_ranap_neonatus.g,penilaian_medis_ranap_neonatus.p,"+
                             "penilaian_medis_ranap_neonatus.a,penilaian_medis_ranap_neonatus.hidup,penilaian_medis_ranap_neonatus.usiahamil,penilaian_medis_ranap_neonatus.hbsag,penilaian_medis_ranap_neonatus.hiv,penilaian_medis_ranap_neonatus.syphilis,penilaian_medis_ranap_neonatus.riwayat_obstetri_ibu,penilaian_medis_ranap_neonatus.keterangan_riwayat_obstetri_ibu,"+
@@ -31193,6 +31439,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                                        "</tr>");
                                         try {
                                             w=1;
+                                            koneksi=koneksiDB.condb();
                                             rs3=koneksi.prepareStatement(
                                                 "select * from riwayat_persalinan_pasien where riwayat_persalinan_pasien.no_rkm_medis='"+rs2.getString("no_rkm_medis_ibu").trim()+"' order by riwayat_persalinan_pasien.tgl_thn").executeQuery();
                                             while(rs3.next()){
@@ -31552,6 +31799,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanLanjutanRisikoJatuhDewasa.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_dehidrasi.tanggal,penilaian_dehidrasi.penilaian1,penilaian_dehidrasi.penilaian_nilai1,penilaian_dehidrasi.penilaian2,penilaian_dehidrasi.penilaian_nilai2,"+
                             "penilaian_dehidrasi.penilaian3,penilaian_dehidrasi.penilaian_nilai3,penilaian_dehidrasi.penilaian4,penilaian_dehidrasi.penilaian_nilai4,penilaian_dehidrasi.penilaian5,"+
@@ -31640,6 +31888,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHasilPemeriksaanEcho.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hasil_pemeriksaan_echo.tanggal,hasil_pemeriksaan_echo.kd_dokter,dokter.nm_dokter,hasil_pemeriksaan_echo.sistolik,hasil_pemeriksaan_echo.diastolic,hasil_pemeriksaan_echo.kontraktilitas,"+
                             "hasil_pemeriksaan_echo.dimensi_ruang,hasil_pemeriksaan_echo.katup,hasil_pemeriksaan_echo.analisa_segmental,hasil_pemeriksaan_echo.erap,hasil_pemeriksaan_echo.lain_lain,hasil_pemeriksaan_echo.kesimpulan "+
@@ -31725,6 +31974,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSEPBPJS.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select bridging_sep.no_sep,bridging_sep.tglsep,bridging_sep.tglrujukan,bridging_sep.no_rujukan,bridging_sep.kdppkrujukan,bridging_sep.nmppkrujukan,"+
                         "if(bridging_sep.jnspelayanan='1','1. Ranap','2. Ralan') as jnspelayanan,bridging_sep.catatan,bridging_sep.diagawal,bridging_sep.nmdiagnosaawal,bridging_sep.kdpolitujuan,"+
@@ -31977,6 +32227,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningDiabetesMelitus.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_diabetes_melitus.nip,petugas.nama,skrining_diabetes_melitus.tanggal,skrining_diabetes_melitus.anamnesis1,skrining_diabetes_melitus.anamnesis2,skrining_diabetes_melitus.anamnesis3,"+
                             "skrining_diabetes_melitus.anamnesis4,skrining_diabetes_melitus.anamnesis5,skrining_diabetes_melitus.anamnesis6,skrining_diabetes_melitus.anamnesis7,skrining_diabetes_melitus.anamnesis8,"+
@@ -32150,6 +32401,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkPenilaianBayiBaruLahir.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_bayi_baru_lahir.no_rkm_medis_ibu,ibupasien.nm_pasien as nama_ibu,ibupasien.stts_nikah as sttsnikahibu,ibupasien.tgl_lahir as lahiribu,ibupasien.no_ktp as ktpibu,penilaian_bayi_baru_lahir.tanggal,penilaian_bayi_baru_lahir.kd_dokter,dokter.nm_dokter,penilaian_bayi_baru_lahir.penyakit_diderita_ibu,penilaian_bayi_baru_lahir.keterangan_penyakit_diderita_ibu,"+
                             "penilaian_bayi_baru_lahir.obat_dikonsumsi_selama_kehamilan,penilaian_bayi_baru_lahir.perawatan_antenatal,penilaian_bayi_baru_lahir.keterangan_perawatan_antenatal,penilaian_bayi_baru_lahir.terdaftar_ekohort,penilaian_bayi_baru_lahir.keterangan_terdaftar_ekohort,penilaian_bayi_baru_lahir.penyulit_kehamilan,penilaian_bayi_baru_lahir.keterangan_penyulit_kehamilan,"+
@@ -32237,6 +32489,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                                                        "</tr>");
                                         try {
                                             w=1;
+                                            koneksi=koneksiDB.condb();
                                             rs3=koneksi.prepareStatement(
                                                 "select * from riwayat_persalinan_pasien where riwayat_persalinan_pasien.no_rkm_medis='"+rs2.getString("no_rkm_medis_ibu").trim()+"' order by riwayat_persalinan_pasien.tgl_thn").executeQuery();
                                             while(rs3.next()){
@@ -32539,6 +32792,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkLaporanTindakan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select laporan_tindakan.tanggal,laporan_tindakan.nip,petugas.nama,laporan_tindakan.kd_dokter,dokter.nm_dokter,laporan_tindakan.diagnosa_pra_tindakan,laporan_tindakan.diagnosa_pasca_tindakan,"+
                             "laporan_tindakan.tindakan_medik,laporan_tindakan.uraian,laporan_tindakan.hasil,laporan_tindakan.kesimpulan from laporan_tindakan inner join dokter on laporan_tindakan.kd_dokter=dokter.kd_dokter "+
@@ -32641,6 +32895,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkLayananKedokteranFisikRehabilitasi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select layanan_kedokteran_fisik_rehabilitasi.tanggal,layanan_kedokteran_fisik_rehabilitasi.kd_dokter,dokter.nm_dokter,layanan_kedokteran_fisik_rehabilitasi.pendamping,layanan_kedokteran_fisik_rehabilitasi.keterangan_pendamping,"+
                             "layanan_kedokteran_fisik_rehabilitasi.anamnesa,layanan_kedokteran_fisik_rehabilitasi.pemeriksaan_fisik,layanan_kedokteran_fisik_rehabilitasi.diagnosa_medis,layanan_kedokteran_fisik_rehabilitasi.diagnosa_fungsi,"+
@@ -32738,6 +32993,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningGigiMulutBalita.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_kesehatan_gigi_mulut_balita.nip,petugas.nama,skrining_kesehatan_gigi_mulut_balita.tanggal,skrining_kesehatan_gigi_mulut_balita.pernah_pemeriksaan_gigimulut,skrining_kesehatan_gigi_mulut_balita.sudah_tumbuh_gigi,"+
                             "skrining_kesehatan_gigi_mulut_balita.jumlah_gigi_tumbuh,skrining_kesehatan_gigi_mulut_balita.kondisi_kebersihan_gigimulut,skrining_kesehatan_gigi_mulut_balita.kebiasaan_susu_botol,skrining_kesehatan_gigi_mulut_balita.mengemil_manis,"+
@@ -32865,6 +33121,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningAnemia.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_anemia.nip,petugas.nama,skrining_anemia.tanggal,skrining_anemia.mudah_lelah,skrining_anemia.buah_sayur,skrining_anemia.protein_hewani,skrining_anemia.masalah_pubertas,skrining_anemia.risiko_ims,"+
                             "skrining_anemia.kekerasan_seksual,skrining_anemia.sudah_menstruasi,skrining_anemia.gangguan_menstruasi,skrining_anemia.tambah_darah,skrining_anemia.kelainan_darah,skrining_anemia.keluarga_thalasemia,"+
@@ -33046,6 +33303,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkLayananProgramKFR.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select layanan_program_kfr.tanggal,layanan_program_kfr.no_rawat_layanan,layanan_kedokteran_fisik_rehabilitasi.diagnosa_medis,layanan_kedokteran_fisik_rehabilitasi.tatalaksana,layanan_program_kfr.program,"+
                             "layanan_program_kfr.nip,petugas.nama,layanan_kedokteran_fisik_rehabilitasi.evaluasi,layanan_kedokteran_fisik_rehabilitasi.kd_dokter,dokter.nm_dokter from layanan_program_kfr "+
@@ -33135,6 +33393,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningHipertensi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_hipertensi.nip,petugas.nama,skrining_hipertensi.tanggal,skrining_hipertensi.anamnesis1,skrining_hipertensi.anamnesis2,skrining_hipertensi.anamnesis3,skrining_hipertensi.anamnesis4,skrining_hipertensi.anamnesis5,"+
                             "skrining_hipertensi.anamnesis6,skrining_hipertensi.anamnesis7,skrining_hipertensi.anamnesis8,skrining_hipertensi.sistole,skrining_hipertensi.diastole,skrining_hipertensi.klasifikasi_hipertensi,skrining_hipertensi.hasil_skrining,"+
@@ -33260,6 +33519,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningKesehatanPenglihatan.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_kesehatan_penglihatan.nip,petugas.nama,skrining_kesehatan_penglihatan.tanggal,skrining_kesehatan_penglihatan.mata_luar,skrining_kesehatan_penglihatan.tajam_kiri,skrining_kesehatan_penglihatan.tajam_kanan,skrining_kesehatan_penglihatan.buta_warna_kiri,"+
                             "skrining_kesehatan_penglihatan.buta_warna_kanan,skrining_kesehatan_penglihatan.kacamata,skrining_kesehatan_penglihatan.visus_kiri,skrining_kesehatan_penglihatan.visus_kanan,skrining_kesehatan_penglihatan.refraksi_kiri,skrining_kesehatan_penglihatan.refraksi_kanan,"+
@@ -33434,6 +33694,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningGigiMulutDewasa.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_kesehatan_gigi_mulut_dewasa.nip,petugas.nama,skrining_kesehatan_gigi_mulut_dewasa.tanggal,skrining_kesehatan_gigi_mulut_dewasa.kontrol_gigi,"+
                             "skrining_kesehatan_gigi_mulut_dewasa.gigi_bungsu_tumbuh,skrining_kesehatan_gigi_mulut_dewasa.gigi_hilang,skrining_kesehatan_gigi_mulut_dewasa.gigi_berlubang,"+
@@ -33530,6 +33791,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningRisikoKankerServiks.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_risiko_kanker_serviks.nip,petugas.nama,skrining_risiko_kanker_serviks.tanggal,skrining_risiko_kanker_serviks.riwayat_penyakit_keluarga,skrining_risiko_kanker_serviks.riwayat_penyakit_sendiri,skrining_risiko_kanker_serviks.risiko_merokok,skrining_risiko_kanker_serviks.risiko_kurang_fisik,"+
                             "skrining_risiko_kanker_serviks.risiko_gula_berlebihan,skrining_risiko_kanker_serviks.risiko_garam_berlebihan,skrining_risiko_kanker_serviks.risiko_lemak_berlebihan,skrining_risiko_kanker_serviks.risiko_kurang_buah_sayur,skrining_risiko_kanker_serviks.risiko_alkohol,skrining_risiko_kanker_serviks.hasil_iva,"+
@@ -33652,6 +33914,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningGigiMulutLansia.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_kesehatan_gigi_mulut_lansia.nip,petugas.nama,skrining_kesehatan_gigi_mulut_lansia.tanggal,skrining_kesehatan_gigi_mulut_lansia.kontrol_gigi,skrining_kesehatan_gigi_mulut_lansia.pola_makan,skrining_kesehatan_gigi_mulut_lansia.sikat_gigi,skrining_kesehatan_gigi_mulut_lansia.gigi_palsu,"+
                             "skrining_kesehatan_gigi_mulut_lansia.gigi_berfungsi,skrining_kesehatan_gigi_mulut_lansia.mukosa_mulut,skrining_kesehatan_gigi_mulut_lansia.hasil_skrining,skrining_kesehatan_gigi_mulut_lansia.keterangan from skrining_kesehatan_gigi_mulut_lansia inner join petugas on skrining_kesehatan_gigi_mulut_lansia.nip=petugas.nip "+
@@ -33757,6 +34020,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningIndraPendengaran.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_indra_pendengaran.nip,petugas.nama,skrining_indra_pendengaran.tanggal,skrining_indra_pendengaran.curiga_tuli_telinga_kiri,skrining_indra_pendengaran.curiga_tuli_telinga_kanan,skrining_indra_pendengaran.curiga_tuli_telinga_rujuk,skrining_indra_pendengaran.penurunan_pendengaran_telinga_kiri,"+
                             "skrining_indra_pendengaran.penurunan_pendengaran_telinga_kanan,skrining_indra_pendengaran.mendengar_bisikan_telinga_kiri,skrining_indra_pendengaran.mendengar_bisikan_telinga_kanan,skrining_indra_pendengaran.congek_telinga_kiri,skrining_indra_pendengaran.congek_telinga_kanan,skrining_indra_pendengaran.congek_telinga_rujuk,"+
@@ -33914,6 +34178,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkCatatanPengkajianPaskaOperasi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select catatan_pengkajian_paska_operasi.tanggal,catatan_pengkajian_paska_operasi.kd_dokter,catatan_pengkajian_paska_operasi.rawat_paska_operasi,catatan_pengkajian_paska_operasi.cairan,catatan_pengkajian_paska_operasi.antibiotika,"+
                             "catatan_pengkajian_paska_operasi.analgetika,catatan_pengkajian_paska_operasi.medikamentosa_lain,catatan_pengkajian_paska_operasi.diet,catatan_pengkajian_paska_operasi.pemeriksaan_laborat,catatan_pengkajian_paska_operasi.tranfusi,"+
@@ -34050,6 +34315,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningFrailtySyndrome.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_frailty_syndrome.nip,petugas.nama,skrining_frailty_syndrome.tanggal,skrining_frailty_syndrome.resistensi,skrining_frailty_syndrome.nilai_resistensi,skrining_frailty_syndrome.aktivitas,"+
                             "skrining_frailty_syndrome.nilai_aktivitas,skrining_frailty_syndrome.penyakit_tidak_pernah,skrining_frailty_syndrome.penyakit_kanker,skrining_frailty_syndrome.penyakit_gagal_jantung,"+
@@ -34170,6 +34436,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHasilPemeriksaanSlitLamp.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hasil_pemeriksaan_slit_lamp.tanggal,hasil_pemeriksaan_slit_lamp.kd_dokter,dokter.nm_dokter,hasil_pemeriksaan_slit_lamp.diagnosa_klinis,hasil_pemeriksaan_slit_lamp.kiriman_dari,"+
                             "hasil_pemeriksaan_slit_lamp.hasil_pemeriksaan from hasil_pemeriksaan_slit_lamp inner join dokter on hasil_pemeriksaan_slit_lamp.kd_dokter=dokter.kd_dokter "+
@@ -34242,6 +34509,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHasilPemeriksaanOCT.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hasil_pemeriksaan_oct.tanggal,hasil_pemeriksaan_oct.kd_dokter,dokter.nm_dokter,hasil_pemeriksaan_oct.diagnosa_klinis,hasil_pemeriksaan_oct.kiriman_dari,"+
                             "hasil_pemeriksaan_oct.hasil_pemeriksaan from hasil_pemeriksaan_oct inner join dokter on hasil_pemeriksaan_oct.kd_dokter=dokter.kd_dokter "+
@@ -34314,6 +34582,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkChecklistKesiapanAnestesi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select checklist_kesiapan_anestesi.tanggal,checklist_kesiapan_anestesi.nip,petugas.nama,checklist_kesiapan_anestesi.kd_dokter,dokter.nm_dokter,checklist_kesiapan_anestesi.tindakan,"+
                         "checklist_kesiapan_anestesi.teknik_anestesi,checklist_kesiapan_anestesi.listrik1,checklist_kesiapan_anestesi.listrik2,checklist_kesiapan_anestesi.listrik3,"+
@@ -34613,6 +34882,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningInstrumenACRS.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select skrining_instrumen_acrs.nip,petugas.nama,skrining_instrumen_acrs.tanggal,"+
                         "skrining_instrumen_acrs.pernyataanacrs1,skrining_instrumen_acrs.nilai_acrs1,skrining_instrumen_acrs.pernyataanacrs2,skrining_instrumen_acrs.nilai_acrs2,skrining_instrumen_acrs.pernyataanacrs3,"+
@@ -34747,6 +35017,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkChecklistKriteriaMasukNICU.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select checklist_kriteria_masuk_nicu.tanggal,checklist_kriteria_masuk_nicu.respirasi1,checklist_kriteria_masuk_nicu.respirasi2,checklist_kriteria_masuk_nicu.respirasi3,"+
                         "checklist_kriteria_masuk_nicu.respirasi4,checklist_kriteria_masuk_nicu.prematur1,checklist_kriteria_masuk_nicu.prematur2,"+
@@ -34953,6 +35224,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkChecklistKriteriaKeluarNICU.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select checklist_kriteria_keluar_nicu.tanggal,checklist_kriteria_keluar_nicu.respirasi1,checklist_kriteria_keluar_nicu.respirasi2,checklist_kriteria_keluar_nicu.respirasi3,"+
                         "checklist_kriteria_keluar_nicu.kardio1,checklist_kriteria_keluar_nicu.kardio2,checklist_kriteria_keluar_nicu.nutrisi1,checklist_kriteria_keluar_nicu.nutrisi2,"+
@@ -35115,6 +35387,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try{
             if(chkAsuhanMedisRanapPsikiatri.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select penilaian_medis_ranap_psikiatrik.tanggal,penilaian_medis_ranap_psikiatrik.kd_dokter,penilaian_medis_ranap_psikiatrik.anamnesis,penilaian_medis_ranap_psikiatrik.hubungan,"+
                             "penilaian_medis_ranap_psikiatrik.keluhan_utama,penilaian_medis_ranap_psikiatrik.rps,penilaian_medis_ranap_psikiatrik.rpk,penilaian_medis_ranap_psikiatrik.rpd,penilaian_medis_ranap_psikiatrik.rpo,"+
@@ -35295,6 +35568,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkChecklistKriteriaMasukPICU.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select checklist_kriteria_masuk_picu.tanggal,checklist_kriteria_masuk_picu.kriteriaumum1,checklist_kriteria_masuk_picu.kriteriaumum2,"+
                         "checklist_kriteria_masuk_picu.kriteriaumum3,checklist_kriteria_masuk_picu.respirasi1,checklist_kriteria_masuk_picu.respirasi2,"+
@@ -35511,6 +35785,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkChecklistKriteriaKeluarPICU.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select checklist_kriteria_keluar_picu.tanggal,checklist_kriteria_keluar_picu.kondisiklinis1,checklist_kriteria_keluar_picu.kondisiklinis2,checklist_kriteria_keluar_picu.kondisiklinis3,"+
                         "checklist_kriteria_keluar_picu.kondisiklinis4,checklist_kriteria_keluar_picu.kondisiklinis5,checklist_kriteria_keluar_picu.kondisiklinis6,checklist_kriteria_keluar_picu.kebutuhanperawatan1,"+
@@ -35668,6 +35943,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningInstrumenAMT.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select skrining_instrumen_amt.nip,petugas.nama,skrining_instrumen_amt.tanggal,"+
                         "skrining_instrumen_amt.pernyataanamt1,skrining_instrumen_amt.nilai_amt1,skrining_instrumen_amt.pernyataanamt2,skrining_instrumen_amt.nilai_amt2,skrining_instrumen_amt.pernyataanamt3,"+
@@ -35802,6 +36078,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanJantung.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_medis_ralan_jantung.tanggal,penilaian_medis_ralan_jantung.kd_dokter,penilaian_medis_ralan_jantung.anamnesis,penilaian_medis_ralan_jantung.hubungan,penilaian_medis_ralan_jantung.keluhan_utama,penilaian_medis_ralan_jantung.rps,"+
                         "penilaian_medis_ralan_jantung.rpk,penilaian_medis_ralan_jantung.rpd,penilaian_medis_ralan_jantung.rpo,penilaian_medis_ralan_jantung.alergi,penilaian_medis_ralan_jantung.td,penilaian_medis_ralan_jantung.bb,penilaian_medis_ralan_jantung.tb,"+
@@ -35959,6 +36236,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRalanUrologi.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_medis_ralan_urologi.tanggal,penilaian_medis_ralan_urologi.kd_dokter,penilaian_medis_ralan_urologi.anamnesis,penilaian_medis_ralan_urologi.hubungan,penilaian_medis_ralan_urologi.keluhan_utama,penilaian_medis_ralan_urologi.rps,"+
                         "penilaian_medis_ralan_urologi.rpk,penilaian_medis_ralan_urologi.rpd,penilaian_medis_ralan_urologi.rpo,penilaian_medis_ralan_urologi.riwayat_kebiasaan,penilaian_medis_ralan_urologi.riwayat_operasi_urologi,"+
@@ -36134,6 +36412,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHasilPemeriksaanTreadmill.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hasil_pemeriksaan_treadmill.tanggal,hasil_pemeriksaan_treadmill.kd_dokter,dokter.nm_dokter,hasil_pemeriksaan_treadmill.kiriman_dari,hasil_pemeriksaan_treadmill.diagnosa_klinis,"+
                             "hasil_pemeriksaan_treadmill.protokol,hasil_pemeriksaan_treadmill.keterangan_protokol,hasil_pemeriksaan_treadmill.td_awal,hasil_pemeriksaan_treadmill.nadi_awal,"+
@@ -36263,6 +36542,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkHasilPemeriksaanEchoPediatrik.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select hasil_pemeriksaan_echo_pediatrik.tanggal,hasil_pemeriksaan_echo_pediatrik.kd_dokter,dokter.nm_dokter,hasil_pemeriksaan_echo_pediatrik.diagnosa_klinis,hasil_pemeriksaan_echo_pediatrik.kiriman_dari,"+
                             "hasil_pemeriksaan_echo_pediatrik.situs,hasil_pemeriksaan_echo_pediatrik.av_va,hasil_pemeriksaan_echo_pediatrik.drainase_vena_pulmonalis,hasil_pemeriksaan_echo_pediatrik.katup_mitral,hasil_pemeriksaan_echo_pediatrik.katup_aorta,"+
@@ -36419,6 +36699,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningPSI.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                             "select skrining_pneumonia_severity_index.nip,petugas.nama,skrining_pneumonia_severity_index.tanggal,skrining_pneumonia_severity_index.nilai_umur,skrining_pneumonia_severity_index.tinggal_di_panti_jompo,skrining_pneumonia_severity_index.nilai_tinggal_di_panti_jompo,skrining_pneumonia_severity_index.gagal_jantung,skrining_pneumonia_severity_index.nilai_gagal_jantung,"+
                             "skrining_pneumonia_severity_index.penyakit_hati,skrining_pneumonia_severity_index.nilai_penyakit_hati,skrining_pneumonia_severity_index.penyakit_ginjal,skrining_pneumonia_severity_index.nilai_penyakit_ginjal,skrining_pneumonia_severity_index.kanker,skrining_pneumonia_severity_index.nilai_kanker,skrining_pneumonia_severity_index.penyakit_serebrovaskuler,"+
@@ -36653,6 +36934,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningInstrumenESAT.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select skrining_instrumen_esat.nip,petugas.nama,skrining_instrumen_esat.tanggal,skrining_instrumen_esat.pernyataanesat1,skrining_instrumen_esat.pernyataanesat2,skrining_instrumen_esat.pernyataanesat3,skrining_instrumen_esat.pernyataanesat4,"+
                         "skrining_instrumen_esat.pernyataanesat5,skrining_instrumen_esat.pernyataanesat6,skrining_instrumen_esat.pernyataanesat7,skrining_instrumen_esat.pernyataanesat8,skrining_instrumen_esat.pernyataanesat9,skrining_instrumen_esat.pernyataanesat10,"+
@@ -36771,6 +37053,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkAsuhanMedisRanapJantung.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select penilaian_medis_ranap_jantung.tanggal,penilaian_medis_ranap_jantung.kd_dokter,penilaian_medis_ranap_jantung.anamnesis,penilaian_medis_ranap_jantung.hubungan,penilaian_medis_ranap_jantung.keluhan_utama,penilaian_medis_ranap_jantung.rps,"+
                         "penilaian_medis_ranap_jantung.rpk,penilaian_medis_ranap_jantung.rpd,penilaian_medis_ranap_jantung.rpo,penilaian_medis_ranap_jantung.alergi,penilaian_medis_ranap_jantung.td,penilaian_medis_ranap_jantung.bb,penilaian_medis_ranap_jantung.tb,"+
@@ -36928,6 +37211,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkSkriningCRUB65.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select skrining_curb65.nip,petugas.nama,skrining_curb65.tanggal,skrining_curb65.pernyataancurb651,skrining_curb65.nilai_curb651,skrining_curb65.pernyataancurb652,skrining_curb65.nilai_curb652,skrining_curb65.pernyataancurb653,"+
                         "skrining_curb65.nilai_curb653,skrining_curb65.pernyataancurb654,skrining_curb65.nilai_curb654,skrining_curb65.pernyataancurb655,skrining_curb65.nilai_curb655,skrining_curb65.nilai_total_curb65,skrining_curb65.kesimpulan "+
@@ -37029,6 +37313,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         try {
             if(chkKonsultasiPerawat.isSelected()==true){
                 try {
+                    koneksi=koneksiDB.condb();
                     rs2=koneksi.prepareStatement(
                         "select konsultasi_perawat.no_permintaan,konsultasi_perawat.tanggal as tanggalkonsultasi,konsultasi_perawat.nip,petugas.nama,"+
                         "konsultasi_perawat.kd_dokter_dikonsuli,dokter.nm_dokter,konsultasi_perawat.situation,konsultasi_perawat.background,konsultasi_perawat.assessment,"+

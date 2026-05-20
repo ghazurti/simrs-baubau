@@ -289,6 +289,7 @@ public class BPJSCekKelengkapanKlaim extends javax.swing.JDialog {
                     sqlJenis + sqlCari +
                     " ORDER BY bs.tglsep DESC, bs.no_rawat";
 
+                koneksi=koneksiDB.condb();
                 ps = koneksi.prepareStatement(sql);
                 int idx = 1;
                 ps.setString(idx++, tglDari);

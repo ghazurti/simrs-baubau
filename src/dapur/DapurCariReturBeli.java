@@ -641,6 +641,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(TCari,"No.Faktur");
         }else{
           try {
+             koneksi=koneksiDB.condb();
              pscaripesan=koneksi.prepareStatement("select no_retur_beli, total from dapurreturbeli where no_retur_beli=?");
              try {
                 pscaripesan.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());
@@ -648,6 +649,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 if(rs.next()){
                     Sequel.AutoComitFalse();
                     sukses=true;
+                    koneksi=koneksiDB.condb();
                     psdapur_detail_returbeli=koneksi.prepareStatement("select kode_brng,jml_retur from dapur_detail_returbeli where no_retur_beli=? ");
                     try {
                         psdapur_detail_returbeli.setString(1,rs.getString(1));
@@ -931,6 +933,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 caribarang= " and dapurbarang.jenis like '%"+Jenis.getSelectedItem().toString()+"%' ";
             }
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select dapurreturbeli.no_retur_beli,dapurreturbeli.kode_suplier,dapursuplier.nama_suplier, "+
                     "dapurreturbeli.nip,petugas.nama,dapurreturbeli.tgl_retur,dapurreturbeli.catatan "+
@@ -952,6 +955,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                           rs.getString("nip")+" "+rs.getString("nama"),rs.getString("catatan"),"","",""
                     });  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select dapur_detail_returbeli.kode_brng,dapurbarang.nama_brng, "+
                         "dapur_detail_returbeli.kode_sat,kodesatuan.satuan,dapur_detail_returbeli.jml_retur,dapur_detail_returbeli.h_retur, "+
                         "dapur_detail_returbeli.h_beli,dapur_detail_returbeli.total,dapur_detail_returbeli.no_faktur "+

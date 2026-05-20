@@ -54,7 +54,7 @@ import uz.ncipro.calendar.JDateTimePicker;
 public final class sekuel {
     private javax.swing.ImageIcon icon = null;
     private String folder,AKTIFKANTRACKSQL = koneksiDB.AKTIFKANTRACKSQL();
-    private final Connection connect=koneksiDB.condb();
+    private Connection connect;
     private PreparedStatement ps;
     private ResultSet rs;
     private int angka=0;
@@ -74,7 +74,7 @@ public final class sekuel {
 
     public void menyimpan(String table,String value,String sama){
         try {
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             try{                  
                 ps.executeUpdate();
             }catch(Exception e){
@@ -93,7 +93,7 @@ public final class sekuel {
     
     public void menyimpan2(String table,String value,String sama){
         try {
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             try{                  
                 ps.executeUpdate();
             }catch(Exception e){
@@ -112,7 +112,7 @@ public final class sekuel {
     
     public boolean menyimpantf(String table,String value,String sama){
         try {
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             ps.executeUpdate();
             if(ps != null){
                 ps.close();
@@ -129,7 +129,7 @@ public final class sekuel {
     
     public boolean menyimpantf2(String table,String value,String sama){
         try {
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             ps.executeUpdate();
             if(ps != null){
                 ps.close();
@@ -146,7 +146,7 @@ public final class sekuel {
     public boolean menyimpantf(String table,String value,int i,String[] a,String acuan_field,String update,int j,String[] b){
         bool=false;
         try{ 
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             for(angka=1;angka<=i;angka++){
                 ps.setString(angka,a[angka-1]);
             }            
@@ -166,7 +166,7 @@ public final class sekuel {
             bool=true;
         }catch(Exception e){
             try {
-                ps=connect.prepareStatement("update "+table+" set "+update+" where "+acuan_field);
+                ps=koneksiDB.condb().prepareStatement("update "+table+" set "+update+" where "+acuan_field);
                 for(angka=1;angka<=j;angka++){
                     ps.setString(angka,b[angka-1]);
                 } 
@@ -194,7 +194,7 @@ public final class sekuel {
     
     public void menyimpan(String table,String value,String sama,int i,String[] a){
         try {
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             try{
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
@@ -224,7 +224,7 @@ public final class sekuel {
     
     public void menyimpan2(String table,String value,String sama,int i,String[] a){
         try {
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             try{
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
@@ -252,7 +252,7 @@ public final class sekuel {
     
     public void menyimpan3(String table,String value,String sama,int i,String[] a){
         try {
-            ps=connect.prepareStatement("insert ignore into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert ignore into "+table+" values("+value+")");
             try{
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
@@ -280,7 +280,7 @@ public final class sekuel {
     
     public boolean menyimpantf(String table,String value,String sama,int i,String[] a){        
         try{             
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             for(angka=1;angka<=i;angka++){
                 ps.setString(angka,a[angka-1]);
             }            
@@ -312,7 +312,7 @@ public final class sekuel {
     public boolean menyimpantf2(String table,String value,String sama,int i,String[] a){
         bool=true;
         try{ 
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             try {
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
@@ -344,7 +344,7 @@ public final class sekuel {
     public boolean menyimpantf2(String table,String value,int i,String[] a){
         bool=true;
         try{ 
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             try {
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
@@ -375,7 +375,7 @@ public final class sekuel {
     
     public void menyimpan(String table,String value,int i,String[] a){
         try {
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             try{                 
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
@@ -402,7 +402,7 @@ public final class sekuel {
     
     public void menyimpanignore(String table,String value,int i,String[] a){
         try {
-            ps=connect.prepareStatement("insert ignore into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert ignore into "+table+" values("+value+")");
             try{                 
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
@@ -429,7 +429,7 @@ public final class sekuel {
     
     public void menyimpan2(String table,String value,int i,String[] a){
         try {
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             try{                 
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
@@ -455,7 +455,7 @@ public final class sekuel {
     
     public void menyimpan(String table,String value,int i,String[] a,String acuan_field,String update,int j,String[] b){
         try{ 
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             for(angka=1;angka<=i;angka++){
                 ps.setString(angka,a[angka-1]);
             }            
@@ -474,7 +474,7 @@ public final class sekuel {
             SimpanTrack("insert into "+table+" values("+dicari+")");
         }catch(Exception e){
             try {
-                ps=connect.prepareStatement("update "+table+" set "+update+" where "+acuan_field);
+                ps=koneksiDB.condb().prepareStatement("update "+table+" set "+update+" where "+acuan_field);
                 for(angka=1;angka<=j;angka++){
                     ps.setString(angka,b[angka-1]);
                 } 
@@ -500,7 +500,7 @@ public final class sekuel {
     public void menyimpan2(String table,String value,int i,String[] a,String acuan_field,String update,int j,String[] b){
         try{ 
             dicari="";
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             for(angka=1;angka<=i;angka++){
                 dicari=dicari+", "+a[angka-1];
                 ps.setString(angka,a[angka-1]);
@@ -520,7 +520,7 @@ public final class sekuel {
             SimpanTrack("insert into "+table+" values("+dicari+")");
         }catch(Exception e){
             try {
-                ps=connect.prepareStatement("update "+table+" set "+update+" where "+acuan_field);
+                ps=koneksiDB.condb().prepareStatement("update "+table+" set "+update+" where "+acuan_field);
                 for(angka=1;angka<=j;angka++){
                     ps.setString(angka,b[angka-1]);
                 } 
@@ -545,7 +545,7 @@ public final class sekuel {
     
     public void menyimpan3(String table,String value,int i,String[] a,String acuan_field,String update,int j,String[] b){
         try{ 
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             for(angka=1;angka<=i;angka++){
                 ps.setString(angka,a[angka-1]);
             }            
@@ -565,7 +565,7 @@ public final class sekuel {
             SimpanTrack("insert into "+table+" values("+dicari+")");
         }catch(Exception e){
             try {
-                ps=connect.prepareStatement("update "+table+" set "+update+" where "+acuan_field);
+                ps=koneksiDB.condb().prepareStatement("update "+table+" set "+update+" where "+acuan_field);
                 for(angka=1;angka<=j;angka++){
                     ps.setString(angka,b[angka-1]);
                 } 
@@ -590,7 +590,7 @@ public final class sekuel {
     
     public void menyimpan(String table,String value){
         try {
-            ps=connect.prepareStatement("insert into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+")");
             try{
                 ps.executeUpdate();
             }catch(Exception e){
@@ -608,7 +608,7 @@ public final class sekuel {
     
     public void menyimpanignore(String table,String value){
         try {
-            ps=connect.prepareStatement("insert ignore into "+table+" values("+value+")");
+            ps=koneksiDB.condb().prepareStatement("insert ignore into "+table+" values("+value+")");
             try{
                 ps.executeUpdate();
             }catch(Exception e){
@@ -626,7 +626,7 @@ public final class sekuel {
     
     public void menyimpan(String table,String isisimpan,String isiedit,String acuan_field){
         try{            
-            ps=connect.prepareStatement("insert into "+table+" values("+isisimpan+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+isisimpan+")");
             ps.executeUpdate();   
             if(ps != null){
                 ps.close();
@@ -634,7 +634,7 @@ public final class sekuel {
             SimpanTrack("insert into "+table+" values("+isisimpan+")");
         }catch(Exception e){
             try {
-                ps=connect.prepareStatement("update "+table+" set "+isiedit+" where "+acuan_field);
+                ps=koneksiDB.condb().prepareStatement("update "+table+" set "+isiedit+" where "+acuan_field);
                 ps.executeUpdate();
                 if(ps != null){
                     ps.close();
@@ -649,7 +649,7 @@ public final class sekuel {
     public boolean menyimpantf(String table,String isisimpan,String isiedit,String acuan_field){
         bool=true;
         try{            
-            ps=connect.prepareStatement("insert into "+table+" values("+isisimpan+")");
+            ps=koneksiDB.condb().prepareStatement("insert into "+table+" values("+isisimpan+")");
             ps.executeUpdate();   
             if(ps != null){
                 ps.close();
@@ -659,7 +659,7 @@ public final class sekuel {
         }catch(Exception e){
             if(e.toString().toLowerCase().contains("duplicate")){
                 try {
-                    ps=connect.prepareStatement("update "+table+" set "+isiedit+" where "+acuan_field);
+                    ps=koneksiDB.condb().prepareStatement("update "+table+" set "+isiedit+" where "+acuan_field);
                     ps.executeUpdate();
                     if(ps != null){
                         ps.close();
@@ -679,7 +679,7 @@ public final class sekuel {
 
     public void menyimpan(String table,String value,String sama,JTextField AlmGb){
         try {
-            ps = connect.prepareStatement("insert into "+table+" values("+value+",?)");
+            ps = koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+",?)");
             try{                        
                 ps.setBinaryStream(1, new FileInputStream(AlmGb.getText()), new File(AlmGb.getText()).length());
                 ps.executeUpdate();
@@ -699,7 +699,7 @@ public final class sekuel {
     
     public void menyimpan(String table,String value,String sama,JTextField AlmGb,JTextField AlmPhoto){
         try {
-            ps = connect.prepareStatement("insert into "+table+" values("+value+",?,?)");
+            ps = koneksiDB.condb().prepareStatement("insert into "+table+" values("+value+",?,?)");
             try{                        
                 ps.setBinaryStream(1, new FileInputStream(AlmGb.getText()), new File(AlmGb.getText()).length());
                 ps.setBinaryStream(2, new FileInputStream(AlmPhoto.getText()), new File(AlmPhoto.getText()).length());
@@ -720,7 +720,7 @@ public final class sekuel {
 
     public void meghapus(String table,String field,String nilai_field) {
         try {
-            ps=connect.prepareStatement("delete from "+table+" where "+field+"=?");
+            ps=koneksiDB.condb().prepareStatement("delete from "+table+" where "+field+"=?");
             try{       
                 ps.setString(1,nilai_field);
                 ps.executeUpdate(); 
@@ -741,7 +741,7 @@ public final class sekuel {
     public boolean meghapustf(String table,String field,String nilai_field) {
         bool=true;
         try {
-            ps=connect.prepareStatement("delete from "+table+" where "+field+"=?");
+            ps=koneksiDB.condb().prepareStatement("delete from "+table+" where "+field+"=?");
             try{       
                 ps.setString(1,nilai_field);
                 ps.executeUpdate();
@@ -765,7 +765,7 @@ public final class sekuel {
     
     public void meghapus(String table,String field,String field2,String nilai_field,String nilai_field2) {
         try {
-            ps=connect.prepareStatement("delete from "+table+" where "+field+"=? and "+field2+"=?");
+            ps=koneksiDB.condb().prepareStatement("delete from "+table+" where "+field+"=? and "+field2+"=?");
             try{       
                 ps.setString(1,nilai_field);
                 ps.setString(2,nilai_field2);
@@ -786,7 +786,7 @@ public final class sekuel {
     
     public void meghapus2(String table,String field,String nilai_field) {
         try {
-            ps=connect.prepareStatement("delete from "+table+" where "+field+"=?");
+            ps=koneksiDB.condb().prepareStatement("delete from "+table+" where "+field+"=?");
             try{       
                 ps.setString(1,nilai_field);
                 ps.executeUpdate(); 
@@ -807,7 +807,7 @@ public final class sekuel {
     
     public void meghapus3(String table,String field,String nilai_field) {
         try {
-            ps=connect.prepareStatement("delete from "+table+" where "+field+"=?");
+            ps=koneksiDB.condb().prepareStatement("delete from "+table+" where "+field+"=?");
             try{       
                 ps.setString(1,nilai_field);
                 ps.executeUpdate(); 
@@ -826,7 +826,7 @@ public final class sekuel {
     
     public void mengedit(String table,String acuan_field,String update){
         try {
-            ps=connect.prepareStatement("update "+table+" set "+update+" where "+acuan_field);
+            ps=koneksiDB.condb().prepareStatement("update "+table+" set "+update+" where "+acuan_field);
             try{                        
                 ps.executeUpdate();       
              }catch(Exception e){
@@ -846,7 +846,7 @@ public final class sekuel {
     public boolean mengedittf(String table,String acuan_field,String update){
         bool=true;
         try {
-            ps=connect.prepareStatement("update "+table+" set "+update+" where "+acuan_field);
+            ps=koneksiDB.condb().prepareStatement("update "+table+" set "+update+" where "+acuan_field);
             try{                        
                 ps.executeUpdate();  
                 bool=true;
@@ -869,7 +869,7 @@ public final class sekuel {
     
     public void mengedit(String table,String acuan_field,String update,int i,String[] a){
         try {
-            ps=connect.prepareStatement("update "+table+" set "+update+" where "+acuan_field);
+            ps=koneksiDB.condb().prepareStatement("update "+table+" set "+update+" where "+acuan_field);
             try{
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
@@ -898,7 +898,7 @@ public final class sekuel {
     
     public void mengedit2(String table,String acuan_field,String update,int i,String[] a){
         try {
-            ps=connect.prepareStatement("update "+table+" set "+update+" where "+acuan_field);
+            ps=koneksiDB.condb().prepareStatement("update "+table+" set "+update+" where "+acuan_field);
             try{
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
@@ -928,7 +928,7 @@ public final class sekuel {
     
     public void mengedit3(String table,String acuan_field,String update,int i,String[] a){
         try {
-            ps=connect.prepareStatement("update "+table+" set "+update+" where "+acuan_field);
+            ps=koneksiDB.condb().prepareStatement("update "+table+" set "+update+" where "+acuan_field);
             try{
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
@@ -956,7 +956,7 @@ public final class sekuel {
     public boolean mengedittf(String table,String acuan_field,String update,int i,String[] a){
         bool=true;
         try {
-            ps=connect.prepareStatement("update "+table+" set "+update+" where "+acuan_field);
+            ps=koneksiDB.condb().prepareStatement("update "+table+" set "+update+" where "+acuan_field);
             try{
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
@@ -989,7 +989,7 @@ public final class sekuel {
     public boolean mengedittf2(String table,String acuan_field,String update,int i,String[] a){
         bool=true;
         try {
-            ps=connect.prepareStatement("update "+table+" set "+update+" where "+acuan_field);
+            ps=koneksiDB.condb().prepareStatement("update "+table+" set "+update+" where "+acuan_field);
             try{
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
@@ -1020,7 +1020,7 @@ public final class sekuel {
     
     public void mengedit(String table,String acuan_field,String update,JTextField AlmGb){
         try {
-            ps = connect.prepareStatement("update "+table+" set "+update+" where "+acuan_field);
+            ps = koneksiDB.condb().prepareStatement("update "+table+" set "+update+" where "+acuan_field);
             try{            
                 ps.setBinaryStream(1, new FileInputStream(AlmGb.getText()), new File(AlmGb.getText()).length());
                 ps.executeUpdate();
@@ -1039,7 +1039,7 @@ public final class sekuel {
 
     public void query(String qry){
         try {
-            ps=connect.prepareStatement(qry);
+            ps=koneksiDB.condb().prepareStatement(qry);
             try{
                 ps.executeQuery();
              }catch(Exception e){
@@ -1058,7 +1058,7 @@ public final class sekuel {
 
     public void queryu(String qry){
         try {
-            ps=connect.prepareStatement(qry);
+            ps=koneksiDB.condb().prepareStatement(qry);
             try{                            
                 ps.executeUpdate(); 
              }catch(Exception e){
@@ -1079,7 +1079,7 @@ public final class sekuel {
     public boolean queryutf(String qry){
         bool=false;
         try {
-            ps=connect.prepareStatement(qry);
+            ps=koneksiDB.condb().prepareStatement(qry);
             try{                            
                 ps.executeUpdate(); 
                 bool=true;
@@ -1103,7 +1103,7 @@ public final class sekuel {
     public boolean queryutf2(String qry){
         bool=false;
         try {
-            ps=connect.prepareStatement(qry);
+            ps=koneksiDB.condb().prepareStatement(qry);
             try{                            
                 ps.executeUpdate(); 
                 bool=true;
@@ -1125,7 +1125,7 @@ public final class sekuel {
     
     public void queryu(String qry,String parameter){
         try {
-            ps=connect.prepareStatement(qry);
+            ps=koneksiDB.condb().prepareStatement(qry);
             try{
                 ps.setString(1,parameter);
                 ps.executeUpdate();
@@ -1146,7 +1146,7 @@ public final class sekuel {
     
     public void queryu2(String qry){
         try {
-            ps=connect.prepareStatement(qry);
+            ps=koneksiDB.condb().prepareStatement(qry);
             try{                            
                 ps.executeUpdate(); 
              }catch(Exception e){
@@ -1165,7 +1165,7 @@ public final class sekuel {
     public void queryu2(String qry,int i,String[] a){
         try {
             try{            
-                ps=connect.prepareStatement(qry);
+                ps=koneksiDB.condb().prepareStatement(qry);
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
                 } 
@@ -1193,7 +1193,7 @@ public final class sekuel {
         bool=false;
         try {
             try{            
-                ps=connect.prepareStatement(qry);
+                ps=koneksiDB.condb().prepareStatement(qry);
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
                 } 
@@ -1223,7 +1223,7 @@ public final class sekuel {
     public void queryu3(String qry,int i,String[] a){
         try {
             try{            
-                ps=connect.prepareStatement(qry);
+                ps=koneksiDB.condb().prepareStatement(qry);
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
                 } 
@@ -1250,7 +1250,7 @@ public final class sekuel {
     public void queryu4(String qry,int i,String[] a){
         try {
             try{            
-                ps=connect.prepareStatement(qry);
+                ps=koneksiDB.condb().prepareStatement(qry);
                 for(angka=1;angka<=i;angka++){
                     ps.setString(angka,a[angka-1]);
                 } 
@@ -1274,28 +1274,28 @@ public final class sekuel {
     
     public void AutoComitFalse(){
         try {
-            connect.setAutoCommit(false);
+            koneksiDB.condb().setAutoCommit(false);
         } catch (Exception e) {
         }
     }
     
     public void AutoComitTrue(){
         try {
-            connect.setAutoCommit(true);
+            koneksiDB.condb().setAutoCommit(true);
         } catch (Exception e) {
         }
     }
     
     public void Commit(){
         try {
-            connect.commit();
+            koneksiDB.condb().commit();
         } catch (Exception e) {
         }
     }
      
     public void RollBack(){
         try {
-            connect.rollback();
+            koneksiDB.condb().rollback();
         } catch (Exception e) {
             System.out.println("Notif : "+e);
             JOptionPane.showMessageDialog(null,"Gagal melakukan rollback..!");
@@ -1304,7 +1304,7 @@ public final class sekuel {
     
     public void cariIsi(String sql,JComboBox cmb){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{  
                 rs=ps.executeQuery();
                 if(rs.next()){
@@ -1331,7 +1331,7 @@ public final class sekuel {
 
     public void cariIsi(String sql,JDateTimePicker dtp){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{            
                 rs=ps.executeQuery();
                 if(rs.next()){
@@ -1361,7 +1361,7 @@ public final class sekuel {
 
     public void cariIsi(String sql,JTextField txt){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{            
                 rs=ps.executeQuery();
                 if(rs.next()){
@@ -1436,7 +1436,7 @@ public final class sekuel {
     
     public void cariIsi(String sql,JTextField txt,String kunci){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{
                 ps.setString(1,kunci);
                 rs=ps.executeQuery();
@@ -1463,7 +1463,7 @@ public final class sekuel {
     
     public void cariIsi(String sql,JTextArea txt,String kunci){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{
                 ps.setString(1,kunci);
                 rs=ps.executeQuery();
@@ -1491,7 +1491,7 @@ public final class sekuel {
 
     public void cariIsi(String sql,JLabel txt){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{
                 rs=ps.executeQuery();
                 if(rs.next()){
@@ -1518,7 +1518,7 @@ public final class sekuel {
     public String cariIsi(String sql){
         dicari="";
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{            
                 rs=ps.executeQuery();            
                 if(rs.next()){
@@ -1548,7 +1548,7 @@ public final class sekuel {
     public ByteArrayInputStream cariGambar(String sql){
         ByteArrayInputStream inputStream=null;
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{            
                 rs=ps.executeQuery();            
                 if(rs.next()){                
@@ -1575,7 +1575,7 @@ public final class sekuel {
     public String cariIsi(String sql,String data){
         dicari="";
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{                            
                 ps.setString(1,data);
                 rs=ps.executeQuery();            
@@ -1605,7 +1605,7 @@ public final class sekuel {
     
     public Date cariIsi2(String sql){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{            
                 rs=ps.executeQuery();            
                 if(rs.next()){
@@ -1633,7 +1633,7 @@ public final class sekuel {
     public Integer cariInteger(String sql){
         angka=0;
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{            
                 rs=ps.executeQuery();            
                 if(rs.next()){
@@ -1662,7 +1662,7 @@ public final class sekuel {
     public Integer cariIntegerCount(String sql){
         angka=0;
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{            
                 rs=ps.executeQuery();            
                 while(rs.next()){
@@ -1689,7 +1689,7 @@ public final class sekuel {
     public Integer cariInteger(String sql,String data){
         angka=0;
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{
                 ps.setString(1,data);
                 rs=ps.executeQuery();            
@@ -1720,7 +1720,7 @@ public final class sekuel {
     public Integer cariInteger(String sql,String data,String data2){
         angka=0;
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{
                 ps.setString(1,data);
                 ps.setString(2,data2);
@@ -1752,7 +1752,7 @@ public final class sekuel {
     public Integer cariInteger(String sql,String data,String data2,String data3){
         angka=0;
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{
                 ps.setString(1,data);
                 ps.setString(2,data2);
@@ -1785,7 +1785,7 @@ public final class sekuel {
     public Integer cariInteger2(String sql){
         angka=0;
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{
                 rs=ps.executeQuery();            
                 rs.last();
@@ -1813,7 +1813,7 @@ public final class sekuel {
 
     public void cariIsiAngka(String sql,JTextField txt){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{
                 rs=ps.executeQuery();
                 if(rs.next()){
@@ -1839,7 +1839,7 @@ public final class sekuel {
 
     public void cariIsiAngka(String sql,JLabel txt) {
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{
                 rs=ps.executeQuery();
                 if(rs.next()){
@@ -1866,7 +1866,7 @@ public final class sekuel {
     public double cariIsiAngka(String sql) {
         angka2=0;
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{            
                 rs=ps.executeQuery();
                 if(rs.next()){
@@ -1895,7 +1895,7 @@ public final class sekuel {
     public double cariIsiAngka(String sql,String data) {
         angka2=0;
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{            
                 ps.setString(1,data);
                 rs=ps.executeQuery();
@@ -1926,7 +1926,7 @@ public final class sekuel {
     public double cariIsiAngka2(String sql,String data,String data2) {
         angka2=0;
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{            
                 ps.setString(1,data);
                 ps.setString(2,data2);
@@ -1955,7 +1955,7 @@ public final class sekuel {
 
     public void cariGambar(String sql,JLabel txt){        
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{
                 rs=ps.executeQuery();
                 if(rs.next()){
@@ -1983,7 +1983,7 @@ public final class sekuel {
 
     public void cariGambar(String sql,java.awt.Canvas txt,String text){
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try {
                 rs = ps.executeQuery();
                 for (int I = 0; rs.next(); I++) {
@@ -2012,7 +2012,7 @@ public final class sekuel {
     private void SimpanTrack(String sql){
         if(AKTIFKANTRACKSQL.equals("yes")){
             try {
-                ps=connect.prepareStatement("insert into trackersql values(now(),?,?)");
+                ps=koneksiDB.condb().prepareStatement("insert into trackersql values(now(),?,?)");
                 try{       
                     ps.setString(1,akses.getalamatip()+" "+sql);
                     ps.setString(2,akses.getkode());
@@ -2033,7 +2033,7 @@ public final class sekuel {
     public String cariString(String sql){
         dicari="";
         try {
-            ps=connect.prepareStatement(sql);
+            ps=koneksiDB.condb().prepareStatement(sql);
             try{
                 rs=ps.executeQuery();            
                 if(rs.next()){

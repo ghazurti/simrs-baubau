@@ -2623,6 +2623,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikBatangPeristiwaK3PerTahunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikBatangPeristiwaK3PerTahunActionPerformed
         DefaultCategoryDataset dcd = new DefaultCategoryDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select year(k3rs_peristiwa.tgl_pelaporan),count(year(k3rs_peristiwa.tgl_pelaporan)) as jumlah "+
                 "from k3rs_peristiwa where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by year(k3rs_peristiwa.tgl_pelaporan)").executeQuery();
             while(rs.next()) {
@@ -2648,6 +2649,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikPiePeristiwaK3PerTahunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikPiePeristiwaK3PerTahunActionPerformed
         DefaultPieDataset dpd = new DefaultPieDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select year(k3rs_peristiwa.tgl_pelaporan),count(year(k3rs_peristiwa.tgl_pelaporan)) as jumlah "+
                 "from k3rs_peristiwa where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by year(k3rs_peristiwa.tgl_pelaporan)").executeQuery();
             while(rs.next()) {
@@ -2674,6 +2676,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikBatangPeristiwaK3PerBulanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikBatangPeristiwaK3PerBulanActionPerformed
         DefaultCategoryDataset dcd = new DefaultCategoryDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select DATE_FORMAT(k3rs_peristiwa.tgl_pelaporan, '%y-%m'),count(DATE_FORMAT(k3rs_peristiwa.tgl_pelaporan, '%y-%m')) as jumlah "+
                 "from k3rs_peristiwa where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by DATE_FORMAT(k3rs_peristiwa.tgl_pelaporan, '%y-%m')").executeQuery();
             while(rs.next()) {
@@ -2699,6 +2702,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikPiePeristiwaK3PerBulanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikPiePeristiwaK3PerBulanActionPerformed
         DefaultPieDataset dpd = new DefaultPieDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select DATE_FORMAT(k3rs_peristiwa.tgl_pelaporan, '%y-%m'),count(DATE_FORMAT(k3rs_peristiwa.tgl_pelaporan, '%y-%m')) as jumlah "+
                 "from k3rs_peristiwa where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by DATE_FORMAT(k3rs_peristiwa.tgl_pelaporan, '%y-%m')").executeQuery();
             while(rs.next()) {
@@ -2725,6 +2729,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikBatangPeristiwaK3PerTanggalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikBatangPeristiwaK3PerTanggalActionPerformed
         DefaultCategoryDataset dcd = new DefaultCategoryDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select DATE_FORMAT(k3rs_peristiwa.tgl_pelaporan, '%y-%m-%d'),count(DATE_FORMAT(k3rs_peristiwa.tgl_pelaporan, '%y-%m-%d')) as jumlah "+
                 "from k3rs_peristiwa where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by DATE_FORMAT(k3rs_peristiwa.tgl_pelaporan, '%y-%m-%d')").executeQuery();
             while(rs.next()) {
@@ -2750,6 +2755,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikPiePeristiwaK3PerTanggalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikPiePeristiwaK3PerTanggalActionPerformed
         DefaultPieDataset dpd = new DefaultPieDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select DATE_FORMAT(k3rs_peristiwa.tgl_pelaporan, '%y-%m-%d'),count(DATE_FORMAT(k3rs_peristiwa.tgl_pelaporan, '%y-%m-%d')) as jumlah "+
                 "from k3rs_peristiwa where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by DATE_FORMAT(k3rs_peristiwa.tgl_pelaporan, '%y-%m-%d')").executeQuery();
             while(rs.next()) {
@@ -2776,6 +2782,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikBatangPeristiwaK3PerJenisCideraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikBatangPeristiwaK3PerJenisCideraActionPerformed
         DefaultCategoryDataset dcd = new DefaultCategoryDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_jenis_cidera.jenis_cidera,count(k3rs_peristiwa.kode_cidera) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_jenis_cidera on k3rs_jenis_cidera.kode_cidera=k3rs_peristiwa.kode_cidera where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_cidera").executeQuery();
             while(rs.next()) {
@@ -2801,6 +2808,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikPiePeristiwaK3PerJenisCideraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikPiePeristiwaK3PerJenisCideraActionPerformed
         DefaultPieDataset dpd = new DefaultPieDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_jenis_cidera.jenis_cidera,count(k3rs_peristiwa.kode_cidera) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_jenis_cidera on k3rs_jenis_cidera.kode_cidera=k3rs_peristiwa.kode_cidera where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_cidera").executeQuery();
             while(rs.next()) {
@@ -2827,6 +2835,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikBatangPeristiwaK3PerPenyebabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikBatangPeristiwaK3PerPenyebabActionPerformed
         DefaultCategoryDataset dcd = new DefaultCategoryDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_penyebab.penyebab_kecelakaan,count(k3rs_peristiwa.kode_penyebab) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_penyebab on k3rs_penyebab.kode_penyebab=k3rs_peristiwa.kode_penyebab where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_penyebab").executeQuery();
             while(rs.next()) {
@@ -2852,6 +2861,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikPiePeristiwaK3PerPenyebabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikPiePeristiwaK3PerPenyebabActionPerformed
         DefaultPieDataset dpd = new DefaultPieDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_penyebab.penyebab_kecelakaan,count(k3rs_peristiwa.kode_penyebab) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_penyebab on k3rs_penyebab.kode_penyebab=k3rs_peristiwa.kode_penyebab where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_penyebab").executeQuery();
             while(rs.next()) {
@@ -2878,6 +2888,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikBatangPeristiwaK3PerJenisLukaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikBatangPeristiwaK3PerJenisLukaActionPerformed
         DefaultCategoryDataset dcd = new DefaultCategoryDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_jenis_luka.jenis_luka,count(k3rs_peristiwa.kode_luka) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_jenis_luka on k3rs_jenis_luka.kode_luka=k3rs_peristiwa.kode_luka where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_luka").executeQuery();
             while(rs.next()) {
@@ -2903,6 +2914,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikPiePeristiwaK3PerJenisLukaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikPiePeristiwaK3PerJenisLukaActionPerformed
         DefaultPieDataset dpd = new DefaultPieDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_jenis_luka.jenis_luka,count(k3rs_peristiwa.kode_luka) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_jenis_luka on k3rs_jenis_luka.kode_luka=k3rs_peristiwa.kode_luka where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_luka").executeQuery();
             while(rs.next()) {
@@ -2929,6 +2941,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikBatangPeristiwaK3PerLokasiKejadianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikBatangPeristiwaK3PerLokasiKejadianActionPerformed
         DefaultCategoryDataset dcd = new DefaultCategoryDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_lokasi_kejadian.lokasi_kejadian,count(k3rs_peristiwa.kode_lokasi) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_lokasi_kejadian on k3rs_lokasi_kejadian.kode_lokasi=k3rs_peristiwa.kode_lokasi where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_lokasi").executeQuery();
             while(rs.next()) {
@@ -2954,6 +2967,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikPiePeristiwaK3PerLokasiKejadianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikPiePeristiwaK3PerLokasiKejadianActionPerformed
         DefaultPieDataset dpd = new DefaultPieDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_lokasi_kejadian.lokasi_kejadian,count(k3rs_peristiwa.kode_lokasi) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_lokasi_kejadian on k3rs_lokasi_kejadian.kode_lokasi=k3rs_peristiwa.kode_lokasi where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_lokasi").executeQuery();
             while(rs.next()) {
@@ -2980,6 +2994,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikBatangPeristiwaK3PerDampakCideraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikBatangPeristiwaK3PerDampakCideraActionPerformed
         DefaultCategoryDataset dcd = new DefaultCategoryDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_dampak_cidera.dampak_cidera,count(k3rs_peristiwa.kode_dampak) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_dampak_cidera on k3rs_dampak_cidera.kode_dampak=k3rs_peristiwa.kode_dampak where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_dampak").executeQuery();
             while(rs.next()) {
@@ -3005,6 +3020,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikPiePeristiwaK3PerDampakCideraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikPiePeristiwaK3PerDampakCideraActionPerformed
         DefaultPieDataset dpd = new DefaultPieDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_dampak_cidera.dampak_cidera,count(k3rs_peristiwa.kode_dampak) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_dampak_cidera on k3rs_dampak_cidera.kode_dampak=k3rs_peristiwa.kode_dampak where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_dampak").executeQuery();
             while(rs.next()) {
@@ -3031,6 +3047,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikBatangPeristiwaK3PerJenisPekerjaanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikBatangPeristiwaK3PerJenisPekerjaanActionPerformed
         DefaultCategoryDataset dcd = new DefaultCategoryDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_jenis_pekerjaan.jenis_pekerjaan,count(k3rs_peristiwa.kode_pekerjaan) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_jenis_pekerjaan on k3rs_jenis_pekerjaan.kode_pekerjaan=k3rs_peristiwa.kode_pekerjaan where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_pekerjaan").executeQuery();
             while(rs.next()) {
@@ -3056,6 +3073,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikPiePeristiwaK3PerJenisPekerjaanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikPiePeristiwaK3PerJenisPekerjaanActionPerformed
         DefaultPieDataset dpd = new DefaultPieDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_jenis_pekerjaan.jenis_pekerjaan,count(k3rs_peristiwa.kode_pekerjaan) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_jenis_pekerjaan on k3rs_jenis_pekerjaan.kode_pekerjaan=k3rs_peristiwa.kode_pekerjaan where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_pekerjaan").executeQuery();
             while(rs.next()) {
@@ -3082,6 +3100,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikBatangPeristiwaK3PerBagianTubuhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikBatangPeristiwaK3PerBagianTubuhActionPerformed
         DefaultCategoryDataset dcd = new DefaultCategoryDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_bagian_tubuh.bagian_tubuh,count(k3rs_peristiwa.kode_bagian) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_bagian_tubuh on k3rs_bagian_tubuh.kode_bagian=k3rs_peristiwa.kode_bagian where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_bagian").executeQuery();
             while(rs.next()) {
@@ -3107,6 +3126,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void ppGrafikPiePeristiwaK3PerBagianTubuhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppGrafikPiePeristiwaK3PerBagianTubuhActionPerformed
         DefaultPieDataset dpd = new DefaultPieDataset();
         try {                
+            koneksi=koneksiDB.condb();
             rs = koneksi.prepareStatement("select k3rs_bagian_tubuh.bagian_tubuh,count(k3rs_peristiwa.kode_bagian) as jumlah "+
                 "from k3rs_peristiwa inner join k3rs_bagian_tubuh on k3rs_bagian_tubuh.kode_bagian=k3rs_peristiwa.kode_bagian where tgl_pelaporan between '"+Valid.SetTgl(DTPCari1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(DTPCari2.getSelectedItem()+"")+"' group by k3rs_peristiwa.kode_bagian").executeQuery();
             while(rs.next()) {
@@ -3328,6 +3348,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select k3rs_peristiwa.no_k3rs,k3rs_peristiwa.tgl_insiden,k3rs_peristiwa.waktu_insiden,k3rs_peristiwa.kode_pekerjaan,k3rs_jenis_pekerjaan.jenis_pekerjaan,"+
                 "k3rs_peristiwa.tgl_pelaporan,k3rs_peristiwa.waktu_pelaporan,k3rs_peristiwa.kode_lokasi,k3rs_lokasi_kejadian.lokasi_kejadian,k3rs_peristiwa.kronologi_kejadian,"+
@@ -3518,6 +3539,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
             NIKK3.setText(tbJnsPerawatan.getValueAt(tbJnsPerawatan.getSelectedRow(),34).toString());
             NmPetugasK3.setText(tbJnsPerawatan.getValueAt(tbJnsPerawatan.getSelectedRow(),35).toString());
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select jk,jbtn,departemen,bidang,tgl_lahir from pegawai where nik=?");
                 try {
@@ -3541,6 +3563,7 @@ public final class K3RSPeristiwa extends javax.swing.JDialog {
                     }
                 }
                 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select departemen,bidang from pegawai where nik=?");
                 try {

@@ -387,6 +387,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select detail_piutang_pasien.kd_pj,penjab.png_jawab,sum(detail_piutang_pasien.sisapiutang) as sisapiutang "+
                     "from detail_piutang_pasien inner join penjab on detail_piutang_pasien.kd_pj=penjab.kd_pj "+

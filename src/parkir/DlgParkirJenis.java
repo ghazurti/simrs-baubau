@@ -103,6 +103,7 @@ public class DlgParkirJenis extends javax.swing.JDialog {
             });
         }  
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from parkir_jenis where kd_parkir like ? or jns_parkir like ? order by kd_parkir");
         } catch (Exception e) {
             System.out.println(e);

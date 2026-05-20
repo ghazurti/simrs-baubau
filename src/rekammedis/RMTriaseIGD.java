@@ -2385,6 +2385,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                     "</td>"
                             );
                             
+                            koneksi=koneksiDB.condb();
                             ps=koneksi.prepareStatement(
                                 "select data_triase_igdprimer.keluhan_utama,data_triase_igdprimer.kebutuhan_khusus,data_triase_igdprimer.catatan,"+
                                 "data_triase_igdprimer.plan,data_triase_igdprimer.tanggaltriase,data_triase_igdprimer.nik,data_triase_igd.tekanan_darah,"+
@@ -2399,6 +2400,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                         "<td valign='top'> Keluhan Utama : "+rs.getString("keluhan_utama")+"<br>Kebutuhan Khusus : "+rs.getString("kebutuhan_khusus")+"</td>"+
                                         "<td valign='top'> Suhu (C) : "+rs.getString("suhu")+", Respirasi(/menit) : "+rs.getString("pernapasan")+", Tensi : "+rs.getString("tekanan_darah")+", Nadi(/menit) : "+rs.getString("nadi")+", Saturasi O²(%) : "+rs.getString("saturasi_o2")+", Nyeri : "+rs.getString("nyeri")+"</td>"
                                     );
+                                    koneksi=koneksiDB.condb();
                                     ps2=koneksi.prepareStatement(
                                         "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                         "from master_triase_pemeriksaan inner join master_triase_skala1 inner join data_triase_igddetail_skala1 "+
@@ -2422,6 +2424,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                                         "<td width='59%' valign='top'>"+
                                                             "<table width='100%' border='0' cellpadding='0' cellspacing='0' align='center'>"
                                                     );
+                                                koneksi=koneksiDB.condb();
                                                 ps3=koneksi.prepareStatement(
                                                     "select master_triase_skala1.pengkajian_skala1 from master_triase_skala1 inner join data_triase_igddetail_skala1 "+
                                                     "on master_triase_skala1.kode_skala1=data_triase_igddetail_skala1.kode_skala1 where "+
@@ -2470,6 +2473,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                         }
                                     }
                                     
+                                    koneksi=koneksiDB.condb();
                                     ps2=koneksi.prepareStatement(
                                         "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                         "from master_triase_pemeriksaan inner join master_triase_skala2 inner join data_triase_igddetail_skala2 "+
@@ -2493,6 +2497,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                                         "<td width='59%' valign='top'>"+
                                                             "<table width='100%' border='0' cellpadding='0' cellspacing='0' align='center'>"
                                                     );
+                                                koneksi=koneksiDB.condb();
                                                 ps3=koneksi.prepareStatement(
                                                     "select master_triase_skala2.pengkajian_skala2 from master_triase_skala2 inner join data_triase_igddetail_skala2 "+
                                                     "on master_triase_skala2.kode_skala2=data_triase_igddetail_skala2.kode_skala2 where "+
@@ -2570,6 +2575,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                 }
                             }
                             
+                            koneksi=koneksiDB.condb();
                             ps=koneksi.prepareStatement(
                                 "select data_triase_igdsekunder.anamnesa_singkat,data_triase_igdsekunder.catatan,"+
                                 "data_triase_igdsekunder.plan,data_triase_igdsekunder.tanggaltriase,data_triase_igdsekunder.nik,data_triase_igd.tekanan_darah,"+
@@ -2584,6 +2590,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                         "<td valign='top'> Anamnesa Singkat : "+rs.getString("anamnesa_singkat")+"</td>"+
                                         "<td valign='top'> Suhu (C) : "+rs.getString("suhu")+", Respirasi(/menit) : "+rs.getString("pernapasan")+", Tensi : "+rs.getString("tekanan_darah")+", Nadi(/menit) : "+rs.getString("nadi")+", Saturasi O²(%) : "+rs.getString("saturasi_o2")+", Nyeri : "+rs.getString("nyeri")+"</td>"
                                     );
+                                    koneksi=koneksiDB.condb();
                                     ps2=koneksi.prepareStatement(
                                         "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                         "from master_triase_pemeriksaan inner join master_triase_skala3 inner join data_triase_igddetail_skala3 "+
@@ -2607,6 +2614,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                                         "<td width='59%' valign='top'>"+
                                                             "<table width='100%' border='0' cellpadding='0' cellspacing='0' align='center'>"
                                                     );
+                                                koneksi=koneksiDB.condb();
                                                 ps3=koneksi.prepareStatement(
                                                     "select master_triase_skala3.pengkajian_skala3 from master_triase_skala3 inner join data_triase_igddetail_skala3 "+
                                                     "on master_triase_skala3.kode_skala3=data_triase_igddetail_skala3.kode_skala3 where "+
@@ -2655,6 +2663,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                         }
                                     }
                                     
+                                    koneksi=koneksiDB.condb();
                                     ps2=koneksi.prepareStatement(
                                         "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                         "from master_triase_pemeriksaan inner join master_triase_skala4 inner join data_triase_igddetail_skala4 "+
@@ -2678,6 +2687,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                                         "<td width='59%' valign='top'>"+
                                                             "<table width='100%' border='0' cellpadding='0' cellspacing='0' align='center'>"
                                                     );
+                                                koneksi=koneksiDB.condb();
                                                 ps3=koneksi.prepareStatement(
                                                     "select master_triase_skala4.pengkajian_skala4 from master_triase_skala4 inner join data_triase_igddetail_skala4 "+
                                                     "on master_triase_skala4.kode_skala4=data_triase_igddetail_skala4.kode_skala4 where "+
@@ -2726,6 +2736,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                         }
                                     }
                                     
+                                    koneksi=koneksiDB.condb();
                                     ps2=koneksi.prepareStatement(
                                         "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                         "from master_triase_pemeriksaan inner join master_triase_skala5 inner join data_triase_igddetail_skala5 "+
@@ -2749,6 +2760,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                                         "<td width='59%' valign='top'>"+
                                                             "<table width='100%' border='0' cellpadding='0' cellspacing='0' align='center'>"
                                                     );
+                                                koneksi=koneksiDB.condb();
                                                 ps3=koneksi.prepareStatement(
                                                     "select master_triase_skala5.pengkajian_skala5 from master_triase_skala5 inner join data_triase_igddetail_skala5 "+
                                                     "on master_triase_skala5.kode_skala5=data_triase_igddetail_skala5.kode_skala5 where "+
@@ -2965,6 +2977,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                         KdKasus.setText(tbTriase.getValueAt(tbTriase.getSelectedRow(),8).toString());
                         NmKasus.setText(tbTriase.getValueAt(tbTriase.getSelectedRow(),9).toString());
                         TabPilihan.setSelectedIndex(0);
+                        koneksi=koneksiDB.condb();
                         ps=koneksi.prepareStatement(
                                 "select data_triase_igdprimer.keluhan_utama,data_triase_igdprimer.kebutuhan_khusus,data_triase_igdprimer.catatan,"+
                                 "data_triase_igdprimer.plan,data_triase_igdprimer.tanggaltriase,data_triase_igdprimer.nik,data_triase_igd.tekanan_darah,"+
@@ -2986,6 +2999,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                 PrimerKubutuhanKusus.setSelectedItem(rs.getString("kebutuhan_khusus"));
                                 TabTriase.setSelectedIndex(0);
 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement(
                                         "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                         "from master_triase_pemeriksaan inner join master_triase_skala1 inner join data_triase_igddetail_skala1 "+
@@ -3002,6 +3016,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                         rs2.beforeFirst();
                                         while(rs2.next()){
                                             tabModePemeriksaan.addRow(new Object[]{rs2.getString("kode_pemeriksaan"),rs2.getString("nama_pemeriksaan")});
+                                            koneksi=koneksiDB.condb();
                                             ps3=koneksi.prepareStatement(
                                                     "select master_triase_skala1.kode_skala1,master_triase_skala1.pengkajian_skala1 from master_triase_skala1 inner join data_triase_igddetail_skala1 "+
                                                     "on master_triase_skala1.kode_skala1=data_triase_igddetail_skala1.kode_skala1 where "+
@@ -3037,6 +3052,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                     }
                                 }
 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement(
                                         "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                         "from master_triase_pemeriksaan inner join master_triase_skala2 inner join data_triase_igddetail_skala2 "+
@@ -3053,6 +3069,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                         rs2.beforeFirst();
                                         while(rs2.next()){
                                             tabModePemeriksaan.addRow(new Object[]{rs2.getString("kode_pemeriksaan"),rs2.getString("nama_pemeriksaan")});
+                                            koneksi=koneksiDB.condb();
                                             ps3=koneksi.prepareStatement(
                                                     "select master_triase_skala2.kode_skala2,master_triase_skala2.pengkajian_skala2 from master_triase_skala2 inner join data_triase_igddetail_skala2 "+
                                                     "on master_triase_skala2.kode_skala2=data_triase_igddetail_skala2.kode_skala2 where "+
@@ -3108,6 +3125,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                             }
                         }
 
+                        koneksi=koneksiDB.condb();
                         ps=koneksi.prepareStatement(
                                 "select data_triase_igdsekunder.anamnesa_singkat,data_triase_igdsekunder.catatan,"+
                                 "data_triase_igdsekunder.plan,data_triase_igdsekunder.tanggaltriase,data_triase_igdsekunder.nik,data_triase_igd.tekanan_darah,"+
@@ -3128,6 +3146,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                 SekunderRespirasi.setText(rs.getString("pernapasan"));
                                 TabTriase.setSelectedIndex(1);
 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement(
                                         "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                         "from master_triase_pemeriksaan inner join master_triase_skala3 inner join data_triase_igddetail_skala3 "+
@@ -3144,6 +3163,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                         rs2.beforeFirst();
                                         while(rs2.next()){
                                             tabModePemeriksaan2.addRow(new Object[]{rs2.getString("kode_pemeriksaan"),rs2.getString("nama_pemeriksaan")});
+                                            koneksi=koneksiDB.condb();
                                             ps3=koneksi.prepareStatement(
                                                     "select master_triase_skala3.kode_skala3,master_triase_skala3.pengkajian_skala3 from master_triase_skala3 inner join data_triase_igddetail_skala3 "+
                                                     "on master_triase_skala3.kode_skala3=data_triase_igddetail_skala3.kode_skala3 where "+
@@ -3179,6 +3199,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                     }
                                 }
 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement(
                                         "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                         "from master_triase_pemeriksaan inner join master_triase_skala4 inner join data_triase_igddetail_skala4 "+
@@ -3195,6 +3216,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                         rs2.beforeFirst();
                                         while(rs2.next()){
                                             tabModePemeriksaan2.addRow(new Object[]{rs2.getString("kode_pemeriksaan"),rs2.getString("nama_pemeriksaan")});
+                                            koneksi=koneksiDB.condb();
                                             ps3=koneksi.prepareStatement(
                                                     "select master_triase_skala4.kode_skala4,master_triase_skala4.pengkajian_skala4 from master_triase_skala4 inner join data_triase_igddetail_skala4 "+
                                                     "on master_triase_skala4.kode_skala4=data_triase_igddetail_skala4.kode_skala4 where "+
@@ -3230,6 +3252,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                     }
                                 }
 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement(
                                         "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                         "from master_triase_pemeriksaan inner join master_triase_skala5 inner join data_triase_igddetail_skala5 "+
@@ -3246,6 +3269,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                         rs2.beforeFirst();
                                         while(rs2.next()){
                                             tabModePemeriksaan2.addRow(new Object[]{rs2.getString("kode_pemeriksaan"),rs2.getString("nama_pemeriksaan")});
+                                            koneksi=koneksiDB.condb();
                                             ps3=koneksi.prepareStatement(
                                                     "select master_triase_skala5.kode_skala5,master_triase_skala5.pengkajian_skala5 from master_triase_skala5 inner join data_triase_igddetail_skala5 "+
                                                     "on master_triase_skala5.kode_skala5=data_triase_igddetail_skala5.kode_skala5 where "+
@@ -3917,6 +3941,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                     param.put("emailrs",akses.getemailrs());   
                     param.put("logo",Sequel.cariGambar("select setting.logo from setting")); 
                     try {
+                        koneksi=koneksiDB.condb();
                         ps=koneksi.prepareStatement(
                             "select data_triase_igdprimer.keluhan_utama,data_triase_igdprimer.kebutuhan_khusus,data_triase_igdprimer.catatan,"+
                             "data_triase_igdprimer.plan,data_triase_igdprimer.tanggaltriase,data_triase_igdprimer.nik,data_triase_igd.tekanan_darah,"+
@@ -3950,6 +3975,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                 param.put("tandavital","Suhu (C) : "+rs.getString("suhu")+", Nyeri : "+rs.getString("nyeri")+", Tensi : "+rs.getString("tekanan_darah")+", Nadi(/menit) : "+rs.getString("nadi")+", Saturasi O²(%) : "+rs.getString("saturasi_o2")+", Respirasi(/menit) : "+rs.getString("pernapasan"));
                                 finger=Sequel.cariIsi("select sha1(sidikjari.sidikjari) from sidikjari inner join pegawai on pegawai.id=sidikjari.id where pegawai.nik=?",rs.getString("nik"));
                                 param.put("finger","Dikeluarkan di "+akses.getnamars()+", Kabupaten/Kota "+akses.getkabupatenrs()+"\nDitandatangani secara elektronik oleh "+rs.getString("nama")+"\nID "+(finger.equals("")?rs.getString("nik"):finger)+"\n"+Valid.SetTgl3(rs.getString("tanggaltriase"))); 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement(
                                     "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                     "from master_triase_pemeriksaan inner join master_triase_skala1 inner join data_triase_igddetail_skala1 "+
@@ -3962,6 +3988,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                     rs2=ps2.executeQuery();
                                     while(rs2.next()){
                                         datatriase="";
+                                        koneksi=koneksiDB.condb();
                                         ps3=koneksi.prepareStatement(
                                             "select master_triase_skala1.pengkajian_skala1 from master_triase_skala1 inner join data_triase_igddetail_skala1 "+
                                             "on master_triase_skala1.kode_skala1=data_triase_igddetail_skala1.kode_skala1 where "+
@@ -4038,6 +4065,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                     param.put("emailrs",akses.getemailrs());   
                     param.put("logo",Sequel.cariGambar("select setting.logo from setting")); 
                     try {
+                        koneksi=koneksiDB.condb();
                         ps=koneksi.prepareStatement(
                             "select data_triase_igdprimer.keluhan_utama,data_triase_igdprimer.kebutuhan_khusus,data_triase_igdprimer.catatan,"+
                             "data_triase_igdprimer.plan,data_triase_igdprimer.tanggaltriase,data_triase_igdprimer.nik,data_triase_igd.tekanan_darah,"+
@@ -4071,6 +4099,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                 param.put("catatan",rs.getString("catatan"));
                                 finger=Sequel.cariIsi("select sha1(sidikjari.sidikjari) from sidikjari inner join pegawai on pegawai.id=sidikjari.id where pegawai.nik=?",rs.getString("nik"));
                                 param.put("finger","Dikeluarkan di "+akses.getnamars()+", Kabupaten/Kota "+akses.getkabupatenrs()+"\nDitandatangani secara elektronik oleh "+rs.getString("nama")+"\nID "+(finger.equals("")?rs.getString("nik"):finger)+"\n"+Valid.SetTgl3(rs.getString("tanggaltriase"))); 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement(
                                     "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                     "from master_triase_pemeriksaan inner join master_triase_skala2 inner join data_triase_igddetail_skala2 "+
@@ -4083,6 +4112,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                     rs2=ps2.executeQuery();
                                     while(rs2.next()){
                                         datatriase="";
+                                        koneksi=koneksiDB.condb();
                                         ps3=koneksi.prepareStatement(
                                             "select master_triase_skala2.pengkajian_skala2 from master_triase_skala2 inner join data_triase_igddetail_skala2 "+
                                             "on master_triase_skala2.kode_skala2=data_triase_igddetail_skala2.kode_skala2 where "+
@@ -4159,6 +4189,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                     param.put("emailrs",akses.getemailrs());   
                     param.put("logo",Sequel.cariGambar("select setting.logo from setting")); 
                     try {
+                        koneksi=koneksiDB.condb();
                         ps=koneksi.prepareStatement(
                             "select data_triase_igdsekunder.anamnesa_singkat,data_triase_igdsekunder.catatan,"+
                             "data_triase_igdsekunder.plan,data_triase_igdsekunder.tanggaltriase,data_triase_igdsekunder.nik,data_triase_igd.tekanan_darah,"+
@@ -4191,6 +4222,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                 param.put("catatan",rs.getString("catatan"));
                                 finger=Sequel.cariIsi("select sha1(sidikjari.sidikjari) from sidikjari inner join pegawai on pegawai.id=sidikjari.id where pegawai.nik=?",rs.getString("nik"));
                                 param.put("finger","Dikeluarkan di "+akses.getnamars()+", Kabupaten/Kota "+akses.getkabupatenrs()+"\nDitandatangani secara elektronik oleh "+rs.getString("nama")+"\nID "+(finger.equals("")?rs.getString("nik"):finger)+"\n"+Valid.SetTgl3(rs.getString("tanggaltriase"))); 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement(
                                     "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                     "from master_triase_pemeriksaan inner join master_triase_skala3 inner join data_triase_igddetail_skala3 "+
@@ -4203,6 +4235,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                     rs2=ps2.executeQuery();
                                     while(rs2.next()){
                                         datatriase="";
+                                        koneksi=koneksiDB.condb();
                                         ps3=koneksi.prepareStatement(
                                             "select master_triase_skala3.pengkajian_skala3 from master_triase_skala3 inner join data_triase_igddetail_skala3 "+
                                             "on master_triase_skala3.kode_skala3=data_triase_igddetail_skala3.kode_skala3 where "+
@@ -4279,6 +4312,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                     param.put("emailrs",akses.getemailrs());   
                     param.put("logo",Sequel.cariGambar("select setting.logo from setting")); 
                     try {
+                        koneksi=koneksiDB.condb();
                         ps=koneksi.prepareStatement(
                             "select data_triase_igdsekunder.anamnesa_singkat,data_triase_igdsekunder.catatan,"+
                             "data_triase_igdsekunder.plan,data_triase_igdsekunder.tanggaltriase,data_triase_igdsekunder.nik,data_triase_igd.tekanan_darah,"+
@@ -4311,6 +4345,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                 param.put("catatan",rs.getString("catatan"));
                                 finger=Sequel.cariIsi("select sha1(sidikjari.sidikjari) from sidikjari inner join pegawai on pegawai.id=sidikjari.id where pegawai.nik=?",rs.getString("nik"));
                                 param.put("finger","Dikeluarkan di "+akses.getnamars()+", Kabupaten/Kota "+akses.getkabupatenrs()+"\nDitandatangani secara elektronik oleh "+rs.getString("nama")+"\nID "+(finger.equals("")?rs.getString("nik"):finger)+"\n"+Valid.SetTgl3(rs.getString("tanggaltriase"))); 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement(
                                     "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                     "from master_triase_pemeriksaan inner join master_triase_skala4 inner join data_triase_igddetail_skala4 "+
@@ -4323,6 +4358,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                     rs2=ps2.executeQuery();
                                     while(rs2.next()){
                                         datatriase="";
+                                        koneksi=koneksiDB.condb();
                                         ps3=koneksi.prepareStatement(
                                             "select master_triase_skala4.pengkajian_skala4 from master_triase_skala4 inner join data_triase_igddetail_skala4 "+
                                             "on master_triase_skala4.kode_skala4=data_triase_igddetail_skala4.kode_skala4 where "+
@@ -4399,6 +4435,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                     param.put("emailrs",akses.getemailrs());   
                     param.put("logo",Sequel.cariGambar("select setting.logo from setting")); 
                     try {
+                        koneksi=koneksiDB.condb();
                         ps=koneksi.prepareStatement(
                             "select data_triase_igdsekunder.anamnesa_singkat,data_triase_igdsekunder.catatan,"+
                             "data_triase_igdsekunder.plan,data_triase_igdsekunder.tanggaltriase,data_triase_igdsekunder.nik,data_triase_igd.tekanan_darah,"+
@@ -4431,6 +4468,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                 param.put("catatan",rs.getString("catatan"));
                                 finger=Sequel.cariIsi("select sha1(sidikjari.sidikjari) from sidikjari inner join pegawai on pegawai.id=sidikjari.id where pegawai.nik=?",rs.getString("nik"));
                                 param.put("finger","Dikeluarkan di "+akses.getnamars()+", Kabupaten/Kota "+akses.getkabupatenrs()+"\nDitandatangani secara elektronik oleh "+rs.getString("nama")+"\nID "+(finger.equals("")?rs.getString("nik"):finger)+"\n"+Valid.SetTgl3(rs.getString("tanggaltriase"))); 
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement(
                                     "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                     "from master_triase_pemeriksaan inner join master_triase_skala5 inner join data_triase_igddetail_skala5 "+
@@ -4443,6 +4481,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                     rs2=ps2.executeQuery();
                                     while(rs2.next()){
                                         datatriase="";
+                                        koneksi=koneksiDB.condb();
                                         ps3=koneksi.prepareStatement(
                                             "select master_triase_skala5.pengkajian_skala5 from master_triase_skala5 inner join data_triase_igddetail_skala5 "+
                                             "on master_triase_skala5.kode_skala5=data_triase_igddetail_skala5.kode_skala5 where "+
@@ -4699,6 +4738,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
     private void tampil() {        
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,data_triase_igd.tgl_kunjungan,"+
                     "data_triase_igd.cara_masuk,data_triase_igd.alat_transportasi,data_triase_igd.alasan_kedatangan,"+
@@ -4817,6 +4857,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
     private void tampilPemeriksaan() {        
         Valid.tabelKosong(tabModePemeriksaan);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_triase_pemeriksaan where kode_pemeriksaan like ? or nama_pemeriksaan like ? order by kode_pemeriksaan");
             try {
                 ps.setString(1,"%"+TCariPemeriksaan.getText().trim()+"%");
@@ -4843,6 +4884,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
     private void tampilPemeriksaan2() {        
         Valid.tabelKosong(tabModePemeriksaan2);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_triase_pemeriksaan where kode_pemeriksaan like ? or nama_pemeriksaan like ? order by kode_pemeriksaan");
             try {
                 ps.setString(1,"%"+TCariPemeriksaan2.getText().trim()+"%");
@@ -4901,6 +4943,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                     });
                 }
                 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select * from master_triase_skala1 where kode_pemeriksaan=? and pengkajian_skala1 like ? order by master_triase_skala1.kode_skala1");
                 try {
@@ -4961,6 +5004,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                     });
                 }
                 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select * from master_triase_skala2 where kode_pemeriksaan=? and pengkajian_skala2 like ? order by master_triase_skala2.kode_skala2");
                 try {
@@ -5021,6 +5065,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                     });
                 }
                 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select * from master_triase_skala3 where kode_pemeriksaan=? and pengkajian_skala3 like ? order by master_triase_skala3.kode_skala3");
                 try {
@@ -5081,6 +5126,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                     });
                 }
                 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select * from master_triase_skala4 where kode_pemeriksaan=? and pengkajian_skala4 like ? order by master_triase_skala4.kode_skala4");
                 try {
@@ -5141,6 +5187,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                     });
                 }
                 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select * from master_triase_skala5 where kode_pemeriksaan=? and pengkajian_skala5 like ? order by master_triase_skala5.kode_skala5");
                 try {
@@ -5191,6 +5238,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
             try {
                 TNoRM1.setText(tbTriase.getValueAt(tbTriase.getSelectedRow(),1).toString());
                 TPasien1.setText(tbTriase.getValueAt(tbTriase.getSelectedRow(),2).toString());
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select data_triase_igdprimer.keluhan_utama,data_triase_igdprimer.kebutuhan_khusus,data_triase_igdprimer.catatan,"+
                         "data_triase_igdprimer.plan,data_triase_igdprimer.tanggaltriase,data_triase_igdprimer.nik,data_triase_igd.tekanan_darah,"+
@@ -5222,6 +5270,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                             "</tr>"
                         );
                         
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(
                                 "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                 "from master_triase_pemeriksaan inner join master_triase_skala1 inner join data_triase_igddetail_skala1 "+
@@ -5245,6 +5294,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                             "<td valign='middle' bgcolor='#AA0000' color='ffffff'>"+
                                                 "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0'>"
                                     );
+                                    koneksi=koneksiDB.condb();
                                     ps3=koneksi.prepareStatement(
                                             "select master_triase_skala1.pengkajian_skala1 from master_triase_skala1 inner join data_triase_igddetail_skala1 "+
                                             "on master_triase_skala1.kode_skala1=data_triase_igddetail_skala1.kode_skala1 where "+
@@ -5290,6 +5340,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                             }
                         }
                         
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(
                                 "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                 "from master_triase_pemeriksaan inner join master_triase_skala2 inner join data_triase_igddetail_skala2 "+
@@ -5313,6 +5364,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                             "<td valign='middle' bgcolor='#FF0000' color='ffffff'>"+
                                                 "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0'>"
                                     );
+                                    koneksi=koneksiDB.condb();
                                     ps3=koneksi.prepareStatement(
                                             "select master_triase_skala2.pengkajian_skala2 from master_triase_skala2 inner join data_triase_igddetail_skala2 "+
                                             "on master_triase_skala2.kode_skala2=data_triase_igddetail_skala2.kode_skala2 where "+
@@ -5399,6 +5451,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                     }
                 }
                 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select data_triase_igdsekunder.anamnesa_singkat,data_triase_igdsekunder.catatan,"+
                         "data_triase_igdsekunder.plan,data_triase_igdsekunder.tanggaltriase,data_triase_igdsekunder.nik,data_triase_igd.tekanan_darah,"+
@@ -5426,6 +5479,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                             "</tr>"
                         );
                         
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(
                                 "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                 "from master_triase_pemeriksaan inner join master_triase_skala3 inner join data_triase_igddetail_skala3 "+
@@ -5449,6 +5503,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                             "<td valign='middle' bgcolor='#C8C800' color='ffffff'>"+
                                                 "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0'>"
                                     );
+                                    koneksi=koneksiDB.condb();
                                     ps3=koneksi.prepareStatement(
                                             "select master_triase_skala3.pengkajian_skala3 from master_triase_skala3 inner join data_triase_igddetail_skala3 "+
                                             "on master_triase_skala3.kode_skala3=data_triase_igddetail_skala3.kode_skala3 where "+
@@ -5494,6 +5549,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                             }
                         }
                         
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(
                                 "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                 "from master_triase_pemeriksaan inner join master_triase_skala4 inner join data_triase_igddetail_skala4 "+
@@ -5517,6 +5573,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                             "<td valign='middle' bgcolor='#00AA00' color='ffffff'>"+
                                                 "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0'>"
                                     );
+                                    koneksi=koneksiDB.condb();
                                     ps3=koneksi.prepareStatement(
                                             "select master_triase_skala4.pengkajian_skala4 from master_triase_skala4 inner join data_triase_igddetail_skala4 "+
                                             "on master_triase_skala4.kode_skala4=data_triase_igddetail_skala4.kode_skala4 where "+
@@ -5562,6 +5619,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                             }
                         }
                         
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement(
                                 "select master_triase_pemeriksaan.kode_pemeriksaan,master_triase_pemeriksaan.nama_pemeriksaan "+
                                 "from master_triase_pemeriksaan inner join master_triase_skala5 inner join data_triase_igddetail_skala5 "+
@@ -5585,6 +5643,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                             "<td valign='middle' bgcolor='#969696' color='ffffff'>"+
                                                 "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0'>"
                                     );
+                                    koneksi=koneksiDB.condb();
                                     ps3=koneksi.prepareStatement(
                                             "select master_triase_skala5.pengkajian_skala5 from master_triase_skala5 inner join data_triase_igddetail_skala5 "+
                                             "on master_triase_skala5.kode_skala5=data_triase_igddetail_skala5.kode_skala5 where "+

@@ -2136,6 +2136,7 @@ public class DlgBilingRalan extends javax.swing.JDialog {
     private void BtnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnKeluarActionPerformed
         if(akses.getbilling_ralan()==true){
             try {
+                koneksi=koneksiDB.condb();
                 pscekbilling=koneksi.prepareStatement(sqlpscekbilling);
                 try {
                     pscekbilling.setString(1,TNoRw.getText());
@@ -2234,6 +2235,7 @@ public class DlgBilingRalan extends javax.swing.JDialog {
                                 totals="";
                             }
                             
+                            koneksi=koneksiDB.condb();
                             pstemporary=koneksi.prepareStatement(sqlpstemporary);
                             try {
                                 pstemporary.setString(1,i+"");
@@ -2685,6 +2687,7 @@ private void DTPTglKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_DT
 private void MnHapusTagihanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnHapusTagihanActionPerformed
     try {
         i=0;
+        koneksi=koneksiDB.condb();
         pscekbilling=koneksi.prepareStatement(sqlpscekbilling);
         try{
             pscekbilling.setString(1,TNoRw.getText());
@@ -2774,6 +2777,7 @@ private void MnHapusTagihanActionPerformed(java.awt.event.ActionEvent evt) {//GE
                     }    
                 }
 
+                koneksi=koneksiDB.condb();
                 psakunbayar=koneksi.prepareStatement(
                         "select akun_bayar.nama_bayar,akun_bayar.kd_rek,detail_nota_jalan.besar_bayar,"+
                         "akun_bayar.ppn,detail_nota_jalan.besarppn from akun_bayar inner join detail_nota_jalan "+
@@ -2798,6 +2802,7 @@ private void MnHapusTagihanActionPerformed(java.awt.event.ActionEvent evt) {//GE
                     } 
                 }
 
+                koneksi=koneksiDB.condb();
                 psakunpiutang=koneksi.prepareStatement(
                         "select akun_piutang.nama_bayar,akun_piutang.kd_rek,akun_piutang.kd_pj, "+
                         "detail_piutang_pasien.totalpiutang,date_format(detail_piutang_pasien.tgltempo,'%d/%m/%Y') from "+
@@ -3218,6 +3223,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 
     private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSimpanActionPerformed
         try {
+            koneksi=koneksiDB.condb();
             pscekbilling=koneksi.prepareStatement(sqlpscekbilling);
             try {
                 pscekbilling.setString(1,TNoRw.getText());
@@ -3589,6 +3595,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         if(TabRawat.getSelectedIndex()==2){
             try {
                 Valid.tabelKosong(tabModeLab);
+                koneksi=koneksiDB.condb();
                 pscarilab=koneksi.prepareStatement("select permintaan_lab.noorder,permintaan_lab.tgl_permintaan,"+
                     "if(permintaan_lab.jam_permintaan='00:00:00','',permintaan_lab.jam_permintaan) as jam_permintaan,"+
                     "if(permintaan_lab.tgl_hasil='0000-00-00','Belum Terlayani','Sudah Terlayani') as status,"+
@@ -3613,6 +3620,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                     }
                 }
                 
+                koneksi=koneksiDB.condb();
                 pscarilab=koneksi.prepareStatement("select permintaan_labpa.noorder,permintaan_labpa.tgl_permintaan,"+
                     "if(permintaan_labpa.jam_permintaan='00:00:00','',permintaan_labpa.jam_permintaan) as jam_permintaan,"+
                     "if(permintaan_labpa.tgl_hasil='0000-00-00','Belum Terlayani','Sudah Terlayani') as status,"+
@@ -3637,6 +3645,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                     }
                 }
                 
+                koneksi=koneksiDB.condb();
                 pscarilab=koneksi.prepareStatement("select permintaan_labmb.noorder,permintaan_labmb.tgl_permintaan,"+
                     "if(permintaan_labmb.jam_permintaan='00:00:00','',permintaan_labmb.jam_permintaan) as jam_permintaan,"+
                     "if(permintaan_labmb.tgl_hasil='0000-00-00','Belum Terlayani','Sudah Terlayani') as status,"+
@@ -3662,6 +3671,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                 }
                 
                 Valid.tabelKosong(tabModeRad);
+                koneksi=koneksiDB.condb();
                 pscariradiologi=koneksi.prepareStatement("select permintaan_radiologi.noorder,permintaan_radiologi.tgl_permintaan,"+
                     "if(permintaan_radiologi.jam_permintaan='00:00:00','',permintaan_radiologi.jam_permintaan) as jam_permintaan,"+
                     "if(permintaan_radiologi.tgl_hasil='0000-00-00','Belum Terlayani','Sudah Terlayani') as status,"+
@@ -3687,6 +3697,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                 }
                 
                 Valid.tabelKosong(tabModeApotek);
+                koneksi=koneksiDB.condb();
                 psobatlangsung=koneksi.prepareStatement("select resep_obat.no_resep,resep_obat.tgl_peresepan,resep_obat.jam_peresepan,"+
                     " dokter.nm_dokter,if(resep_obat.tgl_perawatan='0000-00-00','Belum Terlayani','Sudah Terlayani') as status "+
                     " from resep_obat inner join dokter on resep_obat.kd_dokter=dokter.kd_dokter "+
@@ -4071,6 +4082,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 
     public void isRawat() {
         try {    
+            koneksi=koneksiDB.condb();
             pscekbilling=koneksi.prepareStatement(sqlpscekbilling);
 	    try{
                 pscekbilling.setString(1,TNoRw.getText());
@@ -4090,6 +4102,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                 }
             }
                             
+            koneksi=koneksiDB.condb();
             pscarirm=koneksi.prepareStatement("select reg_periksa.no_rkm_medis from reg_periksa where reg_periksa.no_rawat=?");
             try{
                 pscarirm.setString(1,TNoRw.getText());
@@ -4110,6 +4123,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                 }
             }
             
+            koneksi=koneksiDB.condb();
             pscaripasien=koneksi.prepareStatement("select pasien.nm_pasien,pasien.jk,pasien.tgl_lahir from pasien where pasien.no_rkm_medis=? ");
             try{
                 pscaripasien.setString(1,TNoRM.getText());
@@ -4159,6 +4173,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
              }
              if(chkTambahan.isSelected()==true){                           
                 try {
+                    koneksi=koneksiDB.condb();
                     pstambahan=koneksi.prepareStatement(sqlpstambahan);
                     try {
                         pstambahan.setString(1,TNoRw.getText());
@@ -4190,6 +4205,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
              }
              if(chkPotongan.isSelected()==true){                          
                 try {
+                    koneksi=koneksiDB.condb();
                     pspotongan=koneksi.prepareStatement(sqlpspotongan);
                     try{
                         pspotongan.setString(1,TNoRw.getText());
@@ -4229,6 +4245,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
              Valid.SetTgl2(DTPTgl,Sequel.cariIsi("select concat(nota_jalan.tanggal,' ',nota_jalan.jam) from nota_jalan where nota_jalan.no_rawat='"+TNoRw.getText()+"'"));
              Valid.tabelKosong(tabModeRwJlDr);
              try{                
+                koneksi=koneksiDB.condb();
                 psbilling=koneksi.prepareStatement(sqlpsbilling);    
                 try {
                     psbilling.setString(1,TNoRw.getText());
@@ -4293,6 +4310,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         }
         if(chkTambahan.isSelected()==true){                           
             try {
+                koneksi=koneksiDB.condb();
                 pstambahan=koneksi.prepareStatement(sqlpstambahan);
                 try {
                     pstambahan.setString(1,TNoRw.getText());
@@ -4324,6 +4342,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         }
         if(chkPotongan.isSelected()==true){                          
             try {
+                koneksi=koneksiDB.condb();
                 pspotongan=koneksi.prepareStatement(sqlpspotongan);
                 try{
                     pspotongan.setString(1,TNoRw.getText());
@@ -4361,18 +4380,21 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private void prosesCariReg() {        
         Valid.tabelKosong(tabModeRwJlDr);
         try{   
+            koneksi=koneksiDB.condb();
             psreg=koneksi.prepareStatement(sqlpsreg);
             try{
                 psreg.setString(1,TNoRw.getText());
                 rsreg=psreg.executeQuery();            
                 if(rsreg.next()){
                     tabModeRwJlDr.addRow(new Object[]{true,"No.Nota",": "+Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(nota_jalan.no_nota,4),signed)),0) from nota_jalan where nota_jalan.tanggal='"+Valid.SetTgl(DTPTgl.getSelectedItem()+"").substring(0,10)+"' ",Valid.SetTgl(DTPTgl.getSelectedItem()+"").substring(0,10).replaceAll("-","/")+"/RJ",4),"",null,null,null,null,"-"});                
+                    koneksi=koneksiDB.condb();
                     pscaripoli=koneksi.prepareStatement(sqlpscaripoli);
                     try{
                         pscaripoli.setString(1,rsreg.getString("kd_poli"));
                         rscaripoli=pscaripoli.executeQuery();
                         if(rscaripoli.next()){
                             polirujukan="";
+                            koneksi=koneksiDB.condb();
                             pscaripoli2=koneksi.prepareStatement(sqlpscaripoli2);
                             try {
                                 pscaripoli2.setString(1,TNoRw.getText());
@@ -4409,6 +4431,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                     tabModeRwJlDr.addRow(new Object[]{true,"Tanggal & Jam",": "+rsreg.getString("tgl_registrasi")+" "+rsreg.getString("jam"),"",null,null,null,null,"-"});
                     tabModeRwJlDr.addRow(new Object[]{true,"No.RM",": "+TNoRM.getText(),"",null,null,null,null,"-"});
                     tabModeRwJlDr.addRow(new Object[]{true,"Nama Pasien",": "+TPasien.getText()+" ("+rsreg.getString("umurdaftar")+rsreg.getString("sttsumur")+")","",null,null,null,null,"-"});
+                    koneksi=koneksiDB.condb();
                     pscarialamat=koneksi.prepareStatement(sqlpscarialamat); 
                     try{
                         pscarialamat.setString(1,TNoRM.getText());
@@ -4431,6 +4454,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                     }
                     //cari dokter yang menangani  
 
+                    koneksi=koneksiDB.condb();
                     psdokterralan=koneksi.prepareStatement(sqlpsdokterralan);
                     try{
                         psdokterralan.setString(1,TNoRw.getText());
@@ -4442,6 +4466,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                             rsdokterralan.beforeFirst();
                             if(rsdokterralan.next()){
                                 dokterrujukan="";
+                                koneksi=koneksiDB.condb();
                                 psdokterralan2=koneksi.prepareStatement(sqlpsdokterralan2);
                                 try {
                                     psdokterralan2.setString(1,TNoRw.getText());
@@ -4468,6 +4493,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                             rsdokterralan.beforeFirst();
                             if(rsdokterralan.next()){
                                 dokterrujukan="";
+                                koneksi=koneksiDB.condb();
                                 psdokterralan2=koneksi.prepareStatement(sqlpsdokterralan2);
                                 try {
                                     psdokterralan2.setString(1,TNoRw.getText());
@@ -4522,6 +4548,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 
     private void prosesCariRwJlDr() {
         try{  
+            koneksi=koneksiDB.condb();
             pscariralandokter=koneksi.prepareStatement(sqlpscariralandokter);
             try {
                 pscariralandokter.setString(1,TNoRw.getText());
@@ -4531,6 +4558,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                 detailjs=0;
                 while(rscariralandokter.next()){
                     tamkur=0;
+                    koneksi=koneksiDB.condb();
                     pstamkur=koneksi.prepareStatement(sqlpstamkur);
                     try {
                         pstamkur.setString(1,TNoRw.getText());
@@ -4579,6 +4607,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     
     private void prosesCariRwJlDrPr() {
         try{            
+            koneksi=koneksiDB.condb();
             pscariralandrpr=koneksi.prepareStatement(sqlpscariralandrpr);
             try {
                 pscariralandrpr.setString(1,TNoRw.getText());
@@ -4586,6 +4615,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                 subttl=0;
                 while(rscariralandrpr.next()){
                     tamkur=0;
+                    koneksi=koneksiDB.condb();
                     pstamkur=koneksi.prepareStatement(sqlpstamkur);
                     try{
                         pstamkur.setString(1,TNoRw.getText());
@@ -4637,6 +4667,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
 
     private void prosesCariRwJlPr() {
         try{        
+            koneksi=koneksiDB.condb();
             pscariralanperawat=koneksi.prepareStatement(sqlpscariralanperawat);
             try {
                 pscariralanperawat.setString(1,TNoRw.getText());
@@ -4644,6 +4675,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                 subttl=0;
                 while(rscariralanperawat.next()){
                     tamkur=0;
+                    koneksi=koneksiDB.condb();
                     pstamkur=koneksi.prepareStatement(sqlpstamkur);
                     try{
                         pstamkur.setString(1,TNoRw.getText());
@@ -4685,12 +4717,14 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     
     private void prosesCariPeriksaLab() {
         try{
+            koneksi=koneksiDB.condb();
             pscarilab=koneksi.prepareStatement(sqlpscarilab);
             try {
                 pscarilab.setString(1,TNoRw.getText());
                 rscarilab=pscarilab.executeQuery();
                 subttl=0;
                 while(rscarilab.next()){
+                    koneksi=koneksiDB.condb();
                     psdetaillab=koneksi.prepareStatement(sqlpsdetaillab);
                     try {
                         psdetaillab.setString(1,TNoRw.getText());
@@ -4732,6 +4766,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     
     private void prosesCariRadiologi() {
         try{
+            koneksi=koneksiDB.condb();
             pscariradiologi=koneksi.prepareStatement(sqlpscariradiologi);
             try {
                 pscariradiologi.setString(1,TNoRw.getText());
@@ -4739,6 +4774,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                 subttl=0;
                 while(rscariradiologi.next()){
                     tamkur=0;
+                    koneksi=koneksiDB.condb();
                     pstamkur=koneksi.prepareStatement(sqlpstamkur);
                     try{
                         pstamkur.setString(1,TNoRw.getText());
@@ -4782,6 +4818,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         subttl=0;
         obatlangsung=0;
         try{     
+            koneksi=koneksiDB.condb();
             psobatlangsung=koneksi.prepareStatement(sqlpsobatlangsung);
             try {
                 psobatlangsung.setString(1,TNoRw.getText());
@@ -4805,6 +4842,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         }
         
         try{     
+            koneksi=koneksiDB.condb();
             psobatoperasi=koneksi.prepareStatement(sqlpsobatoperasi);
             try{
                 psobatoperasi.setString(1,TNoRw.getText());
@@ -4838,6 +4876,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         }
         
         try{      
+            koneksi=koneksiDB.condb();
             pscariobat=koneksi.prepareStatement(sqlpscariobat);
             try {
                 pscariobat.setString(1,TNoRw.getText());
@@ -5050,6 +5089,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
         norawat.setText(NoRawat);
         Valid.tabelKosong(tabModeTambahan);
         try{     
+            koneksi=koneksiDB.condb();
             pstambahan=koneksi.prepareStatement(sqlpstambahan);
             try{
                 pstambahan.setString(1,norawat.getText());
@@ -5076,6 +5116,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
              norawatpotongan.setText(NoRawat);
              Valid.tabelKosong(tabModePotongan);
              try{           
+                 koneksi=koneksiDB.condb();
                  pspotongan=koneksi.prepareStatement(sqlpspotongan);
                  try{
                      pspotongan.setString(1,TNoRw.getText());
@@ -5102,6 +5143,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private void prosesCariOperasi(){
         try{            
             subttl=0;
+            koneksi=koneksiDB.condb();
             psoperasi=koneksi.prepareStatement(sqlpsoperasi);
             try {
                 psoperasi.setString(1,TNoRw.getText());
@@ -5320,6 +5362,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     
     private void tampilAkunBankMandiri() { 
         try{     
+            koneksi=koneksiDB.condb();
             psrekening=koneksi.prepareStatement(
                     "select set_akun_mandiri.kd_rek,set_akun_mandiri.kd_rek_biaya,set_akun_mandiri.kode_mcm,set_akun_mandiri.no_rekening from set_akun_mandiri");
             try {
@@ -5445,6 +5488,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
              file.createNewFile();
              fileWriter = new FileWriter(file);
              StringBuilder iyembuilder = new StringBuilder();
+             koneksi=koneksiDB.condb();
              psakunbayar=koneksi.prepareStatement("select * from akun_bayar");
              try{
                  rsakunbayar=psakunbayar.executeQuery();
@@ -5547,6 +5591,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
              file.createNewFile();
              fileWriter = new FileWriter(file);
              StringBuilder iyembuilder = new StringBuilder();
+             koneksi=koneksiDB.condb();
              psakunbayar=koneksi.prepareStatement("select * from akun_bayar");
              try{
                  rsakunbayar=psakunbayar.executeQuery();
@@ -5583,6 +5628,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
          try{           
              Valid.tabelKosong(tabModeAkunBayar);
              
+             koneksi=koneksiDB.condb();
              psakunbayar=koneksi.prepareStatement(
                      "select akun_bayar.nama_bayar,akun_bayar.kd_rek,detail_nota_jalan.besar_bayar,"+
                      "akun_bayar.ppn,detail_nota_jalan.besarppn from akun_bayar inner join detail_nota_jalan "+
@@ -5621,6 +5667,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
              file.createNewFile();
              fileWriter = new FileWriter(file);
              StringBuilder iyembuilder = new StringBuilder();
+             koneksi=koneksiDB.condb();
              psakunpiutang=koneksi.prepareStatement("select * from akun_piutang");
              try{
                  rsakunpiutang=psakunpiutang.executeQuery();
@@ -5723,6 +5770,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
              file.createNewFile();
              fileWriter = new FileWriter(file);
              StringBuilder iyembuilder = new StringBuilder();
+             koneksi=koneksiDB.condb();
              psakunpiutang=koneksi.prepareStatement("select * from akun_piutang");
              try{
                  rsakunpiutang=psakunpiutang.executeQuery();
@@ -5757,6 +5805,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
     private void tampilAkunPiutangTersimpan() {
          try{           
              Valid.tabelKosong(tabModeAkunPiutang);  
+             koneksi=koneksiDB.condb();
              psakunpiutang=koneksi.prepareStatement(
                      "select akun_piutang.nama_bayar,akun_piutang.kd_rek,akun_piutang.kd_pj, "+
                      "detail_piutang_pasien.totalpiutang,date_format(detail_piutang_pasien.tgltempo,'%d/%m/%Y') from "+
@@ -5807,6 +5856,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
             JOptionPane.showMessageDialog(null,"Maaf, Silahkan tampilkan semua pilihan tagihan...!!!");
         }else{
             try {
+                koneksi=koneksiDB.condb();
                 psnota=koneksi.prepareStatement("insert into nota_jalan values(?,?,?,?)");
                 try {    
                     no_nota=Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(nota_jalan.no_nota,4),signed)),0) from nota_jalan where nota_jalan.tanggal='"+Valid.SetTgl(DTPTgl.getSelectedItem()+"").substring(0,10)+"' ",Valid.SetTgl(DTPTgl.getSelectedItem()+"").substring(0,10).replaceAll("-","/")+"/RJ",4);
@@ -5834,6 +5884,7 @@ private void MnPeriksaLabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-
                 Sequel.AutoComitFalse();
                 sukses=true; 
                 for(i=0;i<tbBilling.getRowCount();i++){  
+                    koneksi=koneksiDB.condb();
                     psbiling=koneksi.prepareStatement(sqlpsbiling);
                     try {
                         psbiling.setInt(1,i);

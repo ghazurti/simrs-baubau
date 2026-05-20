@@ -640,6 +640,7 @@ public final class DlgPemasukanLain extends javax.swing.JDialog {
             })==true){
                 Sequel.queryu("delete from tampjurnal");
                 try {
+                    koneksi=koneksiDB.condb();
                     psakun=koneksi.prepareStatement(
                         "select kategori_pemasukan_lain.kd_rek,kategori_pemasukan_lain.kd_rek2 from kategori_pemasukan_lain where kategori_pemasukan_lain.kode_kategori=?");
                     try {
@@ -733,6 +734,7 @@ public final class DlgPemasukanLain extends javax.swing.JDialog {
                 })==true){
                     try {
                         Sequel.queryu("delete from tampjurnal");
+                        koneksi=koneksiDB.condb();
                         psakun=koneksi.prepareStatement(
                             "select kategori_pemasukan_lain.kd_rek,kategori_pemasukan_lain.kd_rek2 from kategori_pemasukan_lain where kategori_pemasukan_lain.kode_kategori=?");
                         try{
@@ -1136,6 +1138,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select pemasukan_lain.no_masuk,pemasukan_lain.tanggal, pemasukan_lain.keterangan, pemasukan_lain.keperluan, pemasukan_lain.besar, pemasukan_lain.nip,petugas.nama,pemasukan_lain.kode_kategori,kategori_pemasukan_lain.nama_kategori "+
                 "from pemasukan_lain inner join petugas on pemasukan_lain.nip=petugas.nip inner join kategori_pemasukan_lain on pemasukan_lain.kode_kategori=kategori_pemasukan_lain.kode_kategori where pemasukan_lain.tanggal between ? and ? "+

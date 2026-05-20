@@ -872,6 +872,7 @@ public final class KeuanganBayarPemesananAset extends javax.swing.JDialog {
                     }else{
                         if(koderekening.equals(Host_to_Host_Bank_Mandiri)){
                             Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(pembayaran_pihak_ke3_bankmandiri.nomor_pembayaran,6),signed)),0) from pembayaran_pihak_ke3_bankmandiri where left(pembayaran_pihak_ke3_bankmandiri.tgl_pembayaran,10)='"+Valid.SetTgl(TglBayar.getSelectedItem()+"")+"' ",kodemcm+"14"+TglBayar.getSelectedItem().toString().replaceAll("-",""),6,NoBukti); 
+                            koneksi=koneksiDB.condb();
                             ps=koneksi.prepareStatement(
                                     "select inventaris_suplier.nama_suplier,inventaris_suplier.kota,inventaris_suplier.nama_bank,inventaris_suplier.rekening "+
                                     "from inventaris_pemesanan inner join inventaris_suplier on inventaris_pemesanan.kode_suplier=inventaris_suplier.kode_suplier "+
@@ -1627,6 +1628,7 @@ private void BtnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{           
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select bayar_pemesanan_inventaris.tgl_bayar,inventaris_pemesanan.tgl_faktur,inventaris_pemesanan.tgl_pesan,inventaris_pemesanan.tgl_tempo, bayar_pemesanan_inventaris.no_faktur,"+
                     "inventaris_suplier.nama_suplier,bayar_pemesanan_inventaris.nama_bayar,bayar_pemesanan_inventaris.no_bukti,bayar_pemesanan_inventaris.besar_bayar,bayar_pemesanan_inventaris.keterangan,"+
@@ -1745,6 +1747,7 @@ private void BtnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
              file.createNewFile();
              fileWriter = new FileWriter(file);
              StringBuilder iyembuilder = new StringBuilder();
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement("select * from akun_bayar_hutang order by akun_bayar_hutang.nama_bayar");
              try{
                  rs=ps.executeQuery();
@@ -1805,6 +1808,7 @@ private void BtnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     
     private void tampilAkunBankMandiri() { 
         try{     
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select set_akun_mandiri.kd_rek,set_akun_mandiri.kd_rek_biaya,set_akun_mandiri.kode_mcm,set_akun_mandiri.no_rekening from set_akun_mandiri");
             try {

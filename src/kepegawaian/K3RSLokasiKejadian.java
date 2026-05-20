@@ -596,6 +596,7 @@ public class K3RSLokasiKejadian extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from k3rs_lokasi_kejadian where kode_lokasi like ? or lokasi_kejadian like ? order by kode_lokasi");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

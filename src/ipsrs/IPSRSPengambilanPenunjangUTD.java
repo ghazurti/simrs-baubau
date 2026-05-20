@@ -684,6 +684,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         for(i=0;i<tbDokter.getRowCount();i++){
             try {
                 stok_tujuan=0;                
+                koneksi=koneksiDB.condb();
                 psstok2=koneksi.prepareStatement("select ifnull(stok,'0') from utd_stok_penunjang where kode_brng=?");
                 try {
                     psstok2.setString(1,tabMode.getValueAt(i,1).toString());
@@ -815,6 +816,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             tabMode.addRow(new Object[]{jumlah[i],kodebarang[i],namabarang[i],hbeli[i],total[i],satuan[i],stokasal[i],stoktujuan[i]});
         }
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select ipsrsbarang.kode_brng, ipsrsbarang.nama_brng,ipsrsbarang.harga,ipsrsbarang.kode_sat,ipsrsbarang.stok "+
                 " from ipsrsbarang where ipsrsbarang.status='1' and  ipsrsbarang.kode_brng like ? or "+
@@ -848,6 +850,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                 try {
                     if(Double.parseDouble(tabMode.getValueAt(tbDokter.getSelectedRow(),0).toString())>0){
                         stok_tujuan=0;                
+                        koneksi=koneksiDB.condb();
                         psstok2=koneksi.prepareStatement("select ifnull(stok,'0') from utd_stok_penunjang where kode_brng=?");
                         try {
                             psstok2.setString(1,tabMode.getValueAt(tbDokter.getSelectedRow(),1).toString());

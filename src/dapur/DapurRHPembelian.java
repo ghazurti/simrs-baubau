@@ -831,6 +831,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select dapurpembelian.tgl_beli,dapurpembelian.no_faktur, "+
                     "dapurpembelian.kode_suplier,dapursuplier.nama_suplier, "+

@@ -419,6 +419,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void tampil(){
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from tagihan_bpd_jateng where tagihan_bpd_jateng.tgl_closing between ? and ? "+
                    (TCari.getText().equals("")?"":"and (tagihan_bpd_jateng.no_rkm_medis like ? or tagihan_bpd_jateng.nm_pasien like ? or "+
                    "tagihan_bpd_jateng.no_nota like ? or tagihan_bpd_jateng.referensi like ? or tagihan_bpd_jateng.no_rawat like ? or "+

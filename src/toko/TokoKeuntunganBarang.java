@@ -557,6 +557,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     public void tampil(){        
         try {
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select tokopenjualan.tgl_jual,tokopenjualan.nota_jual,toko_detail_jual.kode_brng,tokobarang.nama_brng,kodesatuan.satuan,toko_detail_jual.h_jual,toko_detail_jual.jumlah, "+
                 "toko_detail_jual.subtotal,toko_detail_jual.dis,toko_detail_jual.bsr_dis,toko_detail_jual.tambahan,toko_detail_jual.total, toko_detail_jual.h_beli,(toko_detail_jual.h_beli * toko_detail_jual.jumlah) as total_asal, "+
@@ -603,6 +604,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     public void tampil2(){        
         try {
             Valid.tabelKosong(tabMode2);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select tokopiutang.tgl_piutang,tokopiutang.nota_piutang,toko_detail_piutang.kode_brng,tokobarang.nama_brng,kodesatuan.satuan,toko_detail_piutang.h_jual,toko_detail_piutang.jumlah, "+
                 "toko_detail_piutang.subtotal,toko_detail_piutang.dis,toko_detail_piutang.bsr_dis,toko_detail_piutang.total, toko_detail_piutang.h_beli,(toko_detail_piutang.h_beli * toko_detail_piutang.jumlah) as total_asal, "+

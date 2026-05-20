@@ -374,6 +374,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void prosesCari() {
        Valid.tabelKosong(tabMode);      
        try{   
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement("select bangsal.kd_bangsal,bangsal.nm_bangsal from bangsal where bangsal.status='1' and bangsal.kd_bangsal in (select kamar.kd_bangsal from kamar group by kamar.kd_bangsal) and bangsal.kd_bangsal like ? order by bangsal.nm_bangsal");
            try {
                 ps.setString(1,"%"+kdbangsal.getText()+"%");
@@ -385,6 +386,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                    tabMode.addRow(new Object[]{i+". Kamar : "+rs.getString("nm_bangsal"),"",""});
                    tabMode.addRow(new Object[]{"","Isi : "+Sequel.cariInteger("select count(kamar.kd_bangsal) from kamar where kamar.statusdata='1' and kamar.kd_bangsal=? and kamar.status='ISI' ",rs.getString("kd_bangsal"))});
 
+                   koneksi=koneksiDB.condb();
                    ps2=koneksi.prepareStatement("select kamar.kd_kamar,kamar.trf_kamar,kamar.kelas from kamar where kamar.statusdata='1' and kamar.kd_bangsal=? and kamar.status='ISI'");
                    try {
                         ps2.setString(1,rs.getString("kd_bangsal"));
@@ -405,6 +407,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                    
                    tabMode.addRow(new Object[]{"","Kosong : "+Sequel.cariInteger("select count(kamar.kd_bangsal) from kamar where kamar.statusdata='1' and kamar.kd_bangsal=? and kamar.status='KOSONG' ",rs.getString("kd_bangsal")),""});
 
+                   koneksi=koneksiDB.condb();
                    ps3=koneksi.prepareStatement("select kamar.kd_kamar,kamar.trf_kamar from kamar where kamar.statusdata='1' and kamar.kd_bangsal=? and kamar.status='KOSONG'");
                    try {
                         ps3.setString(1,rs.getString("kd_bangsal"));

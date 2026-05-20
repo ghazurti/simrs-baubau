@@ -446,6 +446,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             satujam=0;
             duajam=0;
             lebihduajam=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select reg_periksa.no_rkm_medis,pasien.nm_pasien,dokter.nm_dokter,laporan_operasi.tanggal,laporan_operasi.selesaioperasi," +
                 "paket_operasi.nm_perawatan,round((TIME_TO_SEC(laporan_operasi.selesaioperasi)-TIME_TO_SEC(laporan_operasi.tanggal))/60,2) as durasi " +

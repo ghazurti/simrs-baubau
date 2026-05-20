@@ -788,6 +788,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
       Valid.textKosong(TCari,"No.Faktur");
   }else{
      try {
+         koneksi=koneksiDB.condb();
          ps=koneksi.prepareStatement("select no_retur_beli, kd_bangsal from returbeli where no_retur_beli=?");
          try {
              ps.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());
@@ -795,6 +796,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
              if(rs.next()){
                 Sequel.AutoComitFalse();
                 sukses=true;
+                koneksi=koneksiDB.condb();
                 ps2=koneksi.prepareStatement(
                      "select kode_brng,jml_retur2,no_batch,no_faktur from detreturbeli where no_retur_beli=? ");
                 try {
@@ -975,6 +977,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select returbeli.no_retur_beli,returbeli.tgl_retur,returbeli.nip,petugas.nama,returbeli.kode_suplier,datasuplier.nama_suplier,bangsal.nm_bangsal "+
                 "from returbeli inner join petugas on returbeli.nip=petugas.nip inner join bangsal on returbeli.kd_bangsal=bangsal.kd_bangsal "+
@@ -995,6 +998,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         rs.getString(1),rs.getString(2),rs.getString(3)+", "+rs.getString(4),
                         rs.getString(5)+", "+rs.getString(6),"Retur Beli : ","di "+rs.getString(7),"","","",""
                     });
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select detreturbeli.no_faktur,detreturbeli.kode_brng,databarang.nama_brng,detreturbeli.kode_sat,kodesatuan.satuan,detreturbeli.h_retur,detreturbeli.jml_retur, "+
                             "detreturbeli.total,detreturbeli.no_batch from detreturbeli inner join databarang on detreturbeli.kode_brng=databarang.kode_brng "+

@@ -726,6 +726,7 @@ public class DlgReturBeli extends javax.swing.JDialog {
             try {
                 stokobat=0;   
                 if(aktifkanbatch.equals("yes")){
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch=? and gudangbarang.no_faktur=?");
                     try {
                         ps.setString(1,kdgudang.getText());
@@ -747,6 +748,7 @@ public class DlgReturBeli extends javax.swing.JDialog {
                         }
                     }  
                 }else{
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement("select ifnull(gudangbarang.stok,'0') from gudangbarang where gudangbarang.kd_bangsal=? and gudangbarang.kode_brng=? and gudangbarang.no_batch='' and gudangbarang.no_faktur=''");
                     try {
                         ps.setString(1,kdgudang.getText());
@@ -1307,6 +1309,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select tampreturbeli.no_faktur,tampreturbeli.kode_brng,tampreturbeli.nama_brng,tampreturbeli.satuan,tampreturbeli.h_beli,"+
                     "tampreturbeli.jml_beli,tampreturbeli.h_retur,tampreturbeli.jml_retur,tampreturbeli.total,tampreturbeli.no_batch,"+
@@ -1378,6 +1381,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 jumlahretur=Double.parseDouble(Jmlretur.getText());
             }else if(!satuanretur.getText().equals(Satuanbar.getText())){
                 try {
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                             "select konver_sat.nilai,konver_sat.nilai_konversi from konver_sat where konver_sat.kode_sat=? and konver_sat.sat_konversi=?");
                     try {
@@ -1443,6 +1447,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
  
     private void cariBarang(){
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select databarang.nama_brng,databarang.kode_sat,databarang.dasar from databarang where databarang.kode_brng=?");
             try {
                 ps.setString(1,Kdbar.getText());
@@ -1469,6 +1474,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
     
     private void cariBatch() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select data_batch.tgl_kadaluarsa,data_batch.dasar from data_batch where data_batch.no_batch=? and data_batch.kode_brng=? and data_batch.no_faktur=?");
             try {
                 ps.setString(1,NoBatch.getText());
@@ -1503,6 +1509,7 @@ private void BtnGudangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
 
     private void simpan() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select tampreturbeli.no_faktur, tampreturbeli.kode_brng, tampreturbeli.satuan, tampreturbeli.h_beli, tampreturbeli.jml_beli, tampreturbeli.h_retur, tampreturbeli.jml_retur, tampreturbeli.total,tampreturbeli.no_batch, tampreturbeli.jml_retur2 from tampreturbeli where tampreturbeli.petugas=?");
             try {
                 ps.setString(1,akses.getkode());

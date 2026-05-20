@@ -89,10 +89,12 @@ public class DlgFeeRujukanRontgen extends javax.swing.JDialog {
         kddokter.setDocument(new batasInput((byte)10).getKata(kddokter));
                 
         try {        
+            koneksi=koneksiDB.condb();
             pstanggal=koneksi.prepareStatement(
                     "select periksa_radiologi.tgl_periksa from periksa_radiologi "+
                     "where periksa_radiologi.dokter_perujuk=? and "+
                     "periksa_radiologi.tgl_periksa between ? and ? group by periksa_radiologi.tgl_periksa ");
+            koneksi=koneksiDB.condb();
             psradiologi=koneksi.prepareStatement(
                     "select pasien.nm_pasien,penjab.png_jawab,periksa_radiologi.tarif_perujuk "+
                     "from periksa_radiologi inner join jns_perawatan_radiologi "+
@@ -102,6 +104,7 @@ public class DlgFeeRujukanRontgen extends javax.swing.JDialog {
                     "reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj "+
                     "where periksa_radiologi.dokter_perujuk=? and "+
                     "periksa_radiologi.tgl_periksa=? and jns_perawatan_radiologi.nm_perawatan like '%rontgen%'");
+            koneksi=koneksiDB.condb();
             psusg=koneksi.prepareStatement(
                     "select pasien.nm_pasien,penjab.png_jawab,periksa_radiologi.tarif_perujuk "+
                     "from periksa_radiologi inner join jns_perawatan_radiologi "+

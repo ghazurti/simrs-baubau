@@ -4935,6 +4935,7 @@ public final class RMPelaporanEfekSampingObat extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select monitoring_efek_samping_obat.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,pasien.tgl_lahir,pasien.jk,pasien.umur,pasien.pekerjaan,pasien.suku_bangsa,suku_bangsa.nama_suku_bangsa,monitoring_efek_samping_obat.no_laporan,monitoring_efek_samping_obat.tanggal,monitoring_efek_samping_obat.profesi,monitoring_efek_samping_obat.nik,pegawai.nama,monitoring_efek_samping_obat.kd_bangsal,"+
                         "bangsal.nm_bangsal,monitoring_efek_samping_obat.berat_badan,monitoring_efek_samping_obat.pasien_hamil,monitoring_efek_samping_obat.kesudahan,monitoring_efek_samping_obat.penyakit_lain,monitoring_efek_samping_obat.penyakit_utama,monitoring_efek_samping_obat.tanggal_kejadian,monitoring_efek_samping_obat.manifestasi,monitoring_efek_samping_obat.masalah_kualitas,"+       
@@ -4959,6 +4960,7 @@ public final class RMPelaporanEfekSampingObat extends javax.swing.JDialog {
                         "inner join suku_bangsa on suku_bangsa.id=pasien.suku_bangsa "+
                         "where monitoring_efek_samping_obat.tanggal between ? and ? order by monitoring_efek_samping_obat.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select monitoring_efek_samping_obat.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,pasien.tgl_lahir,pasien.jk,pasien.umur,pasien.pekerjaan,pasien.suku_bangsa,suku_bangsa.nama_suku_bangsa,monitoring_efek_samping_obat.no_laporan,monitoring_efek_samping_obat.tanggal,monitoring_efek_samping_obat.profesi,monitoring_efek_samping_obat.nik,pegawai.nama,monitoring_efek_samping_obat.kd_bangsal,"+
                         "bangsal.nm_bangsal,monitoring_efek_samping_obat.berat_badan,monitoring_efek_samping_obat.pasien_hamil,monitoring_efek_samping_obat.kesudahan,monitoring_efek_samping_obat.penyakit_lain,monitoring_efek_samping_obat.penyakit_utama,monitoring_efek_samping_obat.tanggal_kejadian,monitoring_efek_samping_obat.manifestasi,monitoring_efek_samping_obat.masalah_kualitas,"+       
@@ -5349,6 +5351,7 @@ public final class RMPelaporanEfekSampingObat extends javax.swing.JDialog {
 
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select reg_periksa.no_rkm_medis,pasien.nm_pasien, if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,pasien.umur,pasien.pekerjaan,pasien.suku_bangsa,suku_bangsa.nama_suku_bangsa,"+
                     "reg_periksa.tgl_registrasi,reg_periksa.jam_reg "+

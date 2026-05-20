@@ -388,6 +388,7 @@ public final class DlgCariKategori extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from kategori_barang order by kategori_barang.nama ");
             try {
                 rs=ps.executeQuery();

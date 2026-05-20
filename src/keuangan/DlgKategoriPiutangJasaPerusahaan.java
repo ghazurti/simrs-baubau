@@ -633,6 +633,7 @@ public final class DlgKategoriPiutangJasaPerusahaan extends javax.swing.JDialog 
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                      "select * from kategori_piutang_jasa_perusahaan "+(TCari.getText().trim().equals("")?"":"where kategori_piutang_jasa_perusahaan.kode_kategori like ? or "+
                      "kategori_piutang_jasa_perusahaan.nama_kategori like ?")+" order by kategori_piutang_jasa_perusahaan.kode_kategori");  

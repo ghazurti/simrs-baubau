@@ -592,6 +592,7 @@ public class DlgDiet extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select diet.kd_diet,diet.nama_diet from diet "+(TCari.getText().trim().equals("")?"":"where diet.kd_diet like ? or diet.nama_diet like ? ")+" order by kd_diet");
             try {
                 if(!TCari.getText().trim().equals("")){

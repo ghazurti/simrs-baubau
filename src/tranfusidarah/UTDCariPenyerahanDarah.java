@@ -889,6 +889,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     Sequel.AutoComitFalse();
                     sukses=true;
                     try {
+                        koneksi=koneksiDB.condb();
                         psdarah=koneksi.prepareStatement(
                             "select no_kantong from utd_penyerahan_darah_detail where no_penyerahan=? ");                    
                         try {
@@ -909,6 +910,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                             }
                         } 
                         if(tbDokter.getValueAt(tbDokter.getSelectedRow(),5).toString().equals("Sudah Dibayar")){
+                            koneksi=koneksiDB.condb();
                             pscekmedis=koneksi.prepareStatement(sqlpscekmedis);
                             try {
                                 pscekmedis.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());
@@ -928,6 +930,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                     pscekmedis.close();
                                 }
                             }
+                            koneksi=koneksiDB.condb();
                             psceknonmedis=koneksi.prepareStatement(sqlpsceknonmedis);
                             try {
                                 psceknonmedis.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());
@@ -1021,6 +1024,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     if(tbDokter.getValueAt(tbDokter.getSelectedRow(),5).toString().equals("Belum Dibayar")){ 
                         Sequel.AutoComitFalse();
                         sukses=true; 
+                        koneksi=koneksiDB.condb();
                         psdarah=koneksi.prepareStatement(
                             "select no_kantong from utd_penyerahan_darah_detail where no_penyerahan=? ");                    
                         try {
@@ -1040,6 +1044,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 psdarah.close();
                             }
                         }
+                        koneksi=koneksiDB.condb();
                         pscekmedis=koneksi.prepareStatement(sqlpscekmedis);
                         try {
                             pscekmedis.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());
@@ -1059,6 +1064,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                 pscekmedis.close();
                             }
                         }
+                        koneksi=koneksiDB.condb();
                         psceknonmedis=koneksi.prepareStatement(sqlpsceknonmedis);
                         try {
                             psceknonmedis.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());
@@ -1143,6 +1149,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     try {
                         
                         if(tbDokter.getValueAt(tbDokter.getSelectedRow(),5).toString().equals("Sudah Dibayar")){
+                            koneksi=koneksiDB.condb();
                             pscekmedis=koneksi.prepareStatement(sqlpscekmedis);
                             try {
                                 pscekmedis.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());
@@ -1189,6 +1196,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     try {
                         
                         if(tbDokter.getValueAt(tbDokter.getSelectedRow(),5).toString().equals("Sudah Dibayar")){
+                            koneksi=koneksiDB.condb();
                             psceknonmedis=koneksi.prepareStatement(sqlpsceknonmedis);
                             try {
                                 psceknonmedis.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());
@@ -1235,6 +1243,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     try {
                         
                         if(tbDokter.getValueAt(tbDokter.getSelectedRow(),5).toString().equals("Sudah Dibayar")){
+                            koneksi=koneksiDB.condb();
                             pscekmedis=koneksi.prepareStatement(sqlpscekmedis);
                             try {
                                 pscekmedis.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());
@@ -1253,6 +1262,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                                     pscekmedis.close();
                                 }
                             }
+                            koneksi=koneksiDB.condb();
                             psceknonmedis=koneksi.prepareStatement(sqlpsceknonmedis);
                             try {
                                 psceknonmedis.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());
@@ -1354,6 +1364,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         Valid.tabelKosong(tabMode);
         try {
             pendapatan=0;
+            koneksi=koneksiDB.condb();
             pspenyerahan=koneksi.prepareStatement(
                     "select utd_penyerahan_darah.no_penyerahan,utd_penyerahan_darah.tanggal,"+
                     "utd_penyerahan_darah.dinas,utd_penyerahan_darah.nip_cross,"+
@@ -1417,6 +1428,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     tabMode.addRow(new Object[]{
                         "","","No.","No.Kantung","Komponen","G.D. & Rhesus","Asal Darah","Aftap & Kadaluarsa","Biaya"
                     });
+                    koneksi=koneksiDB.condb();
                     psdarah=koneksi.prepareStatement(
                         "select utd_stok_darah.no_kantong,utd_komponen_darah.nama as darah,"+
                         "utd_stok_darah.golongan_darah,utd_stok_darah.resus,"+
@@ -1460,6 +1472,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     }  
                     //data penggunaan BHP
                     if(aktifkan.equals("medis")){
+                        koneksi=koneksiDB.condb();
                         pscekmedis=koneksi.prepareStatement(sqlpscekmedis);
                         try {
                             subtotalmedis=0;
@@ -1497,6 +1510,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                             }
                         }
                     }else if(aktifkan.equals("nonmedis")){
+                        koneksi=koneksiDB.condb();
                         psceknonmedis=koneksi.prepareStatement(sqlpsceknonmedis);
                         try {
                             subtotalnonmedis=0;
@@ -1534,6 +1548,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                             }
                         }
                     }else if(aktifkan.equals("medis&nonmedis")){
+                        koneksi=koneksiDB.condb();
                         pscekmedis=koneksi.prepareStatement(sqlpscekmedis);
                         try {
                             subtotalmedis=0;
@@ -1571,6 +1586,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                             }
                         }
                         
+                        koneksi=koneksiDB.condb();
                         psceknonmedis=koneksi.prepareStatement(sqlpsceknonmedis);
                         try {
                             subtotalnonmedis=0;

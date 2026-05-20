@@ -653,6 +653,7 @@ private void BtnSeek2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                 });
             }
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select ipsrsbarang.kode_brng,ipsrsbarang.nama_brng,kodesatuan.satuan,ipsrsjenisbarang.nm_jenis as jenis,"+
                     "sum(detail_permintaan_non_medis.jumlah) as jumlah,ipsrsbarang.kode_sat from ipsrsbarang inner join kodesatuan "+

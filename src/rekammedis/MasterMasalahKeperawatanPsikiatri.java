@@ -604,6 +604,7 @@ public class MasterMasalahKeperawatanPsikiatri extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_masalah_keperawatan_psikiatri where master_masalah_keperawatan_psikiatri.kode_masalah like ? or master_masalah_keperawatan_psikiatri.nama_masalah like ? order by master_masalah_keperawatan_psikiatri.kode_masalah");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

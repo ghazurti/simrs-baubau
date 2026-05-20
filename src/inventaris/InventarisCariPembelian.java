@@ -620,6 +620,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(TCari,"No.Faktur");
         }else{
            try {
+               koneksi=koneksiDB.condb();
                pscaribeli=koneksi.prepareStatement(
                        "select inventaris_pembelian.no_faktur,inventaris_pembelian.tagihan,inventaris_pembelian.tgl_beli,inventaris_pembelian.kd_rek,"+
                        "inventaris_pembelian.kd_rek_aset,inventaris_pembelian.ppn,(inventaris_pembelian.meterai+inventaris_pembelian.total) as total "+
@@ -930,6 +931,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{            
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select inventaris_pembelian.tgl_beli,inventaris_pembelian.no_faktur, "+
                     "inventaris_pembelian.kode_suplier,inventaris_suplier.nama_suplier, "+
                     "inventaris_pembelian.nip,petugas.nama,inventaris_pembelian.subtotal,inventaris_pembelian.potongan,inventaris_pembelian.total, "+
@@ -969,6 +971,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3)+", "+rs.getString(4),
                           rs.getString(5)+", "+rs.getString(6),"","","","","",""
                     });      
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select inventaris_detail_beli.kode_barang,inventaris_barang.nama_barang, "+
                         "inventaris_barang.id_jenis,inventaris_jenis.nama_jenis,inventaris_detail_beli.jumlah,inventaris_detail_beli.harga, "+
                         "inventaris_detail_beli.subtotal,inventaris_detail_beli.dis,inventaris_detail_beli.besardis,inventaris_detail_beli.total "+

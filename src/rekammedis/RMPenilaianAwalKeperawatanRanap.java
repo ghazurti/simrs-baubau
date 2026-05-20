@@ -5364,6 +5364,7 @@ public final class RMPenilaianAwalKeperawatanRanap extends javax.swing.JDialog {
                 File f;            
                 BufferedWriter bw; 
                 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select penilaian_awal_keperawatan_ranap.no_rawat,penilaian_awal_keperawatan_ranap.tanggal,penilaian_awal_keperawatan_ranap.informasi,penilaian_awal_keperawatan_ranap.ket_informasi,penilaian_awal_keperawatan_ranap.tiba_diruang_rawat,"+
                     "penilaian_awal_keperawatan_ranap.kasus_trauma,penilaian_awal_keperawatan_ranap.cara_masuk,penilaian_awal_keperawatan_ranap.rps,penilaian_awal_keperawatan_ranap.rpd,penilaian_awal_keperawatan_ranap.rpk,penilaian_awal_keperawatan_ranap.rpo,"+
@@ -6399,6 +6400,7 @@ public final class RMPenilaianAwalKeperawatanRanap extends javax.swing.JDialog {
             
             try {
                 masalahkeperawatan="";
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select master_masalah_keperawatan.kode_masalah,master_masalah_keperawatan.nama_masalah from master_masalah_keperawatan "+
                     "inner join penilaian_awal_keperawatan_ranap_masalah on penilaian_awal_keperawatan_ranap_masalah.kode_masalah=master_masalah_keperawatan.kode_masalah "+
@@ -6425,6 +6427,7 @@ public final class RMPenilaianAwalKeperawatanRanap extends javax.swing.JDialog {
             param.put("masalah",masalahkeperawatan);  
             try {
                 masalahkeperawatan="";
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select master_rencana_keperawatan.kode_rencana,master_rencana_keperawatan.rencana_keperawatan from master_rencana_keperawatan "+
                     "inner join penilaian_awal_keperawatan_ranap_rencana on penilaian_awal_keperawatan_ranap_rencana.kode_rencana=master_rencana_keperawatan.kode_rencana "+
@@ -8233,6 +8236,7 @@ public final class RMPenilaianAwalKeperawatanRanap extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select penilaian_awal_keperawatan_ranap.no_rawat,penilaian_awal_keperawatan_ranap.tanggal,penilaian_awal_keperawatan_ranap.informasi,penilaian_awal_keperawatan_ranap.ket_informasi,penilaian_awal_keperawatan_ranap.tiba_diruang_rawat,"+
                 "penilaian_awal_keperawatan_ranap.kasus_trauma,penilaian_awal_keperawatan_ranap.cara_masuk,penilaian_awal_keperawatan_ranap.rps,penilaian_awal_keperawatan_ranap.rpd,penilaian_awal_keperawatan_ranap.rpk,penilaian_awal_keperawatan_ranap.rpo,"+
@@ -9015,6 +9019,7 @@ public final class RMPenilaianAwalKeperawatanRanap extends javax.swing.JDialog {
 
     private void isRawat() {
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pasien.nm_pasien, if(pasien.jk='L','Laki-Laki','Perempuan') as jk,pasien.tgl_lahir,pasien.agama,"+
                     "bahasa_pasien.nama_bahasa,pasien.pnd,pasien.pekerjaan,reg_periksa.tgl_registrasi,reg_periksa.jam_reg "+
@@ -9113,6 +9118,7 @@ public final class RMPenilaianAwalKeperawatanRanap extends javax.swing.JDialog {
             DetailRencana.setText(tbObat.getValueAt(tbObat.getSelectedRow(),174).toString());
             try {
                 Valid.tabelKosong(tabModeDetailMasalah);
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select master_masalah_keperawatan.kode_masalah,master_masalah_keperawatan.nama_masalah from master_masalah_keperawatan "+
                         "inner join penilaian_awal_keperawatan_ranap_masalah on penilaian_awal_keperawatan_ranap_masalah.kode_masalah=master_masalah_keperawatan.kode_masalah "+
@@ -9139,6 +9145,7 @@ public final class RMPenilaianAwalKeperawatanRanap extends javax.swing.JDialog {
             
             try {
                 Valid.tabelKosong(tabModeDetailRencana);
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select master_rencana_keperawatan.kode_rencana,master_rencana_keperawatan.rencana_keperawatan from master_rencana_keperawatan "+
                         "inner join penilaian_awal_keperawatan_ranap_rencana on penilaian_awal_keperawatan_ranap_rencana.kode_rencana=master_rencana_keperawatan.kode_rencana "+
@@ -9446,6 +9453,7 @@ public final class RMPenilaianAwalKeperawatanRanap extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_masalah_keperawatan order by master_masalah_keperawatan.kode_masalah");
             try {
                 rs=ps.executeQuery();
@@ -9541,6 +9549,7 @@ public final class RMPenilaianAwalKeperawatanRanap extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_rencana_keperawatan order by master_rencana_keperawatan.kode_rencana");
             try {
                 rs=ps.executeQuery();

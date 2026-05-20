@@ -1452,6 +1452,7 @@ public final class MasterCariTemplatePemeriksaan extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select template_pemeriksaan_dokter.no_template,template_pemeriksaan_dokter.kd_dokter,dokter.nm_dokter,"+
                     "template_pemeriksaan_dokter.keluhan,template_pemeriksaan_dokter.pemeriksaan,template_pemeriksaan_dokter.penilaian,"+
@@ -1565,6 +1566,7 @@ public final class MasterCariTemplatePemeriksaan extends javax.swing.JDialog {
                     Evaluasi.setText(tabMode.getValueAt(tbDokter.getSelectedRow(),8).toString());
                     
                     Valid.tabelKosong(tabModeDiagnosa);
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                             "select template_pemeriksaan_dokter_penyakit.kd_penyakit,penyakit.nm_penyakit,penyakit.ciri_ciri,penyakit.keterangan, "+
                             "kategori_penyakit.nm_kategori,kategori_penyakit.ciri_umum,template_pemeriksaan_dokter_penyakit.urut from template_pemeriksaan_dokter_penyakit "+
@@ -1591,6 +1593,7 @@ public final class MasterCariTemplatePemeriksaan extends javax.swing.JDialog {
                     }
                     
                     Valid.tabelKosong(tabModeProsedur);
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                             "select template_pemeriksaan_dokter_prosedur.kode,icd9.deskripsi_panjang,icd9.deskripsi_pendek,template_pemeriksaan_dokter_prosedur.urut,template_pemeriksaan_dokter_prosedur.jumlah "+
                             "from template_pemeriksaan_dokter_prosedur inner join icd9 on template_pemeriksaan_dokter_prosedur.kode=icd9.kode where template_pemeriksaan_dokter_prosedur.no_template=? "+
@@ -1613,6 +1616,7 @@ public final class MasterCariTemplatePemeriksaan extends javax.swing.JDialog {
                     }
                     
                     Valid.tabelKosong(tabModeRadiologi);
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                             "select template_pemeriksaan_dokter_permintaan_radiologi.kd_jenis_prw,jns_perawatan_radiologi.nm_perawatan from template_pemeriksaan_dokter_permintaan_radiologi "+
                             "inner join jns_perawatan_radiologi on template_pemeriksaan_dokter_permintaan_radiologi.kd_jenis_prw=jns_perawatan_radiologi.kd_jenis_prw "+
@@ -1636,6 +1640,7 @@ public final class MasterCariTemplatePemeriksaan extends javax.swing.JDialog {
                     
                     Valid.tabelKosong(tabModePK);
                     Valid.tabelKosong(tabModeDetailPK);
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                             "select template_pemeriksaan_dokter_permintaan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan from template_pemeriksaan_dokter_permintaan_lab "+
                             "inner join jns_perawatan_lab on template_pemeriksaan_dokter_permintaan_lab.kd_jenis_prw=jns_perawatan_lab.kd_jenis_prw "+
@@ -1647,6 +1652,7 @@ public final class MasterCariTemplatePemeriksaan extends javax.swing.JDialog {
                             tabModePK.addRow(new Object[]{rs.getString("kd_jenis_prw"),rs.getString("nm_perawatan")});
                             try {
                                 tabModeDetailPK.addRow(new Object[]{rs.getString("nm_perawatan"),"","","",""});
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement(
                                         "select template_pemeriksaan_dokter_detail_permintaan_lab.id_template,template_laboratorium.Pemeriksaan,template_laboratorium.satuan,template_laboratorium.nilai_rujukan_ld,template_laboratorium.nilai_rujukan_la,template_laboratorium.nilai_rujukan_pd,template_laboratorium.nilai_rujukan_pa "+
                                         "from template_pemeriksaan_dokter_detail_permintaan_lab inner join template_laboratorium on template_pemeriksaan_dokter_detail_permintaan_lab.id_template=template_laboratorium.id_template where template_pemeriksaan_dokter_detail_permintaan_lab.no_template=? and "+
@@ -1695,6 +1701,7 @@ public final class MasterCariTemplatePemeriksaan extends javax.swing.JDialog {
                     }
                     
                     Valid.tabelKosong(tabModePA);
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                             "select template_pemeriksaan_dokter_permintaan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan from template_pemeriksaan_dokter_permintaan_lab "+
                             "inner join jns_perawatan_lab on template_pemeriksaan_dokter_permintaan_lab.kd_jenis_prw=jns_perawatan_lab.kd_jenis_prw "+
@@ -1718,6 +1725,7 @@ public final class MasterCariTemplatePemeriksaan extends javax.swing.JDialog {
                     
                     Valid.tabelKosong(tabModeMB);
                     Valid.tabelKosong(tabModeDetailMB);
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                             "select template_pemeriksaan_dokter_permintaan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan from template_pemeriksaan_dokter_permintaan_lab "+
                             "inner join jns_perawatan_lab on template_pemeriksaan_dokter_permintaan_lab.kd_jenis_prw=jns_perawatan_lab.kd_jenis_prw "+
@@ -1729,6 +1737,7 @@ public final class MasterCariTemplatePemeriksaan extends javax.swing.JDialog {
                             tabModeMB.addRow(new Object[]{rs.getString("kd_jenis_prw"),rs.getString("nm_perawatan")});
                             try {
                                 tabModeDetailMB.addRow(new Object[]{rs.getString("nm_perawatan"),"","","",""});
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement(
                                         "select template_pemeriksaan_dokter_detail_permintaan_lab.id_template,template_laboratorium.Pemeriksaan,template_laboratorium.satuan,template_laboratorium.nilai_rujukan_ld,template_laboratorium.nilai_rujukan_la,template_laboratorium.nilai_rujukan_pd,template_laboratorium.nilai_rujukan_pa "+
                                         "from template_pemeriksaan_dokter_detail_permintaan_lab inner join template_laboratorium on template_pemeriksaan_dokter_detail_permintaan_lab.id_template=template_laboratorium.id_template where template_pemeriksaan_dokter_detail_permintaan_lab.no_template=? and "+
@@ -1777,6 +1786,7 @@ public final class MasterCariTemplatePemeriksaan extends javax.swing.JDialog {
                     }
                     
                     Valid.tabelKosong(tabModeObatUmum);
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                             "select template_pemeriksaan_dokter_resep.kode_brng,databarang.nama_brng,kodesatuan.satuan,template_pemeriksaan_dokter_resep.jml,template_pemeriksaan_dokter_resep.aturan_pakai,jenis.nama,industrifarmasi.nama_industri, "+
                             "databarang.kapasitas,databarang.letak_barang from template_pemeriksaan_dokter_resep inner join databarang on template_pemeriksaan_dokter_resep.kode_brng=databarang.kode_brng inner join kodesatuan on kodesatuan.kode_sat=databarang.kode_sat "+
@@ -1802,6 +1812,7 @@ public final class MasterCariTemplatePemeriksaan extends javax.swing.JDialog {
                     
                     Valid.tabelKosong(tabModeObatRacikan);
                     Valid.tabelKosong(tabModeDetailObatRacikan);
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                             "select template_pemeriksaan_dokter_resep_racikan.no_racik,template_pemeriksaan_dokter_resep_racikan.kd_racik,template_pemeriksaan_dokter_resep_racikan.nama_racik,metode_racik.nm_racik,template_pemeriksaan_dokter_resep_racikan.jml_dr,template_pemeriksaan_dokter_resep_racikan.aturan_pakai,"+
                             "template_pemeriksaan_dokter_resep_racikan.keterangan from template_pemeriksaan_dokter_resep_racikan inner join metode_racik on metode_racik.kd_racik=template_pemeriksaan_dokter_resep_racikan.kd_racik where template_pemeriksaan_dokter_resep_racikan.no_template=? "+
@@ -1814,6 +1825,7 @@ public final class MasterCariTemplatePemeriksaan extends javax.swing.JDialog {
                                 rs.getString("no_racik"),rs.getString("nama_racik"),rs.getString("kd_racik"),rs.getString("nm_racik"),rs.getString("jml_dr"),rs.getString("aturan_pakai"),rs.getString("keterangan")
                             });
                             try {
+                                koneksi=koneksiDB.condb();
                                 ps2=koneksi.prepareStatement(
                                         "select template_pemeriksaan_dokter_resep_racikan_detail.kode_brng,databarang.nama_brng,kodesatuan.satuan,template_pemeriksaan_dokter_resep_racikan_detail.jml,jenis.nama,"+
                                         "databarang.kapasitas,template_pemeriksaan_dokter_resep_racikan_detail.p1,template_pemeriksaan_dokter_resep_racikan_detail.p2,template_pemeriksaan_dokter_resep_racikan_detail.kandungan,"+
@@ -1853,6 +1865,7 @@ public final class MasterCariTemplatePemeriksaan extends javax.swing.JDialog {
                     }
 
                     Valid.tabelKosong(TabModeTindakan);
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement(
                             "select template_pemeriksaan_dokter_tindakan.kd_jenis_prw,jns_perawatan.nm_perawatan,kategori_perawatan.nm_kategori,jns_perawatan.total_byrdr,jns_perawatan.bhp,jns_perawatan.material,"+
                             "jns_perawatan.tarif_tindakandr,jns_perawatan.kso,jns_perawatan.menejemen from template_pemeriksaan_dokter_tindakan inner join jns_perawatan "+

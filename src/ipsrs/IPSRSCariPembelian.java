@@ -662,6 +662,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(TCari,"No.Faktur");
         }else{
            try {
+               koneksi=koneksiDB.condb();
                pscaribeli=koneksi.prepareStatement("select ipsrspembelian.no_faktur,ipsrspembelian.tagihan,ipsrspembelian.tgl_beli,ipsrspembelian.kd_rek,ipsrspembelian.ppn,(ipsrspembelian.total+ipsrspembelian.meterai) as total from ipsrspembelian where ipsrspembelian.no_faktur=?");
                try {
                   pscaribeli.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),1).toString());
@@ -669,6 +670,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                   if(rs.next()){
                       Sequel.AutoComitFalse();
                       sukses=true;
+                      koneksi=koneksiDB.condb();
                       psipsrsdetailbeli=koneksi.prepareStatement("select ipsrsdetailbeli.kode_brng,ipsrsdetailbeli.jumlah from ipsrsdetailbeli where ipsrsdetailbeli.no_faktur=? ");
                       try {
                           psipsrsdetailbeli.setString(1,rs.getString(1));
@@ -996,6 +998,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{            
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select ipsrspembelian.tgl_beli,ipsrspembelian.no_faktur,ipsrspembelian.kode_suplier,ipsrssuplier.nama_suplier, "+
                 "ipsrspembelian.nip,petugas.nama,ipsrspembelian.subtotal,ipsrspembelian.potongan,ipsrspembelian.total, "+
@@ -1065,6 +1068,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3)+", "+rs.getString(4),
                           rs.getString(5)+", "+rs.getString(6),"Pembelian :","","","","","","",""
                     });      
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select ipsrsdetailbeli.kode_brng,ipsrsbarang.nama_brng,ipsrsdetailbeli.kode_sat,kodesatuan.satuan,ipsrsdetailbeli.jumlah,ipsrsdetailbeli.harga, "+
                         "ipsrsdetailbeli.subtotal,ipsrsdetailbeli.dis,ipsrsdetailbeli.besardis,ipsrsdetailbeli.total from ipsrsdetailbeli "+

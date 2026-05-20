@@ -1077,6 +1077,7 @@ public final class DlgAuditBundleISK extends javax.swing.JDialog {
       Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_bundle_isk.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_bundle_isk.tanggal,audit_bundle_isk.pemasangan_sesuai_indikasi,"+
                     "audit_bundle_isk.hand_hygiene,audit_bundle_isk.menggunakan_apd_yang_tepat,audit_bundle_isk.pemasangan_menggunakan_alat_steril,audit_bundle_isk.segera_dilepas_setelah_tidak_diperlukan,"+
@@ -1084,6 +1085,7 @@ public final class DlgAuditBundleISK extends javax.swing.JDialog {
                     "inner join ruang_audit_kepatuhan on audit_bundle_isk.id_ruang=ruang_audit_kepatuhan.id_ruang "+
                     "where audit_bundle_isk.tanggal between ? and ? order by audit_bundle_isk.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_bundle_isk.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_bundle_isk.tanggal,audit_bundle_isk.pemasangan_sesuai_indikasi,"+
                     "audit_bundle_isk.hand_hygiene,audit_bundle_isk.menggunakan_apd_yang_tepat,audit_bundle_isk.pemasangan_menggunakan_alat_steril,audit_bundle_isk.segera_dilepas_setelah_tidak_diperlukan,"+

@@ -385,6 +385,7 @@ public final class DlgCariBahasa extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from bahasa_pasien ");
             try{           
                 rs=ps.executeQuery();

@@ -587,6 +587,7 @@ public final class PCRAICRAKelasRisikoPencegahan extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select pcra_icra_kelas_risiko_pencegahan.kode_kelas,pcra_icra_kelas_risiko_pencegahan.nama_kelas from pcra_icra_kelas_risiko_pencegahan "+(TCari.getText().trim().equals("")?"":"where pcra_icra_kelas_risiko_pencegahan.kode_kelas like ? or pcra_icra_kelas_risiko_pencegahan.nama_kelas like ? ")+"order by pcra_icra_kelas_risiko_pencegahan.kode_kelas"
             );

@@ -353,6 +353,7 @@ public final class DlgBelum extends javax.swing.JDialog {
     public void tampil() {        
         Valid.tabelKosong(tabMode);
         try{    
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                    "select pegawai.nik, pegawai.nama, pegawai.jk, pegawai.jbtn, pegawai.jnj_jabatan,"+
                    "departemen.nama, pegawai.bidang  from pegawai inner join departemen on pegawai.departemen=departemen.dep_id where  "+

@@ -429,6 +429,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private void prosesCari() {
         Valid.tabelKosong(tabMode);
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                "select data_batch.no_batch,data_batch.kode_brng,databarang.nama_brng,"+
                "kodesatuan.satuan,data_batch.tgl_beli,data_batch.tgl_kadaluarsa,"+

@@ -1137,6 +1137,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select pengeluaran_obat_bhp.no_keluar,pengeluaran_obat_bhp.tanggal,pengeluaran_obat_bhp.nip,petugas.nama, "+
                 "pengeluaran_obat_bhp.kd_bangsal,bangsal.nm_bangsal,pengeluaran_obat_bhp.keterangan "+
@@ -1164,6 +1165,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     tabMode.addRow(new Object[]{
                         "","No.Batch & Faktur","Barang","Jenis","Satuan","Harga","Jml","Total"
                     });
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select detail_pengeluaran_obat_bhp.kode_brng,databarang.nama_brng,detail_pengeluaran_obat_bhp.no_faktur,"+
                         "jenis.nama,detail_pengeluaran_obat_bhp.harga_beli,detail_pengeluaran_obat_bhp.jumlah, "+
@@ -1242,6 +1244,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
 
         Valid.tabelKosong(tabMode2);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pengeluaran_obat_bhp.no_keluar, pengeluaran_obat_bhp.tanggal,pengeluaran_obat_bhp.nip,petugas.nama, "+
                     "pengeluaran_obat_bhp.kd_bangsal,bangsal.nm_bangsal,pengeluaran_obat_bhp.keterangan,detail_pengeluaran_obat_bhp.kode_brng,"+
@@ -1315,12 +1318,14 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
        Sequel.AutoComitFalse();
        sukses=true;
        try {
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement(
                    "select pengeluaran_obat_bhp.no_keluar,pengeluaran_obat_bhp.kd_bangsal from pengeluaran_obat_bhp where pengeluaran_obat_bhp.no_keluar=?");
            try {
               ps.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString().trim());
               rs=ps.executeQuery();
               if(rs.next()){
+                  koneksi=koneksiDB.condb();
                   ps2=koneksi.prepareStatement(
                        "select detail_pengeluaran_obat_bhp.kode_brng,detail_pengeluaran_obat_bhp.jumlah,detail_pengeluaran_obat_bhp.no_batch,detail_pengeluaran_obat_bhp.no_faktur from detail_pengeluaran_obat_bhp where detail_pengeluaran_obat_bhp.no_keluar=? ");
                   try {

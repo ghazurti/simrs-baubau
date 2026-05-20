@@ -652,6 +652,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                 Valid.textKosong(TCari,"pilihan data");
             }else{
                 try {
+                    koneksi=koneksiDB.condb();
                     ps=koneksi.prepareStatement("select dapur_detail_titip_faktur.no_faktur from dapur_detail_titip_faktur where dapur_detail_titip_faktur.no_tagihan=?");
                     try {
                        ps.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString().trim());
@@ -823,6 +824,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                  cari=" and (dapur_titip_faktur.no_tagihan like '%"+TCari.getText()+"%' or petugas.nama like '%"+TCari.getText()+"%' or dapur_titip_faktur.keterangan like '%"+TCari.getText()+"%' or dapur_detail_titip_faktur.no_faktur like '%"+TCari.getText()+"%' or dapursuplier.nama_suplier like '%"+TCari.getText()+"%' ) ";
              }
              
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement(
                      "select dapur_titip_faktur.no_tagihan,dapur_titip_faktur.tanggal,dapur_titip_faktur.nip,petugas.nama as petugas,"+
                      "dapur_titip_faktur.keterangan,dapur_titip_faktur.status from dapur_titip_faktur "+
@@ -841,6 +843,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     tabMode.addRow(new Object[]{
                         "","Tgl.Tempo","No.Faktur","Nama Suplier","Sisa Hutang"
                     });
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select dapurpemesanan.tgl_tempo,dapurpemesanan.no_faktur,dapurpemesanan.kode_suplier,dapursuplier.nama_suplier,dapurpemesanan.tagihan,"+
                         "(SELECT ifnull(SUM(besar_bayar),0) FROM bayar_pemesanan_dapur where bayar_pemesanan_dapur.no_faktur=dapurpemesanan.no_faktur) as bayar from dapur_titip_faktur "+

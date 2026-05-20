@@ -1110,6 +1110,7 @@ private void TanggalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_T
         Valid.tabelKosong(tabMode);
         try {
             semua=nm_ruangcari.getText().equals("")&&TCari.getText().equals("");
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select pemeliharaan_inventaris.no_inventaris,inventaris.kode_barang,inventaris_barang.nama_barang,"+
                     "inventaris_ruang.nama_ruang,pemeliharaan_inventaris.nip,petugas.nama,pemeliharaan_inventaris.uraian_kegiatan,"+

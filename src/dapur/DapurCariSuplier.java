@@ -357,6 +357,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select dapursuplier.kode_suplier, dapursuplier.nama_suplier, "+
                     " dapursuplier.alamat,dapursuplier.kota, dapursuplier.no_telp,"+

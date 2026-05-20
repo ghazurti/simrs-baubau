@@ -1098,6 +1098,7 @@ public final class DlgAuditPengelolaanLinenKotor extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_pengelolaan_linen_kotor.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_pengelolaan_linen_kotor.tanggal,audit_pengelolaan_linen_kotor.audit1,"+
                     "audit_pengelolaan_linen_kotor.audit2,audit_pengelolaan_linen_kotor.audit3,"+
@@ -1107,6 +1108,7 @@ public final class DlgAuditPengelolaanLinenKotor extends javax.swing.JDialog {
                     "inner join ruang_audit_kepatuhan on audit_pengelolaan_linen_kotor.id_ruang=ruang_audit_kepatuhan.id_ruang "+
                     "where audit_pengelolaan_linen_kotor.tanggal between ? and ? order by audit_pengelolaan_linen_kotor.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_pengelolaan_linen_kotor.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_pengelolaan_linen_kotor.tanggal,audit_pengelolaan_linen_kotor.audit1,"+
                     "audit_pengelolaan_linen_kotor.audit2,audit_pengelolaan_linen_kotor.audit3,"+

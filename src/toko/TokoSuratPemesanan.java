@@ -1423,6 +1423,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         }
         
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select tokobarang.kode_brng,tokobarang.nama_brng,tokobarang.kode_sat,tokobarang.h_beli from tokobarang inner join tokojenisbarang on tokobarang.jenis=tokojenisbarang.kd_jenis "+
                 "where tokobarang.status='1' "+(TCari.getText().trim().equals("")?"":"and (tokobarang.kode_brng like ? or tokobarang.nama_brng like ? or tokojenisbarang.nm_jenis like ?) ")+
@@ -1545,6 +1546,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
     
     public void panggilgetData(String nopengajuan){
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select tokobarang.kode_brng, tokobarang.nama_brng,tokobarang.kode_sat,toko_detail_pengajuan_barang.jumlah,toko_detail_pengajuan_barang.total,"+
                 " toko_detail_pengajuan_barang.h_pengajuan from tokobarang inner join tokojenisbarang inner join toko_detail_pengajuan_barang "+

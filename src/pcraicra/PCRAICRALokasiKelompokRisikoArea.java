@@ -584,6 +584,7 @@ public final class PCRAICRALokasiKelompokRisikoArea extends javax.swing.JDialog 
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select pcra_icra_lokasi_kelompok_risiko_area.kode_area,pcra_icra_lokasi_kelompok_risiko_area.nama_area from pcra_icra_lokasi_kelompok_risiko_area "+(TCari.getText().trim().equals("")?"":"where pcra_icra_lokasi_kelompok_risiko_area.kode_area like ? or pcra_icra_lokasi_kelompok_risiko_area.nama_area like ? ")+"order by pcra_icra_lokasi_kelompok_risiko_area.kode_area"
             );

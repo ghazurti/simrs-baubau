@@ -676,6 +676,7 @@ public final class SKPKategoriPenilaian extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select * from skp_kategori_penilaian where skp_kategori_penilaian.kode_kategori like ? "+
                     "or skp_kategori_penilaian.nama_kategori like ? or skp_kategori_penilaian.sasaran like ? "+

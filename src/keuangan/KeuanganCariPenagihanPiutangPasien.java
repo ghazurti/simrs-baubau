@@ -1149,6 +1149,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                  transfer=" and concat(akun_penagihan_piutang.nama_bank,akun_penagihan_piutang.no_rek)='"+NamaBank.getText()+NoRek.getText()+"' ";
              }
              
+             koneksi=koneksiDB.condb();
              ps=koneksi.prepareStatement(
                      "select penagihan_piutang.no_tagihan, penagihan_piutang.tanggal, penagihan_piutang.tanggaltempo, penagihan_piutang.tempo,"+
                      "penagihan_piutang.nip,bagianpenagihan.nama as bagianpenagihan,penagihan_piutang.nip_menyetujui,menyetujui.nama as menyetujui,"+
@@ -1183,6 +1184,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         "","","Tgl.Piutang","NIP","Asal Perusahaan","No.Rawat/No.Tagihan","No.Peserta","Piutang","No.Rm & Nama Pasien","Status"
                     });  
                     nilaitagihan=0;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select piutang_pasien.tgl_piutang,pasien.nip,perusahaan_pasien.nama_perusahaan,piutang_pasien.no_rkm_medis,pasien.nm_pasien,"+
                             "pasien.no_peserta,detail_penagihan_piutang.sisapiutang,detail_penagihan_piutang.no_rawat,reg_periksa.status_lanjut "+
@@ -1291,6 +1293,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void panggilPhoto() {
         if(FormPhoto.isVisible()==true){
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select bukti_penagihan_piutang.photo from bukti_penagihan_piutang where bukti_penagihan_piutang.no_tagihan=?");
                 try {
                     ps.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),3).toString());

@@ -1084,6 +1084,7 @@ public final class DlgAuditBundleVAP extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_bundle_vap.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_bundle_vap.tanggal,audit_bundle_vap.posisi_kepala,"+
                     "audit_bundle_vap.pengkajian_setiap_hari,audit_bundle_vap.hand_hygiene,audit_bundle_vap.oral_hygiene,audit_bundle_vap.suction_manajemen_sekresi,"+
@@ -1091,6 +1092,7 @@ public final class DlgAuditBundleVAP extends javax.swing.JDialog {
                     "inner join ruang_audit_kepatuhan on audit_bundle_vap.id_ruang=ruang_audit_kepatuhan.id_ruang "+
                     "where audit_bundle_vap.tanggal between ? and ? order by audit_bundle_vap.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_bundle_vap.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_bundle_vap.tanggal,audit_bundle_vap.posisi_kepala,"+
                     "audit_bundle_vap.pengkajian_setiap_hari,audit_bundle_vap.hand_hygiene,audit_bundle_vap.oral_hygiene,audit_bundle_vap.suction_manajemen_sekresi,"+

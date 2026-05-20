@@ -1085,6 +1085,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Sequel.queryu("delete from temporary where temp37='"+akses.getalamatip()+"'");
             try {
                 i=0;
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select surat_pemesanan_non_medis.tanggal,surat_pemesanan_non_medis.no_pemesanan, "+
                     "surat_pemesanan_non_medis.kode_suplier,ipsrssuplier.nama_suplier, "+
@@ -1124,6 +1125,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         param.put("kabidkeu",KabidKeu.getText());
                         param.put("logo",Sequel.cariGambar("select setting.logo from setting"));
                         
+                        koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement("select detail_surat_pemesanan_non_medis.kode_brng,ipsrsbarang.nama_brng, "+
                             "detail_surat_pemesanan_non_medis.kode_sat,kodesatuan.satuan,detail_surat_pemesanan_non_medis.jumlah,detail_surat_pemesanan_non_medis.h_pesan, "+
                             "detail_surat_pemesanan_non_medis.subtotal,detail_surat_pemesanan_non_medis.dis,detail_surat_pemesanan_non_medis.besardis,detail_surat_pemesanan_non_medis.total "+
@@ -1316,6 +1318,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{   
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select surat_pemesanan_non_medis.tanggal,surat_pemesanan_non_medis.no_pemesanan, "+
                     "surat_pemesanan_non_medis.kode_suplier,ipsrssuplier.nama_suplier, "+
@@ -1421,6 +1424,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                         rs.getString("no_pemesanan"),"Tanggal : "+rs.getString("tanggal")+", Status : "+rs.getString("status"),"","","","","","",""
                     });  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select detail_surat_pemesanan_non_medis.kode_brng,ipsrsbarang.nama_brng, "+
                         "detail_surat_pemesanan_non_medis.kode_sat,kodesatuan.satuan,detail_surat_pemesanan_non_medis.jumlah,detail_surat_pemesanan_non_medis.h_pesan, "+
                         "detail_surat_pemesanan_non_medis.subtotal,detail_surat_pemesanan_non_medis.dis,detail_surat_pemesanan_non_medis.besardis,detail_surat_pemesanan_non_medis.total "+

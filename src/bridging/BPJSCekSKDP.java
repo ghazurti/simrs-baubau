@@ -191,6 +191,7 @@ public final class BPJSCekSKDP extends javax.swing.JDialog {
         try{
             KdPPK.setText(akses.getkodeppkbpjs());
             NmPPK.setText(akses.getnamars());     
+            koneksi=koneksiDB.condb();
             pssetalamat=koneksi.prepareStatement("select * from set_alamat_pasien");
             try {
                 rs=pssetalamat.executeQuery();
@@ -215,6 +216,7 @@ public final class BPJSCekSKDP extends javax.swing.JDialog {
                 }
             }
             
+            koneksi=koneksiDB.condb();
             pskelengkapan=koneksi.prepareStatement("select * from set_kelengkapan_data_pasien");
             try {
                 rs=pskelengkapan.executeQuery();
@@ -4657,6 +4659,7 @@ public final class BPJSCekSKDP extends javax.swing.JDialog {
                             NmDPJPLayanan.setText(dpjp.getTable().getValueAt(dpjp.getTable().getSelectedRow(),2).toString());
                         }
                         try{
+                            koneksi=koneksiDB.condb();
                             ps=koneksi.prepareStatement(
                                     "select maping_dokter_dpjpvclaim.kd_dokter,dokter.nm_dokter from maping_dokter_dpjpvclaim inner join dokter "+
                                     "on maping_dokter_dpjpvclaim.kd_dokter=dokter.kd_dokter where maping_dokter_dpjpvclaim.kd_dokter_bpjs=?");
@@ -5081,6 +5084,7 @@ public final class BPJSCekSKDP extends javax.swing.JDialog {
                             NmDPJPLayanan.setText(dpjp.getTable().getValueAt(dpjp.getTable().getSelectedRow(),2).toString());
                         }
                         try{
+                            koneksi=koneksiDB.condb();
                             ps=koneksi.prepareStatement(
                                     "select maping_dokter_dpjpvclaim.kd_dokter,dokter.nm_dokter from maping_dokter_dpjpvclaim inner join dokter "+
                                     "on maping_dokter_dpjpvclaim.kd_dokter=dokter.kd_dokter where maping_dokter_dpjpvclaim.kd_dokter_bpjs=?");
@@ -5800,6 +5804,7 @@ public final class BPJSCekSKDP extends javax.swing.JDialog {
     public void tampil(String noskdp) {
         try {
             nosep="";
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select bridging_sep.no_rawat,bridging_sep.no_sep,bridging_sep.no_kartu,bridging_sep.nomr,bridging_sep.nama_pasien,bridging_sep.tanggal_lahir,"+
                 "bridging_sep.jkel,bridging_sep.diagawal,bridging_sep.nmdiagnosaawal,bridging_surat_kontrol_bpjs.tgl_surat,bridging_surat_kontrol_bpjs.no_surat,"+
@@ -5979,6 +5984,7 @@ public final class BPJSCekSKDP extends javax.swing.JDialog {
                 });
                 prb=cekViaBPJSKartu.informasiprolanisPRB.replaceAll("null","");
                 TUmur.setText(cekViaBPJSKartu.umurumurSekarang.replaceAll("tahun","Th ").replaceAll("bulan","Bl ").replaceAll("hari","Hr"));
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                    "select pasien.no_rkm_medis, pasien.nm_pasien, pasien.no_ktp, pasien.jk, "+
                    "pasien.tmp_lahir, pasien.tgl_lahir,pasien.nm_ibu, pasien.alamat,kelurahan.nm_kel,kecamatan.nm_kec,kabupaten.nm_kab,propinsi.nm_prop,"+
@@ -6033,6 +6039,7 @@ public final class BPJSCekSKDP extends javax.swing.JDialog {
                         CmbKeluarga.setSelectedItem(rs.getString("keluarga"));
                         Saudara.setText(rs.getString("namakeluarga"));
                         if(tampilkantni.equals("Yes")){
+                            koneksi=koneksiDB.condb();
                             pstni=koneksi.prepareStatement(
                                 "select pasien_tni.no_rkm_medis,pasien_tni.golongan_tni,golongan_tni.nama_golongan,"+
                                 "pasien_tni.satuan_tni,satuan_tni.nama_satuan,pasien_tni.pangkat_tni,"+
@@ -6067,6 +6074,7 @@ public final class BPJSCekSKDP extends javax.swing.JDialog {
                                 }
                             }
                                 
+                            koneksi=koneksiDB.condb();
                             pspolri=koneksi.prepareStatement(
                                 "select pasien_polri.no_rkm_medis,pasien_polri.golongan_polri,golongan_polri.nama_golongan,"+
                                 "pasien_polri.satuan_polri,satuan_polri.nama_satuan,pasien_polri.pangkat_polri,"+
@@ -6115,6 +6123,7 @@ public final class BPJSCekSKDP extends javax.swing.JDialog {
                     }
                 }
                 Catatan.setText("Lama");
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                         "select maping_dokter_dpjpvclaim.kd_dokter,maping_dokter_dpjpvclaim.kd_dokter_bpjs,maping_dokter_dpjpvclaim.nm_dokter_bpjs from maping_dokter_dpjpvclaim inner join jadwal "+
                         "on maping_dokter_dpjpvclaim.kd_dokter=jadwal.kd_dokter where jadwal.kd_poli=? and jadwal.hari_kerja=?");
@@ -6421,6 +6430,7 @@ public final class BPJSCekSKDP extends javax.swing.JDialog {
     
     private void isPoli(){
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select registrasilama "+
                 " from poliklinik where kd_poli=? order by nm_poli");
             try{            
@@ -6659,6 +6669,7 @@ public final class BPJSCekSKDP extends javax.swing.JDialog {
         umurdaftar="0";
         sttsumur="Th";
         try {
+            koneksi=koneksiDB.condb();
             pscariumur=koneksi.prepareStatement(
                 "select TIMESTAMPDIFF(YEAR, pasien.tgl_lahir, CURDATE()) as tahun, "+
                 "(TIMESTAMPDIFF(MONTH, pasien.tgl_lahir, CURDATE()) - ((TIMESTAMPDIFF(MONTH, pasien.tgl_lahir, CURDATE()) div 12) * 12)) as bulan, "+
@@ -6926,6 +6937,7 @@ public final class BPJSCekSKDP extends javax.swing.JDialog {
                         break;
                 }
 
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select jadwal.jam_mulai,jadwal.jam_selesai,jadwal.kuota from jadwal where jadwal.hari_kerja=? and jadwal.kd_poli=? and jadwal.kd_dokter=?");
                 try {
                     ps.setString(1,hari);

@@ -385,6 +385,7 @@ public final class MasterCariTemplatePersetujuanPenolakanTindakan extends javax.
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select template_persetujuan_penolakan_tindakan.kode_template,template_persetujuan_penolakan_tindakan.diagnosa,template_persetujuan_penolakan_tindakan.tindakan,"+
                     "template_persetujuan_penolakan_tindakan.indikasi_tindakan,template_persetujuan_penolakan_tindakan.tata_cara,template_persetujuan_penolakan_tindakan.tujuan,"+

@@ -998,12 +998,14 @@ public final class DlgAuditBundleIADP extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_bundle_iadp.nik,pegawai.nama,audit_bundle_iadp.tanggal,audit_bundle_iadp.handhygiene,"+
                     "audit_bundle_iadp.apd,audit_bundle_iadp.skin_antiseptik,audit_bundle_iadp.lokasi_iv,audit_bundle_iadp.perawatan_rutin "+
                     "from audit_bundle_iadp inner join pegawai on audit_bundle_iadp.nik=pegawai.nik "+
                     "where audit_bundle_iadp.tanggal between ? and ? order by audit_bundle_iadp.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_bundle_iadp.nik,pegawai.nama,audit_bundle_iadp.tanggal,audit_bundle_iadp.handhygiene,"+
                     "audit_bundle_iadp.apd,audit_bundle_iadp.skin_antiseptik,audit_bundle_iadp.lokasi_iv,audit_bundle_iadp.perawatan_rutin "+

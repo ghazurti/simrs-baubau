@@ -203,6 +203,7 @@ public final class DlgLihatPesan extends javax.swing.JDialog {
     public void tampil() {
         try{   
             Valid.tabelKosong(tabMode);  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from sms");
             try {
                 rs=ps.executeQuery();

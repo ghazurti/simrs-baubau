@@ -831,6 +831,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     
     private void prosesCariSemua() { 
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select dokter.kd_dokter,dokter.nm_dokter from dokter where dokter.status='1' "+(nmdokter.getText().trim().equals("")?"":"and dokter.kd_dokter=? ")+" order by dokter.nm_dokter");
             try {
                  if(!nmdokter.getText().trim().equals("")){
@@ -843,10 +844,12 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     jm=0;
                     //rawat jalan dokter   
                     if(chkRalan.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psralandokter=koneksi.prepareStatement(
                              "select sum(rawat_jl_dr.tarif_tindakandr) as total from reg_periksa inner join rawat_jl_dr on rawat_jl_dr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.tgl_registrasi between ? and ? and rawat_jl_dr.kd_dokter=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_jl_dr.tarif_tindakandr>0");   
+                         koneksi=koneksiDB.condb();
                          psralandokterdrpr=koneksi.prepareStatement(
                              "select sum(rawat_jl_drpr.tarif_tindakandr) as total from reg_periksa inner join rawat_jl_drpr on rawat_jl_drpr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.tgl_registrasi between ? and ? and rawat_jl_drpr.kd_dokter=? "+
@@ -891,10 +894,12 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                     //rawat inap dokter   
                     if(chkRanap.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psranapdokter=koneksi.prepareStatement(
                              "select sum(rawat_inap_dr.tarif_tindakandr) as total from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where rawat_inap_dr.tgl_perawatan between ? and ? and rawat_inap_dr.kd_dokter=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_inap_dr.tarif_tindakandr>0");
+                         koneksi=koneksiDB.condb();
                          psranapdokterdrpr=koneksi.prepareStatement(
                              "select sum(rawat_inap_drpr.tarif_tindakandr) as total from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where rawat_inap_drpr.tgl_perawatan between ? and ? and rawat_inap_drpr.kd_dokter=? "+
@@ -938,30 +943,37 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     } 
 
                     if(chkOperasi.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator1=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator1) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where operasi.tgl_operasi between ? and ? and operasi.operator1=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator1>0");
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator2=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator2) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where operasi.tgl_operasi between ? and ? and operasi.operator2=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator2>0");
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator3=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator3) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where operasi.tgl_operasi between ? and ? and operasi.operator3=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator3>0");
+                         koneksi=koneksiDB.condb();
                          psbiayadokter_anak=koneksi.prepareStatement(
                              "select sum(operasi.biayadokter_anak) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where operasi.tgl_operasi between ? and ? and operasi.dokter_anak=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayadokter_anak>0");
+                         koneksi=koneksiDB.condb();
                          psbiaya_dokter_umum=koneksi.prepareStatement(
                              "select sum(operasi.biaya_dokter_umum) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where operasi.tgl_operasi between ? and ? and operasi.dokter_umum=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_dokter_umum>0");
+                         koneksi=koneksiDB.condb();
                          psbiaya_dokter_pjanak=koneksi.prepareStatement(
                              "select sum(operasi.biaya_dokter_pjanak) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where operasi.tgl_operasi between ? and ? and operasi.dokter_pjanak=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_dokter_pjanak>0");
+                         koneksi=koneksiDB.condb();
                          psbiayadokter_anestesi=koneksi.prepareStatement(
                              "select sum(operasi.biayadokter_anestesi) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where operasi.tgl_operasi between ? and ? and operasi.dokter_anestesi=? "+
@@ -1086,6 +1098,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     }
 
                     if(chkLaborat.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psperiksa_lab=koneksi.prepareStatement(
                              "select sum(periksa_lab.tarif_tindakan_dokter) as total from periksa_lab inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where periksa_lab.tgl_periksa between ? and ? and periksa_lab.kd_dokter=? "+
@@ -1110,6 +1123,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                              }
                          }
 
+                         koneksi=koneksiDB.condb();
                          psdetaillab=koneksi.prepareStatement(
                              "select sum(detail_periksa_lab.bagian_dokter) as total from detail_periksa_lab inner join periksa_lab "+
                              "on periksa_lab.no_rawat=detail_periksa_lab.no_rawat and periksa_lab.kd_jenis_prw=detail_periksa_lab.kd_jenis_prw "+
@@ -1138,6 +1152,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                          }
 
                          //perujuk Lab
+                         koneksi=koneksiDB.condb();
                          psperiksa_lab2=koneksi.prepareStatement(
                              "select sum(periksa_lab.tarif_perujuk) as total from periksa_lab inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where periksa_lab.tgl_periksa between ? and ? and periksa_lab.dokter_perujuk=? "+
@@ -1162,6 +1177,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                              }
                          }
 
+                         koneksi=koneksiDB.condb();
                          psdetaillab2=koneksi.prepareStatement(
                              "select sum(detail_periksa_lab.bagian_perujuk) as total from detail_periksa_lab inner join periksa_lab "+
                              "on periksa_lab.no_rawat=detail_periksa_lab.no_rawat and periksa_lab.kd_jenis_prw=detail_periksa_lab.kd_jenis_prw "+
@@ -1192,6 +1208,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                     if(chkRadiologi.isSelected()==true){
                         //periksa radiologi
+                         koneksi=koneksiDB.condb();
                          psperiksa_radiologi=koneksi.prepareStatement(
                              "select sum(periksa_radiologi.tarif_tindakan_dokter) as total from periksa_radiologi inner join reg_periksa on periksa_radiologi.no_rawat=reg_periksa.no_rawat "+
                              " inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where periksa_radiologi.tgl_periksa between ? and ? and periksa_radiologi.kd_dokter=? "+
@@ -1217,6 +1234,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                          }
 
                          //perujuk radiologi
+                         koneksi=koneksiDB.condb();
                          psperiksa_radiologi2=koneksi.prepareStatement(
                              "select sum(periksa_radiologi.tarif_perujuk) as total from periksa_radiologi inner join reg_periksa on periksa_radiologi.no_rawat=reg_periksa.no_rawat "+
                              " inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where periksa_radiologi.tgl_periksa between ? and ? and periksa_radiologi.dokter_perujuk=? "+
@@ -1288,6 +1306,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
     private void prosesCariPiutangBelumLunas() {
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select dokter.kd_dokter,dokter.nm_dokter from dokter where dokter.status='1' "+(nmdokter.getText().trim().equals("")?"":"and dokter.kd_dokter=? ")+" order by dokter.nm_dokter");
             try {
                  if(!nmdokter.getText().trim().equals("")){
@@ -1300,11 +1319,13 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     jm=0;
                     //rawat jalan dokter   
                     if(chkRalan.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psralandokter=koneksi.prepareStatement(
                              "select sum(rawat_jl_dr.tarif_tindakandr) as total from reg_periksa inner join rawat_jl_dr on rawat_jl_dr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and reg_periksa.tgl_registrasi between ? and ? and rawat_jl_dr.kd_dokter=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_jl_dr.tarif_tindakandr>0");   
+                         koneksi=koneksiDB.condb();
                          psralandokterdrpr=koneksi.prepareStatement(
                              "select sum(rawat_jl_drpr.tarif_tindakandr) as total from reg_periksa inner join rawat_jl_drpr on rawat_jl_drpr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -1350,11 +1371,13 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                     //rawat inap dokter   
                     if(chkRanap.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psranapdokter=koneksi.prepareStatement(
                              "select sum(rawat_inap_dr.tarif_tindakandr) as total from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and rawat_inap_dr.tgl_perawatan between ? and ? and rawat_inap_dr.kd_dokter=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_inap_dr.tarif_tindakandr>0");
+                         koneksi=koneksiDB.condb();
                          psranapdokterdrpr=koneksi.prepareStatement(
                              "select sum(rawat_inap_drpr.tarif_tindakandr) as total from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -1399,36 +1422,43 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     } 
 
                     if(chkOperasi.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator1=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator1) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.operator1=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator1>0");
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator2=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator2) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.operator2=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator2>0");
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator3=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator3) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.operator3=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator3>0");
+                         koneksi=koneksiDB.condb();
                          psbiayadokter_anak=koneksi.prepareStatement(
                              "select sum(operasi.biayadokter_anak) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.dokter_anak=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayadokter_anak>0");
+                         koneksi=koneksiDB.condb();
                          psbiaya_dokter_umum=koneksi.prepareStatement(
                              "select sum(operasi.biaya_dokter_umum) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.dokter_umum=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_dokter_umum>0");
+                         koneksi=koneksiDB.condb();
                          psbiaya_dokter_pjanak=koneksi.prepareStatement(
                              "select sum(operasi.biaya_dokter_pjanak) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Belum Lunas' and operasi.tgl_operasi between ? and ? and operasi.dokter_pjanak=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_dokter_pjanak>0");
+                         koneksi=koneksiDB.condb();
                          psbiayadokter_anestesi=koneksi.prepareStatement(
                              "select sum(operasi.biayadokter_anestesi) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -1554,6 +1584,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     }
 
                     if(chkLaborat.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psperiksa_lab=koneksi.prepareStatement(
                              "select sum(periksa_lab.tarif_tindakan_dokter) as total from periksa_lab inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -1579,6 +1610,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                              }
                          }
 
+                         koneksi=koneksiDB.condb();
                          psdetaillab=koneksi.prepareStatement(
                              "select sum(detail_periksa_lab.bagian_dokter) as total from detail_periksa_lab inner join periksa_lab "+
                              "on periksa_lab.no_rawat=detail_periksa_lab.no_rawat and periksa_lab.kd_jenis_prw=detail_periksa_lab.kd_jenis_prw "+
@@ -1609,6 +1641,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                          }
 
                          //perujuk Lab
+                         koneksi=koneksiDB.condb();
                          psperiksa_lab2=koneksi.prepareStatement(
                              "select sum(periksa_lab.tarif_perujuk) as total from periksa_lab inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -1634,6 +1667,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                              }
                          }
 
+                         koneksi=koneksiDB.condb();
                          psdetaillab2=koneksi.prepareStatement(
                              "select sum(detail_periksa_lab.bagian_perujuk) as total from detail_periksa_lab inner join periksa_lab "+
                              "on periksa_lab.no_rawat=detail_periksa_lab.no_rawat and periksa_lab.kd_jenis_prw=detail_periksa_lab.kd_jenis_prw "+
@@ -1666,6 +1700,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                     if(chkRadiologi.isSelected()==true){
                         //periksa radiologi
+                         koneksi=koneksiDB.condb();
                          psperiksa_radiologi=koneksi.prepareStatement(
                              "select sum(periksa_radiologi.tarif_tindakan_dokter) as total from periksa_radiologi inner join reg_periksa on periksa_radiologi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -1692,6 +1727,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                          }
 
                          //perujuk radiologi
+                         koneksi=koneksiDB.condb();
                          psperiksa_radiologi2=koneksi.prepareStatement(
                              "select sum(periksa_radiologi.tarif_perujuk) as total from periksa_radiologi inner join reg_periksa on periksa_radiologi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -1746,6 +1782,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
     private void prosesCariPiutangSudahLunas() {
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select dokter.kd_dokter,dokter.nm_dokter from dokter where dokter.status='1' "+(nmdokter.getText().trim().equals("")?"":"and dokter.kd_dokter=? ")+" order by dokter.nm_dokter");
             try {
                  if(!nmdokter.getText().trim().equals("")){
@@ -1758,11 +1795,13 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     jm=0;
                     //rawat jalan dokter   
                     if(chkRalan.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psralandokter=koneksi.prepareStatement(
                              "select sum(rawat_jl_dr.tarif_tindakandr) as total from reg_periksa inner join rawat_jl_dr on rawat_jl_dr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and reg_periksa.tgl_registrasi between ? and ? and rawat_jl_dr.kd_dokter=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_jl_dr.tarif_tindakandr>0");   
+                         koneksi=koneksiDB.condb();
                          psralandokterdrpr=koneksi.prepareStatement(
                              "select sum(rawat_jl_drpr.tarif_tindakandr) as total from reg_periksa inner join rawat_jl_drpr on rawat_jl_drpr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -1808,11 +1847,13 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                     //rawat inap dokter   
                     if(chkRanap.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psranapdokter=koneksi.prepareStatement(
                              "select sum(rawat_inap_dr.tarif_tindakandr) as total from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and rawat_inap_dr.tgl_perawatan between ? and ? and rawat_inap_dr.kd_dokter=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_inap_dr.tarif_tindakandr>0");
+                         koneksi=koneksiDB.condb();
                          psranapdokterdrpr=koneksi.prepareStatement(
                              "select sum(rawat_inap_drpr.tarif_tindakandr) as total from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -1857,36 +1898,43 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     } 
 
                     if(chkOperasi.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator1=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator1) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.operator1=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator1>0");
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator2=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator2) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.operator2=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator2>0");
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator3=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator3) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.operator3=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator3>0");
+                         koneksi=koneksiDB.condb();
                          psbiayadokter_anak=koneksi.prepareStatement(
                              "select sum(operasi.biayadokter_anak) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.dokter_anak=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayadokter_anak>0");
+                         koneksi=koneksiDB.condb();
                          psbiaya_dokter_umum=koneksi.prepareStatement(
                              "select sum(operasi.biaya_dokter_umum) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.dokter_umum=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_dokter_umum>0");
+                         koneksi=koneksiDB.condb();
                          psbiaya_dokter_pjanak=koneksi.prepareStatement(
                              "select sum(operasi.biaya_dokter_pjanak) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
                              "where reg_periksa.status_bayar='Sudah Bayar' and piutang_pasien.status='Lunas' and operasi.tgl_operasi between ? and ? and operasi.dokter_pjanak=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_dokter_pjanak>0");
+                         koneksi=koneksiDB.condb();
                          psbiayadokter_anestesi=koneksi.prepareStatement(
                              "select sum(operasi.biayadokter_anestesi) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -2012,6 +2060,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     }
 
                     if(chkLaborat.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psperiksa_lab=koneksi.prepareStatement(
                              "select sum(periksa_lab.tarif_tindakan_dokter) as total from periksa_lab inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -2037,6 +2086,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                              }
                          }
 
+                         koneksi=koneksiDB.condb();
                          psdetaillab=koneksi.prepareStatement(
                              "select sum(detail_periksa_lab.bagian_dokter) as total from detail_periksa_lab inner join periksa_lab "+
                              "on periksa_lab.no_rawat=detail_periksa_lab.no_rawat and periksa_lab.kd_jenis_prw=detail_periksa_lab.kd_jenis_prw "+
@@ -2067,6 +2117,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                          }
 
                          //perujuk Lab
+                         koneksi=koneksiDB.condb();
                          psperiksa_lab2=koneksi.prepareStatement(
                              "select sum(periksa_lab.tarif_perujuk) as total from periksa_lab inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -2092,6 +2143,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                              }
                          }
 
+                         koneksi=koneksiDB.condb();
                          psdetaillab2=koneksi.prepareStatement(
                              "select sum(detail_periksa_lab.bagian_perujuk) as total from detail_periksa_lab inner join periksa_lab "+
                              "on periksa_lab.no_rawat=detail_periksa_lab.no_rawat and periksa_lab.kd_jenis_prw=detail_periksa_lab.kd_jenis_prw "+
@@ -2124,6 +2176,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                     if(chkRadiologi.isSelected()==true){
                         //periksa radiologi
+                         koneksi=koneksiDB.condb();
                          psperiksa_radiologi=koneksi.prepareStatement(
                              "select sum(periksa_radiologi.tarif_tindakan_dokter) as total from periksa_radiologi inner join reg_periksa on periksa_radiologi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -2150,6 +2203,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                          }
 
                          //perujuk radiologi
+                         koneksi=koneksiDB.condb();
                          psperiksa_radiologi2=koneksi.prepareStatement(
                              "select sum(periksa_radiologi.tarif_perujuk) as total from periksa_radiologi inner join reg_periksa on periksa_radiologi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj inner join piutang_pasien on reg_periksa.no_rawat=piutang_pasien.no_rawat "+
@@ -2204,6 +2258,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
     private void prosesCariBelumTerclosing() {
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select dokter.kd_dokter,dokter.nm_dokter from dokter where dokter.status='1' "+(nmdokter.getText().trim().equals("")?"":"and dokter.kd_dokter=? ")+" order by dokter.nm_dokter");
             try {
                  if(!nmdokter.getText().trim().equals("")){
@@ -2216,10 +2271,12 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     jm=0;
                     //rawat jalan dokter   
                     if(chkRalan.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psralandokter=koneksi.prepareStatement(
                              "select sum(rawat_jl_dr.tarif_tindakandr) as total from reg_periksa inner join rawat_jl_dr on rawat_jl_dr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and reg_periksa.tgl_registrasi between ? and ? and rawat_jl_dr.kd_dokter=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_jl_dr.tarif_tindakandr>0");   
+                         koneksi=koneksiDB.condb();
                          psralandokterdrpr=koneksi.prepareStatement(
                              "select sum(rawat_jl_drpr.tarif_tindakandr) as total from reg_periksa inner join rawat_jl_drpr on rawat_jl_drpr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and reg_periksa.tgl_registrasi between ? and ? and rawat_jl_drpr.kd_dokter=? "+
@@ -2264,10 +2321,12 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                     //rawat inap dokter   
                     if(chkRanap.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psranapdokter=koneksi.prepareStatement(
                              "select sum(rawat_inap_dr.tarif_tindakandr) as total from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and rawat_inap_dr.tgl_perawatan between ? and ? and rawat_inap_dr.kd_dokter=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_inap_dr.tarif_tindakandr>0");
+                         koneksi=koneksiDB.condb();
                          psranapdokterdrpr=koneksi.prepareStatement(
                              "select sum(rawat_inap_drpr.tarif_tindakandr) as total from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and rawat_inap_drpr.tgl_perawatan between ? and ? and rawat_inap_drpr.kd_dokter=? "+
@@ -2311,30 +2370,37 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     } 
 
                     if(chkOperasi.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator1=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator1) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.operator1=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator1>0");
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator2=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator2) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.operator2=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator2>0");
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator3=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator3) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.operator3=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator3>0");
+                         koneksi=koneksiDB.condb();
                          psbiayadokter_anak=koneksi.prepareStatement(
                              "select sum(operasi.biayadokter_anak) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.dokter_anak=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayadokter_anak>0");
+                         koneksi=koneksiDB.condb();
                          psbiaya_dokter_umum=koneksi.prepareStatement(
                              "select sum(operasi.biaya_dokter_umum) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.dokter_umum=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_dokter_umum>0");
+                         koneksi=koneksiDB.condb();
                          psbiaya_dokter_pjanak=koneksi.prepareStatement(
                              "select sum(operasi.biaya_dokter_pjanak) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.dokter_pjanak=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_dokter_pjanak>0");
+                         koneksi=koneksiDB.condb();
                          psbiayadokter_anestesi=koneksi.prepareStatement(
                              "select sum(operasi.biayadokter_anestesi) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and operasi.tgl_operasi between ? and ? and operasi.dokter_anestesi=? "+
@@ -2459,6 +2525,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     }
 
                     if(chkLaborat.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psperiksa_lab=koneksi.prepareStatement(
                              "select sum(periksa_lab.tarif_tindakan_dokter) as total from periksa_lab inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and periksa_lab.tgl_periksa between ? and ? and periksa_lab.kd_dokter=? "+
@@ -2483,6 +2550,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                              }
                          }
 
+                         koneksi=koneksiDB.condb();
                          psdetaillab=koneksi.prepareStatement(
                              "select sum(detail_periksa_lab.bagian_dokter) as total from detail_periksa_lab inner join periksa_lab "+
                              "on periksa_lab.no_rawat=detail_periksa_lab.no_rawat and periksa_lab.kd_jenis_prw=detail_periksa_lab.kd_jenis_prw "+
@@ -2511,6 +2579,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                          }
 
                          //perujuk Lab
+                         koneksi=koneksiDB.condb();
                          psperiksa_lab2=koneksi.prepareStatement(
                              "select sum(periksa_lab.tarif_perujuk) as total from periksa_lab inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and periksa_lab.tgl_periksa between ? and ? and periksa_lab.dokter_perujuk=? "+
@@ -2535,6 +2604,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                              }
                          }
 
+                         koneksi=koneksiDB.condb();
                          psdetaillab2=koneksi.prepareStatement(
                              "select sum(detail_periksa_lab.bagian_perujuk) as total from detail_periksa_lab inner join periksa_lab "+
                              "on periksa_lab.no_rawat=detail_periksa_lab.no_rawat and periksa_lab.kd_jenis_prw=detail_periksa_lab.kd_jenis_prw "+
@@ -2565,6 +2635,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                     if(chkRadiologi.isSelected()==true){
                         //periksa radiologi
+                         koneksi=koneksiDB.condb();
                          psperiksa_radiologi=koneksi.prepareStatement(
                              "select sum(periksa_radiologi.tarif_tindakan_dokter) as total from periksa_radiologi inner join reg_periksa on periksa_radiologi.no_rawat=reg_periksa.no_rawat "+
                              " inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and periksa_radiologi.tgl_periksa between ? and ? and periksa_radiologi.kd_dokter=? "+
@@ -2590,6 +2661,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                          }
 
                          //perujuk radiologi
+                         koneksi=koneksiDB.condb();
                          psperiksa_radiologi2=koneksi.prepareStatement(
                              "select sum(periksa_radiologi.tarif_perujuk) as total from periksa_radiologi inner join reg_periksa on periksa_radiologi.no_rawat=reg_periksa.no_rawat "+
                              " inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Belum Bayar' and periksa_radiologi.tgl_periksa between ? and ? and periksa_radiologi.dokter_perujuk=? "+
@@ -2643,6 +2715,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
     private void prosesCariSudahBayarNonPiutang() {
         try{  
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select dokter.kd_dokter,dokter.nm_dokter from dokter where dokter.status='1' "+(nmdokter.getText().trim().equals("")?"":"and dokter.kd_dokter=? ")+" order by dokter.nm_dokter");
             try {
                  if(!nmdokter.getText().trim().equals("")){
@@ -2655,10 +2728,12 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     jm=0;
                     //rawat jalan dokter   
                     if(chkRalan.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psralandokter=koneksi.prepareStatement(
                              "select sum(rawat_jl_dr.tarif_tindakandr) as total from reg_periksa inner join rawat_jl_dr on rawat_jl_dr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and reg_periksa.tgl_registrasi between ? and ? and rawat_jl_dr.kd_dokter=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_jl_dr.tarif_tindakandr>0");   
+                         koneksi=koneksiDB.condb();
                          psralandokterdrpr=koneksi.prepareStatement(
                              "select sum(rawat_jl_drpr.tarif_tindakandr) as total from reg_periksa inner join rawat_jl_drpr on rawat_jl_drpr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and reg_periksa.tgl_registrasi between ? and ? and rawat_jl_drpr.kd_dokter=? "+
@@ -2703,10 +2778,12 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                     //rawat inap dokter   
                     if(chkRanap.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psranapdokter=koneksi.prepareStatement(
                              "select sum(rawat_inap_dr.tarif_tindakandr) as total from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and rawat_inap_dr.tgl_perawatan between ? and ? and rawat_inap_dr.kd_dokter=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and rawat_inap_dr.tarif_tindakandr>0");
+                         koneksi=koneksiDB.condb();
                          psranapdokterdrpr=koneksi.prepareStatement(
                              "select sum(rawat_inap_drpr.tarif_tindakandr) as total from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and rawat_inap_drpr.tgl_perawatan between ? and ? and rawat_inap_drpr.kd_dokter=? "+
@@ -2750,30 +2827,37 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     } 
 
                     if(chkOperasi.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator1=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator1) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.operator1=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator1>0");
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator2=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator2) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.operator2=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator2>0");
+                         koneksi=koneksiDB.condb();
                          psbiayaoperator3=koneksi.prepareStatement(
                              "select sum(operasi.biayaoperator3) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.operator3=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayaoperator3>0");
+                         koneksi=koneksiDB.condb();
                          psbiayadokter_anak=koneksi.prepareStatement(
                              "select sum(operasi.biayadokter_anak) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.dokter_anak=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biayadokter_anak>0");
+                         koneksi=koneksiDB.condb();
                          psbiaya_dokter_umum=koneksi.prepareStatement(
                              "select sum(operasi.biaya_dokter_umum) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.dokter_umum=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_dokter_umum>0");
+                         koneksi=koneksiDB.condb();
                          psbiaya_dokter_pjanak=koneksi.prepareStatement(
                              "select sum(operasi.biaya_dokter_pjanak) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.dokter_pjanak=? "+
                              "and concat(reg_periksa.kd_pj,penjab.png_jawab) like ? and operasi.biaya_dokter_pjanak>0");
+                         koneksi=koneksiDB.condb();
                          psbiayadokter_anestesi=koneksi.prepareStatement(
                              "select sum(operasi.biayadokter_anestesi) as total from operasi inner join reg_periksa on operasi.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and operasi.tgl_operasi between ? and ? and operasi.dokter_anestesi=? "+
@@ -2898,6 +2982,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     }
 
                     if(chkLaborat.isSelected()==true){
+                         koneksi=koneksiDB.condb();
                          psperiksa_lab=koneksi.prepareStatement(
                              "select sum(periksa_lab.tarif_tindakan_dokter) as total from periksa_lab inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and periksa_lab.tgl_periksa between ? and ? and periksa_lab.kd_dokter=? "+
@@ -2922,6 +3007,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                              }
                          }
 
+                         koneksi=koneksiDB.condb();
                          psdetaillab=koneksi.prepareStatement(
                              "select sum(detail_periksa_lab.bagian_dokter) as total from detail_periksa_lab inner join periksa_lab "+
                              "on periksa_lab.no_rawat=detail_periksa_lab.no_rawat and periksa_lab.kd_jenis_prw=detail_periksa_lab.kd_jenis_prw "+
@@ -2950,6 +3036,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                          }
 
                          //perujuk Lab
+                         koneksi=koneksiDB.condb();
                          psperiksa_lab2=koneksi.prepareStatement(
                              "select sum(periksa_lab.tarif_perujuk) as total from periksa_lab inner join reg_periksa on periksa_lab.no_rawat=reg_periksa.no_rawat "+
                              "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and periksa_lab.tgl_periksa between ? and ? and periksa_lab.dokter_perujuk=? "+
@@ -2974,6 +3061,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                              }
                          }
 
+                         koneksi=koneksiDB.condb();
                          psdetaillab2=koneksi.prepareStatement(
                              "select sum(detail_periksa_lab.bagian_perujuk) as total from detail_periksa_lab inner join periksa_lab "+
                              "on periksa_lab.no_rawat=detail_periksa_lab.no_rawat and periksa_lab.kd_jenis_prw=detail_periksa_lab.kd_jenis_prw "+
@@ -3004,6 +3092,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                     if(chkRadiologi.isSelected()==true){
                         //periksa radiologi
+                         koneksi=koneksiDB.condb();
                          psperiksa_radiologi=koneksi.prepareStatement(
                              "select sum(periksa_radiologi.tarif_tindakan_dokter) as total from periksa_radiologi inner join reg_periksa on periksa_radiologi.no_rawat=reg_periksa.no_rawat "+
                              " inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and periksa_radiologi.tgl_periksa between ? and ? and periksa_radiologi.kd_dokter=? "+
@@ -3029,6 +3118,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                          }
 
                          //perujuk radiologi
+                         koneksi=koneksiDB.condb();
                          psperiksa_radiologi2=koneksi.prepareStatement(
                              "select sum(periksa_radiologi.tarif_perujuk) as total from periksa_radiologi inner join reg_periksa on periksa_radiologi.no_rawat=reg_periksa.no_rawat "+
                              " inner join penjab on reg_periksa.kd_pj=penjab.kd_pj where reg_periksa.status_bayar='Sudah Bayar' and reg_periksa.no_rawat not in (select no_rawat from piutang_pasien) and periksa_radiologi.tgl_periksa between ? and ? and periksa_radiologi.dokter_perujuk=? "+

@@ -393,6 +393,7 @@ public final class MasterCariTemplateLaporanOperasi extends javax.swing.JDialog 
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select template_laporan_operasi.no_template,template_laporan_operasi.nama_operasi,"+
                     "template_laporan_operasi.diagnosa_preop,template_laporan_operasi.diagnosa_postop,template_laporan_operasi.jaringan_dieksisi,"+

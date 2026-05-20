@@ -798,6 +798,7 @@ public final class InhealthTagihan extends javax.swing.JDialog {
     public void tampil() {        
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select no_sjp, no_rawat, tglsep, tglrujukan, no_rujukan, kdppkrujukan, nmppkrujukan, "+
                     "kdppkpelayanan, nmppkpelayanan, if(jnspelayanan='1','1 RJTP RAWAT JALAN TINGKAT PERTAMA', if(jnspelayanan='2','2 RITP RAWAT INAP TINGKAT PERTAMA',if(jnspelayanan='3','3 RJTL RAWAT JALAN TINGKAT LANJUT','4 RITL RAWAT INAP TINGKAT LANJUT'))), catatan, diagawal, nmdiagnosaawal, diagawal2, "+
@@ -902,6 +903,7 @@ public final class InhealthTagihan extends javax.swing.JDialog {
         Valid.tabelKosong(tabModeTagihanKamar);
         try {
             //"P","Kode Jenis","Jenis Pelayanan Ruang Rawat","Tarif","Hari","Total"
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select inhealth_jenpel_ruang_rawat.kode_jenpel_ruang_rawat,inhealth_jenpel_ruang_rawat.nama_jenpel_ruang_rawat,inhealth_jenpel_ruang_rawat.tarif, "+
                     "kamar_inap.lama,(kamar_inap.lama*inhealth_jenpel_ruang_rawat.tarif) as total "+
@@ -937,6 +939,7 @@ public final class InhealthTagihan extends javax.swing.JDialog {
         Valid.tabelKosong(tabModeTagihanKamar);
         try {
             //"P","Kode Jenis","Jenis Pelayanan Ruang Rawat","Tarif","Hari","Total"
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select inhealth_jenpel_ruang_rawat.kode_jenpel_ruang_rawat,inhealth_jenpel_ruang_rawat.nama_jenpel_ruang_rawat,inhealth_jenpel_ruang_rawat.tarif, "+
                     "kamar_inap.lama,(kamar_inap.lama*inhealth_jenpel_ruang_rawat.tarif) as total "+

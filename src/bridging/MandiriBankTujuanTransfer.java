@@ -586,6 +586,7 @@ public final class MandiriBankTujuanTransfer extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select bank_tujuan_transfer_bankmandiri.kode_bank, bank_tujuan_transfer_bankmandiri.nama_bank "+
                     " from bank_tujuan_transfer_bankmandiri where  bank_tujuan_transfer_bankmandiri.kode_bank like ? or "+
                     " bank_tujuan_transfer_bankmandiri.nama_bank like ? order by bank_tujuan_transfer_bankmandiri.kode_bank");

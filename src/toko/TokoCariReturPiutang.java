@@ -724,6 +724,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(TCari,"No.Nota");
         }else{
           try {
+             koneksi=koneksiDB.condb();
              pscaripesan=koneksi.prepareStatement("select no_retur_piutang, total from tokoreturpiutang where no_retur_piutang=?");
              try {
                 pscaripesan.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString());
@@ -731,6 +732,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                 if(rs.next()){
                     Sequel.AutoComitFalse();
                     sukses=true;
+                    koneksi=koneksiDB.condb();
                     pstoko_detail_returpiutang=koneksi.prepareStatement("select kode_brng,jml_retur from toko_detail_returpiutang where no_retur_piutang=? ");
                     try {
                         pstoko_detail_returpiutang.setString(1,rs.getString(1));
@@ -1019,6 +1021,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             if(!nmbar.getText().equals("")){
                 caribarang= " and tokobarang.nama_brng like '%"+nmbar.getText()+"%' ";
             }
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select tokoreturpiutang.no_retur_piutang,tokoreturpiutang.no_member,tokomember.nama, "+
                     "tokoreturpiutang.nip,petugas.nama,tokoreturpiutang.tgl_retur,tokoreturpiutang.catatan "+
@@ -1043,6 +1046,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                           rs.getString("nip")+" "+rs.getString("nama"),rs.getString("catatan"),"","",""
                     });  
                     
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select toko_detail_returpiutang.kode_brng,tokobarang.nama_brng, "+
                         "toko_detail_returpiutang.kode_sat,kodesatuan.satuan,toko_detail_returpiutang.jml_retur,toko_detail_returpiutang.h_retur, "+
                         "toko_detail_returpiutang.h_piutang,toko_detail_returpiutang.total,toko_detail_returpiutang.nota_piutang "+

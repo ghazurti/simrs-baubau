@@ -338,6 +338,7 @@ public final class RMCariTindakan extends javax.swing.JDialog {
     public void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select rawat_jl_dr.tgl_perawatan, rawat_jl_dr.jam_rawat, jns_perawatan.nm_perawatan "+
                     "from rawat_jl_dr INNER JOIN jns_perawatan ON rawat_jl_dr.kd_jenis_prw=jns_perawatan.kd_jenis_prw "+
@@ -368,6 +369,7 @@ public final class RMCariTindakan extends javax.swing.JDialog {
         }
         
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select rawat_inap_dr.tgl_perawatan, rawat_inap_dr.jam_rawat, jns_perawatan_inap.nm_perawatan "+
                     "from rawat_inap_dr INNER JOIN jns_perawatan_inap ON rawat_inap_dr.kd_jenis_prw=jns_perawatan_inap.kd_jenis_prw "+
@@ -398,6 +400,7 @@ public final class RMCariTindakan extends javax.swing.JDialog {
         }
         
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select DATE_FORMAT(operasi.tgl_operasi,'%Y-%m-%d') as tgl_operasi,DATE_FORMAT(operasi.tgl_operasi,'%H:%i:%s') as jamoperasi, "+
                     "paket_operasi.nm_perawatan from operasi INNER JOIN paket_operasi ON operasi.kode_paket=paket_operasi.kode_paket "+

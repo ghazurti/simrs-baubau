@@ -794,6 +794,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
             tabMode.addRow(new Object[]{jumlah[i],kodebarang[i],namabarang[i],satuan[i],stok[i],harga[i],total[i]});
         }
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select dapurbarang.kode_brng, concat(dapurbarang.nama_brng,' (',dapurbarang.jenis,')'),dapurbarang.kode_sat,stok, "+
                     " dapurbarang.harga from dapurbarang where dapurbarang.status='1' and "+
@@ -870,6 +871,7 @@ private void btnPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FI
         Valid.tabelKosong(tabMode);        
         try{
             Keterangan.setText(keterangan);
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select dapurbarang.kode_brng, concat(dapurbarang.nama_brng,' (',dapurbarang.jenis,')'),"+
                     " dapurbarang.kode_sat,dapurbarang.stok, dapurbarang.harga,detail_permintaan_dapur.jumlah "+
                     " from dapurbarang inner join detail_permintaan_dapur "+

@@ -415,6 +415,7 @@ public final class DlgRujukanMasuk extends javax.swing.JDialog {
             sql += "GROUP BY nama_perujuk, poliklinik.nm_poli, rujuk_masuk.kd_penyakit " +
                    "ORDER BY nama_perujuk ASC, nm_poli ASC, rujuk_masuk.kd_penyakit ASC";
 
+            koneksi=koneksiDB.condb();
             ps = koneksi.prepareStatement(sql);
             rs = ps.executeQuery();
             i=1; total=0;

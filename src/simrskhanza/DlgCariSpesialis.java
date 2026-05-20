@@ -372,6 +372,7 @@ public final class DlgCariSpesialis extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from spesialis");
             try {
                 rs=ps.executeQuery();

@@ -1032,6 +1032,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(TabModePasien);
         try{            
+            koneksi=koneksiDB.condb();
             ps2=koneksi.prepareStatement("select reg_periksa.tgl_registrasi,dpjp_ranap.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,"+
                     "dpjp_ranap.kd_dokter,dokter.nm_dokter from dpjp_ranap inner join reg_periksa inner join pasien inner join dokter "+
                     "on dpjp_ranap.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -1168,6 +1169,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 tabModeDiagnosa.addRow(new Object[] {pilih[i],kode[i],nama[i]});
             }   
             
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select dokter.kd_dokter,dokter.nm_dokter from dokter where dokter.status='1' "+(Dokter.getText().trim().equals("")?"":"and (dokter.kd_dokter like ? or dokter.nm_dokter like ?) ")+"order by dokter.nm_dokter");            
             try {
                 if(!Dokter.getText().trim().equals("")){

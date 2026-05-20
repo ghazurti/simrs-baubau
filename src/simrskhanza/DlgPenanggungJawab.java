@@ -998,6 +998,7 @@ private void NmAsuransiKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select penjab.kd_pj,penjab.png_jawab,penjab.nama_perusahaan,penjab.alamat_asuransi,penjab.no_telp,penjab.attn "+
                     "from penjab where penjab.status='1' and (penjab.kd_pj like ? or penjab.png_jawab like ?) order by penjab.png_jawab ");
@@ -1100,6 +1101,7 @@ private void NmAsuransiKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
     private void panggilPhoto() {
         if(FormPhoto.isVisible()==true){
             try {
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement("select penjab_dokumen_kerjasama.photo,date_format(penjab_dokumen_kerjasama.kerjasama_berakhir,'%d-%m-%Y') as tanggal from penjab_dokumen_kerjasama where penjab_dokumen_kerjasama.kd_pj=?");
                 try {
                     ps.setString(1,tbKamar.getValueAt(tbKamar.getSelectedRow(),1).toString());

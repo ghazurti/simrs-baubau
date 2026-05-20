@@ -1012,6 +1012,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
            Valid.textKosong(TCari,"No.Faktur");
         }else{
           try {
+              koneksi=koneksiDB.condb();
               ps=koneksi.prepareStatement(
                       "select piutang.nota_piutang,piutang.kd_bangsal,piutang.sisapiutang from piutang where piutang.nota_piutang=?");
               try {
@@ -1020,6 +1021,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                  if(rs.next()){
                      Sequel.AutoComitFalse();
                      sukses=true;
+                     koneksi=koneksiDB.condb();
                      ps2=koneksi.prepareStatement(
                           "select detailpiutang.kode_brng,detailpiutang.jumlah,detailpiutang.no_batch,detailpiutang.no_faktur from detailpiutang where detailpiutang.nota_piutang=? ");
                      try {
@@ -1289,6 +1291,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     Sequel.queryu("delete from temporary_resep where temp37='"+akses.getalamatip()+"'");
                     try {
                         i=0;
+                        koneksi=koneksiDB.condb();
                         ps=koneksi.prepareStatement(
                             "select databarang.nama_brng,detailpiutang.aturan_pakai,detailpiutang.jumlah,kodesatuan.satuan "+
                             "from detailpiutang inner join databarang on databarang.kode_brng=detailpiutang.kode_brng "+
@@ -1459,6 +1462,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             ttljual=0;
             ttldisc=0;
             ttlall=0;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select piutang.nota_piutang, piutang.tgl_piutang, "+
                     "piutang.nip,petugas.nama, "+
@@ -1494,6 +1498,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     sisapiutang=0;
                     cicilan=0;
                     no=1;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select detailpiutang.kode_brng,databarang.nama_brng, detailpiutang.kode_sat,"+
                             " kodesatuan.satuan,detailpiutang.h_jual, detailpiutang.jumlah,detailpiutang.subtotal,detailpiutang.dis, "+
                             " detailpiutang.bsr_dis, detailpiutang.total,detailpiutang.no_batch,detailpiutang.no_faktur,detailpiutang.aturan_pakai  "+

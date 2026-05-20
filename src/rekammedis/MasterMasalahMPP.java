@@ -600,6 +600,7 @@ public class MasterMasalahMPP extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from master_masalah_mpp where kode_masalah like ? or nama_masalah like ? order by kode_masalah");
             try {
                 ps.setString(1,"%"+TCari.getText().trim()+"%");

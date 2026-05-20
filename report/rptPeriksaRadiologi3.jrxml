@@ -40,7 +40,7 @@
 	<title>
 		<band height="254" splitType="Stretch">
 			<textField>
-				<reportElement x="2" y="14" width="520" height="25" forecolor="#000000" backcolor="#00FF00" uuid="b654a498-896c-44d7-b6c7-894efe0e8316"/>
+				<reportElement x="70" y="14" width="450" height="25" forecolor="#000000" backcolor="#00FF00" uuid="b654a498-896c-44d7-b6c7-894efe0e8316"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="20" isBold="false" isItalic="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -48,7 +48,7 @@
 				<textFieldExpression><![CDATA[$P{namars}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="68" width="520" height="14" uuid="afe050d2-a1fe-4232-b133-0989a414e235"/>
+				<reportElement x="70" y="68" width="450" height="14" uuid="afe050d2-a1fe-4232-b133-0989a414e235"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -56,7 +56,7 @@
 				<textFieldExpression><![CDATA["E-mail : "+$P{emailrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="55" width="520" height="14" uuid="5d245cfe-d5be-415d-bfd0-9c95b2cb03fc"/>
+				<reportElement x="70" y="55" width="450" height="14" uuid="5d245cfe-d5be-415d-bfd0-9c95b2cb03fc"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>
@@ -64,7 +64,7 @@
 				<textFieldExpression><![CDATA[$P{kontakrs}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="42" width="520" height="14" uuid="55900b77-e15a-4316-b973-a8c3bc727a06"/>
+				<reportElement x="70" y="42" width="450" height="14" uuid="55900b77-e15a-4316-b973-a8c3bc727a06"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="9"/>
 					<paragraph lineSpacing="Single"/>

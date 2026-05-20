@@ -91,6 +91,7 @@ public class DlgPenyakitPd3i extends javax.swing.JDialog {
         nmpenyakit.setDocument(new batasInput((byte)30).getKata(nmpenyakit)); 
         
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select penyakit.kd_penyakit,penyakit.nm_penyakit,penyakit.ciri_ciri,penyakit.keterangan, "+
                 "kategori_penyakit.nm_kategori,kategori_penyakit.ciri_umum from kategori_penyakit inner join penyakit inner join penyakit_pd3i "+
                 "on penyakit.kd_ktg=kategori_penyakit.kd_ktg and penyakit_pd3i.kd_penyakit=penyakit.kd_penyakit "+

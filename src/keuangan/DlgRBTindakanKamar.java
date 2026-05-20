@@ -547,6 +547,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void prosesCari() {            
         try{   
            Valid.tabelKosong(tabMode); 
+           koneksi=koneksiDB.condb();
            psbangsal=koneksi.prepareStatement("select bangsal.kd_bangsal,bangsal.nm_bangsal from bangsal "+(nmbangsal.getText().trim().equals("")?"":"where kd_bangsal.kd_bangsal=?"));
            try {
                 if(!nmbangsal.getText().trim().equals("")){
@@ -568,6 +569,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 while(rsbangsal.next()){
                     tabMode.addRow(new Object[]{i+". ",rsbangsal.getString(2),"","","","","","","","","","","",""});
                     a=1;
+                    koneksi=koneksiDB.condb();
                     pspasien=koneksi.prepareStatement(
                        "select kamar_inap.no_rawat,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,kamar_inap.tgl_masuk,kamar_inap.tgl_keluar "+
                        "from kamar_inap inner join reg_periksa inner join pasien inner join kamar inner join penjab " +
@@ -584,6 +586,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         rspasien=pspasien.executeQuery();
                         while(rspasien.next()){
                             obat=0;
+                            koneksi=koneksiDB.condb();
                             psobat=koneksi.prepareStatement("select sum(total) from detail_pemberian_obat where no_rawat=?");
                             try {
                                 psobat.setString(1,rspasien.getString("no_rawat"));
@@ -604,6 +607,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                             
                             obatlangsung=0;
+                            koneksi=koneksiDB.condb();
                             psobatlangsung=koneksi.prepareStatement("select sum(besar_tagihan) from tagihan_obat_langsung where no_rawat=?");
                             try {
                                 psobatlangsung.setString(1,rspasien.getString("no_rawat"));
@@ -624,6 +628,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                             
                             laborat=0;
+                            koneksi=koneksiDB.condb();
                             psperiksalab=koneksi.prepareStatement("select sum(biaya) from periksa_lab where no_rawat=?");
                             try {
                                 psperiksalab.setString(1,rspasien.getString("no_rawat"));
@@ -644,6 +649,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                             
                             detaillaborat=0;
+                            koneksi=koneksiDB.condb();
                             psdetailperiksalab=koneksi.prepareStatement("select sum(biaya_item) from detail_periksa_lab where no_rawat=?");
                             try {
                                 psdetailperiksalab.setString(1,rspasien.getString("no_rawat"));
@@ -664,6 +670,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                             
                             jm=0;
+                            koneksi=koneksiDB.condb();
                             psranapdr=koneksi.prepareStatement("select sum(biaya_rawat) from rawat_inap_dr where no_rawat=?");
                             try {
                                 psranapdr.setString(1,rspasien.getString("no_rawat"));
@@ -684,6 +691,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                             
                             jm2=0;
+                            koneksi=koneksiDB.condb();
                             psranapdrpr=koneksi.prepareStatement("select sum(biaya_rawat) from rawat_inap_drpr where no_rawat=?");
                             try {
                                 psranapdrpr.setString(1,rspasien.getString("no_rawat"));
@@ -704,6 +712,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                             
                             jm3=0;
+                            koneksi=koneksiDB.condb();
                             psranappr=koneksi.prepareStatement("select sum(biaya_rawat) from rawat_inap_pr where no_rawat=?");
                             try {
                                 psranappr.setString(1,rspasien.getString("no_rawat"));
@@ -724,6 +733,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                             
                             operasi=0;
+                            koneksi=koneksiDB.condb();
                             psoperasi=koneksi.prepareStatement("select sum(biayaoperator1+biayaoperator2+biayaoperator3+"+
                                 "biayaasisten_operator1+biayaasisten_operator2+biayainstrumen+"+
                                 "biayadokter_anak+biayaperawaat_resusitas+biayadokter_anestesi+"+
@@ -749,6 +759,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                             
                             tambahan=0;
+                            koneksi=koneksiDB.condb();
                             pstambahan=koneksi.prepareStatement("select sum(besar_biaya) from tambahan_biaya where no_rawat=?");
                             try {
                                 pstambahan.setString(1,rspasien.getString("no_rawat"));
@@ -769,6 +780,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                             
                             potongan=0;
+                            koneksi=koneksiDB.condb();
                             pspotongan=koneksi.prepareStatement("select sum(besar_pengurangan) from pengurangan_biaya where no_rawat=?");
                             try {
                                 pspotongan.setString(1,rspasien.getString("no_rawat"));
@@ -789,6 +801,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                             
                             registrasi=0;
+                            koneksi=koneksiDB.condb();
                             psregistrasi=koneksi.prepareStatement("select sum(biaya_reg) from reg_periksa where no_rawat=?");
                             try {
                                 psregistrasi.setString(1,rspasien.getString("no_rawat"));
@@ -809,6 +822,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                             
                             radiologi=0;
+                            koneksi=koneksiDB.condb();
                             psradiologi=koneksi.prepareStatement("select sum(biaya) from periksa_radiologi where no_rawat=?");
                             try {
                                 psradiologi.setString(1,rspasien.getString("no_rawat"));
@@ -829,6 +843,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                             
                             kamar=0;
+                            koneksi=koneksiDB.condb();
                             pskamar=koneksi.prepareStatement("select sum(ttl_biaya) from kamar_inap where no_rawat=?");
                             try {
                                 pskamar.setString(1,rspasien.getString("no_rawat"));

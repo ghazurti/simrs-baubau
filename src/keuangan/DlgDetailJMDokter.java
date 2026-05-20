@@ -1230,6 +1230,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void laporan1() {
         Valid.tabelKosong(tabMode);      
         try{
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement("select kd_dokter,nm_dokter from dokter where status='1' and kd_dokter like ? order by nm_dokter");
            try {
                 ps.setString(1,"%"+kddokter.getText()+"%");
@@ -1245,6 +1246,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                    c=1;
                    //jmralan
                    if(chkRalan.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienralan=koneksi.prepareStatement(
                             "select rawat_jl_dr.no_rawat,reg_periksa.no_rkm_medis,reg_periksa.tgl_registrasi,pasien.nm_pasien,penjab.png_jawab,poliklinik.nm_poli "+
                             "from rawat_jl_dr inner join reg_periksa on rawat_jl_dr.no_rawat=reg_periksa.no_rawat inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -1257,6 +1259,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             pspasienralan.setString(4,"%"+pilihancarabayar+"%");
                             rspasien=pspasienralan.executeQuery();
                             while(rspasien.next()){ 
+                                koneksi=koneksiDB.condb();
                                 pstindakanralan=koneksi.prepareStatement(
                                     "select rawat_jl_dr.kd_jenis_prw,count(rawat_jl_dr.kd_jenis_prw) as jml,"+
                                     "jns_perawatan.nm_perawatan,sum(rawat_jl_dr.bhp)as bhp,sum(rawat_jl_dr.material)as material,"+
@@ -1308,6 +1311,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                         }
 
+                        koneksi=koneksiDB.condb();
                         pspasienralandrpr=koneksi.prepareStatement(
                             "select rawat_jl_drpr.no_rawat,reg_periksa.no_rkm_medis,reg_periksa.tgl_registrasi,pasien.nm_pasien,penjab.png_jawab,poliklinik.nm_poli "+
                             "from rawat_jl_drpr inner join reg_periksa on rawat_jl_drpr.no_rawat=reg_periksa.no_rawat inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -1321,6 +1325,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienralandrpr.executeQuery();
                             while(rspasien.next()){ 
                                 a=1; 
+                                koneksi=koneksiDB.condb();
                                 pstindakanralandrpr=koneksi.prepareStatement("select rawat_jl_drpr.kd_jenis_prw,"+
                                         "count(rawat_jl_drpr.kd_jenis_prw) as jml,"+
                                         "jns_perawatan.nm_perawatan,sum(rawat_jl_drpr.bhp)as bhp,sum(rawat_jl_drpr.material)as material,"+
@@ -1375,6 +1380,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                    //jmradiologi
                    if(chkRadiologi.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienradiologi=koneksi.prepareStatement(
                             "select periksa_radiologi.no_rawat,reg_periksa.no_rkm_medis,periksa_radiologi.tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Radiolgi' as nm_poli "+
@@ -1389,6 +1395,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienradiologi.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakanradiologi=koneksi.prepareStatement(
                                         "select periksa_radiologi.kd_jenis_prw,"+
                                         "count(periksa_radiologi.kd_jenis_prw) as jml, "+
@@ -1444,6 +1451,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmradiologiperujuk
+                        koneksi=koneksiDB.condb();
                         pspasienradiologi2=koneksi.prepareStatement(
                             "select periksa_radiologi.no_rawat,reg_periksa.no_rkm_medis,periksa_radiologi.tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Radiolgi' as nm_poli "+
@@ -1458,6 +1466,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienradiologi2.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;     
+                                koneksi=koneksiDB.condb();
                                 pstindakanradiologi2=koneksi.prepareStatement("select periksa_radiologi.kd_jenis_prw,"+
                                         "count(periksa_radiologi.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_radiologi.nm_perawatan,"+
@@ -1514,6 +1523,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                    //jm laborat
                    if(chkLaborat.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienlab=koneksi.prepareStatement(
                             "select periksa_lab.no_rawat,reg_periksa.no_rkm_medis,periksa_lab.tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Laborat' as nm_poli "+
@@ -1528,6 +1538,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienlab.executeQuery();
                             while(rspasien.next()){                        
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakanlab=koneksi.prepareStatement("select periksa_lab.kd_jenis_prw,"+
                                         "count(periksa_lab.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_lab.nm_perawatan,"+
@@ -1551,6 +1562,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         detailtotal=0;
                                         detailbhp=0;
                                         biayaitem=0;
+                                        koneksi=koneksiDB.condb();
                                         psdetaillab=koneksi.prepareStatement("select sum(detail_periksa_lab.bagian_dokter) as totaldokter,"+
                                             "sum(detail_periksa_lab.bagian_rs) as totalrs,"+
                                             "sum(detail_periksa_lab.bhp) as bhp, "+
@@ -1620,6 +1632,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jm perujuk
+                        koneksi=koneksiDB.condb();
                         pspasienlab2=koneksi.prepareStatement(
                             "select periksa_lab.no_rawat,reg_periksa.no_rkm_medis,periksa_lab.tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Laborat' as nm_poli "+
@@ -1634,6 +1647,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienlab2.executeQuery();
                             while(rspasien.next()){                        
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakanlab2=koneksi.prepareStatement("select periksa_lab.kd_jenis_prw,"+
                                         "count(periksa_lab.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_lab.nm_perawatan,"+
@@ -1657,6 +1671,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         detailtotal=0;
                                         biayaitem=0;
                                         detailbhp=0;
+                                        koneksi=koneksiDB.condb();
                                         psdetaillab2=koneksi.prepareStatement("select sum(detail_periksa_lab.bagian_perujuk) as totaldokter,"+
                                             "0 as bhp, "+
                                             "0 as totalrs, "+
@@ -1728,6 +1743,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
 
                    if(chkOperasi.isSelected()==true){
                         //jmoperator1
+                        koneksi=koneksiDB.condb();
                         pspasienoperator1=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,operasi.tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -1742,6 +1758,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator1.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;    
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator1=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -1806,6 +1823,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmoperator2
+                        koneksi=koneksiDB.condb();
                         pspasienoperator2=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,operasi.tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -1820,6 +1838,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator2.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator2=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -1872,6 +1891,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmoperator3
+                        koneksi=koneksiDB.condb();
                         pspasienoperator3=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,operasi.tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -1886,6 +1906,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator3.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;      
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator3=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -1938,6 +1959,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_anak
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_anak=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,operasi.tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -1952,6 +1974,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_anak.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_anak=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -2004,6 +2027,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_anestesi
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_anestesi=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,operasi.tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -2018,6 +2042,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_anestesi.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_anestesi=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -2070,6 +2095,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_pjanak
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_pjanak=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,operasi.tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -2084,6 +2110,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_pjanak.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;    
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_pjanak=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -2136,6 +2163,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_umum
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_umum=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,operasi.tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -2150,6 +2178,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         try {
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_umum=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -2205,6 +2234,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                    //jmranap
                    if(chkRanap.isSelected()==true){
                         if(ranapgabung==false){
+                            koneksi=koneksiDB.condb();
                             pspasienranap=koneksi.prepareStatement(
                                     "select rawat_inap_dr.no_rawat from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                                     "where rawat_inap_dr.kd_dokter=? and rawat_inap_dr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? group by rawat_inap_dr.no_rawat");
@@ -2215,6 +2245,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                 pspasienranap.setString(4,"%"+pilihancarabayar+"%");
                                 rspasien=pspasienranap.executeQuery();
                                 while(rspasien.next()){  
+                                    koneksi=koneksiDB.condb();
                                     pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,kamar_inap.tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',kamar_inap.tgl_keluar) as tgl_keluar,kamar.kelas "+
                                         "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
                                         "reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj and kamar_inap.kd_kamar=kamar.kd_kamar and kamar.kd_bangsal=bangsal.kd_bangsal "+
@@ -2236,6 +2267,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                             penjab=rskamar.getString("png_jawab");
                                             pasien=rskamar.getString("no_rkm_medis")+" "+rskamar.getString("nm_pasien");
                                         }else{
+                                            koneksi=koneksiDB.condb();
                                             psanak=koneksi.prepareStatement(
                                                 "select pasien.no_rkm_medis,pasien.no_rkm_medis,pasien.nm_pasien,ranap_gabung.no_rawat,concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.no_peserta, "+
                                                 "concat(pasien.alamatpj,', ',pasien.kelurahanpj,', ',pasien.kecamatanpj,', ',pasien.kabupatenpj) as alamat "+
@@ -2246,6 +2278,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 rsanak=psanak.executeQuery();
                                                 if(rsanak.next()){
                                                     pasien=rsanak.getString("no_rkm_medis")+" "+rsanak.getString("nm_pasien");  
+                                                    koneksi=koneksiDB.condb();
                                                     pskamar2=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,kamar_inap.tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',kamar_inap.tgl_keluar) as tgl_keluar,kamar.kelas "+
                                                         "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
                                                         "reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj and kamar_inap.kd_kamar=kamar.kd_kamar and kamar.kd_bangsal=bangsal.kd_bangsal "+
@@ -2296,6 +2329,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }  
 
                                     a=1;        
+                                    koneksi=koneksiDB.condb();
                                     pstindakanranap=koneksi.prepareStatement("select rawat_inap_dr.kd_jenis_prw,"+
                                         "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
                                         "jns_perawatan_inap.nm_perawatan,"+
@@ -2349,6 +2383,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                 }
                             }
 
+                            koneksi=koneksiDB.condb();
                             pspasienranapdrpr=koneksi.prepareStatement(
                                     "select rawat_inap_drpr.no_rawat from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                                     "where rawat_inap_drpr.kd_dokter=? and rawat_inap_drpr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? group by rawat_inap_drpr.no_rawat");            
@@ -2359,6 +2394,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                 pspasienranapdrpr.setString(4,"%"+pilihancarabayar+"%");
                                 rspasien=pspasienranapdrpr.executeQuery();
                                 while(rspasien.next()){   
+                                    koneksi=koneksiDB.condb();
                                     pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,kamar_inap.tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',kamar_inap.tgl_keluar) as tgl_keluar,kamar.kelas "+
                                         "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
                                         "reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj and kamar_inap.kd_kamar=kamar.kd_kamar and kamar.kd_bangsal=bangsal.kd_bangsal "+
@@ -2380,6 +2416,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                             penjab=rskamar.getString("png_jawab");
                                             pasien=rskamar.getString("no_rkm_medis")+" "+rskamar.getString("nm_pasien");
                                         }else{
+                                            koneksi=koneksiDB.condb();
                                             psanak=koneksi.prepareStatement(
                                                 "select pasien.no_rkm_medis,pasien.no_rkm_medis,pasien.nm_pasien,ranap_gabung.no_rawat,concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.no_peserta, "+
                                                 "concat(pasien.alamatpj,', ',pasien.kelurahanpj,', ',pasien.kecamatanpj,', ',pasien.kabupatenpj) as alamat "+
@@ -2390,6 +2427,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 rsanak=psanak.executeQuery();
                                                 if(rsanak.next()){
                                                     pasien=rsanak.getString("no_rkm_medis")+" "+rsanak.getString("nm_pasien");   
+                                                    koneksi=koneksiDB.condb();
                                                     pskamar2=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,kamar_inap.tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',kamar_inap.tgl_keluar) as tgl_keluar,kamar.kelas "+
                                                         "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
                                                         "reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj and kamar_inap.kd_kamar=kamar.kd_kamar and kamar.kd_bangsal=bangsal.kd_bangsal "+
@@ -2440,6 +2478,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }  
 
                                     a=1;   
+                                    koneksi=koneksiDB.condb();
                                     pstindakanranapdrpr=koneksi.prepareStatement("select rawat_inap_drpr.kd_jenis_prw,"+
                                         "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
                                         "jns_perawatan_inap.nm_perawatan,"+
@@ -2493,6 +2532,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                 }
                             }
                         }else if(ranapgabung==true){
+                            koneksi=koneksiDB.condb();
                             pspasienranap=koneksi.prepareStatement(
                                     "select rawat_inap_dr.no_rawat from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                                     "where rawat_inap_dr.kd_dokter=? and rawat_inap_dr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? "+
@@ -2505,6 +2545,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                 rspasien=pspasienranap.executeQuery();
                                 while(rspasien.next()){  
                                     norawatbayi="";
+                                    koneksi=koneksiDB.condb();
                                     pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,kamar_inap.tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',kamar_inap.tgl_keluar) as tgl_keluar,kamar.kelas "+
                                         "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
                                         "reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj and kamar_inap.kd_kamar=kamar.kd_kamar and kamar.kd_bangsal=bangsal.kd_bangsal "+
@@ -2538,6 +2579,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }  
 
                                     a=1;        
+                                    koneksi=koneksiDB.condb();
                                     pstindakanranap=koneksi.prepareStatement("select rawat_inap_dr.kd_jenis_prw,"+
                                         "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
                                         "jns_perawatan_inap.nm_perawatan,"+
@@ -2586,6 +2628,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                             "select concat(pasien.no_rkm_medis,' ',pasien.nm_pasien) from reg_periksa inner join pasien on "+
                                             "reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat=? ",norawatbayi);
                                         a=1;        
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranap=koneksi.prepareStatement(
                                             "select rawat_inap_dr.kd_jenis_prw,"+
                                             "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
@@ -2644,6 +2687,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                 }
                             }
 
+                            koneksi=koneksiDB.condb();
                             pspasienranapdrpr=koneksi.prepareStatement(
                                     "select rawat_inap_drpr.no_rawat from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                                     "where rawat_inap_drpr.kd_dokter=? and rawat_inap_drpr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? "+
@@ -2656,6 +2700,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                 rspasien=pspasienranapdrpr.executeQuery();
                                 while(rspasien.next()){   
                                     norawatbayi="";
+                                    koneksi=koneksiDB.condb();
                                     pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,kamar_inap.tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',kamar_inap.tgl_keluar) as tgl_keluar,kamar.kelas "+
                                         "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
                                         "reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj and kamar_inap.kd_kamar=kamar.kd_kamar and kamar.kd_bangsal=bangsal.kd_bangsal "+
@@ -2689,6 +2734,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }  
 
                                     a=1;   
+                                    koneksi=koneksiDB.condb();
                                     pstindakanranapdrpr=koneksi.prepareStatement("select rawat_inap_drpr.kd_jenis_prw,"+
                                         "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
                                         "jns_perawatan_inap.nm_perawatan,"+
@@ -2737,6 +2783,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                             "select concat(pasien.no_rkm_medis,' ',pasien.nm_pasien) from reg_periksa inner join pasien on "+
                                             "reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat=? ",norawatbayi);
                                         a=1;                                           
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranapdrpr=koneksi.prepareStatement(
                                             "select rawat_inap_drpr.kd_jenis_prw,"+
                                             "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
@@ -2818,6 +2865,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void laporan2() {
         try{
            htmlContent = new StringBuilder();
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement("select dokter.kd_dokter,dokter.nm_dokter from dokter where dokter.status='1' and dokter.kd_dokter like ? order by dokter.nm_dokter");
            try {
                 ps.setString(1,"%"+kddokter.getText()+"%");
@@ -2855,6 +2903,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     c=1;
                     //jmralan
                     if(chkRalan.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienralan=koneksi.prepareStatement(
                             "select rawat_jl_dr.no_rawat,reg_periksa.no_rkm_medis,date_format(reg_periksa.tgl_registrasi,'%d-%m-%Y')as tgl_registrasi,pasien.nm_pasien,penjab.png_jawab,poliklinik.nm_poli "+
                             "from rawat_jl_dr inner join reg_periksa on rawat_jl_dr.no_rawat=reg_periksa.no_rawat inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -2867,6 +2916,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             pspasienralan.setString(4,"%"+pilihancarabayar+"%");
                             rspasien=pspasienralan.executeQuery();
                             while(rspasien.next()){ 
+                                koneksi=koneksiDB.condb();
                                 pstindakanralan=koneksi.prepareStatement(
                                     "select rawat_jl_dr.kd_jenis_prw,count(rawat_jl_dr.kd_jenis_prw) as jml,"+
                                     "jns_perawatan.nm_perawatan,sum(rawat_jl_dr.bhp)as bhp,sum(rawat_jl_dr.material)as material,"+
@@ -2950,6 +3000,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                         }
 
+                        koneksi=koneksiDB.condb();
                         pspasienralandrpr=koneksi.prepareStatement(
                             "select rawat_jl_drpr.no_rawat,reg_periksa.no_rkm_medis,date_format(reg_periksa.tgl_registrasi,'%d-%m-%Y')as tgl_registrasi,pasien.nm_pasien,penjab.png_jawab,poliklinik.nm_poli "+
                             "from rawat_jl_drpr inner join reg_periksa on rawat_jl_drpr.no_rawat=reg_periksa.no_rawat inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -2963,6 +3014,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienralandrpr.executeQuery();
                             while(rspasien.next()){ 
                                 a=1; 
+                                koneksi=koneksiDB.condb();
                                 pstindakanralandrpr=koneksi.prepareStatement("select rawat_jl_drpr.kd_jenis_prw,"+
                                         "count(rawat_jl_drpr.kd_jenis_prw) as jml,"+
                                         "jns_perawatan.nm_perawatan,sum(rawat_jl_drpr.bhp)as bhp,sum(rawat_jl_drpr.material)as material,"+
@@ -3049,6 +3101,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     
                     //jmradiologi
                     if(chkRadiologi.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienradiologi=koneksi.prepareStatement(
                             "select periksa_radiologi.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_radiologi.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Radiolgi' as nm_poli "+
@@ -3063,6 +3116,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienradiologi.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakanradiologi=koneksi.prepareStatement(
                                         "select periksa_radiologi.kd_jenis_prw,"+
                                         "count(periksa_radiologi.kd_jenis_prw) as jml, "+
@@ -3150,6 +3204,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmradiologiperujuk
+                        koneksi=koneksiDB.condb();
                         pspasienradiologi2=koneksi.prepareStatement(
                             "select periksa_radiologi.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_radiologi.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Radiolgi' as nm_poli "+
@@ -3164,6 +3219,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienradiologi2.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;     
+                                koneksi=koneksiDB.condb();
                                 pstindakanradiologi2=koneksi.prepareStatement("select periksa_radiologi.kd_jenis_prw,"+
                                         "count(periksa_radiologi.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_radiologi.nm_perawatan,"+
@@ -3252,6 +3308,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     
                     //jm laborat
                     if(chkLaborat.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienlab=koneksi.prepareStatement(
                             "select periksa_lab.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_lab.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Laborat' as nm_poli "+
@@ -3266,6 +3323,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienlab.executeQuery();
                             while(rspasien.next()){                        
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakanlab=koneksi.prepareStatement("select periksa_lab.kd_jenis_prw,"+
                                         "count(periksa_lab.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_lab.nm_perawatan,"+
@@ -3289,6 +3347,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         detailtotal=0;
                                         detailbhp=0;
                                         biayaitem=0;
+                                        koneksi=koneksiDB.condb();
                                         psdetaillab=koneksi.prepareStatement("select sum(detail_periksa_lab.bagian_dokter) as totaldokter,"+
                                             "sum(detail_periksa_lab.bagian_rs) as totalrs,"+
                                             "sum(detail_periksa_lab.bhp) as bhp, "+
@@ -3390,6 +3449,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jm perujuk
+                        koneksi=koneksiDB.condb();
                         pspasienlab2=koneksi.prepareStatement(
                             "select periksa_lab.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_lab.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Laborat' as nm_poli "+
@@ -3404,6 +3464,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienlab2.executeQuery();
                             while(rspasien.next()){                        
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakanlab2=koneksi.prepareStatement("select periksa_lab.kd_jenis_prw,"+
                                         "count(periksa_lab.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_lab.nm_perawatan,"+
@@ -3427,6 +3488,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         detailtotal=0;
                                         biayaitem=0;
                                         detailbhp=0;
+                                        koneksi=koneksiDB.condb();
                                         psdetaillab2=koneksi.prepareStatement("select sum(detail_periksa_lab.bagian_perujuk) as totaldokter,"+
                                             "0 as bhp, "+
                                             "0 as totalrs, "+
@@ -3530,6 +3592,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     
                     if(chkOperasi.isSelected()==true){
                         //jmoperator1
+                        koneksi=koneksiDB.condb();
                         pspasienoperator1=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -3544,6 +3607,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator1.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;    
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator1=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -3640,6 +3704,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmoperator2
+                        koneksi=koneksiDB.condb();
                         pspasienoperator2=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -3654,6 +3719,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator2.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator2=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -3738,6 +3804,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmoperator3
+                        koneksi=koneksiDB.condb();
                         pspasienoperator3=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -3752,6 +3819,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator3.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;      
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator3=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -3836,6 +3904,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_anak
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_anak=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -3850,6 +3919,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_anak.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_anak=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -3934,6 +4004,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_anestesi
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_anestesi=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -3948,6 +4019,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_anestesi.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_anestesi=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -4032,6 +4104,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_pjanak
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_pjanak=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -4046,6 +4119,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_pjanak.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;    
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_pjanak=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -4130,6 +4204,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_umum
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_umum=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -4144,6 +4219,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         try {
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_umum=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -4230,6 +4306,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         //jmranap
                         if(chkRanap.isSelected()==true){
                             if(ranapgabung==false){
+                                koneksi=koneksiDB.condb();
                                 pspasienranap=koneksi.prepareStatement(
                                         "select rawat_inap_dr.no_rawat from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_dr.kd_dokter=? and rawat_inap_dr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? group by rawat_inap_dr.no_rawat");
@@ -4240,6 +4317,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     pspasienranap.setString(4,"%"+pilihancarabayar+"%");
                                     rspasien=pspasienranap.executeQuery();
                                     while(rspasien.next()){  
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -4264,6 +4342,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 norm=rskamar.getString("no_rkm_medis");
                                                 pasien=rskamar.getString("nm_pasien");
                                             }else{
+                                                koneksi=koneksiDB.condb();
                                                 psanak=koneksi.prepareStatement(
                                                     "select pasien.no_rkm_medis,pasien.no_rkm_medis,pasien.nm_pasien,ranap_gabung.no_rawat,concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.no_peserta, "+
                                                     "concat(pasien.alamatpj,', ',pasien.kelurahanpj,', ',pasien.kecamatanpj,', ',pasien.kabupatenpj) as alamat "+
@@ -4274,6 +4353,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                     rsanak=psanak.executeQuery();
                                                     if(rsanak.next()){
                                                         pasien=rsanak.getString("no_rkm_medis")+" "+rsanak.getString("nm_pasien");  
+                                                        koneksi=koneksiDB.condb();
                                                         pskamar2=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,kamar_inap.tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',kamar_inap.tgl_keluar) as tgl_keluar,kamar.kelas "+
                                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
                                                             "reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj and kamar_inap.kd_kamar=kamar.kd_kamar and kamar.kd_bangsal=bangsal.kd_bangsal "+
@@ -4324,6 +4404,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;        
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranap=koneksi.prepareStatement("select rawat_inap_dr.kd_jenis_prw,"+
                                             "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -4409,6 +4490,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }
                                 }
 
+                                koneksi=koneksiDB.condb();
                                 pspasienranapdrpr=koneksi.prepareStatement(
                                         "select rawat_inap_drpr.no_rawat from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_drpr.kd_dokter=? and rawat_inap_drpr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? group by rawat_inap_drpr.no_rawat");            
@@ -4419,6 +4501,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     pspasienranapdrpr.setString(4,"%"+pilihancarabayar+"%");
                                     rspasien=pspasienranapdrpr.executeQuery();
                                     while(rspasien.next()){   
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -4443,6 +4526,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 norm=rskamar.getString("no_rkm_medis");
                                                 pasien=rskamar.getString("nm_pasien");
                                             }else{
+                                                koneksi=koneksiDB.condb();
                                                 psanak=koneksi.prepareStatement(
                                                     "select pasien.no_rkm_medis,pasien.no_rkm_medis,pasien.nm_pasien,ranap_gabung.no_rawat,concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.no_peserta, "+
                                                     "concat(pasien.alamatpj,', ',pasien.kelurahanpj,', ',pasien.kecamatanpj,', ',pasien.kabupatenpj) as alamat "+
@@ -4453,6 +4537,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                     rsanak=psanak.executeQuery();
                                                     if(rsanak.next()){
                                                         pasien=rsanak.getString("no_rkm_medis")+" "+rsanak.getString("nm_pasien");   
+                                                        koneksi=koneksiDB.condb();
                                                         pskamar2=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -4504,6 +4589,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;   
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranapdrpr=koneksi.prepareStatement("select rawat_inap_drpr.kd_jenis_prw,"+
                                             "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -4589,6 +4675,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }
                                 }
                             }else if(ranapgabung==true){
+                                koneksi=koneksiDB.condb();
                                 pspasienranap=koneksi.prepareStatement(
                                         "select rawat_inap_dr.no_rawat from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_dr.kd_dokter=? and rawat_inap_dr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? "+
@@ -4601,6 +4688,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     rspasien=pspasienranap.executeQuery();
                                     while(rspasien.next()){  
                                         norawatbayi="";
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -4637,6 +4725,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;        
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranap=koneksi.prepareStatement("select rawat_inap_dr.kd_jenis_prw,"+
                                             "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -4717,6 +4806,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 "select concat(pasien.no_rkm_medis,' ',pasien.nm_pasien) from reg_periksa inner join pasien on "+
                                                 "reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat=? ",norawatbayi);
                                             a=1;        
+                                            koneksi=koneksiDB.condb();
                                             pstindakanranap=koneksi.prepareStatement(
                                                 "select rawat_inap_dr.kd_jenis_prw,"+
                                                 "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
@@ -4807,6 +4897,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }
                                 }
 
+                                koneksi=koneksiDB.condb();
                                 pspasienranapdrpr=koneksi.prepareStatement(
                                         "select rawat_inap_drpr.no_rawat from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_drpr.kd_dokter=? and rawat_inap_drpr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? "+
@@ -4819,6 +4910,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     rspasien=pspasienranapdrpr.executeQuery();
                                     while(rspasien.next()){   
                                         norawatbayi="";
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -4855,6 +4947,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;   
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranapdrpr=koneksi.prepareStatement("select rawat_inap_drpr.kd_jenis_prw,"+
                                             "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -4935,6 +5028,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 "select concat(pasien.no_rkm_medis,' ',pasien.nm_pasien) from reg_periksa inner join pasien on "+
                                                 "reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat=? ",norawatbayi);
                                             a=1;                                           
+                                            koneksi=koneksiDB.condb();
                                             pstindakanranapdrpr=koneksi.prepareStatement(
                                                 "select rawat_inap_drpr.kd_jenis_prw,"+
                                                 "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
@@ -5076,6 +5170,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void laporan3() {
         try{
            htmlContent = new StringBuilder();
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement("select dokter.kd_dokter,dokter.nm_dokter from dokter where dokter.status='1' and dokter.kd_dokter like ? order by dokter.nm_dokter");
            try {
                 ps.setString(1,"%"+kddokter.getText()+"%");
@@ -5113,6 +5208,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     c=1;
                     //jmralan
                     if(chkRalan.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienralan=koneksi.prepareStatement(
                             "select rawat_jl_dr.no_rawat,reg_periksa.no_rkm_medis,date_format(reg_periksa.tgl_registrasi,'%d-%m-%Y')as tgl_registrasi,pasien.nm_pasien,penjab.png_jawab,poliklinik.nm_poli "+
                             "from rawat_jl_dr inner join reg_periksa on rawat_jl_dr.no_rawat=reg_periksa.no_rawat inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -5125,6 +5221,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             pspasienralan.setString(4,"%"+pilihancarabayar+"%");
                             rspasien=pspasienralan.executeQuery();
                             while(rspasien.next()){ 
+                                koneksi=koneksiDB.condb();
                                 pstindakanralan=koneksi.prepareStatement(
                                     "select rawat_jl_dr.kd_jenis_prw,count(rawat_jl_dr.kd_jenis_prw) as jml,"+
                                     "jns_perawatan.nm_perawatan,sum(rawat_jl_dr.bhp)as bhp,sum(rawat_jl_dr.material)as material,"+
@@ -5208,6 +5305,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                         }
 
+                        koneksi=koneksiDB.condb();
                         pspasienralandrpr=koneksi.prepareStatement(
                             "select rawat_jl_drpr.no_rawat,reg_periksa.no_rkm_medis,date_format(reg_periksa.tgl_registrasi,'%d-%m-%Y')as tgl_registrasi,pasien.nm_pasien,penjab.png_jawab,poliklinik.nm_poli "+
                             "from rawat_jl_drpr inner join reg_periksa on rawat_jl_drpr.no_rawat=reg_periksa.no_rawat inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -5221,6 +5319,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienralandrpr.executeQuery();
                             while(rspasien.next()){ 
                                 a=1; 
+                                koneksi=koneksiDB.condb();
                                 pstindakanralandrpr=koneksi.prepareStatement("select rawat_jl_drpr.kd_jenis_prw,"+
                                         "count(rawat_jl_drpr.kd_jenis_prw) as jml,"+
                                         "jns_perawatan.nm_perawatan,sum(rawat_jl_drpr.bhp)as bhp,sum(rawat_jl_drpr.material)as material,"+
@@ -5307,6 +5406,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     
                     //jmradiologi
                     if(chkRadiologi.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienradiologi=koneksi.prepareStatement(
                             "select periksa_radiologi.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_radiologi.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Radiolgi' as nm_poli "+
@@ -5321,6 +5421,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienradiologi.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakanradiologi=koneksi.prepareStatement(
                                         "select periksa_radiologi.kd_jenis_prw,"+
                                         "count(periksa_radiologi.kd_jenis_prw) as jml, "+
@@ -5408,6 +5509,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmradiologiperujuk
+                        koneksi=koneksiDB.condb();
                         pspasienradiologi2=koneksi.prepareStatement(
                             "select periksa_radiologi.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_radiologi.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Radiolgi' as nm_poli "+
@@ -5422,6 +5524,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienradiologi2.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;     
+                                koneksi=koneksiDB.condb();
                                 pstindakanradiologi2=koneksi.prepareStatement("select periksa_radiologi.kd_jenis_prw,"+
                                         "count(periksa_radiologi.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_radiologi.nm_perawatan,"+
@@ -5510,6 +5613,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     
                     //jm laborat
                     if(chkLaborat.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienlab=koneksi.prepareStatement(
                             "select periksa_lab.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_lab.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Laborat' as nm_poli "+
@@ -5524,6 +5628,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienlab.executeQuery();
                             while(rspasien.next()){                        
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakanlab=koneksi.prepareStatement("select periksa_lab.kd_jenis_prw,"+
                                         "count(periksa_lab.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_lab.nm_perawatan,"+
@@ -5547,6 +5652,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         detailtotal=0;
                                         detailbhp=0;
                                         biayaitem=0;
+                                        koneksi=koneksiDB.condb();
                                         psdetaillab=koneksi.prepareStatement("select sum(detail_periksa_lab.bagian_dokter) as totaldokter,"+
                                             "sum(detail_periksa_lab.bagian_rs) as totalrs,"+
                                             "sum(detail_periksa_lab.bhp) as bhp, "+
@@ -5648,6 +5754,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jm perujuk
+                        koneksi=koneksiDB.condb();
                         pspasienlab2=koneksi.prepareStatement(
                             "select periksa_lab.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_lab.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Laborat' as nm_poli "+
@@ -5662,6 +5769,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienlab2.executeQuery();
                             while(rspasien.next()){                        
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakanlab2=koneksi.prepareStatement("select periksa_lab.kd_jenis_prw,"+
                                         "count(periksa_lab.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_lab.nm_perawatan,"+
@@ -5685,6 +5793,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         detailtotal=0;
                                         biayaitem=0;
                                         detailbhp=0;
+                                        koneksi=koneksiDB.condb();
                                         psdetaillab2=koneksi.prepareStatement("select sum(detail_periksa_lab.bagian_perujuk) as totaldokter,"+
                                             "0 as bhp, "+
                                             "0 as totalrs, "+
@@ -5788,6 +5897,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     
                     if(chkOperasi.isSelected()==true){
                         //jmoperator1
+                        koneksi=koneksiDB.condb();
                         pspasienoperator1=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -5802,6 +5912,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator1.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;    
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator1=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -5898,6 +6009,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmoperator2
+                        koneksi=koneksiDB.condb();
                         pspasienoperator2=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -5912,6 +6024,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator2.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator2=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -5996,6 +6109,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmoperator3
+                        koneksi=koneksiDB.condb();
                         pspasienoperator3=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -6010,6 +6124,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator3.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;      
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator3=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -6094,6 +6209,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_anak
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_anak=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -6108,6 +6224,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_anak.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_anak=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -6192,6 +6309,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_anestesi
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_anestesi=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -6206,6 +6324,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_anestesi.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_anestesi=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -6290,6 +6409,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_pjanak
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_pjanak=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -6304,6 +6424,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_pjanak.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;    
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_pjanak=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -6388,6 +6509,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_umum
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_umum=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -6402,6 +6524,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         try {
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_umum=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -6488,6 +6611,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         //jmranap
                         if(chkRanap.isSelected()==true){
                             if(ranapgabung==false){
+                                koneksi=koneksiDB.condb();
                                 pspasienranap=koneksi.prepareStatement(
                                         "select rawat_inap_dr.no_rawat from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_dr.kd_dokter=? and rawat_inap_dr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? group by rawat_inap_dr.no_rawat");
@@ -6498,6 +6622,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     pspasienranap.setString(4,"%"+pilihancarabayar+"%");
                                     rspasien=pspasienranap.executeQuery();
                                     while(rspasien.next()){  
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -6522,6 +6647,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 norm=rskamar.getString("no_rkm_medis");
                                                 pasien=rskamar.getString("nm_pasien");
                                             }else{
+                                                koneksi=koneksiDB.condb();
                                                 psanak=koneksi.prepareStatement(
                                                     "select pasien.no_rkm_medis,pasien.no_rkm_medis,pasien.nm_pasien,ranap_gabung.no_rawat,concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.no_peserta, "+
                                                     "concat(pasien.alamatpj,', ',pasien.kelurahanpj,', ',pasien.kecamatanpj,', ',pasien.kabupatenpj) as alamat "+
@@ -6532,6 +6658,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                     rsanak=psanak.executeQuery();
                                                     if(rsanak.next()){
                                                         pasien=rsanak.getString("no_rkm_medis")+" "+rsanak.getString("nm_pasien");  
+                                                        koneksi=koneksiDB.condb();
                                                         pskamar2=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,kamar_inap.tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',kamar_inap.tgl_keluar) as tgl_keluar,kamar.kelas "+
                                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
                                                             "reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj and kamar_inap.kd_kamar=kamar.kd_kamar and kamar.kd_bangsal=bangsal.kd_bangsal "+
@@ -6582,6 +6709,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;        
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranap=koneksi.prepareStatement("select rawat_inap_dr.kd_jenis_prw,"+
                                             "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -6667,6 +6795,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }
                                 }
 
+                                koneksi=koneksiDB.condb();
                                 pspasienranapdrpr=koneksi.prepareStatement(
                                         "select rawat_inap_drpr.no_rawat from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_drpr.kd_dokter=? and rawat_inap_drpr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? group by rawat_inap_drpr.no_rawat");            
@@ -6677,6 +6806,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     pspasienranapdrpr.setString(4,"%"+pilihancarabayar+"%");
                                     rspasien=pspasienranapdrpr.executeQuery();
                                     while(rspasien.next()){   
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -6701,6 +6831,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 norm=rskamar.getString("no_rkm_medis");
                                                 pasien=rskamar.getString("nm_pasien");
                                             }else{
+                                                koneksi=koneksiDB.condb();
                                                 psanak=koneksi.prepareStatement(
                                                     "select pasien.no_rkm_medis,pasien.no_rkm_medis,pasien.nm_pasien,ranap_gabung.no_rawat,concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.no_peserta, "+
                                                     "concat(pasien.alamatpj,', ',pasien.kelurahanpj,', ',pasien.kecamatanpj,', ',pasien.kabupatenpj) as alamat "+
@@ -6711,6 +6842,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                     rsanak=psanak.executeQuery();
                                                     if(rsanak.next()){
                                                         pasien=rsanak.getString("no_rkm_medis")+" "+rsanak.getString("nm_pasien");   
+                                                        koneksi=koneksiDB.condb();
                                                         pskamar2=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -6762,6 +6894,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;   
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranapdrpr=koneksi.prepareStatement("select rawat_inap_drpr.kd_jenis_prw,"+
                                             "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -6847,6 +6980,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }
                                 }
                             }else if(ranapgabung==true){
+                                koneksi=koneksiDB.condb();
                                 pspasienranap=koneksi.prepareStatement(
                                         "select rawat_inap_dr.no_rawat from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_dr.kd_dokter=? and rawat_inap_dr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? "+
@@ -6859,6 +6993,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     rspasien=pspasienranap.executeQuery();
                                     while(rspasien.next()){  
                                         norawatbayi="";
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -6895,6 +7030,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;        
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranap=koneksi.prepareStatement("select rawat_inap_dr.kd_jenis_prw,"+
                                             "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -6975,6 +7111,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 "select concat(pasien.no_rkm_medis,' ',pasien.nm_pasien) from reg_periksa inner join pasien on "+
                                                 "reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat=? ",norawatbayi);
                                             a=1;        
+                                            koneksi=koneksiDB.condb();
                                             pstindakanranap=koneksi.prepareStatement(
                                                 "select rawat_inap_dr.kd_jenis_prw,"+
                                                 "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
@@ -7065,6 +7202,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }
                                 }
 
+                                koneksi=koneksiDB.condb();
                                 pspasienranapdrpr=koneksi.prepareStatement(
                                         "select rawat_inap_drpr.no_rawat from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_drpr.kd_dokter=? and rawat_inap_drpr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? "+
@@ -7077,6 +7215,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     rspasien=pspasienranapdrpr.executeQuery();
                                     while(rspasien.next()){   
                                         norawatbayi="";
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -7113,6 +7252,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;   
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranapdrpr=koneksi.prepareStatement("select rawat_inap_drpr.kd_jenis_prw,"+
                                             "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -7193,6 +7333,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 "select concat(pasien.no_rkm_medis,' ',pasien.nm_pasien) from reg_periksa inner join pasien on "+
                                                 "reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat=? ",norawatbayi);
                                             a=1;                                           
+                                            koneksi=koneksiDB.condb();
                                             pstindakanranapdrpr=koneksi.prepareStatement(
                                                 "select rawat_inap_drpr.kd_jenis_prw,"+
                                                 "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
@@ -7334,6 +7475,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void jasamedis() {
         try{
            htmlContent = new StringBuilder();
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement("select dokter.kd_dokter,dokter.nm_dokter from dokter where dokter.status='1' and dokter.kd_dokter like ? order by dokter.nm_dokter");
            try {
                 ps.setString(1,"%"+kddokter.getText()+"%");
@@ -7378,6 +7520,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     c=1;
                     //jmralan
                     if(chkRalan.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienralan=koneksi.prepareStatement(
                             "select rawat_jl_dr.no_rawat,reg_periksa.no_rkm_medis,date_format(reg_periksa.tgl_registrasi,'%d-%m-%Y')as tgl_registrasi,pasien.nm_pasien,penjab.png_jawab,poliklinik.nm_poli "+
                             "from rawat_jl_dr inner join reg_periksa on rawat_jl_dr.no_rawat=reg_periksa.no_rawat inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -7390,6 +7533,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             pspasienralan.setString(4,"%"+pilihancarabayar+"%");
                             rspasien=pspasienralan.executeQuery();
                             while(rspasien.next()){ 
+                                koneksi=koneksiDB.condb();
                                 pstindakanralan=koneksi.prepareStatement(
                                     "select rawat_jl_dr.kd_jenis_prw,count(rawat_jl_dr.kd_jenis_prw) as jml,"+
                                     "jns_perawatan.nm_perawatan,sum(rawat_jl_dr.bhp)as bhp,sum(rawat_jl_dr.material)as material,"+
@@ -7465,6 +7609,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                         }
 
+                        koneksi=koneksiDB.condb();
                         pspasienralandrpr=koneksi.prepareStatement(
                             "select rawat_jl_drpr.no_rawat,reg_periksa.no_rkm_medis,date_format(reg_periksa.tgl_registrasi,'%d-%m-%Y')as tgl_registrasi,pasien.nm_pasien,penjab.png_jawab,poliklinik.nm_poli "+
                             "from rawat_jl_drpr inner join reg_periksa on rawat_jl_drpr.no_rawat=reg_periksa.no_rawat inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -7478,6 +7623,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienralandrpr.executeQuery();
                             while(rspasien.next()){ 
                                 a=1; 
+                                koneksi=koneksiDB.condb();
                                 pstindakanralandrpr=koneksi.prepareStatement("select rawat_jl_drpr.kd_jenis_prw,"+
                                         "count(rawat_jl_drpr.kd_jenis_prw) as jml,"+
                                         "jns_perawatan.nm_perawatan,sum(rawat_jl_drpr.bhp)as bhp,sum(rawat_jl_drpr.material)as material,"+
@@ -7556,6 +7702,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     
                     //jmradiologi
                     if(chkRadiologi.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienradiologi=koneksi.prepareStatement(
                             "select periksa_radiologi.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_radiologi.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Radiolgi' as nm_poli "+
@@ -7570,6 +7717,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienradiologi.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakanradiologi=koneksi.prepareStatement(
                                         "select periksa_radiologi.kd_jenis_prw,"+
                                         "count(periksa_radiologi.kd_jenis_prw) as jml, "+
@@ -7649,6 +7797,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmradiologiperujuk
+                        koneksi=koneksiDB.condb();
                         pspasienradiologi2=koneksi.prepareStatement(
                             "select periksa_radiologi.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_radiologi.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Radiolgi' as nm_poli "+
@@ -7663,6 +7812,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienradiologi2.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;     
+                                koneksi=koneksiDB.condb();
                                 pstindakanradiologi2=koneksi.prepareStatement("select periksa_radiologi.kd_jenis_prw,"+
                                         "count(periksa_radiologi.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_radiologi.nm_perawatan,"+
@@ -7743,6 +7893,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     
                     //jm laborat
                     if(chkLaborat.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienlab=koneksi.prepareStatement(
                             "select periksa_lab.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_lab.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Laborat' as nm_poli "+
@@ -7757,6 +7908,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienlab.executeQuery();
                             while(rspasien.next()){                        
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakanlab=koneksi.prepareStatement("select periksa_lab.kd_jenis_prw,"+
                                         "count(periksa_lab.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_lab.nm_perawatan,"+
@@ -7780,6 +7932,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         detailtotal=0;
                                         detailbhp=0;
                                         biayaitem=0;
+                                        koneksi=koneksiDB.condb();
                                         psdetaillab=koneksi.prepareStatement("select sum(detail_periksa_lab.bagian_dokter) as totaldokter,"+
                                             "sum(detail_periksa_lab.bagian_rs) as totalrs,"+
                                             "sum(detail_periksa_lab.bhp) as bhp, "+
@@ -7873,6 +8026,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jm perujuk
+                        koneksi=koneksiDB.condb();
                         pspasienlab2=koneksi.prepareStatement(
                             "select periksa_lab.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_lab.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Laborat' as nm_poli "+
@@ -7887,6 +8041,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienlab2.executeQuery();
                             while(rspasien.next()){                        
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakanlab2=koneksi.prepareStatement("select periksa_lab.kd_jenis_prw,"+
                                         "count(periksa_lab.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_lab.nm_perawatan,"+
@@ -7910,6 +8065,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         detailtotal=0;
                                         biayaitem=0;
                                         detailbhp=0;
+                                        koneksi=koneksiDB.condb();
                                         psdetaillab2=koneksi.prepareStatement("select sum(detail_periksa_lab.bagian_perujuk) as totaldokter,"+
                                             "0 as bhp, "+
                                             "0 as totalrs, "+
@@ -8005,6 +8161,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     
                     if(chkOperasi.isSelected()==true){
                         //jmoperator1
+                        koneksi=koneksiDB.condb();
                         pspasienoperator1=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -8019,6 +8176,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator1.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;    
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator1=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -8107,6 +8265,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmoperator2
+                        koneksi=koneksiDB.condb();
                         pspasienoperator2=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -8121,6 +8280,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator2.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator2=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -8197,6 +8357,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmoperator3
+                        koneksi=koneksiDB.condb();
                         pspasienoperator3=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -8211,6 +8372,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator3.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;      
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator3=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -8287,6 +8449,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_anak
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_anak=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -8301,6 +8464,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_anak.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_anak=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -8377,6 +8541,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_anestesi
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_anestesi=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -8391,6 +8556,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_anestesi.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_anestesi=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -8467,6 +8633,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_pjanak
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_pjanak=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -8481,6 +8648,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_pjanak.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;    
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_pjanak=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -8557,6 +8725,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_umum
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_umum=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -8571,6 +8740,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         try {
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_umum=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -8649,6 +8819,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         //jmranap
                         if(chkRanap.isSelected()==true){
                             if(ranapgabung==false){
+                                koneksi=koneksiDB.condb();
                                 pspasienranap=koneksi.prepareStatement(
                                         "select rawat_inap_dr.no_rawat from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_dr.kd_dokter=? and rawat_inap_dr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? group by rawat_inap_dr.no_rawat");
@@ -8659,6 +8830,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     pspasienranap.setString(4,"%"+pilihancarabayar+"%");
                                     rspasien=pspasienranap.executeQuery();
                                     while(rspasien.next()){  
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -8683,6 +8855,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 norm=rskamar.getString("no_rkm_medis");
                                                 pasien=rskamar.getString("nm_pasien");
                                             }else{
+                                                koneksi=koneksiDB.condb();
                                                 psanak=koneksi.prepareStatement(
                                                     "select pasien.no_rkm_medis,pasien.no_rkm_medis,pasien.nm_pasien,ranap_gabung.no_rawat,concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.no_peserta, "+
                                                     "concat(pasien.alamatpj,', ',pasien.kelurahanpj,', ',pasien.kecamatanpj,', ',pasien.kabupatenpj) as alamat "+
@@ -8693,6 +8866,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                     rsanak=psanak.executeQuery();
                                                     if(rsanak.next()){
                                                         pasien=rsanak.getString("no_rkm_medis")+" "+rsanak.getString("nm_pasien");  
+                                                        koneksi=koneksiDB.condb();
                                                         pskamar2=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,kamar_inap.tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',kamar_inap.tgl_keluar) as tgl_keluar,kamar.kelas "+
                                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
                                                             "reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj and kamar_inap.kd_kamar=kamar.kd_kamar and kamar.kd_bangsal=bangsal.kd_bangsal "+
@@ -8743,6 +8917,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;        
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranap=koneksi.prepareStatement("select rawat_inap_dr.kd_jenis_prw,"+
                                             "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -8820,6 +8995,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }
                                 }
 
+                                koneksi=koneksiDB.condb();
                                 pspasienranapdrpr=koneksi.prepareStatement(
                                         "select rawat_inap_drpr.no_rawat from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_drpr.kd_dokter=? and rawat_inap_drpr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? group by rawat_inap_drpr.no_rawat");            
@@ -8830,6 +9006,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     pspasienranapdrpr.setString(4,"%"+pilihancarabayar+"%");
                                     rspasien=pspasienranapdrpr.executeQuery();
                                     while(rspasien.next()){   
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -8854,6 +9031,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 norm=rskamar.getString("no_rkm_medis");
                                                 pasien=rskamar.getString("nm_pasien");
                                             }else{
+                                                koneksi=koneksiDB.condb();
                                                 psanak=koneksi.prepareStatement(
                                                     "select pasien.no_rkm_medis,pasien.no_rkm_medis,pasien.nm_pasien,ranap_gabung.no_rawat,concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.no_peserta, "+
                                                     "concat(pasien.alamatpj,', ',pasien.kelurahanpj,', ',pasien.kecamatanpj,', ',pasien.kabupatenpj) as alamat "+
@@ -8864,6 +9042,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                     rsanak=psanak.executeQuery();
                                                     if(rsanak.next()){
                                                         pasien=rsanak.getString("no_rkm_medis")+" "+rsanak.getString("nm_pasien");   
+                                                        koneksi=koneksiDB.condb();
                                                         pskamar2=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -8915,6 +9094,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;   
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranapdrpr=koneksi.prepareStatement("select rawat_inap_drpr.kd_jenis_prw,"+
                                             "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -8992,6 +9172,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }
                                 }
                             }else if(ranapgabung==true){
+                                koneksi=koneksiDB.condb();
                                 pspasienranap=koneksi.prepareStatement(
                                         "select rawat_inap_dr.no_rawat from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_dr.kd_dokter=? and rawat_inap_dr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? "+
@@ -9004,6 +9185,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     rspasien=pspasienranap.executeQuery();
                                     while(rspasien.next()){  
                                         norawatbayi="";
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -9040,6 +9222,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;        
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranap=koneksi.prepareStatement("select rawat_inap_dr.kd_jenis_prw,"+
                                             "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -9112,6 +9295,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 "select concat(pasien.no_rkm_medis,' ',pasien.nm_pasien) from reg_periksa inner join pasien on "+
                                                 "reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat=? ",norawatbayi);
                                             a=1;        
+                                            koneksi=koneksiDB.condb();
                                             pstindakanranap=koneksi.prepareStatement(
                                                 "select rawat_inap_dr.kd_jenis_prw,"+
                                                 "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
@@ -9194,6 +9378,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }
                                 }
 
+                                koneksi=koneksiDB.condb();
                                 pspasienranapdrpr=koneksi.prepareStatement(
                                         "select rawat_inap_drpr.no_rawat from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_drpr.kd_dokter=? and rawat_inap_drpr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? "+
@@ -9206,6 +9391,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     rspasien=pspasienranapdrpr.executeQuery();
                                     while(rspasien.next()){   
                                         norawatbayi="";
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -9242,6 +9428,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;   
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranapdrpr=koneksi.prepareStatement("select rawat_inap_drpr.kd_jenis_prw,"+
                                             "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -9314,6 +9501,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 "select concat(pasien.no_rkm_medis,' ',pasien.nm_pasien) from reg_periksa inner join pasien on "+
                                                 "reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat=? ",norawatbayi);
                                             a=1;                                           
+                                            koneksi=koneksiDB.condb();
                                             pstindakanranapdrpr=koneksi.prepareStatement(
                                                 "select rawat_inap_drpr.kd_jenis_prw,"+
                                                 "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
@@ -9463,6 +9651,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void jasamedis2() {
         try{
            htmlContent = new StringBuilder();
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement("select dokter.kd_dokter,dokter.nm_dokter from dokter where dokter.status='1' and dokter.kd_dokter like ? order by dokter.nm_dokter");
            try {
                 ps.setString(1,"%"+kddokter.getText()+"%");
@@ -9507,6 +9696,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     c=1;
                     //jmralan
                     if(chkRalan.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienralan=koneksi.prepareStatement(
                             "select rawat_jl_dr.no_rawat,reg_periksa.no_rkm_medis,date_format(reg_periksa.tgl_registrasi,'%d-%m-%Y')as tgl_registrasi,pasien.nm_pasien,penjab.png_jawab,poliklinik.nm_poli "+
                             "from rawat_jl_dr inner join reg_periksa on rawat_jl_dr.no_rawat=reg_periksa.no_rawat inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -9519,6 +9709,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             pspasienralan.setString(4,"%"+pilihancarabayar+"%");
                             rspasien=pspasienralan.executeQuery();
                             while(rspasien.next()){ 
+                                koneksi=koneksiDB.condb();
                                 pstindakanralan=koneksi.prepareStatement(
                                     "select rawat_jl_dr.kd_jenis_prw,count(rawat_jl_dr.kd_jenis_prw) as jml,"+
                                     "jns_perawatan.nm_perawatan,sum(rawat_jl_dr.bhp)as bhp,sum(rawat_jl_dr.material)as material,"+
@@ -9594,6 +9785,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             }
                         }
 
+                        koneksi=koneksiDB.condb();
                         pspasienralandrpr=koneksi.prepareStatement(
                             "select rawat_jl_drpr.no_rawat,reg_periksa.no_rkm_medis,date_format(reg_periksa.tgl_registrasi,'%d-%m-%Y')as tgl_registrasi,pasien.nm_pasien,penjab.png_jawab,poliklinik.nm_poli "+
                             "from rawat_jl_drpr inner join reg_periksa on rawat_jl_drpr.no_rawat=reg_periksa.no_rawat inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
@@ -9607,6 +9799,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienralandrpr.executeQuery();
                             while(rspasien.next()){ 
                                 a=1; 
+                                koneksi=koneksiDB.condb();
                                 pstindakanralandrpr=koneksi.prepareStatement("select rawat_jl_drpr.kd_jenis_prw,"+
                                         "count(rawat_jl_drpr.kd_jenis_prw) as jml,"+
                                         "jns_perawatan.nm_perawatan,sum(rawat_jl_drpr.bhp)as bhp,sum(rawat_jl_drpr.material)as material,"+
@@ -9685,6 +9878,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     
                     //jmradiologi
                     if(chkRadiologi.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienradiologi=koneksi.prepareStatement(
                             "select periksa_radiologi.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_radiologi.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Radiolgi' as nm_poli "+
@@ -9699,6 +9893,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienradiologi.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakanradiologi=koneksi.prepareStatement(
                                         "select periksa_radiologi.kd_jenis_prw,"+
                                         "count(periksa_radiologi.kd_jenis_prw) as jml, "+
@@ -9778,6 +9973,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmradiologiperujuk
+                        koneksi=koneksiDB.condb();
                         pspasienradiologi2=koneksi.prepareStatement(
                             "select periksa_radiologi.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_radiologi.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Radiolgi' as nm_poli "+
@@ -9792,6 +9988,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienradiologi2.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;     
+                                koneksi=koneksiDB.condb();
                                 pstindakanradiologi2=koneksi.prepareStatement("select periksa_radiologi.kd_jenis_prw,"+
                                         "count(periksa_radiologi.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_radiologi.nm_perawatan,"+
@@ -9872,6 +10069,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     
                     //jm laborat
                     if(chkLaborat.isSelected()==true){
+                        koneksi=koneksiDB.condb();
                         pspasienlab=koneksi.prepareStatement(
                             "select periksa_lab.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_lab.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Laborat' as nm_poli "+
@@ -9886,6 +10084,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienlab.executeQuery();
                             while(rspasien.next()){                        
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakanlab=koneksi.prepareStatement("select periksa_lab.kd_jenis_prw,"+
                                         "count(periksa_lab.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_lab.nm_perawatan,"+
@@ -9909,6 +10108,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         detailtotal=0;
                                         detailbhp=0;
                                         biayaitem=0;
+                                        koneksi=koneksiDB.condb();
                                         psdetaillab=koneksi.prepareStatement("select sum(detail_periksa_lab.bagian_dokter) as totaldokter,"+
                                             "sum(detail_periksa_lab.bagian_rs) as totalrs,"+
                                             "sum(detail_periksa_lab.bhp) as bhp, "+
@@ -10002,6 +10202,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jm perujuk
+                        koneksi=koneksiDB.condb();
                         pspasienlab2=koneksi.prepareStatement(
                             "select periksa_lab.no_rawat,reg_periksa.no_rkm_medis,date_format(periksa_lab.tgl_periksa,'%d-%m-%Y')as tgl_periksa,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Laborat' as nm_poli "+
@@ -10016,6 +10217,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienlab2.executeQuery();
                             while(rspasien.next()){                        
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakanlab2=koneksi.prepareStatement("select periksa_lab.kd_jenis_prw,"+
                                         "count(periksa_lab.kd_jenis_prw) as jml, "+
                                         "jns_perawatan_lab.nm_perawatan,"+
@@ -10039,6 +10241,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         detailtotal=0;
                                         biayaitem=0;
                                         detailbhp=0;
+                                        koneksi=koneksiDB.condb();
                                         psdetaillab2=koneksi.prepareStatement("select sum(detail_periksa_lab.bagian_perujuk) as totaldokter,"+
                                             "0 as bhp, "+
                                             "0 as totalrs, "+
@@ -10134,6 +10337,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     
                     if(chkOperasi.isSelected()==true){
                         //jmoperator1
+                        koneksi=koneksiDB.condb();
                         pspasienoperator1=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -10148,6 +10352,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator1.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;    
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator1=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -10236,6 +10441,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmoperator2
+                        koneksi=koneksiDB.condb();
                         pspasienoperator2=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -10250,6 +10456,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator2.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator2=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -10326,6 +10533,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmoperator3
+                        koneksi=koneksiDB.condb();
                         pspasienoperator3=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -10340,6 +10548,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasienoperator3.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;      
+                                koneksi=koneksiDB.condb();
                                 pstindakanoperator3=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -10416,6 +10625,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_anak
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_anak=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -10430,6 +10640,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_anak.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_anak=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -10506,6 +10717,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_anestesi
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_anestesi=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -10520,6 +10732,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_anestesi.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;  
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_anestesi=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -10596,6 +10809,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_pjanak
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_pjanak=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -10610,6 +10824,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                             rspasien=pspasiendokter_pjanak.executeQuery();
                             while(rspasien.next()){ 
                                 a=1;    
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_pjanak=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -10686,6 +10901,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         }
 
                         //jmdokter_umum
+                        koneksi=koneksiDB.condb();
                         pspasiendokter_umum=koneksi.prepareStatement(
                             "select operasi.no_rawat,reg_periksa.no_rkm_medis,date_format(operasi.tgl_operasi,'%d-%m-%Y')as tgl_operasi,"+
                             "pasien.nm_pasien,penjab.png_jawab,'Kamar Operasi' as nm_poli "+
@@ -10700,6 +10916,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         try {
                             while(rspasien.next()){ 
                                 a=1;   
+                                koneksi=koneksiDB.condb();
                                 pstindakandokter_umum=koneksi.prepareStatement("select operasi.kode_paket,"+
                                         "count(operasi.kode_paket) as jml, "+
                                         "paket_operasi.nm_perawatan,"+
@@ -10778,6 +10995,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         //jmranap
                         if(chkRanap.isSelected()==true){
                             if(ranapgabung==false){
+                                koneksi=koneksiDB.condb();
                                 pspasienranap=koneksi.prepareStatement(
                                         "select rawat_inap_dr.no_rawat from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_dr.kd_dokter=? and rawat_inap_dr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? group by rawat_inap_dr.no_rawat");
@@ -10788,6 +11006,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     pspasienranap.setString(4,"%"+pilihancarabayar+"%");
                                     rspasien=pspasienranap.executeQuery();
                                     while(rspasien.next()){  
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -10812,6 +11031,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 norm=rskamar.getString("no_rkm_medis");
                                                 pasien=rskamar.getString("nm_pasien");
                                             }else{
+                                                koneksi=koneksiDB.condb();
                                                 psanak=koneksi.prepareStatement(
                                                     "select pasien.no_rkm_medis,pasien.no_rkm_medis,pasien.nm_pasien,ranap_gabung.no_rawat,concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.no_peserta, "+
                                                     "concat(pasien.alamatpj,', ',pasien.kelurahanpj,', ',pasien.kecamatanpj,', ',pasien.kabupatenpj) as alamat "+
@@ -10822,6 +11042,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                     rsanak=psanak.executeQuery();
                                                     if(rsanak.next()){
                                                         pasien=rsanak.getString("no_rkm_medis")+" "+rsanak.getString("nm_pasien");  
+                                                        koneksi=koneksiDB.condb();
                                                         pskamar2=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,kamar_inap.tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',kamar_inap.tgl_keluar) as tgl_keluar,kamar.kelas "+
                                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
                                                             "reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.kd_pj=penjab.kd_pj and kamar_inap.kd_kamar=kamar.kd_kamar and kamar.kd_bangsal=bangsal.kd_bangsal "+
@@ -10872,6 +11093,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;        
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranap=koneksi.prepareStatement("select rawat_inap_dr.kd_jenis_prw,"+
                                             "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -10949,6 +11171,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }
                                 }
 
+                                koneksi=koneksiDB.condb();
                                 pspasienranapdrpr=koneksi.prepareStatement(
                                         "select rawat_inap_drpr.no_rawat from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_drpr.kd_dokter=? and rawat_inap_drpr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? group by rawat_inap_drpr.no_rawat");            
@@ -10959,6 +11182,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     pspasienranapdrpr.setString(4,"%"+pilihancarabayar+"%");
                                     rspasien=pspasienranapdrpr.executeQuery();
                                     while(rspasien.next()){   
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -10983,6 +11207,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 norm=rskamar.getString("no_rkm_medis");
                                                 pasien=rskamar.getString("nm_pasien");
                                             }else{
+                                                koneksi=koneksiDB.condb();
                                                 psanak=koneksi.prepareStatement(
                                                     "select pasien.no_rkm_medis,pasien.no_rkm_medis,pasien.nm_pasien,ranap_gabung.no_rawat,concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.no_peserta, "+
                                                     "concat(pasien.alamatpj,', ',pasien.kelurahanpj,', ',pasien.kecamatanpj,', ',pasien.kabupatenpj) as alamat "+
@@ -10993,6 +11218,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                     rsanak=psanak.executeQuery();
                                                     if(rsanak.next()){
                                                         pasien=rsanak.getString("no_rkm_medis")+" "+rsanak.getString("nm_pasien");   
+                                                        koneksi=koneksiDB.condb();
                                                         pskamar2=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -11044,6 +11270,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;   
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranapdrpr=koneksi.prepareStatement("select rawat_inap_drpr.kd_jenis_prw,"+
                                             "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -11121,6 +11348,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }
                                 }
                             }else if(ranapgabung==true){
+                                koneksi=koneksiDB.condb();
                                 pspasienranap=koneksi.prepareStatement(
                                         "select rawat_inap_dr.no_rawat from rawat_inap_dr inner join reg_periksa on rawat_inap_dr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_dr.kd_dokter=? and rawat_inap_dr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? "+
@@ -11133,6 +11361,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     rspasien=pspasienranap.executeQuery();
                                     while(rspasien.next()){  
                                         norawatbayi="";
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -11169,6 +11398,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;        
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranap=koneksi.prepareStatement("select rawat_inap_dr.kd_jenis_prw,"+
                                             "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -11241,6 +11471,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 "select concat(pasien.no_rkm_medis,' ',pasien.nm_pasien) from reg_periksa inner join pasien on "+
                                                 "reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat=? ",norawatbayi);
                                             a=1;        
+                                            koneksi=koneksiDB.condb();
                                             pstindakanranap=koneksi.prepareStatement(
                                                 "select rawat_inap_dr.kd_jenis_prw,"+
                                                 "count(rawat_inap_dr.kd_jenis_prw) as jml,"+
@@ -11323,6 +11554,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     }
                                 }
 
+                                koneksi=koneksiDB.condb();
                                 pspasienranapdrpr=koneksi.prepareStatement(
                                         "select rawat_inap_drpr.no_rawat from rawat_inap_drpr inner join reg_periksa on rawat_inap_drpr.no_rawat=reg_periksa.no_rawat "+
                                         "where rawat_inap_drpr.kd_dokter=? and rawat_inap_drpr.tgl_perawatan between ? and ? and reg_periksa.kd_pj like ? "+
@@ -11335,6 +11567,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                     rspasien=pspasienranapdrpr.executeQuery();
                                     while(rspasien.next()){   
                                         norawatbayi="";
+                                        koneksi=koneksiDB.condb();
                                         pskamar=koneksi.prepareStatement("select kamar_inap.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,penjab.png_jawab,kamar_inap.kd_kamar,bangsal.kd_bangsal,bangsal.nm_bangsal,"+
                                             "date_format(kamar_inap.tgl_masuk,'%d-%m-%Y')as tgl_masuk,if(kamar_inap.tgl_keluar='0000-00-00','-',date_format(kamar_inap.tgl_keluar,'%d-%m-%Y')) as tgl_keluar,kamar.kelas "+
                                             "from kamar_inap inner join kamar inner join bangsal inner join reg_periksa inner join pasien inner join penjab on kamar_inap.no_rawat=reg_periksa.no_rawat and "+
@@ -11371,6 +11604,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                         }  
 
                                         a=1;   
+                                        koneksi=koneksiDB.condb();
                                         pstindakanranapdrpr=koneksi.prepareStatement("select rawat_inap_drpr.kd_jenis_prw,"+
                                             "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+
                                             "jns_perawatan_inap.nm_perawatan,"+
@@ -11443,6 +11677,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                                 "select concat(pasien.no_rkm_medis,' ',pasien.nm_pasien) from reg_periksa inner join pasien on "+
                                                 "reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.no_rawat=? ",norawatbayi);
                                             a=1;                                           
+                                            koneksi=koneksiDB.condb();
                                             pstindakanranapdrpr=koneksi.prepareStatement(
                                                 "select rawat_inap_drpr.kd_jenis_prw,"+
                                                 "count(rawat_inap_drpr.kd_jenis_prw) as jml,"+

@@ -445,6 +445,7 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
                             append("<td valign='middle' bgcolor='#FFFAFA' align='center'>Tipe</td>").
                         append("</tr>");  
             koneksi=koneksiDBDutaParking.condb();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select keluar.kode,keluar.nopol,keluar.masuk,keluar.keluar,keluar.durasi,keluar.pintum,keluar.pintuk,keluar.jenisk,keluar.tarif,"+
                     "keluar.parkir,keluar.inap,keluar.denda,keluar.tiketmasalah,keluar.paket,keluar.kadaluarsa,keluar.rfid,keluar.petugas,keluar.shif,"+

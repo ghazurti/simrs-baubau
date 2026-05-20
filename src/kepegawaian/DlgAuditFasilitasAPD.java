@@ -1039,6 +1039,7 @@ public final class DlgAuditFasilitasAPD extends javax.swing.JDialog {
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_fasilitas_apd.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_fasilitas_apd.tanggal,audit_fasilitas_apd.audit1,"+
                     "audit_fasilitas_apd.audit2,audit_fasilitas_apd.audit3,"+
@@ -1047,6 +1048,7 @@ public final class DlgAuditFasilitasAPD extends javax.swing.JDialog {
                     "inner join ruang_audit_kepatuhan on audit_fasilitas_apd.id_ruang=ruang_audit_kepatuhan.id_ruang "+
                     "where audit_fasilitas_apd.tanggal between ? and ? order by audit_fasilitas_apd.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_fasilitas_apd.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_fasilitas_apd.tanggal,audit_fasilitas_apd.audit1,"+
                     "audit_fasilitas_apd.audit2,audit_fasilitas_apd.audit3,"+

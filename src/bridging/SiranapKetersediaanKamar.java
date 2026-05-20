@@ -1134,6 +1134,7 @@ private void btnKamarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+           koneksi=koneksiDB.condb();
            ps=koneksi.prepareStatement(
                    "select siranap_ketersediaan_kamar.kode_ruang_siranap,siranap_ketersediaan_kamar.kelas_ruang_siranap,"+
                    "siranap_ketersediaan_kamar.kd_bangsal,bangsal.nm_bangsal,siranap_ketersediaan_kamar.kelas,"+

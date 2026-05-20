@@ -371,6 +371,7 @@ public final class DlgUbahNilaiLab extends javax.swing.JDialog {
             Sequel.cariIsi("select pasien.nm_pasien from pasien where pasien.no_rkm_medis=? ",TPasien,TNoRM.getText());
             this.tanggal=tanggal;
             this.jam=jam;
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select detail_periksa_lab.id_template,template_laboratorium.Pemeriksaan, detail_periksa_lab.nilai,template_laboratorium.satuan,detail_periksa_lab.nilai_rujukan,"+
                     "detail_periksa_lab.keterangan,detail_periksa_lab.kd_jenis_prw "+

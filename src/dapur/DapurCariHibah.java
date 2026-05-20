@@ -713,6 +713,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
             Valid.textKosong(TCari,"No.Faktur");
         }else{
            try {
+               koneksi=koneksiDB.condb();
                pscaribeli=koneksi.prepareStatement("select no_hibah,totalhibah,tgl_hibah from dapur_hibah where no_hibah=?");
                try {
                   pscaribeli.setString(1,tbDokter.getValueAt(tbDokter.getSelectedRow(),1).toString());
@@ -721,6 +722,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                       Sequel.AutoComitFalse();
                       sukses=true;
 
+                      koneksi=koneksiDB.condb();
                       ps2=koneksi.prepareStatement("select kode_brng,jumlah from dapur_detail_hibah where no_hibah=? ");
                       try {
                           ps2.setString(1,rs.getString(1));
@@ -867,6 +869,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
     private void tampil() {
        Valid.tabelKosong(tabMode);
         try{            
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select dapur_hibah.tgl_hibah,dapur_hibah.no_hibah, "+
                     "dapur_hibah.kode_pemberi,pemberihibah.nama_pemberi, "+
                     "dapur_hibah.nip,petugas.nama,dapur_hibah.totalhibah,"+
@@ -902,6 +905,7 @@ private void ppHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3)+", "+rs.getString(4),
                           rs.getString(5)+", "+rs.getString(6),"","",""
                     });      
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select dapur_detail_hibah.kode_brng,dapurbarang.nama_brng, "+
                         "dapurbarang.jenis,dapurbarang.jenis,dapur_detail_hibah.jumlah,dapur_detail_hibah.h_hibah, "+
                         "dapur_detail_hibah.subtotalhibah,dapur_detail_hibah.kode_sat "+

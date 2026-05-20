@@ -702,6 +702,7 @@ public final class DlgBangsal extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from bangsal where bangsal.status='1' "+(TCari.getText().trim().equals("")?"":"and (bangsal.kd_bangsal like ? or bangsal.nm_bangsal like ?) ")+" order by bangsal.kd_bangsal");
             try {
                 if(!TCari.getText().trim().equals("")){

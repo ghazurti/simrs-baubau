@@ -575,6 +575,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try{   
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);
+            koneksi=koneksiDB.condb();
             psdokter=koneksi.prepareStatement("select dokter.kd_dokter,dokter.nm_dokter from dokter where dokter.status='1' "+(nmdokter.getText().trim().equals("")?"":"and dokter.kd_dokter=? ")+" order by dokter.nm_dokter");
             try {
                 if(!nmdokter.getText().trim().equals("")){
@@ -587,6 +588,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                 ttltuslah=0;
                 while(rsdokter.next()){
                     tabMode.addRow(new Object[]{i+". ",rsdokter.getString("nm_dokter"),"","",null,null,null});
+                    koneksi=koneksiDB.condb();
                     pspasien=koneksi.prepareStatement("select reg_periksa.no_rawat,pasien.nm_pasien from reg_periksa inner join pasien inner join detail_pemberian_obat "+
                         "on reg_periksa.no_rkm_medis=pasien.no_rkm_medis and reg_periksa.no_rawat=detail_pemberian_obat.no_rawat where detail_pemberian_obat.status='Ranap' and "+
                         "reg_periksa.kd_dokter=? and reg_periksa.tgl_registrasi between ? and ? and reg_periksa.kd_pj like ? group by reg_periksa.no_rawat");
@@ -602,6 +604,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                         tuslah=0;
                         while(rspasien.next()){
                             tabMode.addRow(new Object[]{"","     "+a+". "+rspasien.getString("no_rawat")+" "+rspasien.getString("nm_pasien"),"","",null,null,null,null});
+                            koneksi=koneksiDB.condb();
                             pstanggal=koneksi.prepareStatement("select detail_pemberian_obat.tgl_perawatan from detail_pemberian_obat "+
                                 "where detail_pemberian_obat.no_rawat=? and detail_pemberian_obat.status='Ranap' group by detail_pemberian_obat.tgl_perawatan order by detail_pemberian_obat.tgl_perawatan asc");
                             try {
@@ -609,6 +612,7 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                                 rstanggal=pstanggal.executeQuery();
                                 while(rstanggal.next()){
                                     tabMode.addRow(new Object[]{"","",rstanggal.getString("tgl_perawatan"),"",null,null,null,null});
+                                    koneksi=koneksiDB.condb();
                                     psobat=koneksi.prepareStatement("select detail_pemberian_obat.kode_brng,databarang.nama_brng,sum(detail_pemberian_obat.jml) as jml,"+
                                         "(sum(detail_pemberian_obat.total)-sum(detail_pemberian_obat.embalase+detail_pemberian_obat.tuslah)) as total,"+
                                         "sum(detail_pemberian_obat.embalase) as embalase, sum(detail_pemberian_obat.tuslah) as tuslah "+

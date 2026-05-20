@@ -385,6 +385,7 @@ public final class MasterCariTemplateHasilRadiologi extends javax.swing.JDialog 
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                     "select template_hasil_radiologi.no_template,template_hasil_radiologi.nama_pemeriksaan,template_hasil_radiologi.template_hasil_radiologi "+
                     "from template_hasil_radiologi where template_hasil_radiologi.no_template like ? or template_hasil_radiologi.nama_pemeriksaan like ? order by template_hasil_radiologi.nama_pemeriksaan");   

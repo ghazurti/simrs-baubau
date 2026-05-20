@@ -98,6 +98,7 @@ public class DlgParkirBarcode extends javax.swing.JDialog {
             });
         }  
         try {
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from parkir_barcode where kode_barcode like ? or nomer_kartu like ? order by kode_barcode");
         } catch (Exception e) {
             System.out.println(e);

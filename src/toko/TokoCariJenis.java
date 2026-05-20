@@ -365,6 +365,7 @@ public final class TokoCariJenis extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{            
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select tokojenisbarang.kd_jenis,tokojenisbarang.nm_jenis from tokojenisbarang "+(TCari.getText().trim().equals("")?"":"where tokojenisbarang.kd_jenis like ? or tokojenisbarang.nm_jenis like ? ")+" order by tokojenisbarang.nm_jenis "
             );

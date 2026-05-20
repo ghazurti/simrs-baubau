@@ -808,6 +808,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select * from icd9 "+(TCari.getText().trim().equals("")?"":"where icd9.kode like ? or icd9.deskripsi_panjang like ? or icd9.deskripsi_pendek like ? ")+"order by icd9.kode");
             try{

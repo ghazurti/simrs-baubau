@@ -402,6 +402,7 @@ public final class DlgRestoreBangsal extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from bangsal where status='0' and kd_bangsal like ? "+
                     "or status='0' and nm_bangsal like ? order by kd_bangsal");
             try {

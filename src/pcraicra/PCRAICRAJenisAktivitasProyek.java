@@ -587,6 +587,7 @@ public final class PCRAICRAJenisAktivitasProyek extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select pcra_icra_jenis_aktivitas_proyek.kode_aktivitas,pcra_icra_jenis_aktivitas_proyek.nama_aktivitas from pcra_icra_jenis_aktivitas_proyek "+(TCari.getText().trim().equals("")?"":"where pcra_icra_jenis_aktivitas_proyek.kode_aktivitas like ? or pcra_icra_jenis_aktivitas_proyek.nama_aktivitas like ? ")+"order by pcra_icra_jenis_aktivitas_proyek.kode_aktivitas"
             );

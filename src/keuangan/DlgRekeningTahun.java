@@ -816,6 +816,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{       
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select rekeningtahun.thn,rekening.kd_rek,rekening.nm_rek,rekening.tipe,rekening.balance,rekeningtahun.saldo_awal from rekening inner join rekeningtahun on rekeningtahun.kd_rek=rekening.kd_rek where rekeningtahun.thn=? "+
                 (TCari.getText().trim().equals("")?"":"and (rekening.kd_rek like ? or rekening.nm_rek like ? or rekening.tipe like ? or rekening.balance like ?) ")+"order by rekening.kd_rek");
@@ -830,6 +831,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
                 rs=ps.executeQuery();
                 while(rs.next()){
                     md = 0;mk = 0;saldoakhir=0;
+                    koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                             "select sum(detailjurnal.debet),sum(detailjurnal.kredit) "+
                             "from jurnal inner join detailjurnal on detailjurnal.no_jurnal=jurnal.no_jurnal where "+

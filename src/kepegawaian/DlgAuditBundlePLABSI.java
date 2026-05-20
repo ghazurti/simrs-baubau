@@ -1144,6 +1144,7 @@ if(KdRuang.getText().trim().equals("")||NmRuang.getText().trim().equals("")){
         Valid.tabelKosong(tabMode);
         try{
             if(TCari.getText().toString().trim().equals("")){
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                     "select audit_bundle_plabsi.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_bundle_plabsi.tanggal,audit_bundle_plabsi.sebelum_melakukan_hand_hygiene,"+
                     "audit_bundle_plabsi.menggunakan_apd_lengkap,audit_bundle_plabsi.lokasi_pemasangan_sesuai,audit_bundle_plabsi.alat_yang_digunakan_steril,audit_bundle_plabsi.pembersihan_kulit,"+
@@ -1151,6 +1152,7 @@ if(KdRuang.getText().trim().equals("")||NmRuang.getText().trim().equals("")){
                     "inner join ruang_audit_kepatuhan on audit_bundle_plabsi.id_ruang=ruang_audit_kepatuhan.id_ruang "+
                     "where audit_bundle_plabsi.tanggal between ? and ? order by audit_bundle_plabsi.tanggal");
             }else{
+                koneksi=koneksiDB.condb();
                 ps=koneksi.prepareStatement(
                    "select audit_bundle_plabsi.id_ruang,ruang_audit_kepatuhan.nama_ruang,audit_bundle_plabsi.tanggal,audit_bundle_plabsi.sebelum_melakukan_hand_hygiene,"+
                     "audit_bundle_plabsi.menggunakan_apd_lengkap,audit_bundle_plabsi.lokasi_pemasangan_sesuai,audit_bundle_plabsi.alat_yang_digunakan_steril,audit_bundle_plabsi.pembersihan_kulit,"+

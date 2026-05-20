@@ -847,6 +847,7 @@ private void NmKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_NmKeyP
     private void prosesCari(String sql) {
         Valid.tabelKosong(tabMode);
         try {
+            koneksi=koneksiDB.condb();
             stat=koneksi.prepareStatement(sql);
             try{
                 rs=stat.executeQuery();

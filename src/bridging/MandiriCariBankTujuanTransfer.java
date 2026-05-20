@@ -369,6 +369,7 @@ public final class MandiriCariBankTujuanTransfer extends javax.swing.JDialog {
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement("select * from bank_tujuan_transfer_bankmandiri order by bank_tujuan_transfer_bankmandiri.kode_bank ");
             try {
                 rs=ps.executeQuery();

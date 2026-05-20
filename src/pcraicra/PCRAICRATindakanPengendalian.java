@@ -587,6 +587,7 @@ public final class PCRAICRATindakanPengendalian extends javax.swing.JDialog {
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{
+            koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
                 "select pcra_icra_tindakan_pengendalian.kode_pengendalian,pcra_icra_tindakan_pengendalian.nama_pengendalian from pcra_icra_tindakan_pengendalian "+(TCari.getText().trim().equals("")?"":"where pcra_icra_tindakan_pengendalian.kode_pengendalian like ? or pcra_icra_tindakan_pengendalian.nama_pengendalian like ? ")+"order by pcra_icra_tindakan_pengendalian.kode_pengendalian"
             );
