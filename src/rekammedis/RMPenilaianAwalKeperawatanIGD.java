@@ -4351,14 +4351,38 @@ public final class RMPenilaianAwalKeperawatanIGD extends javax.swing.JDialog {
         }
     }
     
+    private void autoFillDariSOAP() {
+        try {
+            koneksi=koneksiDB.condb();
+            ps=koneksi.prepareStatement(
+                "select keluhan from pemeriksaan_ralan "+
+                "where no_rawat=? order by tgl_perawatan desc, jam_rawat desc limit 1");
+            try {
+                ps.setString(1,TNoRw.getText());
+                rs=ps.executeQuery();
+                if(rs.next()){
+                    if(KeluhanUtama.getText().trim().isEmpty()) KeluhanUtama.setText(rs.getString("keluhan"));
+                }
+            } catch (Exception e) {
+                System.out.println("Notif autofill : "+e);
+            } finally{
+                if(rs!=null){ rs.close(); }
+                if(ps!=null){ ps.close(); }
+            }
+        } catch (Exception e) {
+            System.out.println("Notif autofill : "+e);
+        }
+    }
+
     public void setNoRm(String norwt, Date tgl2) {
         TNoRw.setText(norwt);
         TCari.setText(norwt);
-        DTPCari2.setDate(tgl2);    
+        DTPCari2.setDate(tgl2);
         isRawat();
+        autoFillDariSOAP();
     }
-    
-    
+
+
     public void isCek(){
         BtnSimpan.setEnabled(akses.getpenilaian_awal_keperawatan_igd());
         BtnHapus.setEnabled(akses.getpenilaian_awal_keperawatan_igd());

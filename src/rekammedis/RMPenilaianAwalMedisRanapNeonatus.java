@@ -4684,13 +4684,42 @@ public final class RMPenilaianAwalMedisRanapNeonatus extends javax.swing.JDialog
         }
     }
  
+    private void autoFillDariSOAP() {
+        try {
+            koneksi=koneksiDB.condb();
+            ps=koneksi.prepareStatement(
+                "select nadi,respirasi,suhu_tubuh,spo2,berat,tinggi from pemeriksaan_ranap "+
+                "where no_rawat=? order by tgl_perawatan desc, jam_rawat desc limit 1");
+            try {
+                ps.setString(1,TNoRw.getText());
+                rs=ps.executeQuery();
+                if(rs.next()){
+                    if(Nadi.getText().trim().isEmpty()) Nadi.setText(rs.getString("nadi"));
+                    if(RR.getText().trim().isEmpty()) RR.setText(rs.getString("respirasi"));
+                    if(Suhu.getText().trim().isEmpty()) Suhu.setText(rs.getString("suhu_tubuh"));
+                    if(Saturasi.getText().trim().isEmpty()) Saturasi.setText(rs.getString("spo2"));
+                    if(BeratBadan.getText().trim().isEmpty()) BeratBadan.setText(rs.getString("berat"));
+                    if(PanjangBadan.getText().trim().isEmpty()) PanjangBadan.setText(rs.getString("tinggi"));
+                }
+            } catch (Exception e) {
+                System.out.println("Notif autofill : "+e);
+            } finally{
+                if(rs!=null){ rs.close(); }
+                if(ps!=null){ ps.close(); }
+            }
+        } catch (Exception e) {
+            System.out.println("Notif autofill : "+e);
+        }
+    }
+
     public void setNoRm(String norwt,Date tgl2) {
         TNoRw.setText(norwt);
         TCari.setText(norwt);
-        DTPCari2.setDate(tgl2);    
-        isRawat(); 
+        DTPCari2.setDate(tgl2);
+        isRawat();
+        autoFillDariSOAP();
     }
-    
+
     public void isCek(){
         BtnSimpan.setEnabled(akses.getpenilaian_awal_medis_ranap_neonatus());
         BtnHapus.setEnabled(akses.getpenilaian_awal_medis_ranap_neonatus());

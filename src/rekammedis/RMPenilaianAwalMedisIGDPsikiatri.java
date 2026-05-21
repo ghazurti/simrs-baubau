@@ -3775,13 +3775,45 @@ public final class RMPenilaianAwalMedisIGDPsikiatri extends javax.swing.JDialog 
         }
     }
  
+    private void autoFillDariSOAP() {
+        try {
+            koneksi=koneksiDB.condb();
+            ps=koneksi.prepareStatement(
+                "select tensi,berat,tinggi,suhu_tubuh,nadi,respirasi,keluhan,alergi,gcs from pemeriksaan_ralan "+
+                "where no_rawat=? order by tgl_perawatan desc, jam_rawat desc limit 1");
+            try {
+                ps.setString(1,TNoRw.getText());
+                rs=ps.executeQuery();
+                if(rs.next()){
+                    if(FisikTD.getText().trim().isEmpty()) FisikTD.setText(rs.getString("tensi"));
+                    if(FisikBB.getText().trim().isEmpty()) FisikBB.setText(rs.getString("berat"));
+                    if(FisikTB.getText().trim().isEmpty()) FisikTB.setText(rs.getString("tinggi"));
+                    if(FisikNadi.getText().trim().isEmpty()) FisikNadi.setText(rs.getString("nadi"));
+                    if(FisikSuhu.getText().trim().isEmpty()) FisikSuhu.setText(rs.getString("suhu_tubuh"));
+                    if(FisikRR.getText().trim().isEmpty()) FisikRR.setText(rs.getString("respirasi"));
+                    if(KeluhanUtama.getText().trim().isEmpty()) KeluhanUtama.setText(rs.getString("keluhan"));
+                    if(RiwayatAlergi.getText().trim().isEmpty()) RiwayatAlergi.setText(rs.getString("alergi"));
+                    if(FisikGCS.getText().trim().isEmpty()) FisikGCS.setText(rs.getString("gcs"));
+                }
+            } catch (Exception e) {
+                System.out.println("Notif autofill : "+e);
+            } finally{
+                if(rs!=null){ rs.close(); }
+                if(ps!=null){ ps.close(); }
+            }
+        } catch (Exception e) {
+            System.out.println("Notif autofill : "+e);
+        }
+    }
+
     public void setNoRm(String norwt,Date tgl2) {
         TNoRw.setText(norwt);
         TCari.setText(norwt);
-        DTPCari2.setDate(tgl2);    
-        isRawat(); 
+        DTPCari2.setDate(tgl2);
+        isRawat();
+        autoFillDariSOAP();
     }
-    
+
     public void isCek(){
         BtnSimpan.setEnabled(akses.getpenilaian_medis_ralan_gawat_darurat_psikiatri());
         BtnHapus.setEnabled(akses.getpenilaian_medis_ralan_gawat_darurat_psikiatri());

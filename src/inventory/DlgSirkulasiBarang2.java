@@ -970,7 +970,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     "inner join jenis on databarang.kdjns=jenis.kdjns "+
                     "inner join golongan_barang on databarang.kode_golongan=golongan_barang.kode "+
                     "inner join kategori_barang on databarang.kode_kategori=kategori_barang.kode where "+
-                    "jenis.nama like ? and kategori_barang.nama like ? and golongan_barang.nama like ? "+
+                    "databarang.status='1' and jenis.nama like ? and kategori_barang.nama like ? and golongan_barang.nama like ? "+
                     (TCari.getText().trim().equals("")?"":"and (databarang.kode_brng like ? or databarang.nama_brng like ?)")+
                     "order by databarang.kode_brng");
             try {
@@ -1453,7 +1453,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     "inner join jenis on databarang.kdjns=jenis.kdjns "+
                     "inner join golongan_barang on databarang.kode_golongan=golongan_barang.kode "+
                     "inner join kategori_barang on databarang.kode_kategori=kategori_barang.kode where "+
-                    "jenis.nama like ? and kategori_barang.nama like ? and golongan_barang.nama like ? and "+
+                    "databarang.status='1' and jenis.nama like ? and kategori_barang.nama like ? and golongan_barang.nama like ? and "+
                     "(databarang.kode_brng like ? or databarang.nama_brng like ?) order by databarang.kode_brng");
             try {
                 ps.setString(1,"%"+nmjns.getText().trim()+"%");

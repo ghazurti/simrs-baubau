@@ -4034,14 +4034,45 @@ public final class RMPenilaianAwalMedisHemodialisa extends javax.swing.JDialog {
         }
     }
  
+    private void autoFillDariSOAP() {
+        try {
+            koneksi=koneksiDB.condb();
+            ps=koneksi.prepareStatement(
+                "select tensi,berat,tinggi,suhu_tubuh,nadi,respirasi,alergi from pemeriksaan_ralan "+
+                "where no_rawat=? order by tgl_perawatan desc, jam_rawat desc limit 1");
+            try {
+                ps.setString(1,TNoRw.getText());
+                rs=ps.executeQuery();
+                if(rs.next()){
+                    if(TD.getText().trim().isEmpty()) TD.setText(rs.getString("tensi"));
+                    if(BB.getText().trim().isEmpty()) BB.setText(rs.getString("berat"));
+                    if(TB.getText().trim().isEmpty()) TB.setText(rs.getString("tinggi"));
+                    if(Nadi.getText().trim().isEmpty()) Nadi.setText(rs.getString("nadi"));
+                    if(Suhu.getText().trim().isEmpty()) Suhu.setText(rs.getString("suhu_tubuh"));
+                    if(Napas.getText().trim().isEmpty()) Napas.setText(rs.getString("respirasi"));
+                    if(Alergi.getText().trim().isEmpty()) Alergi.setText(rs.getString("alergi"));
+                }
+            } catch (Exception e) {
+                System.out.println("Notif autofill : "+e);
+            } finally{
+                if(rs!=null){ rs.close(); }
+                if(ps!=null){ ps.close(); }
+            }
+        } catch (Exception e) {
+            System.out.println("Notif autofill : "+e);
+        }
+    }
+
     public void setNoRm(String norwt,Date tgl2,String asalruangan) {
         TNoRw.setText(norwt);
         TCari.setText(norwt);
-        DTPCari2.setDate(tgl2);    
+        DTPCari2.setDate(tgl2);
         AsalRuangan.setText(asalruangan);
-        isRawat(); 
+        isRawat();
+        autoFillDariSOAP();
     }
-    
+
+
     public void isCek(){
         BtnSimpan.setEnabled(akses.getpenilaian_medis_ralan_hemodialisa());
         BtnHapus.setEnabled(akses.getpenilaian_medis_ralan_hemodialisa());

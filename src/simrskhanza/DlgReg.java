@@ -6934,6 +6934,31 @@ public final class DlgReg extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null,"Pasien sedang dalam masa perawatan di kamar inap..!!");
             TNoRM.requestFocus();
         }else{
+            // Cek jadwal ambil obat iterasi BPJS
+            String infoIterasi = Sequel.cariIsi(
+                "select concat(pri.status_iter,' - Jadwal: ',date_format(ro.tgl_perawatan,'%d-%m-%Y')) "+
+                "from resep_obat ro "+
+                "inner join permintaan_resep_iterasi_bpjs pri on ro.no_resep=pri.no_resep "+
+                "inner join reg_periksa rp on ro.no_rawat=rp.no_rawat "+
+                "where rp.no_rkm_medis=? "+
+                "and ro.tgl_penyerahan='0000-00-00' "+
+                "and ro.tgl_perawatan > curdate() "+
+                "order by ro.tgl_perawatan asc limit 1",
+                TNoRM.getText());
+            if (!infoIterasi.equals("")) {
+                int pilihan = JOptionPane.showConfirmDialog(null,
+                    "PERHATIAN: Pasien ini memiliki jadwal ambil obat iterasi yang belum tiba!\n\n"+
+                    infoIterasi + "\n\n"+
+                    "Pasien datang terlalu cepat sebelum jadwal pengambilan obat.\n"+
+                    "Tetap lanjutkan pendaftaran?",
+                    "Peringatan Jadwal Obat Iterasi",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+                if (pilihan != JOptionPane.YES_OPTION) {
+                    TNoRM.requestFocus();
+                    return;
+                }
+            }
             if(akses.getkode().equals("Admin Utama")){
                 isRegistrasi();
             }else{
@@ -6943,11 +6968,11 @@ public final class DlgReg extends javax.swing.JDialog {
                         TCari.requestFocus();
                     }else{
                         isRegistrasi();
-                    }                    
+                    }
                 }else{
                     isRegistrasi();
-                }  
-            }                          
+                }
+            }
         }
 }//GEN-LAST:event_BtnSimpanActionPerformed
 

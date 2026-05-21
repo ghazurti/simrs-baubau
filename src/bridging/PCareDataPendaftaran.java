@@ -2832,6 +2832,30 @@ public final class PCareDataPendaftaran extends javax.swing.JDialog {
         }else if((chkKunjungan.isSelected()==true)&&(NmDiagnosa1.getText().equals(""))){
             Valid.textKosong(BtnDiagnosa1,"Diagnosa 1");
         }else{
+            // Cek jadwal ambil obat iterasi BPJS
+            String infoIterasi = Sequel.cariIsi(
+                "select concat(pri.status_iter,' - Jadwal: ',date_format(ro.tgl_perawatan,'%d-%m-%Y')) "+
+                "from resep_obat ro "+
+                "inner join permintaan_resep_iterasi_bpjs pri on ro.no_resep=pri.no_resep "+
+                "inner join reg_periksa rp on ro.no_rawat=rp.no_rawat "+
+                "where rp.no_rkm_medis=? "+
+                "and ro.tgl_penyerahan='0000-00-00' "+
+                "and ro.tgl_perawatan > curdate() "+
+                "order by ro.tgl_perawatan asc limit 1",
+                TNoRM.getText());
+            if (!infoIterasi.equals("")) {
+                int pilihan = JOptionPane.showConfirmDialog(null,
+                    "PERHATIAN: Pasien ini memiliki jadwal ambil obat iterasi yang belum tiba!\n\n"+
+                    infoIterasi + "\n\n"+
+                    "Pasien datang terlalu cepat sebelum jadwal pengambilan obat.\n"+
+                    "Tetap lanjutkan pendaftaran?",
+                    "Peringatan Jadwal Obat Iterasi",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+                if (pilihan != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
             if(Sequel.cariInteger("select count(pcare_pendaftaran.no_rawat) from pcare_pendaftaran where pcare_pendaftaran.no_rawat=?",TNoRw.getText())==0){
                 if(kdptg.equals("")){
                     kdptg=Sequel.cariIsi("select maping_dokter_pcare.kd_dokter from maping_dokter_pcare where maping_dokter_pcare.kd_dokter_pcare=?",KdTenagaMedis.getText()) ;
@@ -2850,7 +2874,7 @@ public final class PCareDataPendaftaran extends javax.swing.JDialog {
                     simpanKunjungan();
                     emptTeks();
                 }
-            }   
+            }
         }
 }//GEN-LAST:event_BtnSimpanActionPerformed
 

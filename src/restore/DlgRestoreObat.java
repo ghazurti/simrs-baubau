@@ -16,6 +16,7 @@ import fungsi.koneksiDB;
 import fungsi.sekuel;
 import fungsi.validasi;
 import java.awt.Cursor;
+import javax.swing.JOptionPane;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -331,12 +332,38 @@ public final class DlgRestoreObat extends javax.swing.JDialog {
         }
 }//GEN-LAST:event_BtnSimpanKeyPressed
 
+    private boolean adaRiwayatTransaksi(String kode_brng) {
+        String[] tabel = {
+            "detail_pemberian_obat", "detailbeli", "detailjual",
+            "detail_pengeluaran_obat_bhp", "detail_permintaan_medis",
+            "detail_permintaan_resep_pulang", "detail_permintaan_stok_obat_pasien",
+            "detreturbeli", "detailpesan", "detailpiutang"
+        };
+        for (String t : tabel) {
+            String jumlah = Sequel.cariIsi("select count(*) from " + t + " where kode_brng=?", kode_brng);
+            if (!jumlah.equals("") && !jumlah.equals("0")) return true;
+        }
+        return false;
+    }
+
     private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnHapusActionPerformed
-        for(i=0;i<tbObat.getRowCount();i++){ 
+        java.util.List<String> ditolak = new java.util.ArrayList<>();
+        for(i=0;i<tbObat.getRowCount();i++){
             if(tbObat.getValueAt(i,0).toString().equals("true")){
-                Sequel.meghapus("databarang","kode_brng",tbObat.getValueAt(i,1).toString());
+                String kode = tbObat.getValueAt(i,1).toString();
+                String nama = tbObat.getValueAt(i,2).toString();
+                if(adaRiwayatTransaksi(kode)){
+                    ditolak.add(nama + " [" + kode + "]");
+                } else {
+                    Sequel.meghapus("databarang","kode_brng",kode);
+                }
             }
-        }        
+        }
+        if(!ditolak.isEmpty()){
+            StringBuilder sb = new StringBuilder("Obat berikut tidak bisa dihapus karena masih ada riwayat transaksi:\n\n");
+            for(String s : ditolak) sb.append("- ").append(s).append("\n");
+            JOptionPane.showMessageDialog(this, sb.toString(), "Tidak Bisa Dihapus", JOptionPane.WARNING_MESSAGE);
+        }
         BtnCariActionPerformed(evt);
 }//GEN-LAST:event_BtnHapusActionPerformed
 

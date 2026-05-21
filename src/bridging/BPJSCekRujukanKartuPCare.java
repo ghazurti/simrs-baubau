@@ -5267,6 +5267,30 @@ public final class BPJSCekRujukanKartuPCare extends javax.swing.JDialog {
         }else if(Catatan.getText().trim().equals("")){
             Valid.textKosong(Catatan, "Catatan");
         }else{
+            // Cek jadwal ambil obat iterasi BPJS
+            String infoIterasi = Sequel.cariIsi(
+                "select concat(pri.status_iter,' - Jadwal: ',date_format(ro.tgl_perawatan,'%d-%m-%Y')) "+
+                "from resep_obat ro "+
+                "inner join permintaan_resep_iterasi_bpjs pri on ro.no_resep=pri.no_resep "+
+                "inner join reg_periksa rp on ro.no_rawat=rp.no_rawat "+
+                "where rp.no_rkm_medis=? "+
+                "and ro.tgl_penyerahan='0000-00-00' "+
+                "and ro.tgl_perawatan > curdate() "+
+                "order by ro.tgl_perawatan asc limit 1",
+                TNo.getText());
+            if (!infoIterasi.equals("")) {
+                int pilihan = JOptionPane.showConfirmDialog(null,
+                    "PERHATIAN: Pasien ini memiliki jadwal ambil obat iterasi yang belum tiba!\n\n"+
+                    infoIterasi + "\n\n"+
+                    "Pasien datang terlalu cepat sebelum jadwal pengambilan obat.\n"+
+                    "Tetap lanjutkan pendaftaran?",
+                    "Peringatan Jadwal Obat Iterasi",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+                if (pilihan != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
             if((JenisPelayanan.getSelectedIndex()==1)&&(NmPoli.getText().toLowerCase().contains("darurat"))){
                 if(Sequel.cariInteger("select count(bridging_sep.no_kartu) from bridging_sep where bridging_sep.no_kartu='"+no_peserta+"' and bridging_sep.jnspelayanan='"+JenisPelayanan.getSelectedItem().toString().substring(0,1)+"' and bridging_sep.tglsep like '%"+Valid.SetTgl(TanggalSEP.getSelectedItem()+"").substring(0,10)+"%' and bridging_sep.nmpolitujuan like '%darurat%'")>=3){
                     JOptionPane.showMessageDialog(null,"Maaf, sebelumnya sudah dilakukan 3x pembuatan SEP di jenis pelayanan yang sama..!!");

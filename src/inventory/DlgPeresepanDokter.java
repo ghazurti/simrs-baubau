@@ -1030,6 +1030,35 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
             JOptionPane.showMessageDialog(null,"Maaf, silahkan masukkan terlebih dahulu obat yang mau diberikan...!!!");
             TCari.requestFocus();
         }else{
+            // Cek duplikasi obat dari rujukan internal poli pada hari yang sama
+            StringBuilder dupObat = new StringBuilder();
+            for(int j=0;j<tbResep.getRowCount();j++){
+                if(Valid.SetAngka(tbResep.getValueAt(j,1).toString())>0){
+                    String kodeObat = tbResep.getValueAt(j,3).toString();
+                    String namaObat = tbResep.getValueAt(j,4).toString();
+                    if(Sequel.cariInteger(
+                        "select count(*) from resep_dokter rd "+
+                        "inner join resep_obat ro on rd.no_resep=ro.no_resep "+
+                        "inner join reg_periksa rp on ro.no_rawat=rp.no_rawat "+
+                        "where rp.no_rkm_medis=(select no_rkm_medis from reg_periksa where no_rawat='"+TNoRw.getText()+"') "+
+                        "and ro.tgl_peresepan=? "+
+                        "and rd.kode_brng=? "+
+                        "and ro.no_rawat!='"+TNoRw.getText()+"'",
+                        Valid.SetTgl(DTPBeri.getSelectedItem()+""),kodeObat)>0){
+                        dupObat.append("- ").append(namaObat).append("\n");
+                    }
+                }
+            }
+            if(dupObat.length()>0){
+                int pilDup = JOptionPane.showConfirmDialog(rootPane,
+                    "PERINGATAN: Obat berikut sudah diresepkan di kunjungan poli lain pasien hari ini:\n\n"+
+                    dupObat.toString()+
+                    "\nKemungkinan duplikasi resep dari rujukan internal.\nTetap lanjutkan menyimpan resep?",
+                    "Duplikasi Obat Rujukan Internal",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+                if(pilDup != JOptionPane.YES_OPTION) return;
+            }
             int reply = JOptionPane.showConfirmDialog(rootPane,"Eeiiiiiits, udah bener belum data yang mau disimpan..??","Konfirmasi",JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {                 
                 ChkJln.setSelected(false);    
