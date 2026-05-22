@@ -1011,6 +1011,7 @@ import rekammedis.RMPenilaianAwalMedisRalanAnak;
 import rekammedis.RMPenilaianAwalMedisRalanBedah;
 import rekammedis.RMPenilaianAwalMedisRalanBedahMulut;
 import rekammedis.RMPenilaianAwalMedisRalanPenyakitMulut;
+import rekammedis.Odontogram;
 import rekammedis.RMPenilaianAwalMedisRalanDewasa;
 import rekammedis.RMPenilaianAwalMedisRalanGeriatri;
 import rekammedis.RMPenilaianAwalMedisRalanJantung;
@@ -20386,6 +20387,17 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         this.setCursor(Cursor.getDefaultCursor());
     }
 
+    private void btnOdontogramActionPerformed(java.awt.event.ActionEvent evt) {
+        isTutup();
+        DlgHome.dispose();
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        Odontogram aplikasi = new Odontogram(this, false);
+        aplikasi.setSize(PanelUtama.getWidth(), PanelUtama.getHeight());
+        aplikasi.setLocationRelativeTo(PanelUtama);
+        aplikasi.setVisible(true);
+        this.setCursor(Cursor.getDefaultCursor());
+    }
+
     private void btnPenilaianPasienKeracunanActionPerformed(java.awt.event.ActionEvent evt) {
         isTutup();
         DlgHome.dispose();
@@ -24142,7 +24154,7 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
             btnPenilaianPasienTerminal,btnPersetujuanRawatInap,btnMonitoringReaksiTranfusi,btnPenilaianKorbanKekerasan,btnPenilaianRisikoJatuhLansia,
             btnSkriningManagerPelayananPasien,btnPenilaianPasienPenyakitMenular,btnSkriningMPPFormA,btnSkriningMPPFormB,btnEdukasiPasienKeluargaRJ,
             btnPemantauanPEWSDewasa,btnBPJSAntreanPerTanggalMobileJKN,btnPenilaianTambahanBunuhDiri,btnPenilaianTambahanPerilakuKekerasan,
-            btnPenilaianTambahanMelarikanDiri,btnPersetujuanPenundaanPelayanan,btnSisaDietPasien,btnPenilaianAwalMedisRalanBedahMulut,btnPenilaianAwalMedisRalanPenyakitMulut,
+            btnPenilaianTambahanMelarikanDiri,btnPersetujuanPenundaanPelayanan,btnSisaDietPasien,btnPenilaianAwalMedisRalanBedahMulut,btnPenilaianAwalMedisRalanPenyakitMulut,btnOdontogram,
             btnPenilaianPasienKeracunan,btnPemantauanMEOWS,btnCatatanADIMEGizi,btnMasterMasalahKeperawatanGeriatri,btnMasterRencanaKeperawatanGeriatri,
             btnPenilaianAwalKeperawatanRalanGeriatri,btnChecklistKriteriaMasukHCU,btnChecklistKriteriaKeluarHCU,btnPenilaianRisikoDekubitus,btnMasterMenolakAnjuranMedis,
             btnPenolakanAnjuranMedis,btnLaporanTahunanPenolakanAnjuranMedis,btnMasterTemplateLaporanOperasi,btnDokumentasiTindakanESWL,btnChecklistKriteriaMasukICU,
@@ -28311,6 +28323,11 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
 
             if(akses.getpenilaian_awal_medis_ralan_penyakit_mulut()==true){
                 Panelmenu.add(btnPenilaianAwalMedisRalanPenyakitMulut);
+                jmlmenu++;
+            }
+
+            if(akses.getodontogram()==true){
+                Panelmenu.add(btnOdontogram);
                 jmlmenu++;
             }
 
@@ -34257,6 +34274,11 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
 
         if(akses.getpenilaian_awal_medis_ralan_penyakit_mulut()==true){
             Panelmenu.add(btnPenilaianAwalMedisRalanPenyakitMulut);
+            jmlmenu++;
+        }
+
+        if(akses.getodontogram()==true){
+            Panelmenu.add(btnOdontogram);
             jmlmenu++;
         }
 
@@ -41785,6 +41807,13 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         if(akses.getpenilaian_awal_medis_ralan_penyakit_mulut()==true){
             if(btnPenilaianAwalMedisRalanPenyakitMulut.getText().toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())){
                 Panelmenu.add(btnPenilaianAwalMedisRalanPenyakitMulut);
+                jmlmenu++;
+            }
+        }
+
+        if(akses.getodontogram()==true){
+            if(btnOdontogram.getText().toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())){
+                Panelmenu.add(btnOdontogram);
                 jmlmenu++;
             }
         }
@@ -50136,6 +50165,14 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         btnPenilaianAwalMedisRalanPenyakitMulut.setName("btnPenilaianAwalMedisRalanPenyakitMulut");
         btnPenilaianAwalMedisRalanPenyakitMulut.setPreferredSize(new java.awt.Dimension(200, 90));
         btnPenilaianAwalMedisRalanPenyakitMulut.addActionListener(this::btnPenilaianAwalMedisRalanPenyakitMulutActionPerformed);
+
+        btnOdontogram = new widget.ButtonBig();
+        btnOdontogram.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/2185086_bright_clean_dental_dentist_tooth_icon.png")));
+        btnOdontogram.setText("Odontogram");
+        btnOdontogram.setIconTextGap(0);
+        btnOdontogram.setName("btnOdontogram");
+        btnOdontogram.setPreferredSize(new java.awt.Dimension(200, 90));
+        btnOdontogram.addActionListener(this::btnOdontogramActionPerformed);
 
         btnHasilPemeriksaanECHOPediatrik = new widget.ButtonBig();
         btnHasilPemeriksaanECHOPediatrik.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/2104702_beat_health_healthcare_heart_heartbeat_icon.png")));

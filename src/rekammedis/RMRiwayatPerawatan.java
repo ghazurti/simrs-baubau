@@ -285,6 +285,7 @@ public final class RMRiwayatPerawatan extends javax.swing.JDialog {
         chkAsuhanKeperawatanIGD = new widget.CekBox();
         chkAsuhanKeperawatanRalan = new widget.CekBox();
         chkAsuhanKeperawatanRalanGigi = new widget.CekBox();
+        chkOdontogram = new widget.CekBox();
         chkAsuhanKeperawatanRalanBayi = new widget.CekBox();
         chkAsuhanKeperawatanRalanKandungan = new widget.CekBox();
         chkAsuhanKeperawatanRalanPsikiatri = new widget.CekBox();
@@ -1017,6 +1018,14 @@ public final class RMRiwayatPerawatan extends javax.swing.JDialog {
         chkAsuhanKeperawatanRalanGigi.setOpaque(false);
         chkAsuhanKeperawatanRalanGigi.setPreferredSize(new java.awt.Dimension(245, 22));
         FormMenu.add(chkAsuhanKeperawatanRalanGigi);
+
+        chkOdontogram.setSelected(true);
+        chkOdontogram.setText("Odontogram");
+        chkOdontogram.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        chkOdontogram.setName("chkOdontogram"); // NOI18N
+        chkOdontogram.setOpaque(false);
+        chkOdontogram.setPreferredSize(new java.awt.Dimension(245, 22));
+        FormMenu.add(chkOdontogram);
 
         chkAsuhanKeperawatanRalanBayi.setSelected(true);
         chkAsuhanKeperawatanRalanBayi.setText("Awal Keperawatan Ralan Bayi/Anak");
@@ -3003,6 +3012,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             chkTriase.setSelected(true);
             chkAsuhanKeperawatanRalan.setSelected(true);
             chkAsuhanKeperawatanRalanGigi.setSelected(true);
+            chkOdontogram.setSelected(true);
             chkAsuhanKeperawatanRalanBayi.setSelected(true);
             chkAsuhanKeperawatanRalanKandungan.setSelected(true);
             chkAsuhanKeperawatanRanap.setSelected(true);
@@ -3204,6 +3214,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             chkTriase.setSelected(false);
             chkAsuhanKeperawatanRalan.setSelected(false);
             chkAsuhanKeperawatanRalanGigi.setSelected(false);
+            chkOdontogram.setSelected(false);
             chkAsuhanKeperawatanRalanBayi.setSelected(false);
             chkAsuhanKeperawatanRalanKandungan.setSelected(false);
             chkAsuhanKeperawatanRanap.setSelected(false);
@@ -4213,6 +4224,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
     private widget.CekBox chkTransferAntarRuang;
     private widget.CekBox chkTriase;
     private widget.CekBox chkUjiFungsiKFR;
+    private widget.CekBox chkOdontogram;
     private widget.InternalFrame internalFrame1;
     private widget.InternalFrame internalFrame2;
     private widget.InternalFrame internalFrame8;
@@ -4653,6 +4665,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
                     menampilkanAsuhanMedisMCU(rs.getString("no_rawat"));
                     menampilkanAsuhanKeperawatanRalan(rs.getString("no_rawat"));
                     menampilkanAsuhanKeperawatanRalanGigi(rs.getString("no_rawat"));
+                    menampilkanOdontogram(rs.getString("no_rawat"));
                     menampilkanAsuhanKeperawatanRalanBayi(rs.getString("no_rawat"));
                     menampilkanAsuhanKeperawatanRalanKandungan(rs.getString("no_rawat"));
                     menampilkanAsuhanKeperawatanRalanPsikiatri(rs.getString("no_rawat"));
@@ -8961,6 +8974,50 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             }
         }catch (Exception e) {
             System.out.println("Notif Asuhan Keperawatan Ralan Gigi : "+e);
+        }
+    }
+
+    private void menampilkanOdontogram(String norawat) {
+        try {
+            if (chkOdontogram.isSelected()) {
+                koneksi = koneksiDB.condb();
+                rs2 = koneksi.prepareStatement(
+                    "SELECT o.no_gigi, o.rahang, o.hasil_pemeriksaan, o.diagnosa_gigi, " +
+                    "o.kd_icd, o.catatan, o.tanggal, o.nm_dokter " +
+                    "FROM odontogram o " +
+                    "WHERE o.no_rawat='" + norawat + "' ORDER BY o.no_gigi"
+                ).executeQuery();
+                if (rs2.next()) {
+                    htmlContent.append(
+                        "<tr class='isi'>").append(
+                        "<td valign='top' width='2%'></td>").append(
+                        "<td valign='top' width='18%'>Odontogram</td>").append(
+                        "<td valign='top' width='1%' align='center'>:</td>").append(
+                        "<td valign='top' width='79%'>").append(
+                        "<table width='100%' border='1' align='center' cellpadding='3px' cellspacing='0' class='tbl_form'>").append(
+                        "<tr>").append(
+                        "<th>No.Gigi</th><th>Rahang</th><th>Hasil Pemeriksaan</th>").append(
+                        "<th>Diagnosa</th><th>Kode ICD</th><th>Catatan</th>").append(
+                        "<th>Tanggal</th><th>Dokter Gigi</th>").append(
+                        "</tr>"
+                    );
+                    do {
+                        htmlContent.append("<tr>").append(
+                            "<td align='center'>").append(rs2.getString("no_gigi") != null ? rs2.getString("no_gigi") : "").append("</td>").append(
+                            "<td>").append(rs2.getString("rahang") != null ? rs2.getString("rahang") : "").append("</td>").append(
+                            "<td>").append(rs2.getString("hasil_pemeriksaan") != null ? rs2.getString("hasil_pemeriksaan") : "").append("</td>").append(
+                            "<td>").append(rs2.getString("diagnosa_gigi") != null ? rs2.getString("diagnosa_gigi") : "").append("</td>").append(
+                            "<td>").append(rs2.getString("kd_icd") != null ? rs2.getString("kd_icd") : "").append("</td>").append(
+                            "<td>").append(rs2.getString("catatan") != null ? rs2.getString("catatan") : "").append("</td>").append(
+                            "<td>").append(rs2.getString("tanggal") != null ? rs2.getString("tanggal") : "").append("</td>").append(
+                            "<td>").append(rs2.getString("nm_dokter") != null ? rs2.getString("nm_dokter") : "").append("</td>").append(
+                        "</tr>");
+                    } while (rs2.next());
+                    htmlContent.append("</table></td></tr>");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Notif Odontogram : " + e);
         }
     }
 

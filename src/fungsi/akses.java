@@ -204,7 +204,7 @@ public final class akses {
             penilaian_pasien_terminal=false,surat_persetujuan_rawat_inap=false,monitoring_reaksi_tranfusi=false,penilaian_korban_kekerasan=false,
             penilaian_lanjutan_resiko_jatuh_lansia=false,mpp_skrining=false,penilaian_pasien_penyakit_menular=false,edukasi_pasien_keluarga_rj=false,pemantauan_pews_dewasa=false,
             penilaian_tambahan_bunuh_diri=false,bpjs_antrean_pertanggal=false,penilaian_tambahan_perilaku_kekerasan=false,penilaian_tambahan_beresiko_melarikan_diri=false,
-            persetujuan_penundaan_pelayanan=false,sisa_diet_pasien=false,penilaian_awal_medis_ralan_bedah_mulut=false,penilaian_awal_medis_ralan_penyakit_mulut=false,penilaian_pasien_keracunan=false,
+            persetujuan_penundaan_pelayanan=false,sisa_diet_pasien=false,penilaian_awal_medis_ralan_bedah_mulut=false,penilaian_awal_medis_ralan_penyakit_mulut=false,penilaian_pasien_keracunan=false,odontogram=false,
             pemantauan_meows_obstetri=false,catatan_adime_gizi=false,pengajuan_biaya=false,penilaian_awal_keperawatan_ralan_geriatri=false,master_masalah_keperawatan_geriatri=false,
             master_rencana_keperawatan_geriatri=false,checklist_kriteria_masuk_hcu=false,checklist_kriteria_keluar_hcu=false,penilaian_risiko_dekubitus=false,
             master_menolak_anjuran_medis=false,penolakan_anjuran_medis=false,laporan_tahunan_penolakan_anjuran_medis=false,template_laporan_operasi=false,hasil_tindakan_eswl=false,
@@ -1227,6 +1227,7 @@ public final class akses {
                         akses.sisa_diet_pasien=true;
                         akses.penilaian_awal_medis_ralan_bedah_mulut=true;
                         akses.penilaian_awal_medis_ralan_penyakit_mulut=true;
+                        akses.odontogram=true;
                         akses.penilaian_pasien_keracunan=true;
                         akses.pemantauan_meows_obstetri=true;
                         akses.catatan_adime_gizi=true;
@@ -2430,6 +2431,7 @@ public final class akses {
                         akses.sisa_diet_pasien=rs2.getBoolean("sisa_diet_pasien");
                         akses.penilaian_awal_medis_ralan_bedah_mulut=rs2.getBoolean("penilaian_awal_medis_ralan_bedah_mulut");
                         try{akses.penilaian_awal_medis_ralan_penyakit_mulut=rs2.getBoolean("penilaian_awal_medis_ralan_penyakit_mulut");}catch(Exception e){akses.penilaian_awal_medis_ralan_penyakit_mulut=false;}
+                        try{akses.odontogram=rs2.getBoolean("odontogram");}catch(Exception e){akses.odontogram=false;}
                         akses.penilaian_pasien_keracunan=rs2.getBoolean("penilaian_pasien_keracunan");
                         akses.pemantauan_meows_obstetri=rs2.getBoolean("pemantauan_meows_obstetri");
                         akses.catatan_adime_gizi=rs2.getBoolean("catatan_adime_gizi");
@@ -4897,6 +4899,7 @@ public final class akses {
     public static boolean getsisa_diet_pasien(){return akses.sisa_diet_pasien;}
     public static boolean getpenilaian_awal_medis_ralan_bedah_mulut(){return akses.penilaian_awal_medis_ralan_bedah_mulut;}
     public static boolean getpenilaian_awal_medis_ralan_penyakit_mulut(){return akses.penilaian_awal_medis_ralan_penyakit_mulut;}
+    public static boolean getodontogram(){return akses.odontogram;}
     public static boolean getpenilaian_pasien_keracunan(){return akses.penilaian_pasien_keracunan;}
     public static boolean getpemantauan_meows_obstetri(){return akses.pemantauan_meows_obstetri;}
     public static boolean getcatatan_adime_gizi(){return akses.catatan_adime_gizi;}

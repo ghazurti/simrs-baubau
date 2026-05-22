@@ -1410,6 +1410,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         BtnAwalKeperawatanIGD = new widget.Button();
         BtnAwalKeperawatan = new widget.Button();
         BtnAwalKeperawatanGigi = new widget.Button();
+        BtnOdontogram = new widget.Button();
         BtnAwalKeperawatanKandungan = new widget.Button();
         BtnAwalKeperawatanAnak = new widget.Button();
         BtnAwalKeperawatanPsikiatri = new widget.Button();
@@ -3966,7 +3967,23 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
             }
         });
 
-        BtnAwalKeperawatanKandungan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/item.png"))); 
+        BtnOdontogram.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/item.png")));
+        BtnOdontogram.setText("Odontogram");
+        BtnOdontogram.setFocusPainted(false);
+        BtnOdontogram.setFont(new java.awt.Font("Tahoma", 0, 11));
+        BtnOdontogram.setGlassColor(new java.awt.Color(255, 255, 255));
+        BtnOdontogram.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        BtnOdontogram.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        BtnOdontogram.setName("BtnOdontogram");
+        BtnOdontogram.setPreferredSize(new java.awt.Dimension(190, 23));
+        BtnOdontogram.setRoundRect(false);
+        BtnOdontogram.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnOdontogramActionPerformed(evt);
+            }
+        });
+
+        BtnAwalKeperawatanKandungan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/item.png")));
         BtnAwalKeperawatanKandungan.setText("Awal Keperawatan Kandungan");
         BtnAwalKeperawatanKandungan.setFocusPainted(false);
         BtnAwalKeperawatanKandungan.setFont(new java.awt.Font("Tahoma", 0, 11)); 
@@ -7924,6 +7941,21 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         }
     }//GEN-LAST:event_BtnAwalKeperawatanGigiActionPerformed
 
+    private void BtnOdontogramActionPerformed(java.awt.event.ActionEvent evt) {
+        if(TPasien.getText().trim().equals("")||TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            TCari.requestFocus();
+        }else{
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            rekammedis.Odontogram form = new rekammedis.Odontogram(null, false);
+            form.setNoRawat(TNoRw.getText());
+            form.setSize(internalFrame1.getWidth()-20, internalFrame1.getHeight()-20);
+            form.setLocationRelativeTo(internalFrame1);
+            form.setVisible(true);
+            this.setCursor(Cursor.getDefaultCursor());
+        }
+    }
+
     private void BtnAwalKeperawatanKandunganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAwalKeperawatanKandunganActionPerformed
         if(TPasien.getText().trim().equals("")||TNoRw.getText().trim().equals("")){
             JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
@@ -10796,6 +10828,7 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private widget.Button BtnMonitoringAsuhanGizi;
     private widget.Button BtnMonitoringReaksiTranfusi;
     private widget.Button BtnObatBhp;
+    private widget.Button BtnOdontogram;
     private widget.Button BtnPemantauanEWSNeonatus;
     private widget.Button BtnPemantauanMEOWS;
     private widget.Button BtnPemantauanPEWSAnak;
@@ -11526,8 +11559,12 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         if(akses.getpenilaian_awal_keperawatan_igd()==true){
             tinggi=tinggi+24;
         }
-        BtnAwalKeperawatanGigi.setVisible(akses.getpenilaian_awal_keperawatan_gigi());   
+        BtnAwalKeperawatanGigi.setVisible(akses.getpenilaian_awal_keperawatan_gigi());
         if(akses.getpenilaian_awal_keperawatan_gigi()==true){
+            tinggi=tinggi+24;
+        }
+        BtnOdontogram.setVisible(akses.getodontogram());
+        if(akses.getodontogram()==true){
             tinggi=tinggi+24;
         }
         BtnAwalKeperawatanKandungan.setVisible(akses.getpenilaian_awal_keperawatan_kebidanan()); 
@@ -14418,6 +14455,7 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         FormMenu.add(BtnAwalKeperawatanIGD);
         FormMenu.add(BtnAwalKeperawatan);
         FormMenu.add(BtnAwalKeperawatanGigi);
+        FormMenu.add(BtnOdontogram);
         FormMenu.add(BtnAwalKeperawatanKandungan);
         FormMenu.add(BtnAwalKeperawatanAnak);
         FormMenu.add(BtnAwalKeperawatanPsikiatri);

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="rptOdontogram" pageWidth="842" pageHeight="595" orientation="Landscape"
+              columnWidth="802" leftMargin="20" rightMargin="20" topMargin="15" bottomMargin="15">
+
+  <parameter name="namars"    class="java.lang.String"/>
+  <parameter name="alamatrs"  class="java.lang.String"/>
+  <parameter name="kotars"    class="java.lang.String"/>
+  <parameter name="kontakrs"  class="java.lang.String"/>
+  <parameter name="logo"      class="java.io.InputStream"/>
+  <parameter name="no_rawat"  class="java.lang.String"/>
+
+  <queryString language="SQL">
+    <![CDATA[
+      SELECT
+        o.id, o.no_rawat, o.no_permintaan,
+        o.no_gigi, o.hasil_pemeriksaan, o.rahang,
+        o.diagnosa_gigi, o.kd_icd, o.catatan,
+        o.status_gigi, o.tanggal,
+        o.kd_dokter, o.nm_dokter,
+        rp.no_rkm_medis,
+        p.nm_pasien,
+        TIMESTAMPDIFF(YEAR, p.tgl_lahir, CURDATE()) AS umur,
+        p.jk,
+        p.alamat
+      FROM odontogram o
+      INNER JOIN reg_periksa rp ON o.no_rawat = rp.no_rawat
+      INNER JOIN pasien      p  ON rp.no_rkm_medis = p.no_rkm_medis
+      WHERE o.no_rawat = $P{no_rawat}
+      ORDER BY o.no_gigi
+    ]]>
+  </queryString>
+
+  <field name="no_rawat"          class="java.lang.String"/>
+  <field name="no_permintaan"     class="java.lang.String"/>
+  <field name="no_gigi"           class="java.lang.String"/>
+  <field name="hasil_pemeriksaan" class="java.lang.String"/>
+  <field name="rahang"            class="java.lang.String"/>
+  <field name="diagnosa_gigi"     class="java.lang.String"/>
+  <field name="kd_icd"            class="java.lang.String"/>
+  <field name="catatan"           class="java.lang.String"/>
+  <field name="tanggal"           class="java.sql.Date"/>
+  <field name="kd_dokter"         class="java.lang.String"/>
+  <field name="nm_dokter"         class="java.lang.String"/>
+  <field name="no_rkm_medis"      class="java.lang.String"/>
+  <field name="nm_pasien"         class="java.lang.String"/>
+  <field name="umur"              class="java.lang.Integer"/>
+  <field name="jk"                class="java.lang.String"/>
+  <field name="alamat"            class="java.lang.String"/>
+
+  <background><band splitType="Stretch"/></background>
+
+  <!-- ===== HEADER / JUDUL ===== -->
+  <title>
+    <band height="90" splitType="Stretch">
+      <!-- Logo -->
+      <image scaleImage="FillFrame" onErrorType="Blank">
+        <reportElement x="0" y="0" width="60" height="55"/>
+        <imageExpression class="java.io.InputStream"><![CDATA[$P{logo}]]></imageExpression>
+      </image>
+
+      <!-- Nama RS -->
+      <textField>
+        <reportElement x="65" y="0" width="672" height="20"/>
+        <textElement textAlignment="Center">
+          <font fontName="Tahoma" size="13" isBold="true"/>
+        </textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$P{namars}]]></textFieldExpression>
+      </textField>
+
+      <!-- Alamat RS -->
+      <textField>
+        <reportElement x="65" y="20" width="672" height="14"/>
+        <textElement textAlignment="Center">
+          <font fontName="Tahoma" size="8"/>
+        </textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$P{alamatrs} + "  " + $P{kotars}]]></textFieldExpression>
+      </textField>
+      <textField>
+        <reportElement x="65" y="34" width="672" height="14"/>
+        <textElement textAlignment="Center">
+          <font fontName="Tahoma" size="8"/>
+        </textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$P{kontakrs}]]></textFieldExpression>
+      </textField>
+
+      <!-- Garis -->
+      <line><reportElement x="0" y="56" width="802" height="1"/><graphicElement><pen lineWidth="1.5"/></graphicElement></line>
+      <line><reportElement x="0" y="58" width="802" height="1"/></line>
+
+      <!-- Judul laporan -->
+      <staticText>
+        <reportElement x="0" y="62" width="802" height="18"/>
+        <textElement textAlignment="Center">
+          <font fontName="Tahoma" size="11" isBold="true"/>
+        </textElement>
+        <text><![CDATA[LAPORAN PEMERIKSAAN ODONTOGRAM]]></text>
+      </staticText>
+
+      <!-- Info pasien kiri -->
+      <staticText><reportElement x="0" y="80" width="70" height="10"/><textElement><font fontName="Tahoma" size="8" isBold="true"/></textElement><text><![CDATA[No. Rawat]]></text></staticText>
+      <staticText><reportElement x="70" y="80" width="6" height="10"/><textElement><font fontName="Tahoma" size="8"/></textElement><text><![CDATA[:]]></text></staticText>
+      <textField>
+        <reportElement x="76" y="80" width="120" height="10"/>
+        <textElement><font fontName="Tahoma" size="8"/></textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$F{no_rawat}]]></textFieldExpression>
+      </textField>
+
+      <staticText><reportElement x="200" y="80" width="70" height="10"/><textElement><font fontName="Tahoma" size="8" isBold="true"/></textElement><text><![CDATA[No. RM]]></text></staticText>
+      <staticText><reportElement x="270" y="80" width="6" height="10"/><textElement><font fontName="Tahoma" size="8"/></textElement><text><![CDATA[:]]></text></staticText>
+      <textField>
+        <reportElement x="276" y="80" width="120" height="10"/>
+        <textElement><font fontName="Tahoma" size="8"/></textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$F{no_rkm_medis}]]></textFieldExpression>
+      </textField>
+
+      <staticText><reportElement x="400" y="80" width="70" height="10"/><textElement><font fontName="Tahoma" size="8" isBold="true"/></textElement><text><![CDATA[Nama Pasien]]></text></staticText>
+      <staticText><reportElement x="470" y="80" width="6" height="10"/><textElement><font fontName="Tahoma" size="8"/></textElement><text><![CDATA[:]]></text></staticText>
+      <textField>
+        <reportElement x="476" y="80" width="200" height="10"/>
+        <textElement><font fontName="Tahoma" size="8"/></textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$F{nm_pasien} + "  (" + ($F{jk}.equals("L") ? "L" : "P") + "/" + $F{umur} + " th)"]]></textFieldExpression>
+      </textField>
+    </band>
+  </title>
+
+  <!-- ===== HEADER KOLOM ===== -->
+  <columnHeader>
+    <band height="20" splitType="Stretch">
+      <rectangle><reportElement x="0" y="0" width="802" height="20"/><graphicElement><pen lineWidth="0.5"/></graphicElement></rectangle>
+      <staticText><reportElement x="2"   y="3" width="25"  height="14"/><textElement><font fontName="Tahoma" size="8" isBold="true"/></textElement><text><![CDATA[No.Gigi]]></text></staticText>
+      <staticText><reportElement x="29"  y="3" width="60"  height="14"/><textElement><font fontName="Tahoma" size="8" isBold="true"/></textElement><text><![CDATA[Rahang]]></text></staticText>
+      <staticText><reportElement x="91"  y="3" width="90"  height="14"/><textElement><font fontName="Tahoma" size="8" isBold="true"/></textElement><text><![CDATA[Hasil Pemeriksaan]]></text></staticText>
+      <staticText><reportElement x="183" y="3" width="170" height="14"/><textElement><font fontName="Tahoma" size="8" isBold="true"/></textElement><text><![CDATA[Diagnosa Gigi]]></text></staticText>
+      <staticText><reportElement x="355" y="3" width="55"  height="14"/><textElement><font fontName="Tahoma" size="8" isBold="true"/></textElement><text><![CDATA[Kode ICD]]></text></staticText>
+      <staticText><reportElement x="412" y="3" width="160" height="14"/><textElement><font fontName="Tahoma" size="8" isBold="true"/></textElement><text><![CDATA[Catatan]]></text></staticText>
+      <staticText><reportElement x="574" y="3" width="70"  height="14"/><textElement><font fontName="Tahoma" size="8" isBold="true"/></textElement><text><![CDATA[Tanggal]]></text></staticText>
+      <staticText><reportElement x="646" y="3" width="154" height="14"/><textElement><font fontName="Tahoma" size="8" isBold="true"/></textElement><text><![CDATA[Dokter Gigi]]></text></staticText>
+    </band>
+  </columnHeader>
+
+  <!-- ===== DATA DETAIL ===== -->
+  <detail>
+    <band height="16" splitType="Stretch">
+      <rectangle><reportElement x="0" y="0" width="802" height="16" forecolor="#DDDDDD"/><graphicElement><pen lineWidth="0.25"/></graphicElement></rectangle>
+
+      <textField><reportElement x="2"   y="2" width="25"  height="12"/><textElement><font fontName="Tahoma" size="8"/></textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$F{no_gigi}]]></textFieldExpression>
+      </textField>
+      <textField><reportElement x="29"  y="2" width="60"  height="12"/><textElement><font fontName="Tahoma" size="8"/></textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$F{rahang} == null ? "" : $F{rahang}]]></textFieldExpression>
+      </textField>
+      <textField><reportElement x="91"  y="2" width="90"  height="12"/><textElement><font fontName="Tahoma" size="8"/></textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$F{hasil_pemeriksaan} == null ? "" : $F{hasil_pemeriksaan}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="true"><reportElement x="183" y="2" width="170" height="12"/><textElement><font fontName="Tahoma" size="8"/></textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$F{diagnosa_gigi} == null ? "" : $F{diagnosa_gigi}]]></textFieldExpression>
+      </textField>
+      <textField><reportElement x="355" y="2" width="55"  height="12"/><textElement><font fontName="Tahoma" size="8"/></textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$F{kd_icd} == null ? "" : $F{kd_icd}]]></textFieldExpression>
+      </textField>
+      <textField isStretchWithOverflow="true"><reportElement x="412" y="2" width="160" height="12"/><textElement><font fontName="Tahoma" size="8"/></textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$F{catatan} == null ? "" : $F{catatan}]]></textFieldExpression>
+      </textField>
+      <textField><reportElement x="574" y="2" width="70"  height="12"/><textElement><font fontName="Tahoma" size="8"/></textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$F{tanggal} == null ? "" : new java.text.SimpleDateFormat("dd-MM-yyyy").format($F{tanggal})]]></textFieldExpression>
+      </textField>
+      <textField><reportElement x="646" y="2" width="154" height="12"/><textElement><font fontName="Tahoma" size="8"/></textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA[$F{nm_dokter} == null ? "" : $F{nm_dokter}]]></textFieldExpression>
+      </textField>
+    </band>
+  </detail>
+
+  <!-- ===== FOOTER HALAMAN ===== -->
+  <pageFooter>
+    <band height="18">
+      <line><reportElement x="0" y="0" width="802" height="1"/></line>
+      <textField>
+        <reportElement x="0" y="3" width="400" height="12"/>
+        <textElement><font fontName="Tahoma" size="7" isItalic="true"/></textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA["Dicetak: " + new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm").format(new java.util.Date())]]></textFieldExpression>
+      </textField>
+      <textField>
+        <reportElement x="700" y="3" width="102" height="12"/>
+        <textElement textAlignment="Right"><font fontName="Tahoma" size="7"/></textElement>
+        <textFieldExpression class="java.lang.String"><![CDATA["Hal " + $V{PAGE_NUMBER}]]></textFieldExpression>
+      </textField>
+    </band>
+  </pageFooter>
+
+</jasperReport>
