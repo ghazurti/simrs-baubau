@@ -3637,7 +3637,7 @@ public final class RMDataResumePasienRanap extends javax.swing.JDialog {
                     "  and detail_periksa_lab.kd_jenis_prw=periksa_lab.kd_jenis_prw "+
                     "  and detail_periksa_lab.tgl_periksa=periksa_lab.tgl_periksa "+
                     "  and detail_periksa_lab.jam=periksa_lab.jam "+
-                    "inner join template_laboratorium on detail_periksa_lab.id_template=template_laboratorium.id "+
+                    "inner join template_laboratorium on detail_periksa_lab.id_template=template_laboratorium.id_template "+
                     "where detail_periksa_lab.no_rawat=? and detail_periksa_lab.nilai<>''");
                 try {
                     ps.setString(1,norwt);
