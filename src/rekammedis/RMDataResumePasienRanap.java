@@ -3783,6 +3783,80 @@ public final class RMDataResumePasienRanap extends javax.swing.JDialog {
             }
         }
 
+        // Auto-isi diet dari detail_beri_diet
+        if(Diet.getText().isEmpty()){
+            try {
+                koneksi=koneksiDB.condb();
+                ps=koneksi.prepareStatement(
+                    "select group_concat(distinct diet.nama_diet order by detail_beri_diet.tanggal separator ', ') as diet "+
+                    "from detail_beri_diet inner join diet on detail_beri_diet.kd_diet=diet.kd_diet "+
+                    "where detail_beri_diet.no_rawat=?");
+                try {
+                    ps.setString(1,norwt);
+                    rs=ps.executeQuery();
+                    if(rs.next() && rs.getString("diet")!=null)
+                        Diet.setText(rs.getString("diet"));
+                } catch (Exception e) {
+                    System.out.println("Notif autofill diet : "+e);
+                } finally {
+                    if(rs!=null) rs.close();
+                    if(ps!=null) ps.close();
+                }
+            } catch (Exception e) {
+                System.out.println("Notif autofill diet : "+e);
+            }
+        }
+
+        // Auto-isi lab pending dari permintaan_lab yang belum ada hasil
+        if(LabBelum.getText().isEmpty()){
+            try {
+                koneksi=koneksiDB.condb();
+                ps=koneksi.prepareStatement(
+                    "select group_concat(distinct template_laboratorium.Pemeriksaan order by permintaan_lab.tgl_permintaan separator ', ') as pending "+
+                    "from permintaan_lab "+
+                    "inner join permintaan_detail_permintaan_lab on permintaan_detail_permintaan_lab.noorder=permintaan_lab.noorder "+
+                    "inner join template_laboratorium on permintaan_detail_permintaan_lab.id_template=template_laboratorium.id_template "+
+                    "where permintaan_lab.tgl_hasil='0000-00-00' and permintaan_lab.no_rawat=?");
+                try {
+                    ps.setString(1,norwt);
+                    rs=ps.executeQuery();
+                    if(rs.next() && rs.getString("pending")!=null)
+                        LabBelum.setText(rs.getString("pending"));
+                } catch (Exception e) {
+                    System.out.println("Notif autofill lab pending : "+e);
+                } finally {
+                    if(rs!=null) rs.close();
+                    if(ps!=null) ps.close();
+                }
+            } catch (Exception e) {
+                System.out.println("Notif autofill lab pending : "+e);
+            }
+        }
+
+        // Auto-isi instruksi/edukasi dari instruksi perawat ranap (entry terakhir)
+        if(Edukasi.getText().isEmpty()){
+            try {
+                koneksi=koneksiDB.condb();
+                ps=koneksi.prepareStatement(
+                    "select instruksi from pemeriksaan_ranap "+
+                    "where no_rawat=? and instruksi<>'' "+
+                    "order by tgl_perawatan desc, jam_rawat desc limit 1");
+                try {
+                    ps.setString(1,norwt);
+                    rs=ps.executeQuery();
+                    if(rs.next() && rs.getString("instruksi")!=null)
+                        Edukasi.setText(rs.getString("instruksi"));
+                } catch (Exception e) {
+                    System.out.println("Notif autofill edukasi : "+e);
+                } finally {
+                    if(rs!=null) rs.close();
+                    if(ps!=null) ps.close();
+                }
+            } catch (Exception e) {
+                System.out.println("Notif autofill edukasi : "+e);
+            }
+        }
+
         runBackground(() ->tampil());
     }
 
