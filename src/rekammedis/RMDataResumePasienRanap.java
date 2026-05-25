@@ -3608,8 +3608,8 @@ public final class RMDataResumePasienRanap extends javax.swing.JDialog {
                 if(rs.next()){
                     if(KeluhanUtama.getText().isEmpty() && rs.getString("keluhan")!=null)
                         KeluhanUtama.setText(rs.getString("keluhan"));
-                    if(PemeriksaanRad.getText().isEmpty() && rs.getString("pemeriksaan")!=null)
-                        PemeriksaanRad.setText(rs.getString("pemeriksaan"));
+                    if(PemeriksaanFisik.getText().isEmpty() && rs.getString("pemeriksaan")!=null)
+                        PemeriksaanFisik.setText(rs.getString("pemeriksaan"));
                     if(JalannyaPenyakit.getText().isEmpty() && rs.getString("penilaian")!=null)
                         JalannyaPenyakit.setText(rs.getString("penilaian"));
                     if(Alergi.getText().isEmpty() && rs.getString("alergi")!=null)
@@ -3623,6 +3623,116 @@ public final class RMDataResumePasienRanap extends javax.swing.JDialog {
             }
         } catch (Exception e) {
             System.out.println("Notif : "+e);
+        }
+
+        // Auto-isi hasil laboratorium dari detail_periksa_lab
+        if(HasilLaborat.getText().isEmpty()){
+            try {
+                koneksi=koneksiDB.condb();
+                ps=koneksi.prepareStatement(
+                    "select group_concat(concat(template_laboratorium.Pemeriksaan,' : ',detail_periksa_lab.nilai) "+
+                    "order by periksa_lab.tgl_periksa,periksa_lab.jam,detail_periksa_lab.id_template separator ', ') as hasil "+
+                    "from detail_periksa_lab "+
+                    "inner join periksa_lab on detail_periksa_lab.no_rawat=periksa_lab.no_rawat "+
+                    "  and detail_periksa_lab.kd_jenis_prw=periksa_lab.kd_jenis_prw "+
+                    "  and detail_periksa_lab.tgl_periksa=periksa_lab.tgl_periksa "+
+                    "  and detail_periksa_lab.jam=periksa_lab.jam "+
+                    "inner join template_laboratorium on detail_periksa_lab.id_template=template_laboratorium.id "+
+                    "where detail_periksa_lab.no_rawat=? and detail_periksa_lab.nilai<>''");
+                try {
+                    ps.setString(1,norwt);
+                    rs=ps.executeQuery();
+                    if(rs.next() && rs.getString("hasil")!=null)
+                        HasilLaborat.setText(rs.getString("hasil"));
+                } catch (Exception e) {
+                    System.out.println("Notif autofill lab : "+e);
+                } finally {
+                    if(rs!=null) rs.close();
+                    if(ps!=null) ps.close();
+                }
+            } catch (Exception e) {
+                System.out.println("Notif autofill lab : "+e);
+            }
+        }
+
+        // Auto-isi hasil radiologi dari hasil_radiologi
+        if(PemeriksaanRad.getText().isEmpty()){
+            try {
+                koneksi=koneksiDB.condb();
+                ps=koneksi.prepareStatement(
+                    "select group_concat(concat(jns_perawatan_radiologi.nm_perawatan,': ',hasil_radiologi.hasil) "+
+                    "order by hasil_radiologi.tgl_periksa,hasil_radiologi.jam separator '\n') as hasil "+
+                    "from hasil_radiologi "+
+                    "inner join periksa_radiologi on hasil_radiologi.no_rawat=periksa_radiologi.no_rawat "+
+                    "  and hasil_radiologi.tgl_periksa=periksa_radiologi.tgl_periksa "+
+                    "  and hasil_radiologi.jam=periksa_radiologi.jam "+
+                    "inner join jns_perawatan_radiologi on periksa_radiologi.kd_jenis_prw=jns_perawatan_radiologi.kd_jenis_prw "+
+                    "where hasil_radiologi.no_rawat=? and hasil_radiologi.hasil<>''");
+                try {
+                    ps.setString(1,norwt);
+                    rs=ps.executeQuery();
+                    if(rs.next() && rs.getString("hasil")!=null)
+                        PemeriksaanRad.setText(rs.getString("hasil"));
+                } catch (Exception e) {
+                    System.out.println("Notif autofill rad : "+e);
+                } finally {
+                    if(rs!=null) rs.close();
+                    if(ps!=null) ps.close();
+                }
+            } catch (Exception e) {
+                System.out.println("Notif autofill rad : "+e);
+            }
+        }
+
+        // Auto-isi tindakan/operasi dari rawat_inap_dr dan operasi
+        if(TindakanSelamaDiRS.getText().isEmpty()){
+            StringBuilder tindakan = new StringBuilder();
+            try {
+                koneksi=koneksiDB.condb();
+                ps=koneksi.prepareStatement(
+                    "select group_concat(distinct jns_perawatan_inap.nm_perawatan order by rawat_inap_dr.tgl_perawatan separator ', ') as tindakan "+
+                    "from rawat_inap_dr "+
+                    "inner join jns_perawatan_inap on rawat_inap_dr.kd_jenis_prw=jns_perawatan_inap.kd_jenis_prw "+
+                    "where rawat_inap_dr.no_rawat=?");
+                try {
+                    ps.setString(1,norwt);
+                    rs=ps.executeQuery();
+                    if(rs.next() && rs.getString("tindakan")!=null)
+                        tindakan.append(rs.getString("tindakan"));
+                } catch (Exception e) {
+                    System.out.println("Notif autofill tindakan : "+e);
+                } finally {
+                    if(rs!=null) rs.close();
+                    if(ps!=null) ps.close();
+                }
+            } catch (Exception e) {
+                System.out.println("Notif autofill tindakan : "+e);
+            }
+            try {
+                koneksi=koneksiDB.condb();
+                ps=koneksi.prepareStatement(
+                    "select group_concat(distinct paket_operasi.nm_perawatan order by operasi.tgl_operasi separator ', ') as operasi "+
+                    "from operasi "+
+                    "inner join paket_operasi on operasi.kode_paket=paket_operasi.kode_paket "+
+                    "where operasi.no_rawat=?");
+                try {
+                    ps.setString(1,norwt);
+                    rs=ps.executeQuery();
+                    if(rs.next() && rs.getString("operasi")!=null){
+                        if(tindakan.length()>0) tindakan.append(", ");
+                        tindakan.append(rs.getString("operasi"));
+                    }
+                } catch (Exception e) {
+                    System.out.println("Notif autofill operasi : "+e);
+                } finally {
+                    if(rs!=null) rs.close();
+                    if(ps!=null) ps.close();
+                }
+            } catch (Exception e) {
+                System.out.println("Notif autofill operasi : "+e);
+            }
+            if(tindakan.length()>0)
+                TindakanSelamaDiRS.setText(tindakan.toString());
         }
 
         // Auto-isi obat selama di RS dari detail_pemberian_obat
