@@ -467,7 +467,11 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
         Valid.textKosong(TCari,"No.Batch/No.Faktur");
     }else if(kdgudang.getText().equals("")){
         Valid.textKosong(TCari,"Lokasi");
-    }else{  
+    }else{
+        if(Sequel.cariInteger("select count(*) from resep_pulang where no_rawat=?",TNoRw.getText())>0){
+            JOptionPane.showMessageDialog(null,"Resep pulang pasien ini sudah tersimpan.\nHapus data terlebih dahulu jika ingin mengubah.");
+            return;
+        }
         Sequel.AutoComitFalse();
         sukses=true;
         for(i=0;i<tbKamar.getRowCount();i++){ 
