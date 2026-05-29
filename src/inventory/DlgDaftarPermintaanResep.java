@@ -6150,7 +6150,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             rs.getString("no_rawat")+" "+rs.getString("no_rkm_medis")+" "+rs.getString("nm_pasien")+" ("+rs.getString("png_jawab")+")",
                             rs.getString("nm_dokter")
                         });
-                        tabMode8.addRow(new Object[]{"","","Jumlah","Kode Obat","Nama Obat","Aturan Pakai"});                
+                        tabMode8.addRow(new Object[]{"","","Nama Obat","","Jumlah x Harga + Embalase + Tuslah = Total","Aturan Pakai"});
                         koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement("select databarang.kode_brng,databarang.nama_brng,detail_permintaan_resep_pulang.jml,"+
                             "databarang.kode_sat,detail_permintaan_resep_pulang.dosis "+
@@ -6159,10 +6159,20 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         try {
                             ps2.setString(1,rs.getString("no_permintaan"));
                             rs2=ps2.executeQuery();
+                            double subttlrp=0;
+                            String norawatrp=rs.getString("no_rawat");
                             while(rs2.next()){
+                                double jmlrp=Sequel.cariIsiAngka2("select ifnull(sum(jml_barang),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
+                                double ttlrp=Sequel.cariIsiAngka2("select ifnull(sum(total),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
+                                double hrgrp=(jmlrp>0)?(ttlrp/jmlrp):0;
+                                String jmlpakai=(jmlrp>0)?Valid.SetAngka(jmlrp):rs2.getString("jml");
                                 tabMode8.addRow(new Object[]{
-                                    "","",rs2.getString("jml")+" "+rs2.getString("kode_sat"),rs2.getString("kode_brng"),rs2.getString("nama_brng"),rs2.getString("dosis")
+                                    "","",rs2.getString("nama_brng"),"",jmlpakai+" x "+Valid.SetAngka(hrgrp)+" + 0 + 0 = "+Valid.SetAngka(ttlrp),rs2.getString("dosis")
                                 });
+                                subttlrp=subttlrp+ttlrp;
+                            }
+                            if(subttlrp>0){
+                                tabMode8.addRow(new Object[]{"","","","","Total Biaya Resep = "+Valid.SetAngka(subttlrp),""});
                             }
                         } catch (Exception e) {
                             System.out.println("Notifikasi 2 : "+e);
@@ -6185,7 +6195,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                 rs.getString("no_rawat")+" "+rs.getString("no_rkm_medis")+" "+rs.getString("nm_pasien")+" ("+rs.getString("png_jawab")+")",
                                 rs.getString("nm_dokter")
                             });
-                            tabMode8.addRow(new Object[]{"","","Jumlah","Kode Obat","Nama Obat","Aturan Pakai"});                
+                            tabMode8.addRow(new Object[]{"","","Nama Obat","","Jumlah x Harga + Embalase + Tuslah = Total","Aturan Pakai"});
                             koneksi=koneksiDB.condb();
                             ps2=koneksi.prepareStatement("select databarang.kode_brng,databarang.nama_brng,detail_permintaan_resep_pulang.jml,"+
                                 "databarang.kode_sat,detail_permintaan_resep_pulang.dosis from detail_permintaan_resep_pulang inner join databarang on "+
@@ -6193,10 +6203,20 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             try {
                                 ps2.setString(1,rs.getString("no_permintaan"));
                                 rs2=ps2.executeQuery();
+                                double subttlrp=0;
+                                String norawatrp=rs.getString("no_rawat");
                                 while(rs2.next()){
+                                    double jmlrp=Sequel.cariIsiAngka2("select ifnull(sum(jml_barang),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
+                                    double ttlrp=Sequel.cariIsiAngka2("select ifnull(sum(total),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
+                                    double hrgrp=(jmlrp>0)?(ttlrp/jmlrp):0;
+                                    String jmlpakai=(jmlrp>0)?Valid.SetAngka(jmlrp):rs2.getString("jml");
                                     tabMode8.addRow(new Object[]{
-                                        "","",rs2.getString("jml")+" "+rs2.getString("kode_sat"),rs2.getString("kode_brng"),rs2.getString("nama_brng"),rs2.getString("dosis")
+                                        "","",rs2.getString("nama_brng"),"",jmlpakai+" x "+Valid.SetAngka(hrgrp)+" + 0 + 0 = "+Valid.SetAngka(ttlrp),rs2.getString("dosis")
                                     });
+                                    subttlrp=subttlrp+ttlrp;
+                                }
+                                if(subttlrp>0){
+                                    tabMode8.addRow(new Object[]{"","","","","Total Biaya Resep = "+Valid.SetAngka(subttlrp),""});
                                 }
                             } catch (Exception e) {
                                 System.out.println("Notifikasi 2 : "+e);
@@ -6286,7 +6306,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             rs.getString("no_rawat")+" "+rs.getString("no_rkm_medis")+" "+rs.getString("nm_pasien")+" ("+rs.getString("png_jawab")+")",
                             rs.getString("nm_dokter")
                         });
-                        tabMode8.addRow(new Object[]{"","","Jumlah","Kode Obat","Nama Obat","Aturan Pakai"});                
+                        tabMode8.addRow(new Object[]{"","","Nama Obat","","Jumlah x Harga + Embalase + Tuslah = Total","Aturan Pakai"});
                         koneksi=koneksiDB.condb();
                         ps2=koneksi.prepareStatement("select databarang.kode_brng,databarang.nama_brng,detail_permintaan_resep_pulang.jml,"+
                             "databarang.kode_sat,detail_permintaan_resep_pulang.dosis from detail_permintaan_resep_pulang inner join databarang on "+
@@ -6294,10 +6314,20 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         try {
                             ps2.setString(1,rs.getString("no_permintaan"));
                             rs2=ps2.executeQuery();
+                            double subttlrp=0;
+                            String norawatrp=rs.getString("no_rawat");
                             while(rs2.next()){
+                                double jmlrp=Sequel.cariIsiAngka2("select ifnull(sum(jml_barang),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
+                                double ttlrp=Sequel.cariIsiAngka2("select ifnull(sum(total),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
+                                double hrgrp=(jmlrp>0)?(ttlrp/jmlrp):0;
+                                String jmlpakai=(jmlrp>0)?Valid.SetAngka(jmlrp):rs2.getString("jml");
                                 tabMode8.addRow(new Object[]{
-                                    "","",rs2.getString("jml")+" "+rs2.getString("kode_sat"),rs2.getString("kode_brng"),rs2.getString("nama_brng"),rs2.getString("dosis")
+                                    "","",rs2.getString("nama_brng"),"",jmlpakai+" x "+Valid.SetAngka(hrgrp)+" + 0 + 0 = "+Valid.SetAngka(ttlrp),rs2.getString("dosis")
                                 });
+                                subttlrp=subttlrp+ttlrp;
+                            }
+                            if(subttlrp>0){
+                                tabMode8.addRow(new Object[]{"","","","","Total Biaya Resep = "+Valid.SetAngka(subttlrp),""});
                             }
                         } catch (Exception e) {
                             System.out.println("Notifikasi 2 : "+e);
@@ -6320,7 +6350,7 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                 rs.getString("no_rawat")+" "+rs.getString("no_rkm_medis")+" "+rs.getString("nm_pasien")+" ("+rs.getString("png_jawab")+")",
                                 rs.getString("nm_dokter")
                             });
-                            tabMode8.addRow(new Object[]{"","","Jumlah","Kode Obat","Nama Obat","Aturan Pakai"});                
+                            tabMode8.addRow(new Object[]{"","","Nama Obat","","Jumlah x Harga + Embalase + Tuslah = Total","Aturan Pakai"});
                             koneksi=koneksiDB.condb();
                             ps2=koneksi.prepareStatement("select databarang.kode_brng,databarang.nama_brng,detail_permintaan_resep_pulang.jml,"+
                                 "databarang.kode_sat,detail_permintaan_resep_pulang.dosis from detail_permintaan_resep_pulang inner join databarang on "+
@@ -6328,10 +6358,20 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             try {
                                 ps2.setString(1,rs.getString("no_permintaan"));
                                 rs2=ps2.executeQuery();
+                                double subttlrp=0;
+                                String norawatrp=rs.getString("no_rawat");
                                 while(rs2.next()){
+                                    double jmlrp=Sequel.cariIsiAngka2("select ifnull(sum(jml_barang),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
+                                    double ttlrp=Sequel.cariIsiAngka2("select ifnull(sum(total),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
+                                    double hrgrp=(jmlrp>0)?(ttlrp/jmlrp):0;
+                                    String jmlpakai=(jmlrp>0)?Valid.SetAngka(jmlrp):rs2.getString("jml");
                                     tabMode8.addRow(new Object[]{
-                                        "","",rs2.getString("jml")+" "+rs2.getString("kode_sat"),rs2.getString("kode_brng"),rs2.getString("nama_brng"),rs2.getString("dosis")
+                                        "","",rs2.getString("nama_brng"),"",jmlpakai+" x "+Valid.SetAngka(hrgrp)+" + 0 + 0 = "+Valid.SetAngka(ttlrp),rs2.getString("dosis")
                                     });
+                                    subttlrp=subttlrp+ttlrp;
+                                }
+                                if(subttlrp>0){
+                                    tabMode8.addRow(new Object[]{"","","","","Total Biaya Resep = "+Valid.SetAngka(subttlrp),""});
                                 }
                             } catch (Exception e) {
                                 System.out.println("Notifikasi 2 : "+e);
