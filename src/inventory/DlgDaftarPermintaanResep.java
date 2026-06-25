@@ -6161,15 +6161,18 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             rs2=ps2.executeQuery();
                             double subttlrp=0;
                             String norawatrp=rs.getString("no_rawat");
+                            double embalaserp=Sequel.cariIsiAngka("select embalase_per_obat from set_embalase");
+                            double tuslahrp=Sequel.cariIsiAngka("select tuslah_per_obat from set_embalase");
                             while(rs2.next()){
                                 double jmlrp=Sequel.cariIsiAngka2("select ifnull(sum(jml_barang),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
                                 double ttlrp=Sequel.cariIsiAngka2("select ifnull(sum(total),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
                                 double hrgrp=(jmlrp>0)?(ttlrp/jmlrp):0;
+                                double totalrp=ttlrp+embalaserp+tuslahrp;
                                 String jmlpakai=(jmlrp>0)?Valid.SetAngka(jmlrp):rs2.getString("jml");
                                 tabMode8.addRow(new Object[]{
-                                    "","",rs2.getString("nama_brng"),"",jmlpakai+" x "+Valid.SetAngka(hrgrp)+" + 0 + 0 = "+Valid.SetAngka(ttlrp),rs2.getString("dosis")
+                                    "","",rs2.getString("nama_brng"),"",jmlpakai+" x "+Valid.SetAngka(hrgrp)+" + "+Valid.SetAngka(embalaserp)+" + "+Valid.SetAngka(tuslahrp)+" = "+Valid.SetAngka(totalrp),rs2.getString("dosis")
                                 });
-                                subttlrp=subttlrp+ttlrp;
+                                subttlrp=subttlrp+totalrp;
                             }
                             if(subttlrp>0){
                                 tabMode8.addRow(new Object[]{"","","","","Total Biaya Resep = "+Valid.SetAngka(subttlrp),""});
@@ -6205,15 +6208,18 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                 rs2=ps2.executeQuery();
                                 double subttlrp=0;
                                 String norawatrp=rs.getString("no_rawat");
+                                double embalaserp=Sequel.cariIsiAngka("select embalase_per_obat from set_embalase");
+                                double tuslahrp=Sequel.cariIsiAngka("select tuslah_per_obat from set_embalase");
                                 while(rs2.next()){
                                     double jmlrp=Sequel.cariIsiAngka2("select ifnull(sum(jml_barang),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
                                     double ttlrp=Sequel.cariIsiAngka2("select ifnull(sum(total),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
                                     double hrgrp=(jmlrp>0)?(ttlrp/jmlrp):0;
+                                    double totalrp=ttlrp+embalaserp+tuslahrp;
                                     String jmlpakai=(jmlrp>0)?Valid.SetAngka(jmlrp):rs2.getString("jml");
                                     tabMode8.addRow(new Object[]{
-                                        "","",rs2.getString("nama_brng"),"",jmlpakai+" x "+Valid.SetAngka(hrgrp)+" + 0 + 0 = "+Valid.SetAngka(ttlrp),rs2.getString("dosis")
+                                        "","",rs2.getString("nama_brng"),"",jmlpakai+" x "+Valid.SetAngka(hrgrp)+" + "+Valid.SetAngka(embalaserp)+" + "+Valid.SetAngka(tuslahrp)+" = "+Valid.SetAngka(totalrp),rs2.getString("dosis")
                                     });
-                                    subttlrp=subttlrp+ttlrp;
+                                    subttlrp=subttlrp+totalrp;
                                 }
                                 if(subttlrp>0){
                                     tabMode8.addRow(new Object[]{"","","","","Total Biaya Resep = "+Valid.SetAngka(subttlrp),""});
@@ -6316,15 +6322,18 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             rs2=ps2.executeQuery();
                             double subttlrp=0;
                             String norawatrp=rs.getString("no_rawat");
+                            double embalaserp=Sequel.cariIsiAngka("select embalase_per_obat from set_embalase");
+                            double tuslahrp=Sequel.cariIsiAngka("select tuslah_per_obat from set_embalase");
                             while(rs2.next()){
                                 double jmlrp=Sequel.cariIsiAngka2("select ifnull(sum(jml_barang),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
                                 double ttlrp=Sequel.cariIsiAngka2("select ifnull(sum(total),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
                                 double hrgrp=(jmlrp>0)?(ttlrp/jmlrp):0;
+                                double totalrp=ttlrp+embalaserp+tuslahrp;
                                 String jmlpakai=(jmlrp>0)?Valid.SetAngka(jmlrp):rs2.getString("jml");
                                 tabMode8.addRow(new Object[]{
-                                    "","",rs2.getString("nama_brng"),"",jmlpakai+" x "+Valid.SetAngka(hrgrp)+" + 0 + 0 = "+Valid.SetAngka(ttlrp),rs2.getString("dosis")
+                                    "","",rs2.getString("nama_brng"),"",jmlpakai+" x "+Valid.SetAngka(hrgrp)+" + "+Valid.SetAngka(embalaserp)+" + "+Valid.SetAngka(tuslahrp)+" = "+Valid.SetAngka(totalrp),rs2.getString("dosis")
                                 });
-                                subttlrp=subttlrp+ttlrp;
+                                subttlrp=subttlrp+totalrp;
                             }
                             if(subttlrp>0){
                                 tabMode8.addRow(new Object[]{"","","","","Total Biaya Resep = "+Valid.SetAngka(subttlrp),""});
@@ -6360,15 +6369,18 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                 rs2=ps2.executeQuery();
                                 double subttlrp=0;
                                 String norawatrp=rs.getString("no_rawat");
+                                double embalaserp=Sequel.cariIsiAngka("select embalase_per_obat from set_embalase");
+                                double tuslahrp=Sequel.cariIsiAngka("select tuslah_per_obat from set_embalase");
                                 while(rs2.next()){
                                     double jmlrp=Sequel.cariIsiAngka2("select ifnull(sum(jml_barang),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
                                     double ttlrp=Sequel.cariIsiAngka2("select ifnull(sum(total),0) from resep_pulang where no_rawat=? and kode_brng=?",norawatrp,rs2.getString("kode_brng"));
                                     double hrgrp=(jmlrp>0)?(ttlrp/jmlrp):0;
+                                    double totalrp=ttlrp+embalaserp+tuslahrp;
                                     String jmlpakai=(jmlrp>0)?Valid.SetAngka(jmlrp):rs2.getString("jml");
                                     tabMode8.addRow(new Object[]{
-                                        "","",rs2.getString("nama_brng"),"",jmlpakai+" x "+Valid.SetAngka(hrgrp)+" + 0 + 0 = "+Valid.SetAngka(ttlrp),rs2.getString("dosis")
+                                        "","",rs2.getString("nama_brng"),"",jmlpakai+" x "+Valid.SetAngka(hrgrp)+" + "+Valid.SetAngka(embalaserp)+" + "+Valid.SetAngka(tuslahrp)+" = "+Valid.SetAngka(totalrp),rs2.getString("dosis")
                                     });
-                                    subttlrp=subttlrp+ttlrp;
+                                    subttlrp=subttlrp+totalrp;
                                 }
                                 if(subttlrp>0){
                                     tabMode8.addRow(new Object[]{"","","","","Total Biaya Resep = "+Valid.SetAngka(subttlrp),""});

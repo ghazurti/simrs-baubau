@@ -73,9 +73,10 @@ public final class DlgPeresepanDokter extends javax.swing.JDialog {
     private WarnaTable2 warna=new WarnaTable2();
     private WarnaTable2 warna2=new WarnaTable2();
     private WarnaTable2 warna3=new WarnaTable2();
+    private final java.util.HashMap<String,String> mapRestriksi = new java.util.HashMap<>();
     private DlgCariDokter dokter;
     private String pilihiterasi="",noracik="",aktifkanbatch="no",STOKKOSONGRESEP="no",qrystokkosong="",status="",bangsal="",resep="",DEPOAKTIFOBAT="",
-            kamar="",norawatibu="",kelas,RESEPRAJALKEPLAN="no",NOTIFMAKSIMALNOMINALRESEPRAJAL="no";
+            kamar="",norawatibu="",kelas,RESEPRAJALKEPLAN="no",NOTIFMAKSIMALNOMINALRESEPRAJAL="no",VALIDASIRESTRIKSIOBATBPJS="no";
     private File file;
     private FileWriter fileWriter;
     private ObjectMapper mapper = new ObjectMapper();
@@ -151,7 +152,40 @@ public final class DlgPeresepanDokter extends javax.swing.JDialog {
             }                 
         }
         warna.kolom=1;
-        tbResep.setDefaultRenderer(Object.class,warna);
+        // Percepat tooltip muncul (default 750ms -> 100ms) & lama tampil
+        javax.swing.ToolTipManager.sharedInstance().setInitialDelay(100);
+        javax.swing.ToolTipManager.sharedInstance().setDismissDelay(20000);
+        javax.swing.ToolTipManager.sharedInstance().setReshowDelay(50);
+        tbResep.setToolTipText("");
+        // Custom renderer: tampilkan Nama Barang MERAH + tooltip jika obat punya restriksi Fornas
+        WarnaTable2 warnaResep = new WarnaTable2(){
+            @Override
+            public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column){
+                java.awt.Component c = super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
+                try {
+                    Object kodeObj = table.getValueAt(row,3);
+                    String kode = kodeObj==null?"":kodeObj.toString();
+                    String txt = mapRestriksi.get(kode);
+                    if(txt!=null && !txt.trim().isEmpty()){
+                        if(column==4){
+                            c.setForeground(new java.awt.Color(200,0,0));
+                            c.setFont(c.getFont().deriveFont(java.awt.Font.BOLD));
+                        }
+                        if(c instanceof javax.swing.JComponent){
+                            ((javax.swing.JComponent)c).setToolTipText(txt);
+                        }
+                    } else {
+                        if(c instanceof javax.swing.JComponent){
+                            ((javax.swing.JComponent)c).setToolTipText(null);
+                        }
+                    }
+                } catch(Exception ex){ /* ignore */ }
+                return c;
+            }
+        };
+        warnaResep.kolom=1;
+        tbResep.setDefaultRenderer(Object.class,warnaResep);
         
         tabModeResepRacikan=new DefaultTableModel(null,new Object[]{
                 "No","Nama Racikan","Kode Racik","Metode Racik","Jml.Racik",
@@ -315,7 +349,39 @@ public final class DlgPeresepanDokter extends javax.swing.JDialog {
         } catch (Exception e) {
             TANGGALMUNDUR="yes";
         }
-    }    
+
+        try {
+            VALIDASIRESTRIKSIOBATBPJS=koneksiDB.VALIDASIRESTRIKSIOBATBPJS();
+        } catch (Exception e) {
+            VALIDASIRESTRIKSIOBATBPJS="no";
+        }
+
+        // Load map restriksi obat (kode_brng -> tooltip html) untuk indikator merah di tabel resep
+        try (java.sql.PreparedStatement ps = koneksi.prepareStatement(
+                "select kode_brng, restriksi_text, max_jml, max_iterasi, level_faskes from restriksi_obat "+
+                "where aktif='Y' and (restriksi_text is not null and restriksi_text<>'')")) {
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                while(rs.next()){
+                    String k = rs.getString("kode_brng");
+                    String t = rs.getString("restriksi_text");
+                    double mx = rs.getDouble("max_jml");
+                    int it = rs.getInt("max_iterasi");
+                    int lvl = rs.getInt("level_faskes");
+                    if(k==null || t==null) continue;
+                    String lvlStr = lvl==1?"FKTP":lvl==2?"FKRTL Tk.2":lvl==3?"FKRTL Tk.3":"Semua faskes";
+                    StringBuilder html = new StringBuilder("<html>");
+                    html.append("<b style='color:#c00'>⚠ RESTRIKSI FORNAS</b><br>");
+                    if(mx>0) html.append("<b>MAX ").append((long)mx).append(" / resep</b> &nbsp;|&nbsp; ");
+                    html.append("Iterasi: ").append(it).append("x &nbsp;|&nbsp; ").append(lvlStr).append("<br><hr>");
+                    html.append(t.replace("<","&lt;").replace(">","&gt;").replace("\n","<br>"));
+                    html.append("</html>");
+                    mapRestriksi.put(k, html.toString());
+                }
+            }
+        } catch(Exception ex){
+            System.out.println("Gagal load map restriksi: "+ex);
+        }
+    }
     
 
     /** This method is called from within the constructor to
@@ -1030,7 +1096,138 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
             JOptionPane.showMessageDialog(null,"Maaf, silahkan masukkan terlebih dahulu obat yang mau diberikan...!!!");
             TCari.requestFocus();
         }else{
-            // Cek duplikasi obat dari rujukan internal poli pada hari yang sama
+            // Cek 0: Restriksi Obat BPJS — hardblock jika jumlah melebihi max_jml
+            if(VALIDASIRESTRIKSIOBATBPJS.equals("yes")) try {
+                String kdPj = KdPj.getText();
+                java.util.Map<String,Double> sumPerObat = new java.util.LinkedHashMap<>();
+                java.util.Map<String,String> namaPerObat = new java.util.HashMap<>();
+                for(int j=0;j<tbResep.getRowCount();j++){
+                    double jml = Valid.SetAngka(tbResep.getValueAt(j,1).toString());
+                    if(jml<=0) continue;
+                    String kodeObat = tbResep.getValueAt(j,3).toString();
+                    String namaObat = tbResep.getValueAt(j,4).toString();
+                    sumPerObat.merge(kodeObat, jml, Double::sum);
+                    namaPerObat.putIfAbsent(kodeObat, namaObat);
+                }
+                StringBuilder violRestr = new StringBuilder();
+                String sqlMax =
+                    "select ro.max_jml from restriksi_obat ro "+
+                    "inner join databarang db on db.kode_brng=? "+
+                    "where ro.kode_brng=? and ro.aktif='Y' and ("+
+                    "  (ro.kdjenis=db.kdjns and ro.kd_pj=?) or "+
+                    "  (ro.kdjenis=db.kdjns and ro.kd_pj='ALL') or "+
+                    "  (ro.kdjenis='ALL' and ro.kd_pj=?) or "+
+                    "  (ro.kdjenis='ALL' and ro.kd_pj='ALL')) "+
+                    "order by case when ro.kdjenis=db.kdjns and ro.kd_pj=? then 1 "+
+                    "              when ro.kdjenis=db.kdjns then 2 "+
+                    "              when ro.kd_pj=? then 3 else 4 end limit 1";
+                try (java.sql.PreparedStatement psRestr = koneksi.prepareStatement(sqlMax)) {
+                    for(java.util.Map.Entry<String,Double> e : sumPerObat.entrySet()){
+                        String kodeObat = e.getKey();
+                        double total = e.getValue();
+                        psRestr.setString(1,kodeObat);
+                        psRestr.setString(2,kodeObat);
+                        psRestr.setString(3,kdPj);
+                        psRestr.setString(4,kdPj);
+                        psRestr.setString(5,kdPj);
+                        psRestr.setString(6,kdPj);
+                        try (java.sql.ResultSet rsRestr = psRestr.executeQuery()) {
+                            if(rsRestr.next()){
+                                double maxJml = rsRestr.getDouble("max_jml");
+                                if(maxJml>0 && total>maxJml){
+                                    violRestr.append("- ").append(namaPerObat.get(kodeObat))
+                                        .append(" : diminta ").append((long)total)
+                                        .append(", maksimal ").append((long)maxJml).append("\n");
+                                }
+                            }
+                        }
+                    }
+                }
+                if(violRestr.length()>0){
+                    JOptionPane.showMessageDialog(rootPane,
+                        "RESTRIKSI OBAT BPJS DILANGGAR — resep tidak dapat disimpan:\n\n"+
+                        violRestr.toString()+
+                        "\nSilakan kurangi jumlah obat sesuai batas restriksi.",
+                        "Restriksi Obat BPJS",
+                        JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                // Peringatan teks restriksi indikasi Fornas (informational, tidak block)
+                StringBuilder infoRestr = new StringBuilder();
+                String sqlTxt =
+                    "select ro.restriksi_text, ro.level_faskes from restriksi_obat ro "+
+                    "inner join databarang db on db.kode_brng=? "+
+                    "where ro.kode_brng=? and ro.aktif='Y' "+
+                    "and ro.restriksi_text is not null and ro.restriksi_text<>'' and ("+
+                    "  (ro.kdjenis=db.kdjns and ro.kd_pj=?) or "+
+                    "  (ro.kdjenis=db.kdjns and ro.kd_pj='ALL') or "+
+                    "  (ro.kdjenis='ALL' and ro.kd_pj=?) or "+
+                    "  (ro.kdjenis='ALL' and ro.kd_pj='ALL')) "+
+                    "order by case when ro.kdjenis=db.kdjns and ro.kd_pj=? then 1 "+
+                    "              when ro.kdjenis=db.kdjns then 2 "+
+                    "              when ro.kd_pj=? then 3 else 4 end limit 1";
+                try (java.sql.PreparedStatement psTxt = koneksi.prepareStatement(sqlTxt)) {
+                    for(String kodeObat : sumPerObat.keySet()){
+                        psTxt.setString(1,kodeObat);
+                        psTxt.setString(2,kodeObat);
+                        psTxt.setString(3,kdPj);
+                        psTxt.setString(4,kdPj);
+                        psTxt.setString(5,kdPj);
+                        psTxt.setString(6,kdPj);
+                        try (java.sql.ResultSet rsTxt = psTxt.executeQuery()) {
+                            if(rsTxt.next()){
+                                String txt = rsTxt.getString("restriksi_text");
+                                int lvl = rsTxt.getInt("level_faskes");
+                                String lvlStr = lvl==1?" [FKTP]":lvl==2?" [FKRTL Tk.2]":lvl==3?" [FKRTL Tk.3]":"";
+                                if(txt!=null && !txt.trim().isEmpty()){
+                                    infoRestr.append("• ").append(namaPerObat.get(kodeObat)).append(lvlStr)
+                                        .append("\n  ").append(txt.trim()).append("\n\n");
+                                }
+                            }
+                        }
+                    }
+                }
+                if(infoRestr.length()>0){
+                    JOptionPane.showMessageDialog(rootPane,
+                        "RESTRIKSI INDIKASI FORNAS — resep tidak dapat disimpan:\n\n"+
+                        infoRestr.toString()+
+                        "Obat di atas hanya boleh diberikan sesuai restriksi indikasi Fornas.\n"+
+                        "Silakan ganti obat atau sesuaikan dengan kondisi pasien.",
+                        "Restriksi Indikasi Fornas",
+                        JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            } catch(Exception exRestr){
+                System.out.println("Gagal cek restriksi obat: "+exRestr);
+            }
+            // Cek 1: resep ganda dalam kunjungan yang sama (dokter input 2x)
+            StringBuilder dupSameVisit = new StringBuilder();
+            for(int j=0;j<tbResep.getRowCount();j++){
+                if(Valid.SetAngka(tbResep.getValueAt(j,1).toString())>0){
+                    String kodeObat = tbResep.getValueAt(j,3).toString();
+                    String namaObat = tbResep.getValueAt(j,4).toString();
+                    if(Sequel.cariInteger(
+                        "select count(*) from resep_dokter rd "+
+                        "inner join resep_obat ro on rd.no_resep=ro.no_resep "+
+                        "where ro.no_rawat='"+TNoRw.getText()+"' "+
+                        "and rd.kode_brng=? "+
+                        "and rd.no_resep!='"+NoResep.getText()+"'",
+                        kodeObat)>0){
+                        dupSameVisit.append("- ").append(namaObat).append("\n");
+                    }
+                }
+            }
+            if(dupSameVisit.length()>0){
+                int pilDup1 = JOptionPane.showConfirmDialog(rootPane,
+                    "PERINGATAN: Obat berikut sudah diresepkan di kunjungan ini:\n\n"+
+                    dupSameVisit.toString()+
+                    "\nKemungkinan resep ganda (input 2x). Tetap lanjutkan menyimpan resep?",
+                    "Resep Ganda",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+                if(pilDup1 != JOptionPane.YES_OPTION) return;
+            }
+            // Cek 2: duplikasi obat dari rujukan internal poli lain pada hari yang sama
             StringBuilder dupObat = new StringBuilder();
             for(int j=0;j<tbResep.getRowCount();j++){
                 if(Valid.SetAngka(tbResep.getValueAt(j,1).toString())>0){
@@ -1050,14 +1247,14 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 }
             }
             if(dupObat.length()>0){
-                int pilDup = JOptionPane.showConfirmDialog(rootPane,
+                int pilDup2 = JOptionPane.showConfirmDialog(rootPane,
                     "PERINGATAN: Obat berikut sudah diresepkan di kunjungan poli lain pasien hari ini:\n\n"+
                     dupObat.toString()+
                     "\nKemungkinan duplikasi resep dari rujukan internal.\nTetap lanjutkan menyimpan resep?",
                     "Duplikasi Obat Rujukan Internal",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.WARNING_MESSAGE);
-                if(pilDup != JOptionPane.YES_OPTION) return;
+                if(pilDup2 != JOptionPane.YES_OPTION) return;
             }
             int reply = JOptionPane.showConfirmDialog(rootPane,"Eeiiiiiits, udah bener belum data yang mau disimpan..??","Konfirmasi",JOptionPane.YES_NO_OPTION);
             if (reply == JOptionPane.YES_OPTION) {                 

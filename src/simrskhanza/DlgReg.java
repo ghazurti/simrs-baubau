@@ -1059,6 +1059,7 @@ public final class DlgReg extends javax.swing.JDialog {
         panelGlass6 = new widget.panelisi();
         BtnSimpan = new widget.Button();
         BtnBatal = new widget.Button();
+        BtnBerkas = new widget.Button();
         BtnEdit = new widget.Button();
         BtnHapus = new widget.Button();
         BtnPrint = new widget.Button();
@@ -4582,6 +4583,22 @@ public final class DlgReg extends javax.swing.JDialog {
         MenuInputData.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         MenuInputData.setName("MenuInputData"); // NOI18N
         MenuInputData.setPreferredSize(new java.awt.Dimension(260, 26));
+        
+        ppBerkasDiterima = new javax.swing.JMenuItem();
+        ppBerkasDiterima.setBackground(new java.awt.Color(255, 255, 254));
+        ppBerkasDiterima.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        ppBerkasDiterima.setForeground(new java.awt.Color(50, 50, 50));
+        ppBerkasDiterima.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
+        ppBerkasDiterima.setText("Berkas Diterima");
+        ppBerkasDiterima.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ppBerkasDiterima.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        ppBerkasDiterima.setName("ppBerkasDiterima"); // NOI18N
+        ppBerkasDiterima.setPreferredSize(new java.awt.Dimension(250, 26));
+        ppBerkasDiterima.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ppBerkasDiterimaActionPerformed(evt);
+            }
+        });
 
         ppCatatanPasien.setBackground(new java.awt.Color(255, 255, 254));
         ppCatatanPasien.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -5692,6 +5709,22 @@ public final class DlgReg extends javax.swing.JDialog {
         MenuInputData1.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         MenuInputData1.setName("MenuInputData1"); // NOI18N
         MenuInputData1.setPreferredSize(new java.awt.Dimension(210, 26));
+        
+        ppBerkasDiterima1 = new javax.swing.JMenuItem();
+        ppBerkasDiterima1.setBackground(new java.awt.Color(255, 255, 254));
+        ppBerkasDiterima1.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        ppBerkasDiterima1.setForeground(new java.awt.Color(50, 50, 50));
+        ppBerkasDiterima1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
+        ppBerkasDiterima1.setText("Berkas Diterima");
+        ppBerkasDiterima1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        ppBerkasDiterima1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        ppBerkasDiterima1.setName("ppBerkasDiterima1"); // NOI18N
+        ppBerkasDiterima1.setPreferredSize(new java.awt.Dimension(200, 26));
+        ppBerkasDiterima1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ppBerkasDiterima1ActionPerformed(evt);
+            }
+        });
 
         ppBerkasDigital1.setBackground(new java.awt.Color(255, 255, 254));
         ppBerkasDigital1.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
@@ -6462,6 +6495,18 @@ public final class DlgReg extends javax.swing.JDialog {
         FormInput.add(BtnPasien);
         BtnPasien.setBounds(852, 12, 28, 23);
 
+        BtnBerkas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
+        BtnBerkas.setMnemonic('B');
+        BtnBerkas.setToolTipText("ALt+B");
+        BtnBerkas.setName("BtnBerkas"); // NOI18N
+        BtnBerkas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnBerkasActionPerformed(evt);
+            }
+        });
+        FormInput.add(BtnBerkas);
+        BtnBerkas.setBounds(882, 12, 28, 23);
+
         TPasien.setEditable(false);
         TPasien.setHighlighter(null);
         TPasien.setName("TPasien"); // NOI18N
@@ -6899,6 +6944,16 @@ public final class DlgReg extends javax.swing.JDialog {
     private void TAlmtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TAlmtKeyPressed
         Valid.pindah(evt,THbngn,kdpnj);
 }//GEN-LAST:event_TAlmtKeyPressed
+
+        private void BtnBerkasActionPerformed(java.awt.event.ActionEvent evt) {                                          
+        if(TNoRw.getText().trim().equals("")||TPasien.getText().trim().equals("")){
+            Valid.textKosong(TNoRw,"pasien");
+        }else{
+            Sequel.menyimpan("mutasi_berkas","'"+TNoRw.getText()+"','Sudah Diterima',now(),now(),'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00'","status='Sudah Diterima',dikirim=if(dikirim='0000-00-00 00:00:00',now(),dikirim),diterima=now()","no_rawat='"+TNoRw.getText()+"'");
+            tampil();
+            emptTeks();
+        }
+    }
 
     private void BtnPasienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPasienActionPerformed
         akses.setform("DlgReg");
@@ -10437,7 +10492,7 @@ private void MnLaporanRekapKunjunganBulananPoliActionPerformed(java.awt.event.Ac
             JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
             tbPetugas.requestFocus();
         }else{
-            Sequel.menyimpan("mutasi_berkas","'"+TNoRw.getText()+"','Sudah Diterima',now(),now(),'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00'","status='Sudah Diterima',diterima=now()","no_rawat='"+TNoRw.getText()+"'");
+            Sequel.menyimpan("mutasi_berkas","'"+TNoRw.getText()+"','Sudah Diterima',now(),now(),'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00'","status='Sudah Diterima',dikirim=if(dikirim='0000-00-00 00:00:00',now(),dikirim),diterima=now()","no_rawat='"+TNoRw.getText()+"'");
             Valid.editTable(tabMode,"reg_periksa","no_rawat",TNoRw,"stts='Berkas Diterima'");
             if(tbPetugas.getSelectedRow()>-1){
                 tabMode.setValueAt("Berkas Diterima",tbPetugas.getSelectedRow(),19);
@@ -11382,8 +11437,25 @@ private void MnLaporanRekapKunjunganBulananPoliActionPerformed(java.awt.event.Ac
                     "reg_periksa.kd_pj=penjab.kd_pj and reg_periksa.kd_poli=poliklinik.kd_poli "+
                     "where reg_periksa.no_rawat='"+TNoRw.getText()+"' ",param);
             this.setCursor(Cursor.getDefaultCursor());
-        }
-    }//GEN-LAST:event_MnSPBK1ActionPerformed
+        }                
+    }//GEN-LAST:event_ppCatatanPasienActionPerformed
+
+    private void ppBerkasDiterimaActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabMode.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+            TNoReg.requestFocus();
+        }else{
+            if(tbPetugas.getSelectedRow()!= -1){ 
+                String no_rawat = tbPetugas.getValueAt(tbPetugas.getSelectedRow(),11).toString();
+                try {
+                    Sequel.menyimpan("mutasi_berkas","'"+no_rawat+"','Sudah Diterima',now(),now(),'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00'","status='Sudah Diterima',dikirim=if(dikirim='0000-00-00 00:00:00',now(),dikirim),diterima=now()","no_rawat='"+no_rawat+"'");
+                    JOptionPane.showMessageDialog(null,"Berkas Diterima Berhasil Dicatat");
+                } catch (Exception e) {
+                    System.out.println("Notifikasi : "+e);
+                }
+            }
+        }                
+    }
 
     private void ppBerkasDigitalBtnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ppBerkasDigitalBtnPrintActionPerformed
         if(tabMode.getRowCount()==0){
@@ -11441,6 +11513,23 @@ private void MnLaporanRekapKunjunganBulananPoliActionPerformed(java.awt.event.Ac
             }
         }                
     }//GEN-LAST:event_ppBerkasDigital1BtnPrintActionPerformed
+
+    private void ppBerkasDiterima1ActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabMode2.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+            TNoReg.requestFocus();
+        }else{
+            if(tbPetugas2.getSelectedRow()!= -1){ 
+                String no_rawat = tbPetugas2.getValueAt(tbPetugas2.getSelectedRow(),11).toString();
+                try {
+                    Sequel.menyimpan("mutasi_berkas","'"+no_rawat+"','Sudah Diterima',now(),now(),'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00'","status='Sudah Diterima',dikirim=if(dikirim='0000-00-00 00:00:00',now(),dikirim),diterima=now()","no_rawat='"+no_rawat+"'");
+                    JOptionPane.showMessageDialog(null,"Berkas Diterima Berhasil Dicatat");
+                } catch (Exception e) {
+                    System.out.println("Notifikasi : "+e);
+                }
+            }
+        }                
+    }
 
     private void MnStatusBaruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnStatusBaruActionPerformed
         if(TNoRw.getText().trim().equals("")){
@@ -16684,17 +16773,14 @@ private void MnLaporanRekapKunjunganBulananPoliActionPerformed(java.awt.event.Ac
             return;
         }
         String norawat = tbPetugas.getValueAt(tbPetugas.getSelectedRow(), 2).toString();
-        String nobooking = Sequel.cariIsi("select nobooking from referensi_mobilejkn_bpjs where no_rawat=? and status<>'Batal'", norawat);
+        String nobooking = Sequel.cariIsi("select nobooking from referensi_mobilejkn_bpjs where no_rawat=? and status='Belum'", norawat);
         if (nobooking == null || nobooking.trim().equals("")) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Tidak ada booking Mobile JKN aktif untuk pasien ini", "Info", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this, "Tidak ada booking Mobile JKN aktif yang bisa dibatalkan untuk pasien ini", "Info", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        String keterangan = (String) javax.swing.JOptionPane.showInputDialog(
-            this, "Keterangan pembatalan:", "Batal Antrean JKN",
-            javax.swing.JOptionPane.PLAIN_MESSAGE, null, null,
-            "Terjadi Perubahan Jadwal dokter, silakan daftar kembali"
-        );
-        if (keterangan == null || keterangan.trim().equals("")) return;
+        int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(this, "Batalkan Antrean Mobile JKN untuk pasien ini?", "Konfirmasi Batal JKN", javax.swing.JOptionPane.YES_NO_OPTION);
+        if (konfirmasi != javax.swing.JOptionPane.YES_OPTION) return;
+        String keterangan = "Terjadi Perubahan Jadwal dokter, silakan daftar kembali";
         try {
             ApiMobileJKN apiMobileJKN = new ApiMobileJKN();
             HttpHeaders headers = new HttpHeaders();
@@ -16704,7 +16790,7 @@ private void MnLaporanRekapKunjunganBulananPoliActionPerformed(java.awt.event.Ac
             headers.add("x-timestamp", utc);
             headers.add("x-signature", apiMobileJKN.getHmac(utc));
             headers.add("user_key", koneksiDB.USERKEYAPIMOBILEJKN());
-            String requestJson = "{\"kodebooking\":\"" + nobooking + "\",\"keterangan\":\"" + keterangan + "\"}";
+            String requestJson = "{\"kodebooking\":\"" + nobooking + "\",\"keterangan\":\"" + keterangan.replace("\"","\\\"") + "\"}";
             HttpEntity<String> requestEntity = new HttpEntity<>(requestJson, headers);
             String url = koneksiDB.URLAPIMOBILEJKN() + "/batalantrean";
             System.out.println("[BatalJKN] URL: " + url);
@@ -16758,7 +16844,7 @@ private void MnLaporanRekapKunjunganBulananPoliActionPerformed(java.awt.event.Ac
         String urlfinger   = koneksiDB.URLFINGER();
         String userfinger  = koneksiDB.USERFINGER();
         String passfinger  = koneksiDB.PASSFINGER();
-        if (urlaplikasi.isEmpty()) {
+        if (urlaplikasi == null || urlaplikasi.isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this, "Path aplikasi finger print belum dikonfigurasi di database.xml (URLAPLIKASIFINGERPRINT)", "Konfigurasi", javax.swing.JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -16819,6 +16905,7 @@ private void MnLaporanRekapKunjunganBulananPoliActionPerformed(java.awt.event.Ac
     private widget.TextBox AsalRujukan;
     private widget.Button BtnAll;
     private widget.Button BtnBatal;
+    private widget.Button BtnBerkas;
     private widget.Button BtnCari;
     private widget.Button BtnDokter;
     private widget.Button BtnEdit;
@@ -17208,6 +17295,8 @@ private void MnLaporanRekapKunjunganBulananPoliActionPerformed(java.awt.event.Ac
     private javax.swing.JMenuItem ppBerkas;
     private javax.swing.JMenuItem ppBerkasDigital;
     private javax.swing.JMenuItem ppBerkasDigital1;
+    private javax.swing.JMenuItem ppBerkasDiterima;
+    private javax.swing.JMenuItem ppBerkasDiterima1;
     private javax.swing.JMenuItem ppCatatanAdimeGizi;
     private javax.swing.JMenuItem ppCatatanPasien;
     private javax.swing.JMenuItem ppDataIndukKecelakaan;

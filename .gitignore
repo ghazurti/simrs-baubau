@@ -36,3 +36,5 @@ Thumbs.db
 
 # Config dengan IP internal
 KhanzaUpdater/settingupdate/config.xml
+/APMSEPDuaPrinter/nbproject/private/
+APMSEPDuaPrinter/

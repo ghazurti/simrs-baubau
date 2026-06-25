@@ -637,26 +637,51 @@ public final class SatuSehatKirimMedicationDispense extends javax.swing.JDialog 
                 try {
                     idpasien=cekViaSatuSehat.tampilIDPasien(tbObat.getValueAt(i,5).toString());
                     iddokter=cekViaSatuSehat.tampilIDParktisi(tbObat.getValueAt(i,7).toString());
-                    arrSplit = tbObat.getValueAt(i,24).toString().toLowerCase().split("x");
+                    String signaRaw = tbObat.getValueAt(i,24).toString().toLowerCase().trim();
                     signa1="1";
-                    try {
-                        if(!arrSplit[0].replaceAll("[^0-9.]+", "").equals("")){
-                            signa1=arrSplit[0].replaceAll("[^0-9.]+", "");
-                        }
-                    } catch (Exception e) {
-                        signa1="1";
-                    }
                     signa2="1";
-                    try {
-                        if(!arrSplit[1].replaceAll("[^0-9.]+", "").equals("")){
-                            signa2=arrSplit[1].replaceAll("[^0-9.]+", "");
+                    if(signaRaw.contains("x")){
+                        arrSplit = signaRaw.split("x");
+                        try {
+                            if(!arrSplit[0].replaceAll("[^0-9.]+", "").equals("")){
+                                signa1=arrSplit[0].replaceAll("[^0-9.]+", "");
+                            }
+                        } catch (Exception e) { signa1="1"; }
+                        try {
+                            if(!arrSplit[1].replaceAll("[^0-9.]+", "").equals("")){
+                                signa2=arrSplit[1].replaceAll("[^0-9.]+", "");
+                            }
+                        } catch (Exception e) { signa2="1"; }
+                    } else if(signaRaw.contains("-")){
+                        // notasi pagi-siang-malam, mis "0-0-1" / "1-1-1": frequency = jumlah slot tidak nol
+                        arrSplit = signaRaw.split("-");
+                        int freq=0; String dose="1";
+                        for(String s: arrSplit){
+                            String v=s.replaceAll("[^0-9.]+", "");
+                            try {
+                                if(!v.equals("") && Double.parseDouble(v)>0){ freq++; dose=v; }
+                            } catch (Exception e) { }
                         }
-                    } catch (Exception e) {
-                        signa2="1";
-                    } 
+                        signa1 = freq>0 ? String.valueOf(freq) : "1";
+                        signa2 = dose;
+                    } else {
+                        String v=signaRaw.replaceAll("[^0-9.]+", "");
+                        if(!v.equals("")) signa1=v;
+                    }
+                    // buang leading zero supaya JSON number valid (mis "001" -> "1")
+                    signa1 = signa1.replaceFirst("^0+(?=\\d)", "");
+                    signa2 = signa2.replaceFirst("^0+(?=\\d)", "");
+                    if(signa1.equals("") || signa1.equals("0")) signa1="1";
+                    if(signa2.equals("") || signa2.equals("0")) signa2="1";
                     
                     try{
                         idrequest=Sequel.cariIsi("select satu_sehat_medicationrequest.id_medicationrequest from satu_sehat_medicationrequest where satu_sehat_medicationrequest.no_resep='"+tbObat.getValueAt(i,25).toString()+"' and satu_sehat_medicationrequest.kode_brng='"+tbObat.getValueAt(i,11).toString()+"'");
+                        if(idrequest==null || idrequest.equals("")){
+                            JOptionPane.showMessageDialog(null,"Gagal kirim MedicationDispense baris "+(i+1)+" (Resep "+tbObat.getValueAt(i,25).toString()+"):\n"
+                                + "MedicationRequest belum ter-bridging ke SatuSehat.\n"
+                                + "Kirim dulu MedicationRequest resep ini, baru MedicationDispense.");
+                            continue;
+                        }
                         headers = new HttpHeaders();
                         headers.setContentType(MediaType.APPLICATION_JSON);
                         headers.add("Authorization", "Bearer "+api.TokenSatuSehat());
@@ -713,8 +738,8 @@ public final class SatuSehatKirimMedicationDispense extends javax.swing.JDialog 
                                         "}],"
                                     )+
                                     "\"quantity\": {" +
-                                        "\"system\": \""+tbObat.getValueAt(i,20).toString()+"\"," +
-                                        "\"code\": \""+tbObat.getValueAt(i,19).toString()+"\"," +
+                                        "\"system\": \""+dqSystem(tbObat.getValueAt(i,20).toString(),tbObat.getValueAt(i,19).toString())+"\"," +
+                                        "\"code\": \""+dqCode(tbObat.getValueAt(i,20).toString(),tbObat.getValueAt(i,19).toString(),tbObat.getValueAt(i,15).toString())+"\"," +
                                         "\"value\": "+tbObat.getValueAt(i,22).toString()+
                                     "}," +
                                     "\"whenPrepared\": \""+tbObat.getValueAt(i,21).toString().replaceAll(" ","T")+"Z\"," +
@@ -725,7 +750,7 @@ public final class SatuSehatKirimMedicationDispense extends javax.swing.JDialog 
                                             "\"text\": \""+tbObat.getValueAt(i,24).toString()+"\"," +
                                             "\"timing\": {" +
                                                 "\"repeat\": {" +
-                                                    "\"frequency\": "+signa2+"," +
+                                                    "\"frequency\": "+signa1+"," +
                                                     "\"period\": 1," +
                                                     "\"periodUnit\": \"d\"" +
                                                 "}" +
@@ -742,10 +767,10 @@ public final class SatuSehatKirimMedicationDispense extends javax.swing.JDialog 
                                             "\"doseAndRate\": [" +
                                                 "{" +
                                                     "\"doseQuantity\": {" +
-                                                        "\"value\": "+signa1+"," +
+                                                        "\"value\": "+signa2+"," +
                                                         "\"unit\": \""+tbObat.getValueAt(i,19).toString()+"\"," +
-                                                        "\"system\": \""+tbObat.getValueAt(i,20).toString()+"\"," +
-                                                        "\"code\": \""+tbObat.getValueAt(i,19).toString()+"\"" +
+                                                        "\"system\": \""+dqSystem(tbObat.getValueAt(i,20).toString(),tbObat.getValueAt(i,19).toString())+"\"," +
+                                                        "\"code\": \""+dqCode(tbObat.getValueAt(i,20).toString(),tbObat.getValueAt(i,19).toString(),tbObat.getValueAt(i,15).toString())+"\"" +
                                                     "}" +
                                                 "}" +
                                             "]" +
@@ -768,6 +793,8 @@ public final class SatuSehatKirimMedicationDispense extends javax.swing.JDialog 
                                 tbObat.setValueAt(false,i,0);
                             }
                         }
+                    }catch(org.springframework.web.client.HttpStatusCodeException e){
+                        System.out.println("Notifikasi Bridging : "+e.getStatusCode()+" → "+e.getResponseBodyAsString());
                     }catch(Exception e){
                         System.out.println("Notifikasi Bridging : "+e);
                     }
@@ -796,23 +823,42 @@ public final class SatuSehatKirimMedicationDispense extends javax.swing.JDialog 
                 try {
                     idpasien=cekViaSatuSehat.tampilIDPasien(tbObat.getValueAt(i,5).toString());
                     iddokter=cekViaSatuSehat.tampilIDParktisi(tbObat.getValueAt(i,7).toString());
-                    arrSplit = tbObat.getValueAt(i,24).toString().toLowerCase().split("x");
+                    String signaRaw = tbObat.getValueAt(i,24).toString().toLowerCase().trim();
                     signa1="1";
-                    try {
-                        if(!arrSplit[0].replaceAll("[^0-9.]+", "").equals("")){
-                            signa1=arrSplit[0].replaceAll("[^0-9.]+", "");
-                        }
-                    } catch (Exception e) {
-                        signa1="1";
-                    }
                     signa2="1";
-                    try {
-                        if(!arrSplit[1].replaceAll("[^0-9.]+", "").equals("")){
-                            signa2=arrSplit[1].replaceAll("[^0-9.]+", "");
+                    if(signaRaw.contains("x")){
+                        arrSplit = signaRaw.split("x");
+                        try {
+                            if(!arrSplit[0].replaceAll("[^0-9.]+", "").equals("")){
+                                signa1=arrSplit[0].replaceAll("[^0-9.]+", "");
+                            }
+                        } catch (Exception e) { signa1="1"; }
+                        try {
+                            if(!arrSplit[1].replaceAll("[^0-9.]+", "").equals("")){
+                                signa2=arrSplit[1].replaceAll("[^0-9.]+", "");
+                            }
+                        } catch (Exception e) { signa2="1"; }
+                    } else if(signaRaw.contains("-")){
+                        // notasi pagi-siang-malam, mis "0-0-1" / "1-1-1": frequency = jumlah slot tidak nol
+                        arrSplit = signaRaw.split("-");
+                        int freq=0; String dose="1";
+                        for(String s: arrSplit){
+                            String v=s.replaceAll("[^0-9.]+", "");
+                            try {
+                                if(!v.equals("") && Double.parseDouble(v)>0){ freq++; dose=v; }
+                            } catch (Exception e) { }
                         }
-                    } catch (Exception e) {
-                        signa2="1";
-                    } 
+                        signa1 = freq>0 ? String.valueOf(freq) : "1";
+                        signa2 = dose;
+                    } else {
+                        String v=signaRaw.replaceAll("[^0-9.]+", "");
+                        if(!v.equals("")) signa1=v;
+                    }
+                    // buang leading zero supaya JSON number valid (mis "001" -> "1")
+                    signa1 = signa1.replaceFirst("^0+(?=\\d)", "");
+                    signa2 = signa2.replaceFirst("^0+(?=\\d)", "");
+                    if(signa1.equals("") || signa1.equals("0")) signa1="1";
+                    if(signa2.equals("") || signa2.equals("0")) signa2="1";
                     
                     try{
                         headers = new HttpHeaders();
@@ -867,9 +913,9 @@ public final class SatuSehatKirimMedicationDispense extends javax.swing.JDialog 
                                         "\"display\": \""+tbObat.getValueAt(i,32).toString()+"\"" +
                                     "},"+
                                     "\"quantity\": {" +
-                                        "\"system\": \""+tbObat.getValueAt(i,20).toString()+"\"," +
-                                        "\"code\": \""+tbObat.getValueAt(i,19).toString()+"\"" +
-                                        "\"value\": "+tbObat.getValueAt(i,22).toString()+"," +
+                                        "\"system\": \""+dqSystem(tbObat.getValueAt(i,20).toString(),tbObat.getValueAt(i,19).toString())+"\"," +
+                                        "\"code\": \""+dqCode(tbObat.getValueAt(i,20).toString(),tbObat.getValueAt(i,19).toString(),tbObat.getValueAt(i,15).toString())+"\"," +
+                                        "\"value\": "+tbObat.getValueAt(i,22).toString()+
                                     "}," +
                                     "\"whenPrepared\": \""+tbObat.getValueAt(i,21).toString().replaceAll(" ","T")+"Z\"," +
                                     "\"whenHandedOver\": \""+tbObat.getValueAt(i,29).toString().replaceAll(" ","T")+"Z\","+
@@ -879,7 +925,7 @@ public final class SatuSehatKirimMedicationDispense extends javax.swing.JDialog 
                                             "\"text\": \""+tbObat.getValueAt(i,24).toString()+"\"," +
                                             "\"timing\": {" +
                                                 "\"repeat\": {" +
-                                                    "\"frequency\": "+signa2+"," +
+                                                    "\"frequency\": "+signa1+"," +
                                                     "\"period\": 1," +
                                                     "\"periodUnit\": \"d\"" +
                                                 "}" +
@@ -896,10 +942,10 @@ public final class SatuSehatKirimMedicationDispense extends javax.swing.JDialog 
                                             "\"doseAndRate\": [" +
                                                 "{" +
                                                     "\"doseQuantity\": {" +
-                                                        "\"value\": "+signa1+"," +
+                                                        "\"value\": "+signa2+"," +
                                                         "\"unit\": \""+tbObat.getValueAt(i,19).toString()+"\"," +
-                                                        "\"system\": \""+tbObat.getValueAt(i,20).toString()+"\"," +
-                                                        "\"code\": \""+tbObat.getValueAt(i,19).toString()+"\"" +
+                                                        "\"system\": \""+dqSystem(tbObat.getValueAt(i,20).toString(),tbObat.getValueAt(i,19).toString())+"\"," +
+                                                        "\"code\": \""+dqCode(tbObat.getValueAt(i,20).toString(),tbObat.getValueAt(i,19).toString(),tbObat.getValueAt(i,15).toString())+"\"" +
                                                     "}" +
                                                 "}" +
                                             "]" +
@@ -912,6 +958,8 @@ public final class SatuSehatKirimMedicationDispense extends javax.swing.JDialog 
                         json=api.getRest().exchange(link+"/MedicationDispense/"+tbObat.getValueAt(i,26).toString(), HttpMethod.PUT, requestEntity, String.class).getBody();
                         System.out.println("Result JSON : "+json);
                         tbObat.setValueAt(false,i,0);
+                    }catch(org.springframework.web.client.HttpStatusCodeException e){
+                        System.out.println("Notifikasi Bridging : "+e.getStatusCode()+" → "+e.getResponseBodyAsString());
                     }catch(Exception e){
                         System.out.println("Notifikasi Bridging : "+e);
                     }
@@ -1003,7 +1051,43 @@ public final class SatuSehatKirimMedicationDispense extends javax.swing.JDialog 
     private javax.swing.JMenuItem ppPilihSemua;
     private widget.Table tbObat;
     // End of variables declaration//GEN-END:variables
-    
+
+    // quantity/doseQuantity.system: SatuSehat tolak UCUM (rule 10480). Kalau UCUM, pakai v3-orderableDrugForm.
+    // Perlu dipetakan kalau system UCUM ATAU code-nya unit UCUM (mL/g/1) yg tak valid sbg kode v3-orderableDrugForm.
+    public static boolean perluPetakanDose(String denominatorSystem, String denominatorCode){
+        if(denominatorSystem!=null && denominatorSystem.equals("http://unitsofmeasure.org")) return true;
+        String c = denominatorCode==null?"":denominatorCode.trim().toLowerCase();
+        return c.equals("ml")||c.equals("l")||c.equals("g")||c.equals("mg")||c.equals("mcg")
+            ||c.equals("ug")||c.equals("iu")||c.equals("ui")||c.equals("1")||c.equals("");
+    }
+    public static String dqSystem(String denominatorSystem, String denominatorCode){
+        return perluPetakanDose(denominatorSystem,denominatorCode)
+            ? "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm" : denominatorSystem;
+    }
+
+    // quantity/doseQuantity.code: kalau denominator UCUM (mL/g), petakan form_display -> kode v3-orderableDrugForm.
+    public static String dqCode(String denominatorSystem, String denominatorCode, String formDisplay){
+        if(!perluPetakanDose(denominatorSystem,denominatorCode)){
+            return denominatorCode; // tablet/kapsul dll (mis. TAB) sudah benar, jangan diubah
+        }
+        String fd = formDisplay==null?"":formDisplay.toLowerCase();
+        if(fd.contains("infus")) return "IVSOL";
+        if(fd.contains("injeksi")||fd.contains("injection")) return "IVSOL"; // termasuk Serbuk Injeksi
+        if(fd.contains("tetes mata")) return "OPDROP";
+        if(fd.contains("tetes telinga")) return "OTDROP";
+        if(fd.contains("tetes hidung")) return "NDROP";
+        if(fd.contains("inhal")) return "INHLSOL";
+        if(fd.contains("enema")) return "ENEMA";
+        if(fd.contains("sirup")||fd.contains("syrup")) return "SYRUP";
+        if(fd.contains("suspensi")) return "SUSP";
+        if(fd.contains("emulsi")) return "SOL";
+        if(fd.contains("gel")) return "GEL";
+        if(fd.contains("krim")||fd.contains("cream")) return "CRM";
+        if(fd.contains("salep")) return "OINT";
+        if(fd.contains("cairan obat luar")) return "TOPSOL";
+        return "SOL"; // default aman utk sediaan tak terpetakan / form_display kosong
+    }
+
     private void tampil() {
         Valid.tabelKosong(tabMode);
         try{

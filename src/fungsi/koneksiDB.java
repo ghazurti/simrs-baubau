@@ -1074,8 +1074,19 @@ public class koneksiDB {
             prop.loadFromXML(fis);
             var=prop.getProperty("NOTIFMAKSIMALNOMINALRESEPRAJAL");
         }catch(Exception e){
-            var="no"; 
+            var="no";
         }
+        return var;
+    }
+
+    public static String VALIDASIRESTRIKSIOBATBPJS(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=prop.getProperty("VALIDASIRESTRIKSIOBATBPJS");
+        }catch(Exception e){
+            var="no";
+        }
+        if(var==null) var="no";
         return var;
     }
     
@@ -1801,6 +1812,7 @@ public class koneksiDB {
         try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
             prop.loadFromXML(fis);
             var=prop.getProperty("URLAPLIKASIFINGERPRINT");
+            if(var==null) var="";
         }catch(Exception e){
             var="";
         }
@@ -1811,6 +1823,7 @@ public class koneksiDB {
         try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
             prop.loadFromXML(fis);
             var=prop.getProperty("URLFINGER");
+            if(var==null) var="";
         }catch(Exception e){
             var="";
         }
@@ -1820,7 +1833,9 @@ public class koneksiDB {
     public static String USERFINGER(){
         try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
             prop.loadFromXML(fis);
-            var=EnkripsiAES.decrypt(prop.getProperty("USERFINGER"));
+            String val = prop.getProperty("USERFINGER");
+            var = (val == null) ? "" : EnkripsiAES.decrypt(val);
+            if(var==null) var="";
         }catch(Exception e){
             var="";
         }
@@ -1830,7 +1845,43 @@ public class koneksiDB {
     public static String PASSFINGER(){
         try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
             prop.loadFromXML(fis);
-            var=EnkripsiAES.decrypt(prop.getProperty("PASSFINGER"));
+            String val = prop.getProperty("PASSFINGER");
+            var = (val == null) ? "" : EnkripsiAES.decrypt(val);
+            if(var==null) var="";
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
+
+    public static String KEYEKLAIM(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            String val = prop.getProperty("KEYEKLAIM");
+            var = (val == null || val.isEmpty()) ? "" : EnkripsiAES.decrypt(val);
+            if(var==null) var="";
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
+
+    public static String WSEKLAIM(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=prop.getProperty("WSEKLAIM");
+            if(var==null) var="";
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
+
+    public static String KELASRSEKLAIM(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=prop.getProperty("KELASRSEKLAIM");
+            if(var==null) var="";
         }catch(Exception e){
             var="";
         }

@@ -52,6 +52,7 @@ public final class DlgDkkSurveilansRanap extends javax.swing.JDialog {
     private ResultSet rs,rs2;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private volatile boolean ceksukses = false;
+    private final java.util.List<String> kodeBangsal = new java.util.ArrayList<>();
     private int i=0,hr0s7=0,hr8s28=0,kr1th=0,th1s4=0,th5s9=0,th10s14=0,th15s19=0,th20s44=0,th45s54=0,th55s59=0,
                 th60s69=0,th70plus=0,laki=0,per=0,jml=0,ttl=0,jmltotal,meninggal;
     /** Creates new form DlgLhtBiaya
@@ -120,8 +121,29 @@ public final class DlgDkkSurveilansRanap extends javax.swing.JDialog {
         }
         tbBangsal2.setDefaultRenderer(Object.class, new WarnaTable());
 
-        TKd.setDocument(new batasInput((byte)20).getKata(TKd));        
-    }    
+        TKd.setDocument(new batasInput((byte)20).getKata(TKd));
+        isiBangsal();
+    }
+
+    private void isiBangsal(){
+        try {
+            cmbBangsal.removeAllItems();
+            kodeBangsal.clear();
+            cmbBangsal.addItem("-- Semua Ruangan --");
+            kodeBangsal.add("");
+            koneksi=koneksiDB.condb();
+            PreparedStatement psb=koneksi.prepareStatement("select kd_bangsal, nm_bangsal from bangsal order by nm_bangsal");
+            ResultSet rsb=psb.executeQuery();
+            while(rsb.next()){
+                kodeBangsal.add(rsb.getString("kd_bangsal"));
+                cmbBangsal.addItem(rsb.getString("nm_bangsal"));
+            }
+            rsb.close();
+            psb.close();
+        } catch (Exception e) {
+            System.out.println("Notifikasi isi bangsal : "+e);
+        }
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -143,6 +165,8 @@ public final class DlgDkkSurveilansRanap extends javax.swing.JDialog {
         Tgl1 = new widget.Tanggal();
         label18 = new widget.Label();
         Tgl2 = new widget.Tanggal();
+        labelBangsal = new widget.Label();
+        cmbBangsal = new javax.swing.JComboBox<>();
         BtnCari1 = new widget.Button();
         label12 = new widget.Label();
         BtnPrint = new widget.Button();
@@ -246,6 +270,15 @@ public final class DlgDkkSurveilansRanap extends javax.swing.JDialog {
         Tgl2.setName("Tgl2"); // NOI18N
         Tgl2.setPreferredSize(new java.awt.Dimension(100, 23));
         panelGlass5.add(Tgl2);
+
+        labelBangsal.setText("Ruang :");
+        labelBangsal.setName("labelBangsal"); // NOI18N
+        labelBangsal.setPreferredSize(new java.awt.Dimension(45, 23));
+        panelGlass5.add(labelBangsal);
+
+        cmbBangsal.setName("cmbBangsal"); // NOI18N
+        cmbBangsal.setPreferredSize(new java.awt.Dimension(180, 23));
+        panelGlass5.add(cmbBangsal);
 
         BtnCari1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/accept.png"))); // NOI18N
         BtnCari1.setMnemonic('2');
@@ -579,6 +612,8 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     private widget.Label label11;
     private widget.Label label12;
     private widget.Label label18;
+    private widget.Label labelBangsal;
+    private javax.swing.JComboBox<String> cmbBangsal;
     private widget.panelisi panelGlass5;
     private javax.swing.JMenuItem ppGrafikGolonganUmur;
     private javax.swing.JMenuItem ppGrafikHidupMati;
@@ -587,14 +622,19 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     private widget.Table tbBangsal2;
     // End of variables declaration//GEN-END:variables
 
-    private void tampil(){        
-        try{   
-            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
-            Valid.tabelKosong(tabMode); 
+    private void tampil(){
+        try{
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            Valid.tabelKosong(tabMode);
+            int idxB=cmbBangsal.getSelectedIndex();
+            String kdB=(idxB<=0)?"":kodeBangsal.get(idxB);
+            String joinKamar = kdB.isEmpty()?"":" inner join kamar_inap on kamar_inap.no_rawat=reg_periksa.no_rawat inner join kamar on kamar.kd_kamar=kamar_inap.kd_kamar ";
+            String filterB = kdB.isEmpty()?"":" and kamar.kd_bangsal='"+kdB+"' ";
             koneksi=koneksiDB.condb();
-            ps=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit,SUBSTRING(penyakit.nm_penyakit,1,80) as nm_penyakit from diagnosa_pasien inner join penyakit "+
-                    "inner join reg_periksa on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit and reg_periksa.no_rawat=diagnosa_pasien.no_rawat "+
-                    "where diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1' and reg_periksa.tgl_registrasi between ? and ? and diagnosa_pasien.kd_penyakit<>'-' group by diagnosa_pasien.kd_penyakit ");
+            ps=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit,SUBSTRING(penyakit.nm_penyakit,1,80) as nm_penyakit from diagnosa_pasien "+
+                    "inner join penyakit on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit "+
+                    "inner join reg_periksa on reg_periksa.no_rawat=diagnosa_pasien.no_rawat "+joinKamar+
+                    "where diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1' and reg_periksa.tgl_registrasi between ? and ? "+filterB+"and diagnosa_pasien.kd_penyakit<>'-' group by diagnosa_pasien.kd_penyakit ");
             try {
                 ps.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+""));
                 ps.setString(2,Valid.SetTgl(Tgl2.getSelectedItem()+""));
@@ -605,9 +645,10 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     hr0s7=0;hr8s28=0;kr1th=0;th1s4=0;th5s9=0;th10s14=0;th15s19=0;th20s44=0;th45s54=0;th55s59=0;th60s69=0;th70plus=0;laki=0;per=0;jml=0;ttl=0;meninggal=0;
                     
                     koneksi=koneksiDB.condb();
-                    ps2=koneksi.prepareStatement("select concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.jk,pasien.no_rkm_medis from pasien inner join reg_periksa inner join diagnosa_pasien "+
-                                "on pasien.no_rkm_medis=reg_periksa.no_rkm_medis and reg_periksa.no_rawat=diagnosa_pasien.no_rawat where "+
-                                "diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1' and reg_periksa.tgl_registrasi between ? and ? and diagnosa_pasien.kd_penyakit=? "+
+                    ps2=koneksi.prepareStatement("select concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.jk,pasien.no_rkm_medis from pasien "+
+                                "inner join reg_periksa on pasien.no_rkm_medis=reg_periksa.no_rkm_medis "+
+                                "inner join diagnosa_pasien on reg_periksa.no_rawat=diagnosa_pasien.no_rawat "+joinKamar+
+                                "where diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1' and reg_periksa.tgl_registrasi between ? and ? "+filterB+"and diagnosa_pasien.kd_penyakit=? "+
                                 "group by diagnosa_pasien.no_rawat");
                     try {            
                         ps2.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+""));
@@ -619,9 +660,9 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                             ttl=ttl+1;
                             jmltotal=jmltotal+1;
                             if(Sequel.cariInteger("select count(diagnosa_pasien.no_rawat) from reg_periksa inner join diagnosa_pasien "+
-                                "on reg_periksa.no_rawat=diagnosa_pasien.no_rawat where "+
+                                "on reg_periksa.no_rawat=diagnosa_pasien.no_rawat "+joinKamar+"where "+
                                 "diagnosa_pasien.status='Ranap' and reg_periksa.tgl_registrasi between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and "+
-                                "'"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and diagnosa_pasien.kd_penyakit='"+rs.getString("kd_penyakit")+"' "+
+                                "'"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' "+filterB+"and diagnosa_pasien.kd_penyakit='"+rs.getString("kd_penyakit")+"' "+
                                 "and reg_periksa.no_rkm_medis='"+rs2.getString("no_rkm_medis")+"'")==1){
                                     switch (rs2.getString("jk")) {
                                         case "L":
@@ -694,15 +735,21 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         }
     }
     
-    private void tampil2(){        
-        try{   
-            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
-            Valid.tabelKosong(tabMode2); 
+    private void tampil2(){
+        try{
+            this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            Valid.tabelKosong(tabMode2);
+            int idxB=cmbBangsal.getSelectedIndex();
+            String kdB=(idxB<=0)?"":kodeBangsal.get(idxB);
+            String joinKmr = kdB.isEmpty()?"":" inner join kamar on kamar.kd_kamar=kamar_inap.kd_kamar ";
+            String filterB = kdB.isEmpty()?"":" and kamar.kd_bangsal='"+kdB+"' ";
             koneksi=koneksiDB.condb();
-            ps3=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit,SUBSTRING(penyakit.nm_penyakit,1,80) as nm_penyakit from diagnosa_pasien inner join penyakit "+
-                    "inner join reg_periksa inner join kamar_inap on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit and reg_periksa.no_rawat=diagnosa_pasien.no_rawat "+
-                    "and kamar_inap.no_rawat=reg_periksa.no_rawat where diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1' and "+
-                    "kamar_inap.tgl_keluar between ? and ? and diagnosa_pasien.kd_penyakit<>'-' group by diagnosa_pasien.kd_penyakit ");
+            ps3=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit,SUBSTRING(penyakit.nm_penyakit,1,80) as nm_penyakit from diagnosa_pasien "+
+                    "inner join penyakit on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit "+
+                    "inner join reg_periksa on reg_periksa.no_rawat=diagnosa_pasien.no_rawat "+
+                    "inner join kamar_inap on kamar_inap.no_rawat=reg_periksa.no_rawat "+joinKmr+
+                    "where diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1' and "+
+                    "kamar_inap.tgl_keluar between ? and ? "+filterB+"and diagnosa_pasien.kd_penyakit<>'-' group by diagnosa_pasien.kd_penyakit ");
             try {
                 ps3.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+""));
                 ps3.setString(2,Valid.SetTgl(Tgl2.getSelectedItem()+""));
@@ -713,9 +760,11 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     hr0s7=0;hr8s28=0;kr1th=0;th1s4=0;th5s9=0;th10s14=0;th15s19=0;th20s44=0;th45s54=0;th55s59=0;th60s69=0;th70plus=0;laki=0;per=0;jml=0;ttl=0;meninggal=0;
                     
                     koneksi=koneksiDB.condb();
-                    ps4=koneksi.prepareStatement("select concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.jk,pasien.no_rkm_medis from pasien inner join reg_periksa inner join diagnosa_pasien "+
-                                "inner join kamar_inap on pasien.no_rkm_medis=reg_periksa.no_rkm_medis and reg_periksa.no_rawat=diagnosa_pasien.no_rawat and kamar_inap.no_rawat=reg_periksa.no_rawat where "+
-                                "diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1' and kamar_inap.tgl_keluar between ? and ? and diagnosa_pasien.kd_penyakit=? "+
+                    ps4=koneksi.prepareStatement("select concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.jk,pasien.no_rkm_medis from pasien "+
+                                "inner join reg_periksa on pasien.no_rkm_medis=reg_periksa.no_rkm_medis "+
+                                "inner join diagnosa_pasien on reg_periksa.no_rawat=diagnosa_pasien.no_rawat "+
+                                "inner join kamar_inap on kamar_inap.no_rawat=reg_periksa.no_rawat "+joinKmr+
+                                "where diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1' and kamar_inap.tgl_keluar between ? and ? "+filterB+"and diagnosa_pasien.kd_penyakit=? "+
                                 "group by diagnosa_pasien.no_rawat");
                     try {            
                         ps4.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+""));
@@ -726,10 +775,11 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                             meninggal=meninggal+Sequel.cariInteger("select ifnull(count(pasien_mati.no_rkm_medis),0) from pasien_mati where pasien_mati.no_rkm_medis=?",rs2.getString("no_rkm_medis"));
                             ttl=ttl+1;
                             jmltotal=jmltotal+1;
-                            if(Sequel.cariInteger("select count(diagnosa_pasien.no_rawat) from reg_periksa inner join diagnosa_pasien inner join kamar_inap "+
-                                "on reg_periksa.no_rawat=diagnosa_pasien.no_rawat and kamar_inap.no_rawat=reg_periksa.no_rawat where "+
+                            if(Sequel.cariInteger("select count(diagnosa_pasien.no_rawat) from reg_periksa "+
+                                "inner join diagnosa_pasien on reg_periksa.no_rawat=diagnosa_pasien.no_rawat "+
+                                "inner join kamar_inap on kamar_inap.no_rawat=reg_periksa.no_rawat "+joinKmr+"where "+
                                 "diagnosa_pasien.status='Ranap' and kamar_inap.tgl_keluar between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and "+
-                                "'"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and diagnosa_pasien.kd_penyakit='"+rs.getString("kd_penyakit")+"' "+
+                                "'"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' "+filterB+"and diagnosa_pasien.kd_penyakit='"+rs.getString("kd_penyakit")+"' "+
                                 "and reg_periksa.no_rkm_medis='"+rs2.getString("no_rkm_medis")+"'")==1){
                                     switch (rs2.getString("jk")) {
                                         case "L":

@@ -178,6 +178,41 @@ public class frmUtama extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    // doseQuantity/quantity: SatuSehat tolak UCUM (rule 10480). Kalau UCUM atau code unit UCUM (mL/g/1),
+    // pakai v3-orderableDrugForm + petakan form_display ke kode valid.
+    public static boolean perluPetakanDose(String denominatorSystem, String denominatorCode){
+        if(denominatorSystem!=null && denominatorSystem.equals("http://unitsofmeasure.org")) return true;
+        String c = denominatorCode==null?"":denominatorCode.trim().toLowerCase();
+        return c.equals("ml")||c.equals("l")||c.equals("g")||c.equals("mg")||c.equals("mcg")
+            ||c.equals("ug")||c.equals("iu")||c.equals("ui")||c.equals("1")||c.equals("");
+    }
+    public static String dqSystem(String denominatorSystem, String denominatorCode){
+        return perluPetakanDose(denominatorSystem,denominatorCode)
+            ? "http://terminology.hl7.org/CodeSystem/v3-orderableDrugForm" : denominatorSystem;
+    }
+    public static String dqCode(String denominatorSystem, String denominatorCode, String formDisplay){
+        if(!perluPetakanDose(denominatorSystem,denominatorCode)){
+            return denominatorCode; // tablet/kapsul dll (mis. TAB) sudah benar, jangan diubah
+        }
+        String fd = formDisplay==null?"":formDisplay.toLowerCase();
+        if(fd.contains("infus")) return "IVSOL";
+        if(fd.contains("injeksi")||fd.contains("injection")) return "IVSOL"; // termasuk Serbuk Injeksi
+        if(fd.contains("tetes mata")) return "OPDROP";
+        if(fd.contains("tetes telinga")) return "OTDROP";
+        if(fd.contains("tetes hidung")) return "NDROP";
+        if(fd.contains("inhal")) return "INHLSOL";
+        if(fd.contains("enema")) return "ENEMA";
+        if(fd.contains("sirup")||fd.contains("syrup")) return "SYRUP";
+        if(fd.contains("suspensi")) return "SUSP";
+        if(fd.contains("emulsi")) return "SOL";
+        if(fd.contains("gel")) return "GEL";
+        if(fd.contains("krim")||fd.contains("cream")) return "CRM";
+        if(fd.contains("salep")) return "OINT";
+        if(fd.contains("cairan obat luar")) return "TOPSOL";
+        return "SOL"; // default aman utk sediaan tak terpetakan / form_display kosong
+    }
+
     private void jam(){
         ActionListener taskPerformer = new ActionListener(){
             private int nilai_jam;
@@ -3711,8 +3746,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                             "\"doseQuantity\": {" +
                                                                 "\"value\": "+signa1+"," +
                                                                 "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                                "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                                "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                                "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                                "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                             "}" +
                                                         "}" +
                                                     "]" +
@@ -3722,8 +3757,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                 "\"quantity\": {" +
                                                     "\"value\": "+rs.getString("jml")+"," +
                                                     "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                    "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                    "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                    "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                    "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                 "}," +
                                                 "\"performer\": {" +
                                                     "\"reference\": \"Organization/"+koneksiDB.IDSATUSEHAT()+"\"" +
@@ -3875,8 +3910,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                             "\"doseQuantity\": {" +
                                                                 "\"value\": "+signa1+"," +
                                                                 "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                                "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                                "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                                "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                                "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                             "}" +
                                                         "}" +
                                                     "]" +
@@ -3886,8 +3921,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                 "\"quantity\": {" +
                                                     "\"value\": "+rs.getString("jml")+"," +
                                                     "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                    "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                    "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                    "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                    "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                 "}," +
                                                 "\"performer\": {" +
                                                     "\"reference\": \"Organization/"+koneksiDB.IDSATUSEHAT()+"\"" +
@@ -4041,8 +4076,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                             "\"doseQuantity\": {" +
                                                                 "\"value\": "+signa1+"," +
                                                                 "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                                "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                                "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                                "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                                "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                             "}" +
                                                         "}" +
                                                     "]" +
@@ -4052,8 +4087,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                 "\"quantity\": {" +
                                                     "\"value\": "+rs.getString("jml")+"," +
                                                     "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                    "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                    "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                    "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                    "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                 "}," +
                                                 "\"performer\": {" +
                                                     "\"reference\": \"Organization/"+koneksiDB.IDSATUSEHAT()+"\"" +
@@ -4207,8 +4242,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                             "\"doseQuantity\": {" +
                                                                 "\"value\": "+signa1+"," +
                                                                 "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                                "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                                "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                                "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                                "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                             "}" +
                                                         "}" +
                                                     "]" +
@@ -4218,8 +4253,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                 "\"quantity\": {" +
                                                     "\"value\": "+rs.getString("jml")+"," +
                                                     "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                    "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                    "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                    "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                    "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                 "}," +
                                                 "\"performer\": {" +
                                                     "\"reference\": \"Organization/"+koneksiDB.IDSATUSEHAT()+"\"" +
@@ -4375,8 +4410,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                 "}],"
                                             )+
                                             "\"quantity\": {" +
-                                                "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                "\"code\": \""+rs.getString("denominator_code")+"\"," +
+                                                "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"," +
                                                 "\"value\": "+rs.getString("jml")+
                                             "}," +
                                             "\"whenPrepared\": \""+rs.getString("tgl_peresepan")+"T"+rs.getString("jam_peresepan")+"Z\"," +
@@ -4406,8 +4441,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                             "\"doseQuantity\": {" +
                                                                 "\"value\": "+signa1+"," +
                                                                 "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                                "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                                "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                                "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                                "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                             "}" +
                                                         "}" +
                                                     "]" +
@@ -4557,8 +4592,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                 "}],"
                                             )+
                                             "\"quantity\": {" +
-                                                "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                "\"code\": \""+rs.getString("denominator_code")+"\"," +
+                                                "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"," +
                                                 "\"value\": "+rs.getString("jml")+
                                             "}," +
                                             "\"whenPrepared\": \""+rs.getString("tgl_peresepan")+"T"+rs.getString("jam_peresepan")+"Z\"," +
@@ -4588,8 +4623,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                             "\"doseQuantity\": {" +
                                                                 "\"value\": "+signa1+"," +
                                                                 "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                                "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                                "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                                "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                                "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                             "}" +
                                                         "}" +
                                                     "]" +
@@ -7570,8 +7605,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                             "\"doseQuantity\": {" +
                                                                 "\"value\": "+signa1+"," +
                                                                 "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                                "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                                "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                                "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                                "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                             "}" +
                                                         "}" +
                                                     "]" +
@@ -7713,8 +7748,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                             "\"doseQuantity\": {" +
                                                                 "\"value\": "+signa1+"," +
                                                                 "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                                "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                                "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                                "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                                "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                             "}" +
                                                         "}" +
                                                     "]" +
@@ -7858,8 +7893,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                             "\"doseQuantity\": {" +
                                                                 "\"value\": "+signa1+"," +
                                                                 "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                                "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                                "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                                "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                                "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                             "}" +
                                                         "}" +
                                                     "]" +
@@ -8003,8 +8038,8 @@ public class frmUtama extends javax.swing.JFrame {
                                                             "\"doseQuantity\": {" +
                                                                 "\"value\": "+signa1+"," +
                                                                 "\"unit\": \""+rs.getString("denominator_code")+"\"," +
-                                                                "\"system\": \""+rs.getString("denominator_system")+"\"," +
-                                                                "\"code\": \""+rs.getString("denominator_code")+"\"" +
+                                                                "\"system\": \""+dqSystem(rs.getString("denominator_system"),rs.getString("denominator_code"))+"\"," +
+                                                                "\"code\": \""+dqCode(rs.getString("denominator_system"),rs.getString("denominator_code"),rs.getString("form_display"))+"\"" +
                                                             "}" +
                                                         "}" +
                                                     "]" +

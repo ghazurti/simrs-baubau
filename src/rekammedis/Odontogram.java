@@ -50,7 +50,7 @@ public final class Odontogram extends javax.swing.JDialog {
     private widget.Button BtnDokter, BtnSimpan, BtnBaru, BtnHapus, BtnGanti, BtnCetak, BtnKeluar;
     private JLabel lblSelectedGigi;
     private widget.TextBox TKeyWord;
-    private JTable tbData;
+    private widget.Table tbData;
     private DefaultTableModel tabMode;
     private ToothPanel toothPanel;
     private int editId = -1;
@@ -70,61 +70,103 @@ public final class Odontogram extends javax.swing.JDialog {
     //  UI BUILD
     // =========================================================
     private void initComponents() {
-        setTitle("Pemeriksaan Odontogram");
+        setTitle("::[ Pemeriksaan Odontogram ]::");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setSize(1100, 720);
+        setSize(1100, 740);
         setLocationRelativeTo(getParent());
-        setLayout(new BorderLayout(2, 2));
+        setLayout(new BorderLayout(1, 1));
 
-        // ---- HEADER ----
-        JPanel pHeader = new JPanel(null);
-        pHeader.setPreferredSize(new Dimension(1100, 58));
-        pHeader.setBorder(BorderFactory.createEtchedBorder());
+        Font fontTahoma = new Font("Tahoma", Font.PLAIN, 11);
+        Color khanzaBg  = new Color(255, 255, 255);
+        Color khanzaBorder = new Color(240, 245, 235);
+        Color khanzaTitle  = new Color(50, 50, 50);
 
-        lbl(pHeader, "No.Rawat :",  8,  10, 75, 20);
+        // ---- ROOT INTERNAL FRAME (Khanza wrapper) ----
+        widget.InternalFrame root = new widget.InternalFrame();
+        root.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(khanzaBorder),
+            "::[ Pemeriksaan Odontogram ]::",
+            javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+            javax.swing.border.TitledBorder.DEFAULT_POSITION,
+            new Font("Tahoma", Font.BOLD, 12), khanzaTitle));
+        root.setLayout(new BorderLayout(1, 1));
+        root.setBackground(khanzaBg);
+        add(root, BorderLayout.CENTER);
+
+        // ---- HEADER (Data Pasien & Dokter) ----
+        widget.PanelBiasa pHeader = new widget.PanelBiasa();
+        pHeader.setLayout(null);
+        pHeader.setBackground(khanzaBg);
+        pHeader.setPreferredSize(new Dimension(1100, 72));
+        pHeader.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(khanzaBorder),
+            "Data Pasien & Dokter Gigi",
+            javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+            javax.swing.border.TitledBorder.DEFAULT_POSITION,
+            fontTahoma, khanzaTitle));
+
+        lblK(pHeader, "No.Rawat :",   8, 22, 70, 23);
         TNoRw = new widget.TextBox();
         TNoRw.setDocument(new batasInput((byte)17).getKata(TNoRw));
-        TNoRw.setBounds(85, 10, 140, 22); pHeader.add(TNoRw);
+        TNoRw.setBounds(82, 22, 140, 23); pHeader.add(TNoRw);
 
         TNoRM = new widget.TextBox(); TNoRM.setEditable(false);
-        TNoRM.setBounds(232, 10, 90, 22); pHeader.add(TNoRM);
+        TNoRM.setBounds(226, 22, 90, 23); pHeader.add(TNoRM);
 
         TPasien = new widget.TextBox(); TPasien.setEditable(false);
-        TPasien.setBounds(328, 10, 175, 22); pHeader.add(TPasien);
+        TPasien.setBounds(320, 22, 200, 23); pHeader.add(TPasien);
 
-        lbl(pHeader, "Tanggal :", 510, 10, 62, 20);
+        lblK(pHeader, "Tanggal :", 528, 22, 60, 23);
         DTPTgl = new widget.Tanggal();
         DTPTgl.setDisplayFormat("dd-MM-yyyy");
-        DTPTgl.setBounds(574, 10, 130, 22); pHeader.add(DTPTgl);
+        DTPTgl.setBounds(590, 22, 130, 23); pHeader.add(DTPTgl);
 
-        lbl(pHeader, "Dokter Gigi :",  8, 34, 82, 20);
-        KdDokter = new widget.TextBox(); KdDokter.setEditable(false);
-        KdDokter.setBounds(92, 34, 100, 22); pHeader.add(KdDokter);
-        BtnDokter = new widget.Button(); BtnDokter.setText("...");
-        BtnDokter.setBounds(196, 34, 26, 22); pHeader.add(BtnDokter);
-        NmDokter = new widget.TextBox(); NmDokter.setEditable(false);
-        NmDokter.setBounds(226, 34, 200, 22); pHeader.add(NmDokter);
-
-        lbl(pHeader, "No.Permintaan :", 432, 34, 112, 20);
+        lblK(pHeader, "No.Permintaan :", 730, 22, 100, 23);
         NoPermintaan = new widget.TextBox(); NoPermintaan.setEditable(false);
-        NoPermintaan.setBounds(546, 34, 158, 22); pHeader.add(NoPermintaan);
+        NoPermintaan.setBounds(834, 22, 160, 23); pHeader.add(NoPermintaan);
 
-        add(pHeader, BorderLayout.NORTH);
+        lblK(pHeader, "Dokter Gigi :",  8, 46, 70, 23);
+        KdDokter = new widget.TextBox(); KdDokter.setEditable(false);
+        KdDokter.setBounds(82, 46, 100, 23); pHeader.add(KdDokter);
+        BtnDokter = new widget.Button(); BtnDokter.setText("...");
+        BtnDokter.setBounds(184, 46, 30, 23); pHeader.add(BtnDokter);
+        NmDokter = new widget.TextBox(); NmDokter.setEditable(false);
+        NmDokter.setBounds(218, 46, 302, 23); pHeader.add(NmDokter);
+
+        root.add(pHeader, BorderLayout.NORTH);
 
         // ---- CENTER: tooth diagram (left) + diagnosis (right) ----
-        JPanel pCenter = new JPanel(new BorderLayout(4, 0));
+        widget.PanelBiasa pCenter = new widget.PanelBiasa();
+        pCenter.setLayout(new BorderLayout(4, 0));
+        pCenter.setBackground(khanzaBg);
 
         toothPanel = new ToothPanel();
-        JPanel toothWrap = new JPanel(new BorderLayout());
-        toothWrap.setBackground(Color.WHITE);
+        widget.PanelBiasa toothWrap = new widget.PanelBiasa();
+        toothWrap.setLayout(new BorderLayout());
+        toothWrap.setBackground(khanzaBg);
+        toothWrap.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(khanzaBorder),
+            "Diagram Gigi (FDI)",
+            javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+            javax.swing.border.TitledBorder.DEFAULT_POSITION,
+            fontTahoma, khanzaTitle));
         toothWrap.add(toothPanel, BorderLayout.NORTH);
         pCenter.add(toothWrap, BorderLayout.CENTER);
         pCenter.add(buildRightPanel(), BorderLayout.EAST);
 
-        add(pCenter, BorderLayout.CENTER);
+        root.add(pCenter, BorderLayout.CENTER);
 
         // ---- BOTTOM: table + search + buttons ----
-        JPanel pBottom = new JPanel(new BorderLayout(2, 2));
+        widget.PanelBiasa pBottom = new widget.PanelBiasa();
+        pBottom.setLayout(new BorderLayout(1, 1));
+        pBottom.setBackground(khanzaBg);
+        pBottom.setPreferredSize(new Dimension(1100, 220));
+        pBottom.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(khanzaBorder),
+            "Riwayat Pemeriksaan Odontogram",
+            javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+            javax.swing.border.TitledBorder.DEFAULT_POSITION,
+            fontTahoma, khanzaTitle));
 
         tabMode = new DefaultTableModel(null, new Object[]{
             "Tgl.Rawat","Status","No.Rawat","No.RM","Nama Pasien",
@@ -132,47 +174,65 @@ public final class Odontogram extends javax.swing.JDialog {
         }) {
             @Override public boolean isCellEditable(int r, int c) { return false; }
         };
-        tbData = new JTable(tabMode);
+        tbData = new widget.Table();
+        tbData.setModel(tabMode);
+        tbData.setAutoCreateRowSorter(true);
+        tbData.setFont(fontTahoma);
+        tbData.setRowHeight(20);
+        tbData.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 11));
         tbData.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tbData.setToolTipText("Klik untuk memilih data yang akan diedit/dihapus");
         int[] cw = {90,60,110,80,160,80,140,70,160,80};
         for (int i = 0; i < cw.length; i++) tbData.getColumnModel().getColumn(i).setPreferredWidth(cw[i]);
-        JScrollPane spData = new JScrollPane(tbData);
+        widget.ScrollPane spData = new widget.ScrollPane();
+        spData.setViewportView(tbData);
         spData.setPreferredSize(new Dimension(1080, 130));
         pBottom.add(spData, BorderLayout.CENTER);
 
-        // Search bar
-        JPanel pSearch = new JPanel(null);
-        pSearch.setPreferredSize(new Dimension(1080, 32));
-        lbl(pSearch, "Tgl.Rawat :", 6, 6, 72, 20);
+        // Search bar — Khanza style panelisi
+        widget.panelisi pSearch = new widget.panelisi();
+        pSearch.setPreferredSize(new Dimension(1080, 34));
+        pSearch.setLayout(new FlowLayout(FlowLayout.LEFT, 4, 4));
+        widget.Label lDari = new widget.Label(); lDari.setText("Tgl.Rawat :"); lDari.setPreferredSize(new Dimension(70, 23));
+        pSearch.add(lDari);
         DTPDari = new widget.Tanggal(); DTPDari.setDisplayFormat("dd-MM-yyyy");
-        DTPDari.setBounds(80, 6, 120, 22); pSearch.add(DTPDari);
-        lbl(pSearch, "s.d.", 206, 6, 28, 20);
+        DTPDari.setPreferredSize(new Dimension(120, 23)); pSearch.add(DTPDari);
+        widget.Label lSd = new widget.Label(); lSd.setText("s.d."); lSd.setPreferredSize(new Dimension(28, 23));
+        pSearch.add(lSd);
         DTPSampai = new widget.Tanggal(); DTPSampai.setDisplayFormat("dd-MM-yyyy");
-        DTPSampai.setBounds(236, 6, 120, 22); pSearch.add(DTPSampai);
-        lbl(pSearch, "Key Word :", 366, 6, 70, 20);
+        DTPSampai.setPreferredSize(new Dimension(120, 23)); pSearch.add(DTPSampai);
+        widget.Label lKw = new widget.Label(); lKw.setText("Key Word :"); lKw.setPreferredSize(new Dimension(68, 23));
+        pSearch.add(lKw);
         TKeyWord = new widget.TextBox();
-        TKeyWord.setBounds(438, 6, 200, 22); pSearch.add(TKeyWord);
-        widget.Button BtnTerapkan = new widget.Button(); BtnTerapkan.setText("✓");
-        BtnTerapkan.setBounds(642, 6, 28, 22); pSearch.add(BtnTerapkan);
-        widget.Button BtnCariKw = new widget.Button(); BtnCariKw.setText("...");
-        BtnCariKw.setBounds(674, 6, 28, 22); pSearch.add(BtnCariKw);
+        TKeyWord.setPreferredSize(new Dimension(220, 23)); pSearch.add(TKeyWord);
+        widget.Button BtnTerapkan = new widget.Button();
+        BtnTerapkan.setText("Refresh");
+        try { BtnTerapkan.setIcon(new ImageIcon(getClass().getResource("/picture/refresh.png"))); } catch (Exception ignored) {}
+        BtnTerapkan.setPreferredSize(new Dimension(90, 23));
+        pSearch.add(BtnTerapkan);
+        widget.Button BtnCariKw = new widget.Button();
+        BtnCariKw.setText("Cari");
+        try { BtnCariKw.setIcon(new ImageIcon(getClass().getResource("/picture/find.png"))); } catch (Exception ignored) {}
+        BtnCariKw.setPreferredSize(new Dimension(80, 23));
+        pSearch.add(BtnCariKw);
         BtnTerapkan.addActionListener(e -> tampilData());
         BtnCariKw.addActionListener(e -> cariData());
         pBottom.add(pSearch, BorderLayout.NORTH);
 
-        // Buttons
-        JPanel pBtn = new JPanel(new FlowLayout(FlowLayout.LEFT, 6, 4));
+        // Buttons — Khanza style panelisi
+        widget.panelisi pBtn = new widget.panelisi();
+        pBtn.setLayout(new FlowLayout(FlowLayout.RIGHT, 6, 4));
         BtnSimpan = btn("Simpan", "/picture/save-16x16.png");
         BtnBaru   = btn("Baru",   "/picture/new.png");
         BtnHapus  = btn("Hapus",  "/picture/stop_f2.png");
         BtnGanti  = btn("Ganti",  "/picture/edit.png");
         BtnCetak  = btn("Cetak",  "/picture/print.png");
         BtnKeluar = btn("Keluar", "/picture/exit.png");
-        pBtn.add(BtnSimpan); pBtn.add(BtnBaru); pBtn.add(BtnHapus);
-        pBtn.add(BtnGanti);  pBtn.add(BtnCetak); pBtn.add(BtnKeluar);
+        pBtn.add(BtnSimpan); pBtn.add(BtnBaru); pBtn.add(BtnGanti);
+        pBtn.add(BtnHapus);  pBtn.add(BtnCetak); pBtn.add(BtnKeluar);
         pBottom.add(pBtn, BorderLayout.SOUTH);
 
-        add(pBottom, BorderLayout.SOUTH);
+        root.add(pBottom, BorderLayout.SOUTH);
 
         // ---- EVENTS ----
         TNoRw.addKeyListener(new KeyAdapter() {
@@ -197,38 +257,65 @@ public final class Odontogram extends javax.swing.JDialog {
     }
 
     private JPanel buildRightPanel() {
-        JPanel p = new JPanel(null);
-        p.setPreferredSize(new Dimension(350, 252));
-        p.setBorder(BorderFactory.createEtchedBorder());
+        Color khanzaBg = new Color(255, 255, 255);
+        Color khanzaBorder = new Color(240, 245, 235);
+        Color khanzaTitle  = new Color(50, 50, 50);
+        Font fontTahoma = new Font("Tahoma", Font.PLAIN, 11);
+
+        widget.PanelBiasa p = new widget.PanelBiasa();
+        p.setLayout(null);
+        p.setBackground(khanzaBg);
+        p.setPreferredSize(new Dimension(360, 280));
+        p.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createLineBorder(khanzaBorder),
+            "Detail Pemeriksaan",
+            javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION,
+            javax.swing.border.TitledBorder.DEFAULT_POSITION,
+            fontTahoma, khanzaTitle));
+
+        // Highlighted "Gigi terpilih" banner
+        widget.PanelBiasa banner = new widget.PanelBiasa();
+        banner.setLayout(null);
+        banner.setBackground(new Color(232, 244, 252));
+        banner.setBorder(BorderFactory.createLineBorder(new Color(176, 213, 240)));
+        banner.setBounds(8, 22, 340, 28);
+        p.add(banner);
 
         lblSelectedGigi = new JLabel("Gigi terpilih: -");
-        lblSelectedGigi.setForeground(new Color(0, 100, 0));
-        lblSelectedGigi.setFont(new java.awt.Font("Tahoma", java.awt.Font.BOLD, 11));
-        lblSelectedGigi.setBounds(6, 8, 334, 18); p.add(lblSelectedGigi);
+        lblSelectedGigi.setForeground(new Color(13, 71, 161));
+        lblSelectedGigi.setFont(new Font("Tahoma", Font.BOLD, 11));
+        lblSelectedGigi.setBounds(8, 4, 322, 20);
+        banner.add(lblSelectedGigi);
 
-        lbl(p, "Diagnosa Gigi :", 6, 30, 100, 20);
+        lblK(p, "Diagnosa Gigi :", 8, 60, 100, 23);
         TDiagnosa = new widget.TextBox();
-        TDiagnosa.setBounds(110, 30, 224, 22); p.add(TDiagnosa);
+        TDiagnosa.setBounds(112, 60, 232, 23); p.add(TDiagnosa);
 
-        lbl(p, "Kode ICD :", 6, 56, 78, 20);
+        lblK(p, "Kode ICD :", 8, 88, 78, 23);
         TKdICD = new widget.TextBox();
-        TKdICD.setBounds(86, 56, 80, 22); p.add(TKdICD);
+        TKdICD.setBounds(88, 88, 100, 23); p.add(TKdICD);
 
-        lbl(p, "Hasil Pemeriksaan :", 6, 84, 128, 20);
+        lblK(p, "Hasil Pemeriksaan :", 8, 118, 140, 23);
         CBHasil = new widget.ComboBox();
         for (String s : HASIL_LIST) CBHasil.addItem(s);
-        CBHasil.setBounds(6, 104, 180, 22); p.add(CBHasil);
+        CBHasil.setBounds(8, 140, 170, 23); p.add(CBHasil);
 
-        lbl(p, "Rahang :", 200, 84, 60, 20);
+        lblK(p, "Rahang :", 188, 118, 70, 23);
         CBRahang = new widget.ComboBox();
         for (String s : RAHANG_LIST) CBRahang.addItem(s);
-        CBRahang.setBounds(200, 104, 134, 22); p.add(CBRahang);
+        CBRahang.setBounds(188, 140, 156, 23); p.add(CBRahang);
 
-        lbl(p, "Catatan Pemeriksaan :", 6, 134, 150, 20);
+        lblK(p, "Catatan Pemeriksaan :", 8, 172, 160, 23);
         TACatatan = new JTextArea(3, 20);
-        TACatatan.setLineWrap(true); TACatatan.setWrapStyleWord(true);
-        JScrollPane sc = new JScrollPane(TACatatan);
-        sc.setBounds(6, 154, 328, 72); p.add(sc);
+        TACatatan.setLineWrap(true);
+        TACatatan.setWrapStyleWord(true);
+        TACatatan.setFont(fontTahoma);
+        TACatatan.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+        widget.ScrollPane sc = new widget.ScrollPane();
+        sc.setViewportView(TACatatan);
+        sc.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        sc.setBounds(8, 194, 336, 78);
+        p.add(sc);
 
         return p;
     }
@@ -304,16 +391,29 @@ public final class Odontogram extends javax.swing.JDialog {
             super.paintComponent(g);
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+            // Quadrant labels (Khanza-style subtle text)
+            g2.setFont(new Font("Tahoma", Font.BOLD, 10));
+            g2.setColor(new Color(120, 120, 140));
+            g2.drawString("Kanan Atas (1)", LM, 14);
+            g2.drawString("Kiri Atas (2)",  getWidth() / 2 + 12, 14);
+            g2.drawString("Kanan Bawah (4)", LM, getHeight() - 4);
+            g2.drawString("Kiri Bawah (3)",  getWidth() / 2 + 12, getHeight() - 4);
 
             drawRow(g2, PERM_UPPER, Y_PERM_UP, PW, PH, true);
             drawRow(g2, DEC_UPPER,  Y_DEC_UP,  DW, DH, true);
 
-            // Dashed midline halfway between dec_upper bottom and dec_lower top
-            g2.setColor(new Color(180, 180, 180));
+            // Dashed horizontal midline
+            g2.setColor(new Color(200, 210, 220));
             float[] dash = {5f};
             g2.setStroke(new BasicStroke(1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, dash, 0));
             int midY = (Y_DEC_UP + DH + Y_DEC_LO) / 2;
             g2.drawLine(LM, midY, getWidth() - 10, midY);
+
+            // Dashed vertical midline (kiri/kanan)
+            int midX = getWidth() / 2 + 5;
+            g2.drawLine(midX, 18, midX, getHeight() - 18);
             g2.setStroke(new BasicStroke(1f));
 
             drawRow(g2, DEC_LOWER,  Y_DEC_LO,  DW, DH, false);
@@ -337,19 +437,22 @@ public final class Odontogram extends javax.swing.JDialog {
         }
 
         private void drawTooth(Graphics2D g2, int x, int y, int tw, int th, boolean selected) {
-            // Fill
-            g2.setColor(selected ? new Color(210, 225, 255) : Color.WHITE);
+            // Fill (Khanza accent blue when selected)
+            g2.setColor(selected ? new Color(187, 222, 251) : new Color(252, 252, 252));
             g2.fillRect(x, y, tw, th);
             // Outer border
-            g2.setColor(Color.DARK_GRAY);
+            g2.setColor(selected ? new Color(13, 71, 161) : new Color(90, 100, 120));
+            g2.setStroke(new BasicStroke(selected ? 1.6f : 1f));
             g2.drawRect(x, y, tw, th);
             // Cross + diagonals dividing into 5 surfaces (standard odontogram notation)
-            g2.setColor(new Color(110, 110, 110));
+            g2.setColor(new Color(160, 170, 180));
+            g2.setStroke(new BasicStroke(0.8f));
             int cx = x + tw / 2, cy = y + th / 2;
-            g2.drawLine(x, y, x + tw, y + th);      // diagonal ↘
-            g2.drawLine(x + tw, y, x, y + th);      // diagonal ↙
-            g2.drawLine(cx, y, cx, y + th);          // vertical
-            g2.drawLine(x, cy, x + tw, cy);          // horizontal
+            g2.drawLine(x, y, x + tw, y + th);
+            g2.drawLine(x + tw, y, x, y + th);
+            g2.drawLine(cx, y, cx, y + th);
+            g2.drawLine(x, cy, x + tw, cy);
+            g2.setStroke(new BasicStroke(1f));
         }
     }
 
@@ -358,6 +461,14 @@ public final class Odontogram extends javax.swing.JDialog {
     // =========================================================
     private void lbl(JPanel p, String t, int x, int y, int w, int h) {
         JLabel l = new JLabel(t); l.setBounds(x, y, w, h); p.add(l);
+    }
+
+    private void lblK(JPanel p, String t, int x, int y, int w, int h) {
+        widget.Label l = new widget.Label();
+        l.setText(t);
+        l.setFont(new Font("Tahoma", Font.PLAIN, 11));
+        l.setBounds(x, y, w, h);
+        p.add(l);
     }
 
     private widget.Button btn(String text, String icon) {

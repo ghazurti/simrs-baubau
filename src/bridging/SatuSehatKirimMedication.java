@@ -73,7 +73,7 @@ public final class SatuSehatKirimMedication extends javax.swing.JDialog {
         setSize(628,674);
 
         tabMode=new DefaultTableModel(null,new String[]{
-                "P","KFA Code","KFA System","Kode Barang","KFA Display","Form Code","Form System","Form Display","Status","ID Medication Satu Sehat"
+                "P","KFA Code","KFA System","Kode Barang","KFA Display","Form Code","Form System","Form Display","Status","ID Medication Satu Sehat","Num Code","Num System","Den Code","Den System"
             }){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){
                 boolean a = false;
@@ -84,7 +84,8 @@ public final class SatuSehatKirimMedication extends javax.swing.JDialog {
              }
              Class[] types = new Class[] {
                  java.lang.Boolean.class,java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class,
-                 java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class
+                 java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class,
+                 java.lang.String.class,java.lang.String.class,java.lang.String.class,java.lang.String.class
              };
              @Override
              public Class getColumnClass(int columnIndex) {
@@ -97,7 +98,7 @@ public final class SatuSehatKirimMedication extends javax.swing.JDialog {
         tbObat.setPreferredScrollableViewportSize(new Dimension(500,500));
         tbObat.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 10; i++) {
+        for (i = 0; i < 14; i++) {
             TableColumn column = tbObat.getColumnModel().getColumn(i);
             if(i==0){
                 column.setPreferredWidth(20);
@@ -119,6 +120,14 @@ public final class SatuSehatKirimMedication extends javax.swing.JDialog {
                 column.setPreferredWidth(80);
             }else if(i==9){
                 column.setPreferredWidth(210);
+            }else if(i==10){
+                column.setPreferredWidth(80);
+            }else if(i==11){
+                column.setPreferredWidth(170);
+            }else if(i==12){
+                column.setPreferredWidth(80);
+            }else if(i==13){
+                column.setPreferredWidth(170);
             }
         }
         tbObat.setDefaultRenderer(Object.class, new WarnaTable());
@@ -546,6 +555,32 @@ public final class SatuSehatKirimMedication extends javax.swing.JDialog {
                                             "}" +
                                         "]" +
                                     "}," +
+                                    "\"ingredient\": [" +
+                                        "{" +
+                                            "\"itemCodeableConcept\": {" +
+                                                "\"coding\": [" +
+                                                    "{" +
+                                                        "\"system\": \""+tbObat.getValueAt(i,2).toString()+"\"," +
+                                                        "\"code\": \""+tbObat.getValueAt(i,1).toString()+"\"," +
+                                                        "\"display\": \""+tbObat.getValueAt(i,4).toString()+"\"" +
+                                                    "}" +
+                                                "]" +
+                                            "}," +
+                                            "\"isActive\": true," +
+                                            "\"strength\": {" +
+                                                "\"numerator\": {" +
+                                                    "\"value\": 1," +
+                                                    "\"system\": \""+tbObat.getValueAt(i,11).toString()+"\"," +
+                                                    "\"code\": \""+tbObat.getValueAt(i,10).toString()+"\"" +
+                                                "}," +
+                                                "\"denominator\": {" +
+                                                    "\"value\": 1," +
+                                                    "\"system\": \""+tbObat.getValueAt(i,13).toString()+"\"," +
+                                                    "\"code\": \""+tbObat.getValueAt(i,12).toString()+"\"" +
+                                                "}" +
+                                            "}" +
+                                        "}" +
+                                    "]," +
                                     "\"extension\": [" +
                                         "{" +
                                             "\"url\": \"https://fhir.kemkes.go.id/r4/StructureDefinition/MedicationType\"," +
@@ -578,6 +613,11 @@ public final class SatuSehatKirimMedication extends javax.swing.JDialog {
                         }
                     }catch(Exception e){
                         System.out.println("Notifikasi Bridging : "+e);
+                        if(e instanceof org.springframework.web.client.HttpClientErrorException){
+                            org.springframework.web.client.HttpClientErrorException httpEx =
+                                (org.springframework.web.client.HttpClientErrorException) e;
+                            System.out.println("Response Body : "+httpEx.getResponseBodyAsString());
+                        }
                     }
                 } catch (Exception e) {
                     System.out.println("Notifikasi : "+e);
@@ -640,6 +680,32 @@ public final class SatuSehatKirimMedication extends javax.swing.JDialog {
                                             "}" +
                                         "]" +
                                     "}," +
+                                    "\"ingredient\": [" +
+                                        "{" +
+                                            "\"itemCodeableConcept\": {" +
+                                                "\"coding\": [" +
+                                                    "{" +
+                                                        "\"system\": \""+tbObat.getValueAt(i,2).toString()+"\"," +
+                                                        "\"code\": \""+tbObat.getValueAt(i,1).toString()+"\"," +
+                                                        "\"display\": \""+tbObat.getValueAt(i,4).toString()+"\"" +
+                                                    "}" +
+                                                "]" +
+                                            "}," +
+                                            "\"isActive\": true," +
+                                            "\"strength\": {" +
+                                                "\"numerator\": {" +
+                                                    "\"value\": 1," +
+                                                    "\"system\": \""+tbObat.getValueAt(i,11).toString()+"\"," +
+                                                    "\"code\": \""+tbObat.getValueAt(i,10).toString()+"\"" +
+                                                "}," +
+                                                "\"denominator\": {" +
+                                                    "\"value\": 1," +
+                                                    "\"system\": \""+tbObat.getValueAt(i,13).toString()+"\"," +
+                                                    "\"code\": \""+tbObat.getValueAt(i,12).toString()+"\"" +
+                                                "}" +
+                                            "}" +
+                                        "}" +
+                                    "]," +
                                     "\"extension\": [" +
                                         "{" +
                                             "\"url\": \"https://fhir.kemkes.go.id/r4/StructureDefinition/MedicationType\"," +
@@ -663,6 +729,11 @@ public final class SatuSehatKirimMedication extends javax.swing.JDialog {
                         tbObat.setValueAt(false,i,0);
                     }catch(Exception e){
                         System.out.println("Notifikasi Bridging : "+e);
+                        if(e instanceof org.springframework.web.client.HttpClientErrorException){
+                            org.springframework.web.client.HttpClientErrorException httpEx =
+                                (org.springframework.web.client.HttpClientErrorException) e;
+                            System.out.println("Response Body : "+httpEx.getResponseBodyAsString());
+                        }
                     }
                 } catch (Exception e) {
                     System.out.println("Notifikasi : "+e);
@@ -756,7 +827,8 @@ public final class SatuSehatKirimMedication extends javax.swing.JDialog {
             ps=koneksi.prepareStatement(
                    "select satu_sehat_mapping_obat.obat_code,satu_sehat_mapping_obat.obat_system,databarang.status,"+
                    "satu_sehat_mapping_obat.kode_brng,satu_sehat_mapping_obat.obat_display,satu_sehat_mapping_obat.form_code,"+
-                   "satu_sehat_mapping_obat.form_system,satu_sehat_mapping_obat.form_display,ifnull(satu_sehat_medication.id_medication,'') as id_medication "+
+                   "satu_sehat_mapping_obat.form_system,satu_sehat_mapping_obat.form_display,ifnull(satu_sehat_medication.id_medication,'') as id_medication,"+
+                   "satu_sehat_mapping_obat.numerator_code,satu_sehat_mapping_obat.numerator_system,satu_sehat_mapping_obat.denominator_code,satu_sehat_mapping_obat.denominator_system "+
                    "from satu_sehat_mapping_obat inner join databarang on satu_sehat_mapping_obat.kode_brng=databarang.kode_brng "+
                    "left join satu_sehat_medication on satu_sehat_medication.kode_brng=satu_sehat_mapping_obat.kode_brng "+
                    (TCari.getText().equals("")?"":"where (satu_sehat_mapping_obat.obat_code like ? or satu_sehat_mapping_obat.kode_brng like ? or "+
@@ -773,8 +845,10 @@ public final class SatuSehatKirimMedication extends javax.swing.JDialog {
                 while(rs.next()){
                     tabMode.addRow(new Object[]{
                         false,rs.getString("obat_code"),rs.getString("obat_system"),rs.getString("kode_brng"),rs.getString("obat_display"),rs.getString("form_code"),
-                        rs.getString("form_system"),rs.getString("form_display"),rs.getString("status").replaceAll("0","inactive").replaceAll("1","active"),
+                        rs.getString("form_system"),rs.getString("form_display"),"active",
                         rs.getString("id_medication"),
+                        rs.getString("numerator_code"),rs.getString("numerator_system"),
+                        rs.getString("denominator_code"),rs.getString("denominator_system")
                     });
                 }
             } catch (Exception e) {

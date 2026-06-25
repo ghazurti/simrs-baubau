@@ -14,13 +14,13 @@ import java.sql.ResultSet;
  * @author khanzamedia
  */
 public class riwayatobat {
-    private final Connection koneksi=koneksiDB.condb(); 
     private ResultSet rs,rsawal;
     private PreparedStatement ps,psawal;
     private double stokawal=0,stokakhir=0;
-    public synchronized void catatRiwayat(String kodebarang,double masuk,double keluar,String posisi,String petugas,String kdbangsal,String status,String nobatch,String nofaktur,String keterangan){        
+    public synchronized void catatRiwayat(String kodebarang,double masuk,double keluar,String posisi,String petugas,String kdbangsal,String status,String nobatch,String nofaktur,String keterangan){
+        Connection koneksi = koneksiDB.condb();
         try {
-            stokakhir=0;stokawal=0;            
+            stokakhir=0;stokawal=0;
             psawal=koneksi.prepareStatement("select gudangbarang.stok from gudangbarang where gudangbarang.kode_brng=? and gudangbarang.kd_bangsal=? and gudangbarang.no_batch=? and gudangbarang.no_faktur=?");
             try {
                 psawal.setString(1,kodebarang);

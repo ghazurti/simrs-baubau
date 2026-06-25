@@ -1,22 +1,35 @@
 <?php
     require_once('../../conf/conf.php');
-    $nosurat           = validTeks4($_POST["nosurat"],20);
-    $pengobatan_kepada = validTeks4($_POST["pengobatan_kepada"],20);
-    $nilai_kepercayaan = validTeks4($_POST["nilai_kepercayaan"],50);
-    if(file_exists(host()."/webapps/persetujuanumum/pages/upload/".$nosurat.".jpeg")){
-        @unlink(host()."/webapps/persetujuanumum/pages/upload/".$nosurat.".jpeg");
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST'
+        || empty($_POST['nosurat'])
+        || empty($_POST['image'])) {
+        http_response_code(400);
+        exit("<center><h3>Halaman ini hanya bisa diakses melalui form pengambilan TTD.</h3>"
+            ."<a href='../index.php'>Kembali</a></center>");
     }
-    
-    $img                    = $_POST["image"];
-    $folderPath             = "upload/";
-    $image_parts            = explode(";base64,", $img);
-    $image_type_aux         = explode("image/", $image_parts[0]);
-    $image_type             = $image_type_aux[1];
-    $image_base64           = base64_decode($image_parts[1]);
-    $fileName               = $nosurat.".jpeg";
-    $file                   = $folderPath . $fileName;
+
+    $nosurat           = validTeks4($_POST["nosurat"],20);
+    $pengobatan_kepada = validTeks4($_POST["pengobatan_kepada"] ?? '',20);
+    $nilai_kepercayaan = validTeks4($_POST["nilai_kepercayaan"] ?? '',50);
+
+    $folderPath = __DIR__ . "/upload/";
+    $oldFile    = $folderPath . $nosurat . ".jpeg";
+    if (file_exists($oldFile)) {
+        @unlink($oldFile);
+    }
+
+    $img         = $_POST["image"];
+    $image_parts = explode(";base64,", (string)$img);
+    if (count($image_parts) < 2) {
+        http_response_code(400);
+        exit("<center><h3>Data gambar tidak valid.</h3></center>");
+    }
+    $image_base64 = base64_decode($image_parts[1]);
+    $fileName     = $nosurat . ".jpeg";
+    $file         = $folderPath . $fileName;
     file_put_contents($file, $image_base64);
-    
+
     Tambah3("surat_persetujuan_umum_pembuat_pernyataan","'".$nosurat."','pages/upload/$fileName'");
     Ubah2("surat_persetujuan_umum","pengobatan_kepada='$pengobatan_kepada',nilai_kepercayaan='$nilai_kepercayaan' where no_surat='$nosurat'");
 ?>

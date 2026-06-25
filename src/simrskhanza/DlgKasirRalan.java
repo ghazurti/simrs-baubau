@@ -845,6 +845,7 @@ public final class DlgKasirRalan extends javax.swing.JDialog {
         jLabel10 = new widget.Label();
         LCount = new widget.Label();
         BtnPrint = new widget.Button();
+        BtnBerkasDiterima = new widget.Button();
         BtnKeluar = new widget.Button();
         panelGlass7 = new widget.panelisi();
         jLabel14 = new widget.Label();
@@ -6268,6 +6269,24 @@ public final class DlgKasirRalan extends javax.swing.JDialog {
         });
         panelGlass6.add(BtnPrint);
 
+        BtnBerkasDiterima.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); // NOI18N
+        BtnBerkasDiterima.setMnemonic('D');
+        BtnBerkasDiterima.setText("Berkas Diterima");
+        BtnBerkasDiterima.setToolTipText("Alt+D - Set status berkas diterima");
+        BtnBerkasDiterima.setName("BtnBerkasDiterima"); // NOI18N
+        BtnBerkasDiterima.setPreferredSize(new java.awt.Dimension(130, 30));
+        BtnBerkasDiterima.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnBerkasDiterimaActionPerformed(evt);
+            }
+        });
+        BtnBerkasDiterima.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                BtnBerkasDiterimaKeyPressed(evt);
+            }
+        });
+        panelGlass6.add(BtnBerkasDiterima);
+
         BtnKeluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/exit.png"))); // NOI18N
         BtnKeluar.setMnemonic('K');
         BtnKeluar.setText("Keluar");
@@ -10641,7 +10660,7 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
             JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
             tbKasirRalan.requestFocus();
         }else{
-            Sequel.menyimpan("mutasi_berkas","'"+TNoRw.getText()+"','Sudah Diterima',now(),now(),'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00'","status='Sudah Diterima',diterima=now()","no_rawat='"+TNoRw.getText()+"'");
+            Sequel.menyimpan("mutasi_berkas","'"+TNoRw.getText()+"','Sudah Diterima',now(),now(),'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00'","status='Sudah Diterima',dikirim=if(dikirim='0000-00-00 00:00:00',now(),dikirim),diterima=now()","no_rawat='"+TNoRw.getText()+"'");
             Valid.editTable(tabModekasir,"reg_periksa","no_rawat",TNoRw,"stts='Berkas Diterima'");
             if(tbKasirRalan.getSelectedRow()>-1){
                 tabModekasir.setValueAt("Berkas Diterima",tbKasirRalan.getSelectedRow(),10);
@@ -10954,6 +10973,18 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
             Valid.pindah(evt, BtnCari, BtnAll);
         }
     }//GEN-LAST:event_BtnPrintKeyPressed
+
+    private void BtnBerkasDiterimaActionPerformed(java.awt.event.ActionEvent evt) {
+        ppBerkasDIterimaBtnPrintActionPerformed(evt);
+    }
+
+    private void BtnBerkasDiterimaKeyPressed(java.awt.event.KeyEvent evt) {
+        if(evt.getKeyCode()==KeyEvent.VK_SPACE){
+            ppBerkasDIterimaBtnPrintActionPerformed(null);
+        }else{
+            Valid.pindah(evt, BtnPrint, BtnKeluar);
+        }
+    }
 
     private void MnSEPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnSEPActionPerformed
         if(tabModekasir.getRowCount()==0){
@@ -15677,6 +15708,7 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
     private widget.Button BtnKeluar;
     private widget.Button BtnKeluar2;
     private widget.Button BtnKeluar4;
+    private widget.Button BtnBerkasDiterima;
     private widget.Button BtnPrint;
     private widget.Button BtnPrint2;
     private widget.Button BtnPrint5;

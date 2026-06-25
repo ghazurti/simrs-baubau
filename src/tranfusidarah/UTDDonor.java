@@ -1542,8 +1542,26 @@ public final class UTDDonor extends javax.swing.JDialog {
         }else if(KdPetugas2.getText().trim().equals("")||NmPetugas2.getText().trim().equals("")){
             Valid.textKosong(KdPetugas2,"Petugas Uji Saring");
         }else{
+            String jmlCekal = Sequel.cariIsi(
+                "select count(*) from utd_cekal_darah c "+
+                "inner join utd_donor d on d.no_donor=c.no_donor "+
+                "where d.no_pendonor=?", NoPendonor.getText());
+            if(jmlCekal!=null && !jmlCekal.equals("") && !jmlCekal.equals("0")){
+                String detail = Sequel.cariIsi(
+                    "select concat(date_format(c.tanggal,'%d-%m-%Y'),' — ',c.keterangan) "+
+                    "from utd_cekal_darah c inner join utd_donor d on d.no_donor=c.no_donor "+
+                    "where d.no_pendonor=? order by c.tanggal desc limit 1", NoPendonor.getText());
+                JOptionPane.showMessageDialog(rootPane,
+                    "Pendonor ini terdaftar di Cekal Darah dan belum dihapus.\n"+
+                    "Donor baru TIDAK DAPAT disimpan.\n\n"+
+                    "Cekal terakhir: "+(detail==null?"-":detail)+"\n\n"+
+                    "Silakan periksa form Cekal Darah terlebih dahulu.",
+                    "Cekal Darah",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             if(Sequel.menyimpantf("utd_donor","?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?","Nomor Donor",17,new String[]{
-                    NomorDonor.getText(),NoPendonor.getText(),Valid.SetTgl(Tanggal.getSelectedItem()+""), 
+                    NomorDonor.getText(),NoPendonor.getText(),Valid.SetTgl(Tanggal.getSelectedItem()+""),
                     Dinas.getSelectedItem().toString(),Tensi.getText(),NomorBag.getText(),JenisBag.getSelectedItem().toString(), 
                     JenisDonor.getSelectedItem().toString(),TempatAftap.getSelectedItem().toString(), 
                     KdPetugas.getText(),HBSAg.getSelectedItem().toString(),HCV.getSelectedItem().toString(), 
