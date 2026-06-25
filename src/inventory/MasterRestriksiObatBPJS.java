@@ -27,7 +27,7 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
 
     // --- tabel utama ---
     private final DefaultTableModel tabMode = new DefaultTableModel(
-        new Object[]{"Kode Barang","Nama Barang","KdJenis","Kd PJ","Max Jml","Max Iter","Approval","Aktif","Keterangan","Restriksi","Level"}, 0
+        new Object[]{"Kode Barang","Nama Barang","KdJenis","Kd PJ","Max Jml","Max Iter","Aktif","Keterangan","Restriksi","Level"}, 0
     ) { @Override public boolean isCellEditable(int r, int c) { return false; } };
     private widget.Table tbData = new widget.Table();
 
@@ -42,11 +42,10 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
     private widget.TextBox TKode       = new widget.TextBox();
     private widget.Label   LNama       = new widget.Label();
     private widget.TextBox TKdJenis    = new widget.TextBox();
-    private widget.TextBox TKdPJ       = new widget.TextBox();
+    @SuppressWarnings("unchecked")
+    private widget.ComboBox TKdPJ      = new widget.ComboBox();
     private widget.TextBox TMaxJml     = new widget.TextBox();
     private widget.TextBox TMaxIter    = new widget.TextBox();
-    @SuppressWarnings("unchecked")
-    private widget.ComboBox CbApproval = new widget.ComboBox();
     @SuppressWarnings("unchecked")
     private widget.ComboBox CbAktif    = new widget.ComboBox();
     private widget.TextBox TKet        = new widget.TextBox();
@@ -81,7 +80,6 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
     }
 
     private void initWidgets() {
-        CbApproval.setModel(new DefaultComboBoxModel<>(new String[]{"N", "Y"}));
         CbAktif.setModel(new DefaultComboBoxModel<>(new String[]{"Y", "N"}));
         CbLevel.setModel(new DefaultComboBoxModel<>(new String[]{
             "0 - ALL", "1 - FKTP", "2 - FKRTL Tk.2", "3 - FKRTL Tk.3"
@@ -101,13 +99,13 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
 
         TCariObat.setDocument(new batasInput((byte) 100).getKata(TCariObat));
         TKdJenis.setDocument(new batasInput((byte) 20).getKata(TKdJenis));
-        TKdPJ.setDocument(new batasInput((byte) 20).getKata(TKdPJ));
+        loadPenjabModel();
         TMaxJml.setDocument(new batasInput((byte) 15).getKata(TMaxJml));
         TMaxIter.setDocument(new batasInput((byte) 5).getKata(TMaxIter));
         TKet.setDocument(new batasInput((byte) 200).getKata(TKet));
 
         TKdJenis.setText("ALL");
-        TKdPJ.setText("ALL");
+        setKdPj("ALL");
         TMaxIter.setText("0");
 
         // tabel utama
@@ -116,7 +114,7 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
         tbData.setRowHeight(20);
         tbData.setDefaultRenderer(Object.class, new WarnaTable());
         tbData.setModel(tabMode);
-        int[] w = {100, 200, 60, 60, 60, 55, 60, 40, 180, 240, 80};
+        int[] w = {100, 200, 60, 60, 60, 55, 40, 180, 240, 80};
         for (int i = 0; i < w.length; i++) tbData.getColumnModel().getColumn(i).setPreferredWidth(w[i]);
 
         // tabel cari obat
@@ -246,7 +244,7 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
 
         widget.Label lKdPJ = new widget.Label(); lKdPJ.setText("Kd PJ :");
         lKdPJ.setPreferredSize(new Dimension(45, 23));
-        TKdPJ.setPreferredSize(new Dimension(80, 23));
+        TKdPJ.setPreferredSize(new Dimension(180, 23));
 
         widget.Label lMJml = new widget.Label(); lMJml.setText("Max Jml :");
         lMJml.setPreferredSize(new Dimension(60, 23));
@@ -255,10 +253,6 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
         widget.Label lMIter = new widget.Label(); lMIter.setText("Max Iter :");
         lMIter.setPreferredSize(new Dimension(60, 23));
         TMaxIter.setPreferredSize(new Dimension(40, 23));
-
-        widget.Label lAppr = new widget.Label(); lAppr.setText("Approval :");
-        lAppr.setPreferredSize(new Dimension(60, 23));
-        CbApproval.setPreferredSize(new Dimension(55, 23));
 
         widget.Label lAkt = new widget.Label(); lAkt.setText("Aktif :");
         lAkt.setPreferredSize(new Dimension(38, 23));
@@ -273,7 +267,6 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
         pForm.add(lKdPJ); pForm.add(TKdPJ);
         pForm.add(lMJml); pForm.add(TMaxJml);
         pForm.add(lMIter);pForm.add(TMaxIter);
-        pForm.add(lAppr); pForm.add(CbApproval);
         pForm.add(lAkt);  pForm.add(CbAktif);
         pForm.add(lKet);  pForm.add(TKet);
 
@@ -359,6 +352,44 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
     // =========================================================
     private Connection conn() throws Exception { return koneksiDB.condb(); }
 
+    @SuppressWarnings("unchecked")
+    private void loadPenjabModel() {
+        java.util.List<String> items = new java.util.ArrayList<>();
+        items.add("ALL - Semua Penjamin");
+        try (Connection c = conn();
+             PreparedStatement ps = c.prepareStatement(
+                 "select kd_pj, png_jawab from penjab where status='1' order by png_jawab");
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                items.add(rs.getString(1).trim() + " - " + rs.getString(2));
+            }
+        } catch (Exception ex) {
+            System.out.println("Gagal load penjab: " + ex);
+        }
+        TKdPJ.setModel(new DefaultComboBoxModel<>(items.toArray(new String[0])));
+        TKdPJ.setSelectedIndex(0);
+    }
+
+    private String getKdPj() {
+        Object sel = TKdPJ.getSelectedItem();
+        if (sel == null) return "ALL";
+        String s = sel.toString();
+        int sep = s.indexOf(" - ");
+        return (sep > 0 ? s.substring(0, sep) : s).trim();
+    }
+
+    private void setKdPj(String kd) {
+        if (kd == null || kd.trim().isEmpty()) kd = "ALL";
+        kd = kd.trim();
+        for (int i = 0; i < TKdPJ.getItemCount(); i++) {
+            String it = TKdPJ.getItemAt(i).toString();
+            int sep = it.indexOf(" - ");
+            String code = sep > 0 ? it.substring(0, sep).trim() : it.trim();
+            if (code.equalsIgnoreCase(kd)) { TKdPJ.setSelectedIndex(i); return; }
+        }
+        TKdPJ.setSelectedIndex(0);
+    }
+
     private void runCariObat(String kw) {
         tabCari.setRowCount(0);
         if (kw == null || kw.trim().length() < 2) return;
@@ -381,6 +412,9 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
         if (r < 0) return;
         TKode.setText(tabCari.getValueAt(r, 0).toString());
         LNama.setText(tabCari.getValueAt(r, 1).toString());
+        Object kdjns = tabCari.getValueAt(r, 2);
+        if (kdjns != null && !kdjns.toString().trim().isEmpty())
+            TKdJenis.setText(kdjns.toString().trim());
         TKdJenis.requestFocus();
     }
 
@@ -388,13 +422,14 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         tabMode.setRowCount(0);
         String sql = "select ro.kode_brng,db.nama_brng,ro.kdjenis,ro.kd_pj,ro.max_jml,ro.max_iterasi," +
-                     "ro.butuh_approval,ro.aktif,ro.keterangan,ro.restriksi_text,ro.level_faskes " +
+                     "ro.aktif,ro.keterangan,ro.restriksi_text,ro.level_faskes " +
                      "from restriksi_obat ro left join databarang db on db.kode_brng=ro.kode_brng " +
                      "order by ro.kode_brng";
         try (Connection c = conn(); PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next())
                 tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),
-                                            rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9)});
+                                            rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),
+                                            rs.getString(9),rs.getString(10)});
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
@@ -406,7 +441,7 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         tabMode.setRowCount(0);
         String sql = "select ro.kode_brng,db.nama_brng,ro.kdjenis,ro.kd_pj,ro.max_jml,ro.max_iterasi," +
-                     "ro.butuh_approval,ro.aktif,ro.keterangan,ro.restriksi_text,ro.level_faskes " +
+                     "ro.aktif,ro.keterangan,ro.restriksi_text,ro.level_faskes " +
                      "from restriksi_obat ro left join databarang db on db.kode_brng=ro.kode_brng " +
                      "where ro.kode_brng like ? or db.nama_brng like ? order by ro.kode_brng";
         try (Connection c = conn(); PreparedStatement ps = c.prepareStatement(sql)) {
@@ -415,8 +450,8 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next())
                     tabMode.addRow(new Object[]{rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),
-                                                rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9),
-                                                rs.getString(10),rs.getString(11)});
+                                                rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),
+                                                rs.getString(9),rs.getString(10)});
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -439,10 +474,10 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
         try (Connection c = conn(); PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setString(1, TKode.getText().trim());
             ps.setString(2, TKdJenis.getText().trim().isEmpty() ? "ALL" : TKdJenis.getText().trim());
-            ps.setString(3, TKdPJ.getText().trim().isEmpty()    ? "ALL" : TKdPJ.getText().trim());
+            ps.setString(3, getKdPj());
             ps.setObject(4, TMaxJml.getText().trim().isEmpty()  ? null  : Double.parseDouble(TMaxJml.getText().trim()));
             ps.setInt(5, Integer.parseInt(TMaxIter.getText().trim().isEmpty() ? "0" : TMaxIter.getText().trim()));
-            ps.setString(6, CbApproval.getSelectedItem().toString());
+            ps.setString(6, "N");
             ps.setString(7, CbAktif.getSelectedItem().toString());
             ps.setString(8, TKet.getText());
             ps.setString(9, TRestriksi.getText());
@@ -465,7 +500,7 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
                  "delete from restriksi_obat where kode_brng=? and kdjenis=? and kd_pj=?")) {
             ps.setString(1, TKode.getText().trim());
             ps.setString(2, TKdJenis.getText().trim().isEmpty() ? "ALL" : TKdJenis.getText().trim());
-            ps.setString(3, TKdPJ.getText().trim().isEmpty()    ? "ALL" : TKdPJ.getText().trim());
+            ps.setString(3, getKdPj());
             ps.executeUpdate();
             loadData();
             baru();
@@ -477,9 +512,9 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
     private void baru() {
         TCariObat.setText(""); tabCari.setRowCount(0);
         TKode.setText(""); LNama.setText("-");
-        TKdJenis.setText("ALL"); TKdPJ.setText("ALL");
+        TKdJenis.setText("ALL"); setKdPj("ALL");
         TMaxJml.setText(""); TMaxIter.setText("0");
-        CbApproval.setSelectedItem("N"); CbAktif.setSelectedItem("Y");
+        CbAktif.setSelectedItem("Y");
         TKet.setText("");
         TRestriksi.setText("");
         CbLevel.setSelectedIndex(0);
@@ -507,14 +542,13 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
         TKode.setText(str(tabMode.getValueAt(r, 0)));
         LNama.setText(str(tabMode.getValueAt(r, 1)));
         TKdJenis.setText(str(tabMode.getValueAt(r, 2)));
-        TKdPJ.setText(str(tabMode.getValueAt(r, 3)));
+        setKdPj(str(tabMode.getValueAt(r, 3)));
         TMaxJml.setText(str(tabMode.getValueAt(r, 4)));
         TMaxIter.setText(str(tabMode.getValueAt(r, 5)));
-        CbApproval.setSelectedItem(str(tabMode.getValueAt(r, 6)));
-        CbAktif.setSelectedItem(str(tabMode.getValueAt(r, 7)));
-        TKet.setText(str(tabMode.getValueAt(r, 8)));
-        TRestriksi.setText(str(tabMode.getValueAt(r, 9)));
-        String lvl = str(tabMode.getValueAt(r, 10));
+        CbAktif.setSelectedItem(str(tabMode.getValueAt(r, 6)));
+        TKet.setText(str(tabMode.getValueAt(r, 7)));
+        TRestriksi.setText(str(tabMode.getValueAt(r, 8)));
+        String lvl = str(tabMode.getValueAt(r, 9));
         try { setLevelByValue(lvl.isEmpty() ? 0 : Integer.parseInt(lvl)); }
         catch(Exception ex) { CbLevel.setSelectedIndex(0); }
     }
