@@ -4,7 +4,6 @@ import fungsi.WarnaTable;
 import fungsi.akses;
 import fungsi.batasInput;
 import fungsi.koneksiDB;
-import fungsi.validasi;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -67,7 +66,6 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
     private widget.Button BtnAll    = new widget.Button();
 
     private Timer searchTimer;
-    private final validasi Valid = new validasi();
 
     public MasterRestriksiObatBPJS(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -570,21 +568,72 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
             return;
         }
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-        java.util.Map<String, Object> param = new java.util.HashMap<>();
-        param.put("namars", akses.getnamars());
-        param.put("alamatrs", akses.getalamatrs());
-        param.put("kotars", akses.getkabupatenrs());
-        param.put("propinsirs", akses.getpropinsirs());
-        param.put("kontakrs", akses.getkontakrs());
-        param.put("emailrs", akses.getemailrs());
-        String kw = TCariObat.getText().trim();
-        String where = kw.isEmpty() ? "" :
-            " where ro.kode_brng like '%" + kw + "%' or db.nama_brng like '%" + kw + "%'";
-        Valid.MyReportqry("rptRestriksiObat.jasper", "report", "::[ Daftar Restriksi Obat BPJS ]::",
-            "select ro.kode_brng,db.nama_brng,ro.kdjenis,ro.kd_pj,ro.max_jml,ro.max_iterasi," +
-            "ro.aktif,ro.keterangan,ro.restriksi_text,ro.level_faskes " +
-            "from restriksi_obat ro left join databarang db on db.kode_brng=ro.kode_brng" +
-            where + " order by ro.kode_brng", param);
+        try {
+            StringBuilder rows = new StringBuilder();
+            for (int i = 0; i < tabMode.getRowCount(); i++) {
+                rows.append("<tr>");
+                for (int j = 0; j < tabMode.getColumnCount(); j++) {
+                    String cls = (j==4||j==5||j==6||j==9) ? " class='c'" : "";
+                    rows.append("<td").append(cls).append(">")
+                        .append(escapeHtml(str(tabMode.getValueAt(i, j))))
+                        .append("</td>");
+                }
+                rows.append("</tr>\n");
+            }
+            String tgl = new java.text.SimpleDateFormat("dd MMMM yyyy HH:mm").format(new java.util.Date());
+            String html = "<!DOCTYPE html><html><head><meta charset='UTF-8'>"
+                + "<title>Daftar Restriksi Obat BPJS</title>"
+                + "<style>"
+                + "@page{size:A4 landscape;margin:10mm}"
+                + "body{font-family:Tahoma,Arial,sans-serif;font-size:9pt;margin:0;padding:8px}"
+                + ".hdr{text-align:center;border-bottom:1px solid #000;padding-bottom:6px;margin-bottom:8px}"
+                + ".hdr .rs{font-size:14pt;font-weight:bold}"
+                + ".hdr .al{font-size:9pt}"
+                + ".hdr .jd{font-size:11pt;font-weight:bold;text-decoration:underline;margin-top:4px}"
+                + ".meta{font-size:8pt;margin-bottom:4px;display:flex;justify-content:space-between}"
+                + "table{width:100%;border-collapse:collapse;font-size:8pt}"
+                + "th,td{border:0.5px solid #888;padding:3px 4px;vertical-align:top;text-align:left}"
+                + "th{background:#F0F0DC;font-weight:bold;text-align:center}"
+                + "td.c{text-align:center}"
+                + "tr:nth-child(even) td{background:#FAFAF0}"
+                + ".ft{margin-top:8px;font-size:7pt;text-align:right;color:#666}"
+                + "@media print{.noprint{display:none}}"
+                + ".noprint{position:fixed;top:8px;right:8px;background:#1976d2;color:#fff;border:none;padding:8px 16px;border-radius:4px;font-size:12pt;cursor:pointer}"
+                + "</style></head><body>"
+                + "<button class='noprint' onclick='window.print()'>🖨 Cetak / Save PDF</button>"
+                + "<div class='hdr'>"
+                + "<div class='rs'>" + escapeHtml(akses.getnamars()) + "</div>"
+                + "<div class='al'>" + escapeHtml(akses.getalamatrs()) + ", "
+                + escapeHtml(akses.getkabupatenrs()) + " - " + escapeHtml(akses.getpropinsirs()) + "</div>"
+                + "<div class='al'>Telp: " + escapeHtml(akses.getkontakrs())
+                + " | Email: " + escapeHtml(akses.getemailrs()) + "</div>"
+                + "<div class='jd'>DAFTAR RESTRIKSI OBAT BPJS</div>"
+                + "</div>"
+                + "<div class='meta'><span>Tanggal cetak: " + tgl + "</span>"
+                + "<span>Total: " + tabMode.getRowCount() + " data</span></div>"
+                + "<table><thead><tr>"
+                + "<th>Kode</th><th>Nama Obat</th><th>KdJns</th><th>KdPJ</th>"
+                + "<th>Max Jml</th><th>Iter</th><th>Akt</th>"
+                + "<th>Keterangan</th><th>Restriksi Indikasi Fornas</th><th>Lvl</th>"
+                + "</tr></thead><tbody>" + rows + "</tbody></table>"
+                + "<div class='ft'>Dicetak via SIM-RS Khanza — " + tgl + "</div>"
+                + "</body></html>";
+
+            java.io.File tmp = java.io.File.createTempFile("restriksi_obat_", ".html");
+            tmp.deleteOnExit();
+            try (java.io.FileWriter w = new java.io.FileWriter(tmp, java.nio.charset.StandardCharsets.UTF_8)) {
+                w.write(html);
+            }
+            java.awt.Desktop.getDesktop().browse(tmp.toURI());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Gagal mencetak: " + ex.getMessage());
+        }
         setCursor(Cursor.getDefaultCursor());
+    }
+
+    private String escapeHtml(String s) {
+        if (s == null) return "";
+        return s.replace("&","&amp;").replace("<","&lt;").replace(">","&gt;")
+                .replace("\"","&quot;").replace("\n","<br>");
     }
 }
