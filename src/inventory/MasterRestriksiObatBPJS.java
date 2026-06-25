@@ -1,6 +1,7 @@
 package inventory;
 
 import fungsi.WarnaTable;
+import fungsi.akses;
 import fungsi.batasInput;
 import fungsi.koneksiDB;
 import java.awt.BorderLayout;
@@ -58,6 +59,7 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
     private widget.Button BtnSimpan = new widget.Button();
     private widget.Button BtnBaru   = new widget.Button();
     private widget.Button BtnHapus  = new widget.Button();
+    private widget.Button BtnCetak  = new widget.Button();
     private widget.Button BtnKeluar = new widget.Button();
     private widget.Button BtnCariObat = new widget.Button();
     private widget.Button BtnCari   = new widget.Button();
@@ -139,6 +141,10 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
         BtnHapus.setMnemonic('H'); BtnHapus.setText("Hapus");
         BtnHapus.setToolTipText("Alt+H"); BtnHapus.setPreferredSize(new Dimension(100, 30));
 
+        BtnCetak.setIcon(new ImageIcon(getClass().getResource("/picture/b_print.png")));
+        BtnCetak.setMnemonic('T'); BtnCetak.setText("Cetak");
+        BtnCetak.setToolTipText("Alt+T"); BtnCetak.setPreferredSize(new Dimension(100, 30));
+
         BtnKeluar.setIcon(new ImageIcon(getClass().getResource("/picture/exit.png")));
         BtnKeluar.setMnemonic('K'); BtnKeluar.setText("Keluar");
         BtnKeluar.setToolTipText("Alt+K"); BtnKeluar.setPreferredSize(new Dimension(100, 30));
@@ -159,6 +165,7 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
         BtnSimpan.addActionListener(this::save);
         BtnBaru.addActionListener(e -> baru());
         BtnHapus.addActionListener(this::delete);
+        BtnCetak.addActionListener(e -> cetak());
         BtnKeluar.addActionListener(e -> dispose());
         BtnCariObat.addActionListener(e -> runCariObat(TCariObat.getText()));
         BtnAll.addActionListener(e -> loadData());
@@ -337,7 +344,7 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
         widget.panelisi pBtn = new widget.panelisi();
         pBtn.setPreferredSize(new Dimension(0, 44));
         pBtn.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 9));
-        pBtn.add(BtnSimpan); pBtn.add(BtnBaru); pBtn.add(BtnHapus); pBtn.add(BtnKeluar);
+        pBtn.add(BtnSimpan); pBtn.add(BtnBaru); pBtn.add(BtnHapus); pBtn.add(BtnCetak); pBtn.add(BtnKeluar);
 
         pBottom.add(pSearch, BorderLayout.PAGE_START);
         pBottom.add(pBtn,    BorderLayout.CENTER);
@@ -554,4 +561,30 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
     }
 
     private String str(Object o) { return o == null ? "" : o.toString(); }
+
+    private void cetak() {
+        if (tabMode.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Tidak ada data untuk dicetak.");
+            return;
+        }
+        try {
+            String header = "<html><div style='text-align:center;font-family:Tahoma;'>"
+                + "<b style='font-size:14pt'>" + akses.getnamars() + "</b><br>"
+                + "<span style='font-size:9pt'>" + akses.getalamatrs() + ", "
+                + akses.getkabupatenrs() + " - " + akses.getpropinsirs() + "</span><br>"
+                + "<b style='font-size:11pt;text-decoration:underline'>DAFTAR RESTRIKSI OBAT BPJS</b><br>"
+                + "<span style='font-size:8pt'>Tanggal cetak: "
+                + new java.text.SimpleDateFormat("dd MMMM yyyy HH:mm").format(new java.util.Date())
+                + " &nbsp;|&nbsp; Total: " + tabMode.getRowCount() + " data</span>"
+                + "</div></html>";
+            String footer = "<html><div style='text-align:right;font-family:Tahoma;font-size:8pt'>"
+                + "Halaman {0} dari {1}</div></html>";
+            tbData.print(JTable.PrintMode.FIT_WIDTH,
+                new java.text.MessageFormat(header),
+                new java.text.MessageFormat(footer),
+                true, null, true);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Gagal mencetak: " + ex.getMessage());
+        }
+    }
 }
