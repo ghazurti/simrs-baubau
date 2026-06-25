@@ -4,6 +4,7 @@ import fungsi.WarnaTable;
 import fungsi.akses;
 import fungsi.batasInput;
 import fungsi.koneksiDB;
+import fungsi.validasi;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -66,6 +67,7 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
     private widget.Button BtnAll    = new widget.Button();
 
     private Timer searchTimer;
+    private final validasi Valid = new validasi();
 
     public MasterRestriksiObatBPJS(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -567,24 +569,22 @@ public final class MasterRestriksiObatBPJS extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Tidak ada data untuk dicetak.");
             return;
         }
-        try {
-            String header = "<html><div style='text-align:center;font-family:Tahoma;'>"
-                + "<b style='font-size:14pt'>" + akses.getnamars() + "</b><br>"
-                + "<span style='font-size:9pt'>" + akses.getalamatrs() + ", "
-                + akses.getkabupatenrs() + " - " + akses.getpropinsirs() + "</span><br>"
-                + "<b style='font-size:11pt;text-decoration:underline'>DAFTAR RESTRIKSI OBAT BPJS</b><br>"
-                + "<span style='font-size:8pt'>Tanggal cetak: "
-                + new java.text.SimpleDateFormat("dd MMMM yyyy HH:mm").format(new java.util.Date())
-                + " &nbsp;|&nbsp; Total: " + tabMode.getRowCount() + " data</span>"
-                + "</div></html>";
-            String footer = "<html><div style='text-align:right;font-family:Tahoma;font-size:8pt'>"
-                + "Halaman {0} dari {1}</div></html>";
-            tbData.print(JTable.PrintMode.FIT_WIDTH,
-                new java.text.MessageFormat(header),
-                new java.text.MessageFormat(footer),
-                true, null, true);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Gagal mencetak: " + ex.getMessage());
-        }
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        java.util.Map<String, Object> param = new java.util.HashMap<>();
+        param.put("namars", akses.getnamars());
+        param.put("alamatrs", akses.getalamatrs());
+        param.put("kotars", akses.getkabupatenrs());
+        param.put("propinsirs", akses.getpropinsirs());
+        param.put("kontakrs", akses.getkontakrs());
+        param.put("emailrs", akses.getemailrs());
+        String kw = TCariObat.getText().trim();
+        String where = kw.isEmpty() ? "" :
+            " where ro.kode_brng like '%" + kw + "%' or db.nama_brng like '%" + kw + "%'";
+        Valid.MyReportqry("rptRestriksiObat.jasper", "report", "::[ Daftar Restriksi Obat BPJS ]::",
+            "select ro.kode_brng,db.nama_brng,ro.kdjenis,ro.kd_pj,ro.max_jml,ro.max_iterasi," +
+            "ro.aktif,ro.keterangan,ro.restriksi_text,ro.level_faskes " +
+            "from restriksi_obat ro left join databarang db on db.kode_brng=ro.kode_brng" +
+            where + " order by ro.kode_brng", param);
+        setCursor(Cursor.getDefaultCursor());
     }
 }
