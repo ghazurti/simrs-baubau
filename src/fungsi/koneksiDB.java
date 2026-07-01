@@ -1887,4 +1887,45 @@ public class koneksiDB {
         }
         return var;
     }
+
+    public static String URLALATRS(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=prop.getProperty("URLALATRS");
+            if(var==null) var="";
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
+
+    public static String PORTALATRS(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=EnkripsiAES.decrypt(prop.getProperty("PORTALATRS"));
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
+
+    public static String USERALATRS(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=EnkripsiAES.decrypt(prop.getProperty("USERALATRS"));
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
+
+    public static String PASSALATRS(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=EnkripsiAES.decrypt(prop.getProperty("PASSALATRS"));
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
 }

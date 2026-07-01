@@ -3,14 +3,12 @@
  * and open the template in the editor.
  */
 
-/*
+ /*
  * DlgAbout.java
  *
  * Created on 23 Jun 10, 19:03:08
  */
-
 package bridging;
-
 
 import fungsi.batasInput;
 import fungsi.validasi;
@@ -56,45 +54,46 @@ import javax.swing.WindowConstants;
  * @author perpustakaan
  */
 public class OrthancDICOM extends javax.swing.JDialog {
+
     private final JFXPanel jfxPanel = new JFXPanel();
     private WebEngine engine;
-    private String urlpanggil="",namafile="",series="",study="",norawat="";
+    private String urlpanggil = "", namafile = "", series = "", study = "", norawat = "";
     private final JPanel panel = new JPanel(new BorderLayout());
     private final JLabel lblStatus = new JLabel();
     private final JTextField txtURL = new JTextField();
     private final JProgressBar progressBar = new JProgressBar();
-    private final ApiOrthanc orthanc=new ApiOrthanc();
-    private final validasi Valid=new validasi();
+    private final ApiOrthanc orthanc = new ApiOrthanc();
+    private final validasi Valid = new validasi();
     private OrthancDataACSN dataacsn;
-    
+
     public OrthancDICOM(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         initComponents2();
-        AccessionNumber.setDocument(new batasInput((byte)16).getKata(AccessionNumber));
+        AccessionNumber.setDocument(new batasInput((byte) 16).getKata(AccessionNumber));
     }
-    
-    private void initComponents2() {           
+
+    private void initComponents2() {
         txtURL.addActionListener((ActionEvent e) -> {
             loadURL(txtURL.getText());
         });
-  
+
         progressBar.setPreferredSize(new Dimension(550, 508));
         progressBar.setStringPainted(true);
         panel.add(jfxPanel, BorderLayout.CENTER);
         internalFrame1.setLayout(new BorderLayout());
-        internalFrame1.add(panel, BorderLayout.CENTER);    
-        internalFrame1.add(PanelMenu,BorderLayout.AFTER_LAST_LINE);        
+        internalFrame1.add(panel, BorderLayout.CENTER);
+        internalFrame1.add(PanelMenu, BorderLayout.AFTER_LAST_LINE);
     }
-    
-     private void createScene() {        
+
+    private void createScene() {
         Platform.runLater(new Runnable() {
             public void run() {
                 WebView view = new WebView();
-                
+
                 engine = view.getEngine();
                 engine.setJavaScriptEnabled(true);
-                
+
                 engine.setCreatePopupHandler(new Callback<PopupFeatures, WebEngine>() {
                     @Override
                     public WebEngine call(PopupFeatures p) {
@@ -102,93 +101,91 @@ public class OrthancDICOM extends javax.swing.JDialog {
                         return view.getEngine();
                     }
                 });
-                
+
                 engine.titleProperty().addListener((ObservableValue<? extends String> observable, String oldValue, final String newValue) -> {
                     SwingUtilities.invokeLater(() -> {
                         OrthancDICOM.this.setTitle(newValue);
                     });
                 });
-                
-                
+
                 engine.setOnStatusChanged((final WebEvent<String> event) -> {
                     SwingUtilities.invokeLater(() -> {
                         lblStatus.setText(event.getData());
                     });
                 });
-                
-                
+
                 engine.getLoadWorker().workDoneProperty().addListener((ObservableValue<? extends Number> observableValue, Number oldValue, final Number newValue) -> {
                     SwingUtilities.invokeLater(() -> {
                         progressBar.setValue(newValue.intValue());
-                    });                                                   
+                    });
                 });
-                
+
                 engine.getLoadWorker().exceptionProperty().addListener((ObservableValue<? extends Throwable> o, Throwable old, final Throwable value) -> {
                     if (engine.getLoadWorker().getState() == FAILED) {
                         SwingUtilities.invokeLater(() -> {
                             JOptionPane.showMessageDialog(
                                     panel,
-                                    (value != null) ?
-                                            engine.getLocation() + "\n" + value.getMessage() :
-                                            engine.getLocation() + "\nUnexpected Catatan.",
+                                    (value != null)
+                                            ? engine.getLocation() + "\n" + value.getMessage()
+                                            : engine.getLocation() + "\nUnexpected Catatan.",
                                     "Loading Catatan...",
                                     JOptionPane.ERROR_MESSAGE);
                         });
                     }
                 });
-                
+
                 engine.locationProperty().addListener((ObservableValue<? extends String> ov, String oldValue, final String newValue) -> {
                     SwingUtilities.invokeLater(() -> {
                         txtURL.setText(newValue);
                     });
                 });
-                
+
                 engine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
                     @Override
                     public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
                         if (newState == Worker.State.SUCCEEDED) {
                             try {
-                                if(engine.getLocation().contains("https://www.orthanc-server.com")){
+                                if (engine.getLocation().contains("https://www.orthanc-server.com")) {
                                     setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
                                     Valid.panggilUrl2(urlpanggil);
                                     engine.executeScript("history.back()");
                                     setCursor(Cursor.getDefaultCursor());
                                 }
                             } catch (Exception ex) {
-                                System.out.println("Notifikasi : "+ex);
+                                System.out.println("Notifikasi : " + ex);
                             }
-                        } 
+                        }
                     }
                 });
-                
+
                 jfxPanel.setScene(new Scene(view));
             }
         });
     }
- 
-    public void loadURL(String url) {  
-        urlpanggil=url;
+
+    public void loadURL(String url) {
+        urlpanggil = url;
         try {
             createScene();
         } catch (Exception e) {
         }
-        
+
         Platform.runLater(() -> {
             try {
                 engine.getCreatePopupHandler();
                 engine.setJavaScriptEnabled(true);
-                engine.setUserAgent("foo\nAuthorization: Basic "+orthanc.Auth());
+                engine.setUserAgent("foo\nAuthorization: Basic " + orthanc.Auth());
                 engine.load(url);
-            }catch (Exception exception) {
+            } catch (Exception exception) {
                 engine.load(url);
             }
-        });        
-    }    
-    
-    public void CloseScane(){
+        });
+    }
+
+    public void CloseScane() {
         Platform.setImplicitExit(false);
     }
-    
+
     public void print(final Node node) {
         Printer printer = Printer.getDefaultPrinter();
         PageLayout pageLayout = printer.createPageLayout(Paper.NA_LETTER, PageOrientation.PORTRAIT, Printer.MarginType.DEFAULT);
@@ -204,12 +201,11 @@ public class OrthancDICOM extends javax.swing.JDialog {
             }
         }
     }
-    
 
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -412,7 +408,7 @@ public class OrthancDICOM extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowClosed
 
     private void formWindowStateChanged(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowStateChanged
-        if(this.isActive()==false){
+        if (this.isActive() == false) {
             Platform.setImplicitExit(false);
         }
     }//GEN-LAST:event_formWindowStateChanged
@@ -422,29 +418,29 @@ public class OrthancDICOM extends javax.swing.JDialog {
     }//GEN-LAST:event_BtnKeluarActionPerformed
 
     private void BtnKeluarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BtnKeluarKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_SPACE){
+        if (evt.getKeyCode() == KeyEvent.VK_SPACE) {
             dispose();
         }
     }//GEN-LAST:event_BtnKeluarKeyPressed
 
     private void BtnPngActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPngActionPerformed
-        orthanc.AmbilPng(namafile,series);
+        orthanc.AmbilPng(namafile, series);
     }//GEN-LAST:event_BtnPngActionPerformed
 
     private void BtnDcmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDcmActionPerformed
-        orthanc.AmbilDcm(namafile,series);
+        orthanc.AmbilDcm(namafile, series);
     }//GEN-LAST:event_BtnDcmActionPerformed
 
     private void BtnJpgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnJpgActionPerformed
-        orthanc.AmbilJpg(namafile,series);
+        orthanc.AmbilJpg(namafile, series);
     }//GEN-LAST:event_BtnJpgActionPerformed
 
     private void BtnBmpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBmpActionPerformed
-        orthanc.AmbilBmp(namafile,series);
+        orthanc.AmbilBmp(namafile, series);
     }//GEN-LAST:event_BtnBmpActionPerformed
 
     private void BtnACSNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnACSNActionPerformed
-        WindowGantiACSN.setSize(482,62);
+        WindowGantiACSN.setSize(482, 62);
         WindowGantiACSN.setLocationRelativeTo(internalFrame1);
         WindowGantiACSN.setAlwaysOnTop(false);
         WindowGantiACSN.setVisible(true);
@@ -455,13 +451,18 @@ public class OrthancDICOM extends javax.swing.JDialog {
     }//GEN-LAST:event_BtnCloseIn4ActionPerformed
 
     private void BtnSimpan4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSimpan4ActionPerformed
-        if(AccessionNumber.getText().trim().equals("")){
-            Valid.textKosong(AccessionNumber,"Accession Number");
-        }else{
-            if(orthanc.UbahAccession(study,AccessionNumber.getText())==true){
-                JOptionPane.showMessageDialog(null,"Update accession number selesai..!!");
+        if (AccessionNumber.getText().trim().equals("")) {
+            Valid.textKosong(AccessionNumber, "Accession Number");
+        } else {
+            // Terima Study ID baru
+            String newStudyId = orthanc.UbahAccession(study, AccessionNumber.getText());
+            if (newStudyId != null && !newStudyId.isEmpty()) {
+                study = newStudyId; // update study ID agar kirim ke modality pakai ID baru
+                JOptionPane.showMessageDialog(null, "Update accession number selesai..!!\nNew Study ID: " + newStudyId);
+                WindowGantiACSN.dispose();
             }
         }
+
     }//GEN-LAST:event_BtnSimpan4ActionPerformed
 
     private void AccessionNumberKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_AccessionNumberKeyPressed
@@ -470,36 +471,42 @@ public class OrthancDICOM extends javax.swing.JDialog {
 
     private void BtnCariACSNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCariACSNActionPerformed
         if (dataacsn == null || !dataacsn.isDisplayable()) {
-            dataacsn=new OrthancDataACSN(null,false);
+            dataacsn = new OrthancDataACSN(null, false);
             dataacsn.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
             dataacsn.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    if(dataacsn.getTable().getSelectedRow()!= -1){
-                        AccessionNumber.setText(dataacsn.getTable().getValueAt(dataacsn.getTable().getSelectedRow(),0).toString());
-                    }  
+                    if (dataacsn.getTable().getSelectedRow() != -1) {
+                        AccessionNumber.setText(dataacsn.getTable().getValueAt(dataacsn.getTable().getSelectedRow(), 0).toString());
+                    }
                     AccessionNumber.requestFocus();
-                    dataacsn=null;
+                    dataacsn = null;
                 }
             });
-            
+
             dataacsn.getTable().addKeyListener(new KeyListener() {
                 @Override
-                public void keyTyped(KeyEvent e) {}
+                public void keyTyped(KeyEvent e) {
+                }
+
                 @Override
                 public void keyPressed(KeyEvent e) {
-                    if(e.getKeyCode()==KeyEvent.VK_SPACE){
+                    if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                         dataacsn.dispose();
                     }
                 }
+
                 @Override
-                public void keyReleased(KeyEvent e) {}
+                public void keyReleased(KeyEvent e) {
+                }
             });
-                    
-            dataacsn.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+
+            dataacsn.setSize(internalFrame1.getWidth() - 20, internalFrame1.getHeight() - 20);
             dataacsn.setLocationRelativeTo(internalFrame1);
         }
-        if (dataacsn == null) return;
+        if (dataacsn == null) {
+            return;
+        }
         if (!dataacsn.isVisible()) {
             dataacsn.setNoRawat(norawat);
             dataacsn.tampil("");
@@ -507,13 +514,13 @@ public class OrthancDICOM extends javax.swing.JDialog {
         if (dataacsn.isVisible()) {
             dataacsn.toFront();
             return;
-        }    
+        }
         dataacsn.setVisible(true);
     }//GEN-LAST:event_BtnCariACSNActionPerformed
 
     /**
-    * @param args the command line arguments
-    */
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(() -> {
             OrthancDICOM dialog = new OrthancDICOM(new javax.swing.JFrame(), true);
@@ -545,11 +552,11 @@ public class OrthancDICOM extends javax.swing.JDialog {
     private widget.Label jLabel14;
     // End of variables declaration//GEN-END:variables
 
-    public void setJudul(String Judul,String NamaFile,String Series,String Study,String NoRawat){
-        study=Study;
-        namafile=NamaFile;
-        series=Series;
-        norawat=NoRawat;
-        internalFrame1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(240, 245, 235)), Judul, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(70,70,70))); 
+    public void setJudul(String Judul, String NamaFile, String Series, String Study, String NoRawat) {
+        study = Study;
+        namafile = NamaFile;
+        series = Series;
+        norawat = NoRawat;
+        internalFrame1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(240, 245, 235)), Judul, javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(70, 70, 70)));
     }
 }

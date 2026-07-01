@@ -1,4 +1,5 @@
 package permintaan;
+import bridging.ApiAlatRS;
 import bridging.ApiCareStream;
 import fungsi.BackgroundMusic;
 import fungsi.WarnaTable;
@@ -364,6 +365,7 @@ public class DlgCariPermintaanRadiologi extends javax.swing.JDialog {
         BtnAmbilDataFUJI = new widget.Button();
         BtnKirimDataCareStream = new widget.Button();
         BtnAmbilDataFUJI1 = new widget.Button();
+        BtnKirimDataAlatRS = new widget.Button();
 
         WindowAmbilSampel.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         WindowAmbilSampel.setName("WindowAmbilSampel"); // NOI18N
@@ -1064,6 +1066,23 @@ public class DlgCariPermintaanRadiologi extends javax.swing.JDialog {
             }
         });
         FormMenu.add(BtnAmbilDataFUJI1);
+
+        BtnKirimDataAlatRS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/item.png"))); // NOI18N
+        BtnKirimDataAlatRS.setText("Kirim Permintaan ke RIS (alat_rs)");
+        BtnKirimDataAlatRS.setFocusPainted(false);
+        BtnKirimDataAlatRS.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        BtnKirimDataAlatRS.setGlassColor(new java.awt.Color(255, 255, 255));
+        BtnKirimDataAlatRS.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        BtnKirimDataAlatRS.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        BtnKirimDataAlatRS.setName("BtnKirimDataAlatRS"); // NOI18N
+        BtnKirimDataAlatRS.setPreferredSize(new java.awt.Dimension(215, 23));
+        BtnKirimDataAlatRS.setRoundRect(false);
+        BtnKirimDataAlatRS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnKirimDataAlatRSActionPerformed(evt);
+            }
+        });
+        FormMenu.add(BtnKirimDataAlatRS);
 
         ScrollMenu.setViewportView(FormMenu);
 
@@ -2190,6 +2209,144 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
         }
     }//GEN-LAST:event_BtnKirimDataCareStreamActionPerformed
 
+    private void BtnKirimDataAlatRSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnKirimDataAlatRSActionPerformed
+        if(NoRawat.equals("") || NoPermintaan.trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, silahkan pilih data permintaan...!!!!");
+            TCari.requestFocus();
+            return;
+        }
+        kirimPermintaanAlatRS(NoPermintaan.trim(), NoRawat.trim());
+    }//GEN-LAST:event_BtnKirimDataAlatRSActionPerformed
+
+    /**
+     * Kirim 1 permintaan radiologi Khanza (by noorder) ke RIS alat_rs.
+     * Semua data (pasien, dokter, item pemeriksaan, jadwal) diambil dari DB
+     * by noorder — Khanza hanya kirim permintaan, LOINC di-handle RIS.
+     */
+    private void kirimPermintaanAlatRS(String noorder, String norawat){
+        // 1. Data pasien + dokter + jadwal dari 1 query header.
+        final String[] hdr = new String[]{ "", "", "", "", "", "", "", "", "", "" };
+        // idx: 0=no_rkm_medis 1=nm_pasien 2=no_ktp 3=jk(M/F) 4=tgl_lahir 5=nik_dokter 6=nm_dokter
+        //      7=tgl(yyyy-MM-dd) 8=jk_dokter(M/F) 9=tgl_lahir_dokter
+        try{
+            koneksi=koneksiDB.condb();
+            ps=koneksi.prepareStatement(
+                "select reg_periksa.no_rkm_medis, pasien.nm_pasien, pasien.no_ktp, pasien.jk, "+
+                "date_format(pasien.tgl_lahir,'%Y-%m-%d') as tgllahir, pegawai.no_ktp as nik_dokter, "+
+                "dokter.nm_dokter, date_format(permintaan_radiologi.tgl_permintaan,'%Y-%m-%d') as tglminta, "+
+                "dokter.jk as jk_dokter, date_format(dokter.tgl_lahir,'%Y-%m-%d') as tgllahir_dokter "+
+                "from permintaan_radiologi "+
+                "inner join reg_periksa on permintaan_radiologi.no_rawat=reg_periksa.no_rawat "+
+                "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
+                "inner join dokter on permintaan_radiologi.dokter_perujuk=dokter.kd_dokter "+
+                "inner join pegawai on dokter.kd_dokter=pegawai.nik "+
+                "where permintaan_radiologi.noorder=?");
+            ps.setString(1, noorder);
+            rs=ps.executeQuery();
+            if(rs.next()){
+                hdr[0]=nz(rs.getString("no_rkm_medis"));
+                hdr[1]=nz(rs.getString("nm_pasien"));
+                hdr[2]=nz(rs.getString("no_ktp"));
+                String jk=nz(rs.getString("jk")).toUpperCase();
+                hdr[3]=jk.startsWith("L")?"M":(jk.startsWith("P")?"F":jk);
+                hdr[4]=nz(rs.getString("tgllahir"));
+                hdr[5]=nz(rs.getString("nik_dokter"));
+                hdr[6]=nz(rs.getString("nm_dokter"));
+                hdr[7]=nz(rs.getString("tglminta"));
+                String jkd=nz(rs.getString("jk_dokter")).toUpperCase();
+                hdr[8]=jkd.startsWith("L")?"M":(jkd.startsWith("P")?"F":jkd);
+                hdr[9]=nz(rs.getString("tgllahir_dokter"));
+            }else{
+                JOptionPane.showMessageDialog(null,"Data permintaan tidak lengkap (pasien/dokter tidak ketemu).");
+                return;
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Gagal ambil data permintaan: "+e);
+            return;
+        }
+        if(hdr[2].equals("") || hdr[2].equals("-")){
+            JOptionPane.showMessageDialog(null,"NIK (no_ktp) pasien belum diisi. Lengkapi dulu di data pasien.");
+            return;
+        }
+        if(hdr[5].equals("") || hdr[5].equals("-")){
+            JOptionPane.showMessageDialog(null,"NIK (no_ktp) dokter perujuk \""+hdr[6]+"\" belum diisi di data pegawai.");
+            return;
+        }
+
+        // 2. Item pemeriksaan (bisa lebih dari satu).
+        final java.util.List<String> namaPeriksa = new java.util.ArrayList<>();
+        try{
+            koneksi=koneksiDB.condb();
+            ps=koneksi.prepareStatement(
+                "select jns_perawatan_radiologi.nm_perawatan "+
+                "from permintaan_pemeriksaan_radiologi "+
+                "inner join jns_perawatan_radiologi on permintaan_pemeriksaan_radiologi.kd_jenis_prw=jns_perawatan_radiologi.kd_jenis_prw "+
+                "where permintaan_pemeriksaan_radiologi.noorder=?");
+            ps.setString(1, noorder);
+            rs=ps.executeQuery();
+            while(rs.next()){
+                namaPeriksa.add(nz(rs.getString(1)));
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Gagal ambil item pemeriksaan: "+e);
+            return;
+        }
+        if(namaPeriksa.isEmpty()){
+            JOptionPane.showMessageDialog(null,"Tidak ada item pemeriksaan pada permintaan ini.");
+            return;
+        }
+
+        final String jamNow=new java.text.SimpleDateFormat("HHmmss").format(new java.util.Date());
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        new Thread(() -> {
+            ApiAlatRS api=new ApiAlatRS();
+            api.Login();
+            StringBuilder ringkasan=new StringBuilder();
+            int ok=0, gagal=0;
+            for(String nama: namaPeriksa){
+                ApiAlatRS.HasilKirim h=api.KirimPermintaanRadiologi(
+                        hdr[0], hdr[1], hdr[2], hdr[3], hdr[4],
+                        hdr[6], hdr[5], hdr[8], hdr[9],      // dokter: nama, nik, jk, tgl_lahir
+                        "", "", nama,                       // LOINC & display kosong — RIS yang atur
+                        hdr[7], jamNow);
+                if(h.ok){ ok++; simpanLogAlatRS(noorder, h); } else { gagal++; }
+                ringkasan.append("- ").append(nama).append(": ").append(h.pesan).append("\n");
+            }
+            final String hasil="Kirim ke RIS alat_rs selesai.\nBerhasil: "+ok+"  |  Gagal: "+gagal+"\n\n"+ringkasan;
+            SwingUtilities.invokeLater(() -> {
+                this.setCursor(Cursor.getDefaultCursor());
+                javax.swing.JTextArea ta=new javax.swing.JTextArea(hasil,12,60);
+                ta.setEditable(false);
+                JOptionPane.showMessageDialog(this, new javax.swing.JScrollPane(ta),
+                        "Hasil Kirim ke RIS alat_rs", JOptionPane.INFORMATION_MESSAGE);
+            });
+        }, "alat_rs-kirim").start();
+    }
+
+    private void simpanLogAlatRS(String noorder, ApiAlatRS.HasilKirim h){
+        try{
+            koneksi=koneksiDB.condb();
+            ps=koneksi.prepareStatement(
+                "insert into bridging_alatrs_log "+
+                "(noorder, accession_number, worklist_id_alatrs, patient_id_alatrs, satu_sehat_status, response_terakhir) "+
+                "values (?,?,?,?,?,?) "+
+                "on duplicate key update accession_number=values(accession_number), "+
+                "worklist_id_alatrs=values(worklist_id_alatrs), patient_id_alatrs=values(patient_id_alatrs), "+
+                "satu_sehat_status=values(satu_sehat_status), response_terakhir=values(response_terakhir)");
+            ps.setString(1, noorder);
+            ps.setString(2, h.accessionNumber);
+            ps.setString(3, h.worklistId);
+            ps.setString(4, h.patientIdAlatRS);
+            ps.setString(5, h.satuSehatStatus);
+            ps.setString(6, h.responseRaw);
+            ps.executeUpdate();
+        }catch(Exception e){
+            System.out.println("Gagal simpan bridging_alatrs_log: "+e);
+        }
+    }
+
+    private String nz(String s){ return s==null?"":s; }
+
     private void BtnAmbilDataFUJI1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAmbilDataFUJI1ActionPerformed
         if(TabPilihRawat.getSelectedIndex()==0){
             if(TabRawatJalan.getSelectedIndex()==0){
@@ -2352,6 +2509,7 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
     private widget.Button BtnHasil;
     private widget.Button BtnKeluar;
     private widget.Button BtnKirimDataCareStream;
+    private widget.Button BtnKirimDataAlatRS;
     private widget.Button BtnKirimDataFuji;
     private widget.Button BtnPrint;
     private widget.Button BtnSampel;
@@ -2611,8 +2769,9 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
         BtnKirimDataFuji.setEnabled(akses.getpermintaan_radiologi());
         BtnAmbilDataFUJI.setEnabled(akses.getperiksa_radiologi());
         BtnKirimDataCareStream.setEnabled(akses.getpermintaan_radiologi());
+        BtnKirimDataAlatRS.setEnabled(akses.getpermintaan_radiologi());
     }
-    
+
     public void setPasien(String pasien){
         TCari.setText(pasien);
     }

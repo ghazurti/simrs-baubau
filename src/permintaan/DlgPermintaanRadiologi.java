@@ -127,9 +127,10 @@ public final class DlgPermintaanRadiologi extends javax.swing.JDialog {
         
         try {
             aktifkanparsial=koneksiDB.AKTIFKANBILLINGPARSIAL();
-        } catch (Exception ex) {            
+        } catch (Exception ex) {
             aktifkanparsial="no";
         }
+
     }
 
     /** This method is called from within the constructor to
