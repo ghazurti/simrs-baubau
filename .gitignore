@@ -25,6 +25,8 @@ cache/
 
 # DB/app settings (koneksi database rumah sakit)
 setting/
+!src/setting/
+!src/setting/**
 
 # Log
 *.log
