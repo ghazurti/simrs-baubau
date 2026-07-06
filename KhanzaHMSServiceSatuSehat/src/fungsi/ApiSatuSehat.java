@@ -24,8 +24,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-public class ApiSatuSehat {        
+public class ApiSatuSehat {
     private String key,clientid,urlauth,token;
+    // Token SatuSehat berlaku 1 jam; cache 50 menit supaya tidak minta token baru di tiap kiriman
+    private static String tokenCache="";
+    private static long tokenDiambil=0;
+    private static final long MASA_TOKEN=50*60*1000;
     private long millis;
     private SSLContext sslContext;
     private SSLSocketFactory sslFactory;
@@ -48,16 +52,25 @@ public class ApiSatuSehat {
     }
 
     public String TokenSatuSehat(){
-        try {    
-            header = new HttpHeaders();
-            header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            requestEntity = new HttpEntity("client_id="+clientid+"&client_secret="+key,header);
-            root = mapper.readTree(getRest().exchange(urlauth+"/accesstoken?grant_type=client_credentials", HttpMethod.POST, requestEntity, String.class).getBody());
-            token=root.path("access_token").asText();
-        } catch (Exception ex) {
-            System.out.println("Notifikasi : "+ex);
+        synchronized(ApiSatuSehat.class){
+            if((!tokenCache.equals(""))&&((System.currentTimeMillis()-tokenDiambil)<MASA_TOKEN)){
+                return tokenCache;
+            }
+            try {
+                header = new HttpHeaders();
+                header.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+                requestEntity = new HttpEntity("client_id="+clientid+"&client_secret="+key,header);
+                root = mapper.readTree(getRest().exchange(urlauth+"/accesstoken?grant_type=client_credentials", HttpMethod.POST, requestEntity, String.class).getBody());
+                token=root.path("access_token").asText();
+                if(token!=null&&!token.equals("")){
+                    tokenCache=token;
+                    tokenDiambil=System.currentTimeMillis();
+                }
+            } catch (Exception ex) {
+                System.out.println("Notifikasi : "+ex);
+            }
+            return tokenCache;
         }
-        return token;
     }
         
     public long GetUTCdatetimeAsString(){    

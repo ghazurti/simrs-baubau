@@ -276,7 +276,7 @@ public class frmUtama extends javax.swing.JFrame {
                     careplan();
                     qrtelaahresep();
                     alergi();
-                    kirimdicomrouter();
+                    // kirimdicomrouter(); // pengiriman DICOM sudah ditangani RIS
                 }
             }
         };

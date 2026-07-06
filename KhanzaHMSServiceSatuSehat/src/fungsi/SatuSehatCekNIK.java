@@ -302,6 +302,25 @@ public class SatuSehatCekNIK {
     
     public String tampilIDParktisi(String cari) {
         idpasien="";
+        // Cek cache lokal dulu
+        try {
+            PreparedStatement ps = koneksiDB.condb().prepareStatement(
+                "SELECT ihspraktisi FROM satu_sehat_ihs_practitioner WHERE nikpraktisi=?");
+            ps.setString(1, cari);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                idpasien = rs.getString("ihspraktisi");
+                rs.close(); ps.close();
+                if (idpasien != null && !idpasien.isEmpty()) {
+                    System.out.println("[IHS Cache] NIK Praktisi=" + cari + " → " + idpasien);
+                    return idpasien;
+                }
+            }
+            rs.close(); ps.close();
+        } catch (Exception e) {
+            System.out.println("[IHS Cache] Skip: " + e.getMessage());
+        }
+        // Tidak ada di cache — panggil API
         try{
             headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
@@ -314,6 +333,20 @@ public class SatuSehatCekNIK {
             response = root.path("entry");
             for(JsonNode list:response){
                idpasien=list.path("resource").path("id").asText();
+            }
+            // Simpan ke cache jika berhasil
+            if (idpasien != null && !idpasien.isEmpty()) {
+                try {
+                    PreparedStatement ps = koneksiDB.condb().prepareStatement(
+                        "INSERT IGNORE INTO satu_sehat_ihs_practitioner (nikpraktisi, ihspraktisi) VALUES (?,?)");
+                    ps.setString(1, cari);
+                    ps.setString(2, idpasien);
+                    ps.executeUpdate();
+                    ps.close();
+                    System.out.println("[IHS Cache] Disimpan: NIK Praktisi=" + cari + " → " + idpasien);
+                } catch (Exception e) {
+                    System.out.println("[IHS Cache] Gagal simpan: " + e.getMessage());
+                }
             }
         }catch(Exception e){
             idpasien="";
