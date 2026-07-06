@@ -178,13 +178,24 @@ public class ApiAlatRS {
      * dan tanggal_lahir_tenaga_medis opsional.
      */
     public JsonNode RegisterTenagaMedis(String nama, String nik) {
-        return RegisterTenagaMedis(nama, nik, "", "");
+        return RegisterTenagaMedis("", nama, nik, "", "");
     }
 
     public JsonNode RegisterTenagaMedis(String nama, String nik, String jenisKelamin, String tanggalLahir) {
-        StringBuilder sb = new StringBuilder("{")
-                .append("\"nama_tenaga_medis\":\"").append(escape(nama)).append("\",")
-                .append("\"nik_tenaga_medis\":\"").append(escape(nik)).append("\"");
+        return RegisterTenagaMedis("", nama, nik, jenisKelamin, tanggalLahir);
+    }
+
+    /**
+     * Register tenaga medis dengan id dari FE (mis. kd_dokter Khanza). Kalau id
+     * diisi, RIS memakai id itu (mapping stabil) — mirip rm.id di register_with_rm.
+     */
+    public JsonNode RegisterTenagaMedis(String id, String nama, String nik, String jenisKelamin, String tanggalLahir) {
+        StringBuilder sb = new StringBuilder("{");
+        if (id != null && !id.isEmpty()) {
+            sb.append("\"id\":\"").append(escape(id)).append("\",");
+        }
+        sb.append("\"nama_tenaga_medis\":\"").append(escape(nama)).append("\",")
+          .append("\"nik_tenaga_medis\":\"").append(escape(nik)).append("\"");
         if (jenisKelamin != null && !jenisKelamin.isEmpty()) {
             sb.append(",\"jenis_kelamin_tenaga_medis\":\"").append(escape(jenisKelamin)).append("\"");
         }
@@ -207,17 +218,126 @@ public class ApiAlatRS {
      * loinc_code dipakai untuk ServiceRequest.code di SATUSEHAT.
      */
     public JsonNode RegisterPemeriksaan(String namaPemeriksaan, String kodeModality, String loincCode) {
-        return RegisterPemeriksaan(namaPemeriksaan, kodeModality, loincCode, "");
+        return RegisterPemeriksaan("", namaPemeriksaan, kodeModality, loincCode, "");
     }
 
     public JsonNode RegisterPemeriksaan(String namaPemeriksaan, String kodeModality, String loincCode, String loincDisplay) {
-        String json = "{"
-                + "\"nama_pemeriksaan\":\"" + escape(namaPemeriksaan) + "\","
-                + "\"kode_modality\":\"" + escape(kodeModality) + "\","
-                + "\"loinc_code\":\"" + escape(loincCode) + "\","
-                + "\"loinc_display\":\"" + escape(loincDisplay) + "\""
-                + "}";
-        return postJsonAuth("REG_PEMERIKSAAN", baseUrl + "/api/ms_pemeriksaan/register", json);
+        return RegisterPemeriksaan("", namaPemeriksaan, kodeModality, loincCode, loincDisplay);
+    }
+
+    /**
+     * Register jenis pemeriksaan dengan id dari FE (mis. kd_jenis_prw Khanza).
+     * Kalau id diisi, RIS memakai id itu (mapping stabil, idempotent) — mirip rm.id
+     * di register_with_rm. Kalau id sudah ada → RIS balas 409 (dianggap OK oleh caller).
+     */
+    public JsonNode RegisterPemeriksaan(String id, String namaPemeriksaan, String kodeModality, String loincCode, String loincDisplay) {
+        StringBuilder sb = new StringBuilder("{");
+        if (id != null && !id.isEmpty()) {
+            sb.append("\"id\":\"").append(escape(id)).append("\",");
+        }
+        sb.append("\"nama_pemeriksaan\":\"").append(escape(namaPemeriksaan)).append("\",")
+          .append("\"kode_modality\":\"").append(escape(kodeModality)).append("\",")
+          .append("\"loinc_code\":\"").append(escape(loincCode)).append("\",")
+          .append("\"loinc_display\":\"").append(escape(loincDisplay)).append("\"}");
+        return postJsonAuth("REG_PEMERIKSAAN", baseUrl + "/api/ms_pemeriksaan/register", sb.toString());
+    }
+
+    /**
+     * Cari AE Title alat scanner di master RIS berdasarkan kode modality
+     * (POST /api/ms_alat/list, filter "kode_modality"). Dipakai supaya Khanza
+     * bisa auto-isi scheduled_station_aet worklist tanpa tabel mapping sendiri —
+     * RIS jadi sumber kebenaran daftar alat. Return ae_title atau "".
+     */
+    public String CariAlatAeTitleByModality(String kodeModality) {
+        return CariAlatAeTitleByModality(kodeModality, "");
+    }
+
+    /**
+     * Informasi 1 alat dari RIS (untuk ditampilkan di dialog pilihan).
+     */
+    public static class InfoAlat {
+        public String id = "";
+        public String namaAlat = "";
+        public String aeTitle = "";
+        public String kodeModality = "";
+        @Override public String toString() {
+            return namaAlat + " (" + aeTitle + ") [" + kodeModality + "]";
+        }
+    }
+
+    /**
+     * Ambil semua alat dari RIS. Return list InfoAlat.
+     * Dipakai untuk menampilkan dialog pilihan alat ke user.
+     */
+    public java.util.List<InfoAlat> ListSemuaAlat() {
+        java.util.List<InfoAlat> result = new java.util.ArrayList<>();
+        JsonNode resp = postJsonAuth("LIST_SEMUA_ALAT",
+                baseUrl + "/api/ms_alat/list",
+                "{\"halaman\":0,\"jumlah\":100}");
+        JsonNode arr = extractArray(resp);
+        if (arr == null || !arr.isArray()) return result;
+        for (JsonNode it : arr) {
+            InfoAlat a = new InfoAlat();
+            a.id = it.path("id").asText();
+            a.namaAlat = it.path("nama_alat").asText();
+            a.aeTitle = it.path("ae_title").asText();
+            a.kodeModality = it.path("kode_modality").asText();
+            result.add(a);
+        }
+        return result;
+    }
+
+    /**
+     * Versi dengan hint nama pemeriksaan — dipakai kalau di RIS ada >1 alat
+     * modality sama (mis. 2 mesin DX: X-ray umum + Panoramic Dental).
+     *
+     * Strategi:
+     *   - 1 alat → pakai itu.
+     *   - >1 alat → scoring by nama pemeriksaan vs nama_alat/ae_title:
+     *       nama pemeriksaan mengandung "panoramic/pano/dental/gigi"
+     *         → cari alat yang nama/ae-nya mengandung "pan"/"dental";
+     *       selain itu → pilih alat yang TIDAK mengandung "pan"/"dental"
+     *         (mesin general X-ray).
+     *     Fallback: alat pertama.
+     */
+    public String CariAlatAeTitleByModality(String kodeModality, String namaPemeriksaan) {
+        if (kodeModality == null || kodeModality.isEmpty()) return "";
+        JsonNode resp = postJsonAuth("CARI_ALAT_MODALITY",
+                baseUrl + "/api/ms_alat/list",
+                "{\"halaman\":0,\"jumlah\":20,\"kode_modality\":\"" + escape(kodeModality) + "\"}");
+        JsonNode arr = extractArray(resp);
+        if (arr == null || !arr.isArray() || arr.size() == 0) return "";
+
+        // Kumpulkan hanya alat yang benar modality-nya (kalau server juga
+        // kirim modality lain, kita filter di sisi kita).
+        java.util.List<JsonNode> cocok = new java.util.ArrayList<>();
+        for (JsonNode it : arr) {
+            String m = it.path("kode_modality").asText();
+            if (m == null || m.isEmpty() || kodeModality.equals(m)) cocok.add(it);
+        }
+        if (cocok.isEmpty()) return "";
+        if (cocok.size() == 1) return cocok.get(0).path("ae_title").asText();
+
+        String namaLower = (namaPemeriksaan == null ? "" : namaPemeriksaan).toLowerCase();
+        boolean butuhDental = namaLower.contains("panoramic") || namaLower.contains("panoramik")
+                || namaLower.contains("pano") || namaLower.contains("dental")
+                || namaLower.contains("gigi") || namaLower.contains("cephalometric")
+                || namaLower.contains("cephalometri");
+
+        JsonNode dentalHit = null, generalHit = null;
+        for (JsonNode it : cocok) {
+            String tag = (it.path("nama_alat").asText() + " " + it.path("ae_title").asText()).toLowerCase();
+            boolean isDental = tag.contains("pan") || tag.contains("dental");
+            if (isDental && dentalHit == null) dentalHit = it;
+            if (!isDental && generalHit == null) generalHit = it;
+        }
+        JsonNode pick;
+        if (butuhDental) {
+            pick = (dentalHit != null) ? dentalHit : cocok.get(0);
+        } else {
+            pick = (generalHit != null) ? generalHit : cocok.get(0);
+        }
+        return pick.path("ae_title").asText();
     }
 
     public JsonNode RegisterAlat(String namaAlat, String aeTitle, String kodeModality) {
@@ -326,8 +446,8 @@ public class ApiAlatRS {
      */
     public JsonNode RegisterWorklistWithRm(
             String rmId, String namaPasien, String nik, String jenisKelamin, String tanggalLahir,
-            String tenagaMedisId, String pemeriksaanId,
-            String aeTitle, String tanggal, String jam) {
+            String patientIHS, String tenagaMedisId, String pemeriksaanId,
+            String aeTitle, String tanggal, String jam, String encounterId) {
         try {
             ensureToken();
             headers = jsonAuthHeaders();
@@ -342,6 +462,11 @@ public class ApiAlatRS {
             if (validDate(tanggalLahir)) {
                 sb.append(",\"tanggal_lahir_pasien\":\"").append(escape(tanggalLahir)).append("\"");
             }
+            // Patient IHS dari Khanza (satu_sehat_ihs_patient) → RIS tidak perlu
+            // sync ulang, langsung bisa bikin ServiceRequest/ImagingStudy.
+            if (patientIHS != null && !patientIHS.isEmpty()) {
+                sb.append(",\"satu_sehat_id\":\"").append(escape(patientIHS)).append("\"");
+            }
             sb.append("},")
                     .append("\"tenaga_medis_id\":\"").append(escape(tenagaMedisId)).append("\",")
                     .append("\"ms_pemeriksaan_id\":\"").append(escape(pemeriksaanId)).append("\",")
@@ -349,6 +474,11 @@ public class ApiAlatRS {
                     .append("\"scheduled_step_start_time\":\"").append(escape(jam)).append("\"");
             if (aeTitle != null && !aeTitle.isEmpty()) {
                 sb.append(",\"scheduled_station_aet\":\"").append(escape(aeTitle)).append("\"");
+            }
+            // Encounter dari Khanza (satu_sehat_encounter) — supaya RIS TIDAK bikin
+            // Encounter baru, tapi pakai yang sama dengan kunjungan Khanza.
+            if (encounterId != null && !encounterId.isEmpty()) {
+                sb.append(",\"encounter_id\":\"").append(escape(encounterId)).append("\"");
             }
             sb.append("}");
             requestJson = sb.toString();
@@ -471,6 +601,137 @@ public class ApiAlatRS {
         return root;
     }
 
+    /**
+     * Ambil detail 1 worklist by id di alat_rs (GET /api/worklist/details_by_id/:id).
+     * Dipakai untuk menarik hasil bacaan yang diinput dokter/radiolog di RIS.
+     */
+    public JsonNode GetWorklistDetail(String worklistId) {
+        return getJsonAuth("WORKLIST_DETAIL",
+                baseUrl + "/api/worklist/details_by_id/" + urlEncode(worklistId));
+    }
+
+    /**
+     * Hasil bacaan radiologi yang ditarik dari RIS.
+     */
+    public static class HasilBacaan {
+        public boolean ada;          // true kalau ada teks hasil (kesimpulan/temuan)
+        public boolean ok;           // true kalau call sukses (walau hasil belum ada)
+        public String kesimpulan = "";
+        public String temuan = "";
+        public String status = "";           // final/preliminary/amended
+        public String issuedAt = "";         // waktu hasil dikeluarkan
+        public String radiologId = "";
+        public String diagnosticReportId = "";
+        public String pesan = "";
+        public String responseRaw = "";
+    }
+
+    /**
+     * Tarik hasil bacaan (input dokter/radiolog) dari RIS untuk 1 worklist.
+     * Parsing defensif: dukung beberapa varian nama field.
+     */
+    public HasilBacaan AmbilHasilBacaan(String worklistId) {
+        HasilBacaan hb = new HasilBacaan();
+        if (worklistId == null || worklistId.isEmpty()) {
+            hb.pesan = "worklist_id kosong (permintaan belum pernah dikirim ke RIS?).";
+            return hb;
+        }
+        JsonNode resp = GetWorklistDetail(worklistId);
+        if (resp == null) {
+            hb.pesan = "Tidak ada respons dari RIS saat ambil detail worklist.";
+            return hb;
+        }
+        hb.responseRaw = resp.toString();
+        // ambil node worklist: data (object) / data[0] / root
+        JsonNode w = resp.path("data");
+        if (w.isArray()) {
+            w = w.size() > 0 ? w.get(0) : resp;
+        }
+        if (w.isMissingNode() || w.isNull()) {
+            w = resp;
+        }
+        hb.ok = true;
+        hb.kesimpulan = firstNonEmpty(w, "hasil_kesimpulan", "kesimpulan", "conclusion");
+        hb.temuan     = firstNonEmpty(w, "hasil_temuan", "temuan", "findings", "hasil");
+        hb.status     = firstNonEmpty(w, "hasil_status", "status_hasil", "result_status");
+        hb.issuedAt   = firstNonEmpty(w, "hasil_issued_at", "issued_at", "tgl_hasil");
+        hb.radiologId = firstNonEmpty(w, "radiolog_id", "radiologist_id", "radiolog");
+        hb.diagnosticReportId = firstNonEmpty(w, "satu_sehat_diagnosticreport_id", "diagnosticreport_id", "diagnostic_report_id");
+        hb.ada = !hb.kesimpulan.isEmpty() || !hb.temuan.isEmpty();
+        if (!hb.ada) {
+            hb.pesan = "Hasil bacaan belum diinput dokter/radiolog di RIS.";
+        } else {
+            hb.pesan = "Hasil ditemukan (status: " + (hb.status.isEmpty() ? "-" : hb.status) + ").";
+        }
+        return hb;
+    }
+
+    /**
+     * Cari order id (PK worklist) di RIS dari accession number.
+     * Endpoint: GET /api/worklist/list?accession_number=...
+     * Return id (mis. "22") atau "" kalau tidak ketemu.
+     */
+    public String CariOrderIdByAccession(String accessionNumber) {
+        if (accessionNumber == null || accessionNumber.isEmpty()) return "";
+        JsonNode resp = getJsonAuth("CARI_ORDER_BY_ACC",
+                baseUrl + "/api/worklist/list?accession_number=" + urlEncode(accessionNumber));
+        JsonNode arr = extractArray(resp);
+        if (arr != null && arr.isArray() && arr.size() > 0) {
+            return arr.get(0).path("id").asText();
+        }
+        // fallback: data berupa object tunggal
+        if (resp != null) {
+            String id = resp.path("data").path("id").asText();
+            if (id != null && !id.isEmpty()) return id;
+        }
+        return "";
+    }
+
+    /**
+     * Download SEMUA gambar radiologi 1 order dari RIS sebagai ZIP berisi PNG.
+     * Endpoint: GET /api/orthanc/order/:id/images.zip
+     * Return byte[] isi ZIP (atau gambar tunggal), null kalau gagal.
+     *
+     * Catatan klinis dari vendor: PNG hanya untuk preview/lampiran,
+     * bukan pembacaan diagnostik (grayscale 12-16 bit hilang).
+     * Diagnosis tetap lewat DICOM viewer RIS.
+     */
+    public byte[] DownloadPreviewGambar(String orderId) {
+        if (orderId == null || orderId.isEmpty()) return null;
+        try {
+            ensureToken();
+            String url = baseUrl + "/api/orthanc/order/" + urlEncode(orderId) + "/images.zip";
+            HttpHeaders h = bearerHeaders();
+            h.setAccept(java.util.Arrays.asList(MediaType.ALL));
+            HttpEntity<String> re = new HttpEntity<>(h);
+            org.springframework.http.ResponseEntity<byte[]> resp =
+                getRest().exchange(url, HttpMethod.GET, re, byte[].class);
+            byte[] imgBytes = resp.getBody();
+            if (imgBytes == null || imgBytes.length == 0) {
+                System.out.println("alat_rs PREVIEW : kosong / 0 bytes");
+                return null;
+            }
+            System.out.println("alat_rs PREVIEW : downloaded " + imgBytes.length + " bytes");
+            return imgBytes;
+        } catch (org.springframework.web.client.HttpStatusCodeException he) {
+            System.out.println("alat_rs PREVIEW HTTP " + he.getStatusCode() + " : " + he.getResponseBodyAsString());
+            return null;
+        } catch (Exception ex) {
+            System.out.println("alat_rs PREVIEW ERR : " + ex);
+            return null;
+        }
+    }
+
+    /** Ambil nilai text pertama yang tidak kosong dari beberapa nama field. */
+    private String firstNonEmpty(JsonNode node, String... fields) {
+        if (node == null) return "";
+        for (String f : fields) {
+            String v = node.path(f).asText();
+            if (v != null && !v.isEmpty() && !"null".equalsIgnoreCase(v)) return v;
+        }
+        return "";
+    }
+
     // ---------------- orchestrator Khanza ----------------
 
     /**
@@ -482,6 +743,7 @@ public class ApiAlatRS {
         public String worklistId = "";
         public String patientIdAlatRS = "";
         public String satuSehatStatus = "";
+        public String aeTitle = "";
         public String pesan = "";
         public String responseRaw = "";
     }
@@ -500,10 +762,28 @@ public class ApiAlatRS {
      */
     public HasilKirim KirimPermintaanRadiologi(
             String noRkmMedisKhanza,
-            String namaPasien, String nikPasien, String jkPasien, String tglLahirPasien,
-            String namaDokter, String nikDokter, String jkDokter, String tglLahirDokter,
-            String loincCode, String loincDisplay, String namaPemeriksaan,
-            String tanggal, String jamHHmmss) {
+            String namaPasien, String nikPasien, String jkPasien, String tglLahirPasien, String patientIHS,
+            String kdDokter, String namaDokter, String nikDokter, String jkDokter, String tglLahirDokter,
+            String kdJenisPrw, String loincCode, String loincDisplay, String namaPemeriksaan,
+            String tanggal, String jamHHmmss, String encounterId) {
+        return KirimPermintaanRadiologi(noRkmMedisKhanza,
+                namaPasien, nikPasien, jkPasien, tglLahirPasien, patientIHS,
+                kdDokter, namaDokter, nikDokter, jkDokter, tglLahirDokter,
+                kdJenisPrw, loincCode, loincDisplay, namaPemeriksaan,
+                tanggal, jamHHmmss, encounterId, null);
+    }
+
+    /**
+     * Overload dengan aeTitleOverride — kalau diisi, pakai AE Title itu langsung
+     * tanpa auto-detect dari nama pemeriksaan. Null/"" = auto-detect seperti biasa.
+     */
+    public HasilKirim KirimPermintaanRadiologi(
+            String noRkmMedisKhanza,
+            String namaPasien, String nikPasien, String jkPasien, String tglLahirPasien, String patientIHS,
+            String kdDokter, String namaDokter, String nikDokter, String jkDokter, String tglLahirDokter,
+            String kdJenisPrw, String loincCode, String loincDisplay, String namaPemeriksaan,
+            String tanggal, String jamHHmmss, String encounterId,
+            String aeTitleOverride) {
 
         HasilKirim h = new HasilKirim();
         try {
@@ -513,16 +793,22 @@ public class ApiAlatRS {
                 return h;
             }
 
-            // 1. Resolve tenaga medis by NIK (register kalau belum ada)
+            // 1. Tenaga medis: pakai kd_dokter Khanza sebagai id (stabil).
+            //    Resolve dulu by NIK (kalau sudah ada — apapun idnya — dipakai ulang,
+            //    tidak duplikat). Belum ada → register dengan id = kd_dokter.
             String tmid = "";
             if (nikDokter != null && !nikDokter.isEmpty()) {
                 tmid = CariTenagaMedisIdByNik(nikDokter);
             }
             if (tmid.isEmpty()) {
-                JsonNode rt = RegisterTenagaMedis(namaDokter, nikDokter, jkDokter, tglLahirDokter);
-                tmid = extractId(rt);
+                JsonNode rt = RegisterTenagaMedis(kdDokter, namaDokter, nikDokter, jkDokter, tglLahirDokter);
+                int st = (rt == null) ? -1 : rt.path("status").asInt();
+                if (st == 200 || st == 201) {
+                    tmid = kdDokter;                          // dibuat dengan id kd_dokter
+                } else {
+                    tmid = CariTenagaMedisIdByNik(nikDokter); // 409/lainnya → ambil id yang sudah ada
+                }
                 if (tmid.isEmpty()) {
-                    // register gagal → tampilkan pesan error dari RIS
                     String m = rt == null ? "tidak ada respons" : rt.path("message").asText();
                     h.pesan = "Gagal daftarkan dokter \"" + namaDokter + "\" (NIK " + nikDokter + ") ke RIS: "
                             + (m == null || m.isEmpty() ? (rt == null ? "tidak ada respons" : rt.toString()) : m);
@@ -530,45 +816,54 @@ public class ApiAlatRS {
                 }
                 SyncTenagaMedisSatuSehat(tmid);
             }
-            if (tmid.isEmpty()) {
-                h.pesan = "Gagal mendapatkan ID tenaga medis di alat_rs (NIK: " + nikDokter + ").";
-                return h;
-            }
 
-            // 2. Resolve pemeriksaan. LOINC OPSIONAL:
-            //    - kalau ada LOINC → cari by LOINC dulu
-            //    - kalau tidak ada / tidak ketemu → cari by nama
-            //    - kalau tetap tidak ada → auto-register ke RIS (LOINC boleh kosong)
-            String idPemeriksaan = "";
-            if (loincCode != null && !loincCode.isEmpty()) {
-                idPemeriksaan = CariPemeriksaanIdByLoinc(loincCode);
-            }
-            if (idPemeriksaan.isEmpty()) {
-                idPemeriksaan = CariPemeriksaanIdByNama(namaPemeriksaan);
-            }
-            if (idPemeriksaan.isEmpty()) {
-                // Auto-register pemeriksaan ke RIS. Modality diturunkan dari
-                // LOINC display / nama (mis. "CT Chest" -> CT, "THORAX" -> DX).
-                String kodeModality = deriveModality(loincDisplay, namaPemeriksaan);
-                JsonNode rp = RegisterPemeriksaan(namaPemeriksaan, kodeModality,
-                        loincCode == null ? "" : loincCode, loincDisplay == null ? "" : loincDisplay);
-                idPemeriksaan = extractId(rp);
-                if (idPemeriksaan.isEmpty()) {
-                    idPemeriksaan = CariPemeriksaanIdByNama(namaPemeriksaan);
+            // 2. Pemeriksaan: pakai kd_jenis_prw Khanza sebagai id ms_pemeriksaan di RIS
+            //    (mapping stabil & idempotent — tidak perlu search yang rawan salah cocok).
+            //    Register dengan id itu; kalau sudah ada RIS balas 409 → id tetap dipakai.
+            String idPemeriksaan = kdJenisPrw;
+            String kodeModality = deriveModality(loincDisplay, namaPemeriksaan);
+            JsonNode rp = RegisterPemeriksaan(kdJenisPrw, namaPemeriksaan, kodeModality,
+                    loincCode == null ? "" : loincCode, loincDisplay == null ? "" : loincDisplay);
+            int st = (rp == null) ? -1 : rp.path("status").asInt();
+            // 200/201 = baru dibuat, 409 = sudah ada. Dua-duanya berarti id kd_jenis_prw valid dipakai.
+            if (st != 200 && st != 201 && st != 409) {
+                // gagal lain (mis. modality tidak ada di RIS) → coba fallback resolve by nama/LOINC
+                String fb = "";
+                if (loincCode != null && !loincCode.isEmpty()) fb = CariPemeriksaanIdByLoinc(loincCode);
+                if (fb.isEmpty()) fb = CariPemeriksaanIdByNama(namaPemeriksaan);
+                if (!fb.isEmpty()) {
+                    idPemeriksaan = fb;
+                } else {
+                    String m = (rp == null) ? "tidak ada respons" : rp.path("message").asText();
+                    h.pesan = "Gagal daftarkan pemeriksaan \"" + namaPemeriksaan + "\" (" + kdJenisPrw + ") ke RIS: "
+                            + (m == null || m.isEmpty() ? "cek modality " + kodeModality + " di master RIS" : m);
+                    return h;
                 }
             }
-            if (idPemeriksaan.isEmpty()) {
-                h.pesan = "Gagal mendaftarkan pemeriksaan \"" + namaPemeriksaan + "\" ke RIS. "
-                        + "Cek apakah modality " + deriveModality(loincDisplay, namaPemeriksaan) + " sudah ada di master modality RIS.";
-                return h;
-            }
 
-            // 3. Register worklist + RM inline dalam 1 call.
+            // 3. Resolve alat scanner (AE Title).
+            //    Kalau aeTitleOverride diisi → pakai langsung (user sudah pilih).
+            //    Kalau kosong → auto-detect by modality + nama pemeriksaan.
+            String aeTitle = "";
+            if (aeTitleOverride != null && !aeTitleOverride.trim().isEmpty()) {
+                aeTitle = aeTitleOverride.trim();
+            } else {
+                try {
+                    String hint = (namaPemeriksaan == null ? "" : namaPemeriksaan)
+                            + " " + (loincDisplay == null ? "" : loincDisplay);
+                    aeTitle = CariAlatAeTitleByModality(kodeModality, hint);
+                } catch (Exception ig) {
+                    aeTitle = "";
+                }
+            }
+            h.aeTitle = aeTitle;
+
+            // 4. Register worklist + RM inline dalam 1 call.
             //    rm.id = no_rkm_medis Khanza → mapping stabil, alat_rs auto-create
-            //    rm kalau belum ada. AE Title dikosongkan (RIS/radiografer yang atur).
+            //    rm kalau belum ada.
             JsonNode rw = RegisterWorklistWithRm(
-                    noRkmMedisKhanza, namaPasien, nikPasien, jkPasien, tglLahirPasien,
-                    tmid, idPemeriksaan, "", tanggal, jamHHmmss);
+                    noRkmMedisKhanza, namaPasien, nikPasien, jkPasien, tglLahirPasien, patientIHS,
+                    tmid, idPemeriksaan, aeTitle, tanggal, jamHHmmss, encounterId);
             if (rw == null) {
                 h.pesan = "Tidak ada respons dari alat_rs saat register worklist.";
                 return h;
@@ -582,7 +877,8 @@ public class ApiAlatRS {
 
             if (!h.accessionNumber.isEmpty()) {
                 h.ok = true;
-                h.pesan = "Berhasil. Accession: " + h.accessionNumber + " | Status: " + h.satuSehatStatus;
+                h.pesan = "Berhasil. Accession: " + h.accessionNumber + " | Status: " + h.satuSehatStatus
+                        + " | Alat: " + (h.aeTitle.isEmpty() ? "(diatur RIS)" : h.aeTitle);
             } else {
                 String msg = rw.path("message").asText();
                 h.pesan = "Worklist gagal: " + (msg == null || msg.isEmpty() ? rw.toString() : msg);
@@ -641,6 +937,27 @@ public class ApiAlatRS {
             HttpEntity re = new HttpEntity(json, h);
             System.out.println("alat_rs " + logName + " REQ  : " + json);
             String body = getRest().exchange(url, HttpMethod.POST, re, String.class).getBody();
+            System.out.println("alat_rs " + logName + " RESP : " + body);
+            return mapper.readTree(body);
+        } catch (org.springframework.web.client.HttpStatusCodeException he) {
+            String errBody = he.getResponseBodyAsString();
+            System.out.println("alat_rs " + logName + " HTTP " + he.getStatusCode() + " : " + errBody);
+            try { return mapper.readTree(errBody); } catch (Exception ig) { return null; }
+        } catch (Exception ex) {
+            System.out.println("alat_rs " + logName + " ERR  : " + ex);
+            return null;
+        }
+    }
+
+    /**
+     * GET JSON (Bearer auth) terpusat. Kembalikan node hasil parse (sukses ATAU
+     * error body), atau null kalau gagal total.
+     */
+    private JsonNode getJsonAuth(String logName, String url) {
+        try {
+            ensureToken();
+            HttpEntity re = new HttpEntity(bearerHeaders());
+            String body = getRest().exchange(url, HttpMethod.GET, re, String.class).getBody();
             System.out.println("alat_rs " + logName + " RESP : " + body);
             return mapper.readTree(body);
         } catch (org.springframework.web.client.HttpStatusCodeException he) {

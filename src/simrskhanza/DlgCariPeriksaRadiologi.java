@@ -1,6 +1,7 @@
 package simrskhanza;
 import bridging.ApiOrthanc;
 import bridging.OrthancDICOM;
+import bridging.ApiAlatRS;
 import com.fasterxml.jackson.databind.JsonNode;
 import kepegawaian.DlgCariPetugas;
 import keuangan.Jurnal;
@@ -233,6 +234,7 @@ public class DlgCariPeriksaRadiologi extends javax.swing.JDialog {
         FormPass2 = new widget.PanelBiasa();
         btnAmbilPhoto = new widget.Button();
         BtnRefreshPhoto = new widget.Button();
+        BtnAmbilGambarRIS = new widget.Button();
         Scroll4 = new widget.ScrollPane();
         LoadHTML = new widget.editorpane();
         FormHasilRadiologi = new widget.PanelBiasa();
@@ -241,6 +243,8 @@ public class DlgCariPeriksaRadiologi extends javax.swing.JDialog {
         panelGlass6 = new widget.panelisi();
         btnAmbilPhoto1 = new widget.Button();
         BtnSimpan = new widget.Button();
+        BtnAmbilRIS = new widget.Button();
+        BtnViewerRIS = new widget.Button();
         BtnPrint1 = new widget.Button();
         panelisi8 = new widget.panelisi();
         InformasiTambahan = new widget.TextBox();
@@ -873,6 +877,19 @@ public class DlgCariPeriksaRadiologi extends javax.swing.JDialog {
         });
         FormPass2.add(BtnRefreshPhoto);
 
+        BtnAmbilGambarRIS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/refresh.png"))); // NOI18N
+        BtnAmbilGambarRIS.setMnemonic('R');
+        BtnAmbilGambarRIS.setText("Ambil dari RIS");
+        BtnAmbilGambarRIS.setToolTipText("Tarik gambar radiologi dari RIS alat_rs (Alt+R)");
+        BtnAmbilGambarRIS.setName("BtnAmbilGambarRIS"); // NOI18N
+        BtnAmbilGambarRIS.setPreferredSize(new java.awt.Dimension(140, 30));
+        BtnAmbilGambarRIS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAmbilGambarRISActionPerformed(evt);
+            }
+        });
+        FormPass2.add(BtnAmbilGambarRIS);
+
         FormPhoto.add(FormPass2, java.awt.BorderLayout.PAGE_END);
 
         Scroll4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
@@ -940,6 +957,18 @@ public class DlgCariPeriksaRadiologi extends javax.swing.JDialog {
             }
         });
         panelGlass6.add(BtnSimpan);
+
+        BtnAmbilRIS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/refresh.png"))); // NOI18N
+        BtnAmbilRIS.setText("Ambil Hasil di RIS");
+        BtnAmbilRIS.setToolTipText("Tarik hasil bacaan dari RIS alat_rs");
+        BtnAmbilRIS.setName("BtnAmbilRIS"); // NOI18N
+        BtnAmbilRIS.setPreferredSize(new java.awt.Dimension(140, 30));
+        BtnAmbilRIS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAmbilRISActionPerformed(evt);
+            }
+        });
+        panelGlass6.add(BtnAmbilRIS);
 
         BtnPrint1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/b_print.png"))); // NOI18N
         BtnPrint1.setMnemonic('T');
@@ -1046,6 +1075,19 @@ public class DlgCariPeriksaRadiologi extends javax.swing.JDialog {
             }
         });
         panelGlass7.add(btnDicomRouter);
+
+        BtnViewerRIS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/item.png"))); // NOI18N
+        BtnViewerRIS.setMnemonic('V');
+        BtnViewerRIS.setText("Buka Viewer RIS");
+        BtnViewerRIS.setToolTipText("Buka DICOM viewer RIS di browser (Alt+V)");
+        BtnViewerRIS.setName("BtnViewerRIS"); // NOI18N
+        BtnViewerRIS.setPreferredSize(new java.awt.Dimension(160, 30));
+        BtnViewerRIS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnViewerRISActionPerformed(evt);
+            }
+        });
+        panelGlass7.add(BtnViewerRIS);
 
         FormOrthan.add(panelGlass7, java.awt.BorderLayout.PAGE_END);
 
@@ -1789,6 +1831,144 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         }
     }//GEN-LAST:event_BtnPrint1KeyPressed
 
+    /**
+     * Tarik hasil bacaan dari RIS alat_rs untuk permintaan pada baris yang
+     * sedang dipilih (No.Rawat aktif), lalu isi ke field Hasil Bacaan Radiologi.
+     * User bisa review lalu klik "Update" (BtnSimpan) untuk menyimpan seperti biasa.
+     */
+    private void BtnAmbilRISActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAmbilRISActionPerformed
+        final String noRawat = NoRawatDicari.getText();
+        if(noRawat==null || noRawat.trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, silahkan pilih data pemeriksaan terlebih dulu...");
+            return;
+        }
+        // Cari noorder dari permintaan_radiologi by no_rawat (terbaru).
+        String order = "";
+        try(java.sql.Connection kon=koneksiDB.condb();
+            java.sql.PreparedStatement psq=kon.prepareStatement(
+                "select noorder from permintaan_radiologi where no_rawat=? order by tgl_permintaan desc, jam_permintaan desc limit 1")){
+            psq.setString(1, noRawat);
+            try(java.sql.ResultSet rsq=psq.executeQuery()){
+                if(rsq.next()){ order = rsq.getString("noorder"); }
+            }
+        }catch(Exception e){
+            System.out.println("Cari noorder gagal: "+e);
+        }
+        if(order==null || order.equals("")){
+            JOptionPane.showMessageDialog(null,"Tidak ada permintaan radiologi (noorder) untuk No.Rawat "+noRawat+".");
+            return;
+        }
+
+        // Ambil worklist_id dari bridging_alatrs_log.
+        String worklistId = "";
+        try(java.sql.Connection kon=koneksiDB.condb();
+            java.sql.PreparedStatement psq=kon.prepareStatement(
+                "select ifnull(worklist_id_alatrs,'') as wid from bridging_alatrs_log where noorder=?")){
+            psq.setString(1, order);
+            try(java.sql.ResultSet rsq=psq.executeQuery()){
+                if(rsq.next()){ worklistId = rsq.getString("wid"); }
+            }
+        }catch(Exception e){
+            System.out.println("Cek bridging_alatrs_log gagal: "+e);
+        }
+        if(worklistId==null || worklistId.equals("")){
+            JOptionPane.showMessageDialog(null,
+                "Permintaan "+order+" belum pernah dikirim ke RIS alat_rs.\n"+
+                "Silakan kirim dulu lewat menu Data Permintaan Radiologi → tombol \"Kirim Permintaan ke RIS (alat_rs)\".");
+            return;
+        }
+
+        final String worklistIdFinal = worklistId;
+        final String orderFinal = order;
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        new Thread(() -> {
+            ApiAlatRS api = new ApiAlatRS();
+            api.Login();
+            final ApiAlatRS.HasilBacaan hb = api.AmbilHasilBacaan(worklistIdFinal);
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                this.setCursor(Cursor.getDefaultCursor());
+                if(!hb.ok){
+                    JOptionPane.showMessageDialog(this,
+                        "Gagal ambil hasil dari RIS.\n"+hb.pesan,
+                        "Ambil Hasil di RIS", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if(!hb.ada){
+                    JOptionPane.showMessageDialog(this,
+                        "Belum ada hasil bacaan di RIS untuk order "+orderFinal+".\n"+hb.pesan,
+                        "Ambil Hasil di RIS", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                StringBuilder teks = new StringBuilder();
+                if(!hb.temuan.isEmpty()){
+                    teks.append("TEMUAN:\n").append(hb.temuan).append("\n\n");
+                }
+                if(!hb.kesimpulan.isEmpty()){
+                    teks.append("KESIMPULAN:\n").append(hb.kesimpulan);
+                }
+                String existing = HasilPeriksa.getText();
+                if(existing!=null && !existing.trim().isEmpty()){
+                    int pil = JOptionPane.showConfirmDialog(this,
+                        "Field \"Hasil Bacaan Radiologi\" sudah berisi teks.\nTimpa dengan hasil dari RIS?",
+                        "Timpa Hasil", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if(pil!=JOptionPane.YES_OPTION) return;
+                }
+                HasilPeriksa.setText(teks.toString().trim());
+                HasilPeriksa.setCaretPosition(0);
+                HasilPeriksa.requestFocus();
+                JOptionPane.showMessageDialog(this,
+                    "Hasil dari RIS berhasil ditarik ke field Hasil Bacaan Radiologi.\n"+
+                    "Status RIS: "+(hb.status.isEmpty()?"-":hb.status)+
+                    (hb.issuedAt.isEmpty()?"":("\nWaktu hasil: "+hb.issuedAt))+"\n\n"+
+                    "Review lalu klik \"Update\" untuk menyimpan ke Khanza.",
+                    "Ambil Hasil di RIS", JOptionPane.INFORMATION_MESSAGE);
+            });
+        }, "alat_rs-ambil-hasil-cari").start();
+    }//GEN-LAST:event_BtnAmbilRISActionPerformed
+
+    /**
+     * Buka DICOM viewer milik RIS alat_rs di browser, langsung ke study
+     * pasien yang dipilih (by accession number dari bridging_alatrs_log).
+     */
+    private void BtnViewerRISActionPerformed(java.awt.event.ActionEvent evt) {
+        final String noRawat = NoRawatDicari.getText();
+        if(noRawat==null || noRawat.trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, silahkan pilih data pemeriksaan terlebih dulu...");
+            return;
+        }
+        // Cari noorder terbaru → accession + worklist_id dari log bridging
+        String accession = "", worklistId = "";
+        try(java.sql.Connection kon=koneksiDB.condb();
+            java.sql.PreparedStatement psq=kon.prepareStatement(
+                "select ifnull(b.accession_number,'') as acc, ifnull(b.worklist_id_alatrs,'') as wid "+
+                "from bridging_alatrs_log b inner join permintaan_radiologi p on p.noorder=b.noorder "+
+                "where p.no_rawat=? order by p.tgl_permintaan desc, p.jam_permintaan desc limit 1")){
+            psq.setString(1, noRawat);
+            try(java.sql.ResultSet rsq=psq.executeQuery()){
+                if(rsq.next()){
+                    accession = rsq.getString("acc");
+                    worklistId = rsq.getString("wid");
+                }
+            }
+        }catch(Exception e){
+            System.out.println("Cari accession gagal: "+e);
+        }
+        if(accession.equals("") && worklistId.equals("")){
+            JOptionPane.showMessageDialog(this,
+                "Pemeriksaan ini belum pernah dikirim ke RIS alat_rs,\n"+
+                "jadi tidak ada study yang bisa dibuka di viewer RIS.");
+            return;
+        }
+        try{
+            // Pola URL viewer RIS — sesuaikan dengan info vendor kalau beda.
+            String base = koneksiDB.URLALATRS()+":"+koneksiDB.PORTALATRS();
+            String url = base + "/viewer?accession=" + java.net.URLEncoder.encode(accession,"UTF-8");
+            java.awt.Desktop.getDesktop().browse(new java.net.URI(url));
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this,"Gagal buka browser: "+e.getMessage());
+        }
+    }
+
     private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSimpanActionPerformed
         if(tabMode.getRowCount()==0){
             JOptionPane.showMessageDialog(null,"Maaf, data sudah habis...!!!!");
@@ -2050,6 +2230,18 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         panggilPhoto();
     }//GEN-LAST:event_BtnRefreshPhotoActionPerformed
 
+    private void BtnAmbilGambarRISActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tbDokter.getSelectedRow()<= -1){
+            JOptionPane.showMessageDialog(null,"Maaf, silahkan pilih data pemeriksaan terlebih dulu...");
+            return;
+        }
+        if(NoRawatDicari.getText().equals("") || TglDicari.getText().equals("") || JamDicari.getText().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, silahkan pilih data pemeriksaan terlebih dulu...");
+            return;
+        }
+        autoTarikGambarRIS(NoRawatDicari.getText(), TglDicari.getText(), JamDicari.getText(), true);
+    }
+
     private void btnAmbilPhoto1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAmbilPhoto1ActionPerformed
         akses.setform("DlgCariPeriksaRadiologi");
         MasterCariTemplateHasilRadiologi templatehasil=new MasterCariTemplateHasilRadiologi(null,false);
@@ -2234,7 +2426,9 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     private widget.Button BtnPrint;
     private widget.Button BtnPrint1;
     private widget.Button BtnRefreshPhoto;
+    private widget.Button BtnAmbilGambarRIS;
     private widget.Button BtnSimpan;
+    private widget.Button BtnAmbilRIS;
     private widget.Button BtnSimpan4;
     private widget.CekBox ChkAccor;
     private widget.TextBox DiagnosisKlinis;
@@ -2279,6 +2473,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     private widget.Button btnAmbilPhoto1;
     private widget.Button btnDicom;
     private widget.Button btnDicomRouter;
+    private widget.Button BtnViewerRIS;
     private widget.Button btnDokter;
     private widget.Button btnDokterPj;
     private widget.Button btnPasien;
@@ -2597,6 +2792,14 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                             while(rs.next()){
                                 htmlContent.append("<tr><td border='0' align='center'><a href='http://"+koneksiDB.HOSTHYBRIDWEB()+":"+koneksiDB.PORTWEB()+"/"+koneksiDB.HYBRIDWEB()+"/radiologi/"+rs.getString("lokasi_gambar")+"'><img src='http://"+koneksiDB.HOSTHYBRIDWEB()+":"+koneksiDB.PORTWEB()+"/"+koneksiDB.HYBRIDWEB()+"/radiologi/"+rs.getString("lokasi_gambar")+"' alt='photo' width='"+(internalFrame1.getWidth()-370)+"' height='"+(internalFrame1.getWidth()-370)+"'/></a></td></tr>");
                             }
+                            // Auto-pull gambar dari RIS kalau belum ada di gambar_radiologi
+                            if(htmlContent.length()==0){
+                                autoTarikGambarRIS(
+                                    tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString(),
+                                    tbDokter.getValueAt(tbDokter.getSelectedRow(),3).toString(),
+                                    tbDokter.getValueAt(tbDokter.getSelectedRow(),4).toString()
+                                );
+                            }
                             LoadHTML.setText(
                                 "<html>"+
                                   "<table width='100%' border='0' align='center' cellpadding='1px' cellspacing='1px' class='tbl_form'>"+
@@ -2675,6 +2878,336 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                 }
             }
         }
+    }
+
+    /**
+     * Auto-pull gambar preview dari RIS alat_rs dan tampilkan di Photo Radiologi.
+     * Dipanggil dari panggilPhoto() kalau gambar_radiologi kosong untuk no_rawat ini.
+     * Flow:
+     *  1. Cari noorder → worklist_id dari bridging_alatrs_log
+     *  2. Download gambar dari RIS: GET /api/worklist/:id/preview
+     *  3. Upload ke web server via PHP: radiologi/pages/upload_api.php
+     *  4. Refresh display
+     *
+     * Endpoint vendor: GET /api/orthanc/order/:id/images.zip (ZIP berisi PNG).
+     * orderId dicari dari worklist_id di log; kalau kosong, di-resolve
+     * dari accession_number via GET /api/worklist/list?accession_number=...
+     */
+    private void autoTarikGambarRIS(final String noRawat, final String tglPeriksa, final String jam) {
+        autoTarikGambarRIS(noRawat, tglPeriksa, jam, false);
+    }
+
+    /**
+     * @param interaktif true = dipanggil dari tombol (tampilkan pesan sukses/gagal),
+     *                   false = auto-trigger diam-diam saat buka tab.
+     */
+    private void autoTarikGambarRIS(final String noRawat, final String tglPeriksa, final String jam,
+            final boolean interaktif) {
+        new Thread(() -> {
+            try {
+                // 1. Cari noorder dari permintaan_radiologi
+                String order = "";
+                try(java.sql.Connection kon=koneksiDB.condb();
+                    java.sql.PreparedStatement psq=kon.prepareStatement(
+                        "select noorder from permintaan_radiologi where no_rawat=? order by tgl_permintaan desc, jam_permintaan desc limit 1")){
+                    psq.setString(1, noRawat);
+                    try(java.sql.ResultSet rsq=psq.executeQuery()){
+                        if(rsq.next()) order = rsq.getString("noorder");
+                    }
+                }
+                if(order==null || order.isEmpty()){
+                    pesanTarikGambar(interaktif, "Tidak ada permintaan radiologi (noorder) untuk No.Rawat "+noRawat+".", true);
+                    return;
+                }
+
+                // 2. Cari worklist_id + accession dari bridging_alatrs_log
+                String worklistId = "", accession = "";
+                try(java.sql.Connection kon=koneksiDB.condb();
+                    java.sql.PreparedStatement psq=kon.prepareStatement(
+                        "select ifnull(worklist_id_alatrs,'') as wid, ifnull(accession_number,'') as acc "+
+                        "from bridging_alatrs_log where noorder=?")){
+                    psq.setString(1, order);
+                    try(java.sql.ResultSet rsq=psq.executeQuery()){
+                        if(rsq.next()){
+                            worklistId = rsq.getString("wid");
+                            accession  = rsq.getString("acc");
+                        }
+                    }
+                }
+                if((worklistId==null || worklistId.isEmpty())
+                        && (accession==null || accession.isEmpty())){
+                    pesanTarikGambar(interaktif,
+                        "Permintaan "+order+" belum pernah dikirim ke RIS alat_rs.\n"+
+                        "Kirim dulu lewat menu Data Permintaan Radiologi.", true);
+                    return;
+                }
+
+                // 3. Download ZIP gambar dari RIS.
+                //    orderId = worklist_id; kalau kosong, resolve dari accession.
+                ApiAlatRS api = new ApiAlatRS();
+                api.Login();
+                String orderId = worklistId;
+                if(orderId==null || orderId.isEmpty()){
+                    orderId = api.CariOrderIdByAccession(accession);
+                }
+                if(orderId==null || orderId.isEmpty()){
+                    System.out.println("autoTarikGambarRIS: orderId tidak ketemu (acc="+accession+")");
+                    pesanTarikGambar(interaktif, "Order tidak ditemukan di RIS (accession: "+accession+").", true);
+                    return;
+                }
+                byte[] respBytes = api.DownloadPreviewGambar(orderId);
+                if(respBytes == null || respBytes.length == 0){
+                    System.out.println("autoTarikGambarRIS: gambar belum tersedia di RIS untuk order "+orderId);
+                    pesanTarikGambar(interaktif,
+                        "Gambar belum tersedia di RIS untuk order ini.\n"+
+                        "Kemungkinan pemeriksaan belum di-scan atau gambar belum masuk PACS.", true);
+                    return;
+                }
+
+                String namaDasar = noRawat.replaceAll("[^a-zA-Z0-9]","_") + "_" + tglPeriksa + "_" + jam.replace(":","");
+                boolean adaSukses = false;
+
+                if(respBytes.length > 4 && respBytes[0]=='P' && respBytes[1]=='K'){
+                    // ZIP dari vendor: ekstrak hanya JPG/PNG, lalu GABUNG jadi
+                    // 1 lembar grid (seperti film CT) sebelum di-upload.
+                    // Nama file di-generate sendiri (bukan dari dalam ZIP)
+                    // supaya aman dari path traversal.
+                    java.util.List<java.awt.image.BufferedImage> gambarList = new java.util.ArrayList<>();
+                    try(java.util.zip.ZipInputStream zis = new java.util.zip.ZipInputStream(
+                            new java.io.ByteArrayInputStream(respBytes))){
+                        java.util.zip.ZipEntry entry;
+                        while((entry = zis.getNextEntry()) != null && gambarList.size() < 40){
+                            if(entry.isDirectory()){ zis.closeEntry(); continue; }
+                            String namaEntry = entry.getName().toLowerCase();
+                            if(!namaEntry.endsWith(".jpg") && !namaEntry.endsWith(".jpeg")
+                                    && !namaEntry.endsWith(".png")){ zis.closeEntry(); continue; }
+                            // baca isi entry, max 20MB per gambar
+                            java.io.ByteArrayOutputStream bos = new java.io.ByteArrayOutputStream();
+                            byte[] buf = new byte[8192];
+                            int n, total = 0;
+                            while((n = zis.read(buf)) > 0){
+                                total += n;
+                                if(total > 20*1024*1024) break;
+                                bos.write(buf, 0, n);
+                            }
+                            zis.closeEntry();
+                            if(total > 20*1024*1024){
+                                System.out.println("autoTarikGambarRIS: skip entry kebesaran: "+entry.getName());
+                                continue;
+                            }
+                            java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(
+                                    new java.io.ByteArrayInputStream(bos.toByteArray()));
+                            if(img != null) gambarList.add(img);
+                        }
+                    }
+                    if(gambarList.size() == 1){
+                        // cuma 1 gambar → langsung upload tanpa grid
+                        byte[] jpg = bufferedImageKeJpg(gambarList.get(0));
+                        adaSukses = uploadGambarKeWeb(noRawat, tglPeriksa, jam,
+                                namaDasar + "_ris.jpg", "image/jpeg", jpg);
+                    }else if(gambarList.size() > 1){
+                        byte[] lembarJpg = gabungGambarGrid(gambarList);
+                        if(lembarJpg != null){
+                            adaSukses = uploadGambarKeWeb(noRawat, tglPeriksa, jam,
+                                    namaDasar + "_ris_sheet.jpg", "image/jpeg", lembarJpg);
+                        }
+                    }
+                }else{
+                    // Bukan ZIP: anggap 1 gambar langsung (PNG/JPG).
+                    // Re-encode ke JPG terkompresi supaya file kecil.
+                    java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(
+                            new java.io.ByteArrayInputStream(respBytes));
+                    if(img != null){
+                        byte[] jpg = bufferedImageKeJpg(img);
+                        adaSukses = uploadGambarKeWeb(noRawat, tglPeriksa, jam,
+                                namaDasar + "_ris.jpg", "image/jpeg", jpg);
+                    }else{
+                        System.out.println("autoTarikGambarRIS: respons bukan gambar valid");
+                    }
+                }
+
+                if(adaSukses){
+                    javax.swing.SwingUtilities.invokeLater(() -> panggilPhoto());
+                    pesanTarikGambar(interaktif,
+                        "Gambar dari RIS berhasil ditarik dan ditampilkan.", false);
+                }else{
+                    pesanTarikGambar(interaktif,
+                        "Gambar dari RIS gagal diproses/diunggah. Cek log aplikasi.", true);
+                }
+            } catch(Exception ex){
+                System.out.println("autoTarikGambarRIS ERR: " + ex);
+                pesanTarikGambar(interaktif, "Gagal tarik gambar dari RIS: "+ex.getMessage(), true);
+            }
+        }, "alat_rs-auto-pull-gambar").start();
+    }
+
+    /** Tampilkan pesan hasil tarik gambar hanya kalau mode interaktif (dari tombol). */
+    private void pesanTarikGambar(boolean interaktif, String pesan, boolean error){
+        if(!interaktif) return;
+        javax.swing.SwingUtilities.invokeLater(() ->
+            JOptionPane.showMessageDialog(this, pesan, "Ambil Gambar dari RIS",
+                error ? JOptionPane.WARNING_MESSAGE : JOptionPane.INFORMATION_MESSAGE));
+    }
+
+    /**
+     * Gabung banyak gambar jadi 1 lembar grid (seperti film CT):
+     * maksimal 5 kolom, tiap tile dinormalisasi ke lebar 512px (aspek dijaga),
+     * latar hitam, jarak antar tile 6px. Return bytes JPG.
+     */
+    private byte[] gabungGambarGrid(java.util.List<java.awt.image.BufferedImage> gambarList) {
+        try {
+            final int tileW = 512;
+            final int gap = 6;
+            int kolom = Math.min(5, gambarList.size());
+            int baris = (int) Math.ceil((double) gambarList.size() / kolom);
+
+            // tinggi tile ikut rasio gambar pertama (umumnya seragam dari 1 series)
+            java.awt.image.BufferedImage contoh = gambarList.get(0);
+            int tileH = (int) Math.round((double) tileW * contoh.getHeight() / contoh.getWidth());
+
+            int lebarTotal = kolom * tileW + (kolom + 1) * gap;
+            int tinggiTotal = baris * tileH + (baris + 1) * gap;
+            java.awt.image.BufferedImage lembar = new java.awt.image.BufferedImage(
+                    lebarTotal, tinggiTotal, java.awt.image.BufferedImage.TYPE_INT_RGB);
+            java.awt.Graphics2D g = lembar.createGraphics();
+            g.setColor(java.awt.Color.BLACK);
+            g.fillRect(0, 0, lebarTotal, tinggiTotal);
+            g.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION,
+                    java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
+            for (int i = 0; i < gambarList.size(); i++) {
+                java.awt.image.BufferedImage img = gambarList.get(i);
+                int kol = i % kolom;
+                int brs = i / kolom;
+                int x = gap + kol * (tileW + gap);
+                int y = gap + brs * (tileH + gap);
+                // skala fit di dalam tile, aspek dijaga, di tengah
+                double skala = Math.min((double) tileW / img.getWidth(), (double) tileH / img.getHeight());
+                int w = (int) (img.getWidth() * skala);
+                int hh = (int) (img.getHeight() * skala);
+                g.drawImage(img, x + (tileW - w) / 2, y + (tileH - hh) / 2, w, hh, null);
+            }
+            g.dispose();
+            return bufferedImageKeJpg(lembar);
+        } catch (Exception ex) {
+            System.out.println("gabungGambarGrid ERR: " + ex);
+            return null;
+        }
+    }
+
+    /**
+     * Encode BufferedImage ke bytes JPG dengan kompresi supaya file kecil
+     * dan server tidak berat:
+     *  - resolusi dibatasi max 2500px (sisi terpanjang) — cukup tajam untuk preview
+     *  - kualitas JPG 0.75 — hemat ±60-70% dibanding default, beda visual minim
+     */
+    private byte[] bufferedImageKeJpg(java.awt.image.BufferedImage img) throws java.io.IOException {
+        // 1. Batasi resolusi: sisi terpanjang max 2500px
+        final int maxSisi = 2500;
+        int sisiPanjang = Math.max(img.getWidth(), img.getHeight());
+        if (sisiPanjang > maxSisi) {
+            double skala = (double) maxSisi / sisiPanjang;
+            int w = (int) (img.getWidth() * skala);
+            int h = (int) (img.getHeight() * skala);
+            java.awt.image.BufferedImage kecil = new java.awt.image.BufferedImage(
+                    w, h, java.awt.image.BufferedImage.TYPE_INT_RGB);
+            java.awt.Graphics2D g = kecil.createGraphics();
+            g.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION,
+                    java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g.setColor(java.awt.Color.BLACK);
+            g.fillRect(0, 0, w, h);
+            g.drawImage(img, 0, 0, w, h, null);
+            g.dispose();
+            img = kecil;
+        } else if (img.getType() != java.awt.image.BufferedImage.TYPE_INT_RGB) {
+            // pastikan RGB (JPG tidak dukung alpha)
+            java.awt.image.BufferedImage rgb = new java.awt.image.BufferedImage(
+                    img.getWidth(), img.getHeight(), java.awt.image.BufferedImage.TYPE_INT_RGB);
+            java.awt.Graphics2D g = rgb.createGraphics();
+            g.setColor(java.awt.Color.BLACK);
+            g.fillRect(0, 0, img.getWidth(), img.getHeight());
+            g.drawImage(img, 0, 0, null);
+            g.dispose();
+            img = rgb;
+        }
+
+        // 2. Encode JPG dengan kualitas 0.75
+        java.io.ByteArrayOutputStream bos = new java.io.ByteArrayOutputStream();
+        javax.imageio.ImageWriter writer = javax.imageio.ImageIO
+                .getImageWritersByFormatName("jpg").next();
+        javax.imageio.ImageWriteParam param = writer.getDefaultWriteParam();
+        param.setCompressionMode(javax.imageio.ImageWriteParam.MODE_EXPLICIT);
+        param.setCompressionQuality(0.75f);
+        try (javax.imageio.stream.ImageOutputStream ios =
+                javax.imageio.ImageIO.createImageOutputStream(bos)) {
+            writer.setOutput(ios);
+            writer.write(null, new javax.imageio.IIOImage(img, null, null), param);
+        } finally {
+            writer.dispose();
+        }
+        return bos.toByteArray();
+    }
+
+    /**
+     * Upload 1 gambar ke web server via radiologi/pages/upload_api.php
+     * (masuk folder pages/upload/ + insert gambar_radiologi). Return true kalau sukses.
+     */
+    private boolean uploadGambarKeWeb(String noRawat, String tglPeriksa, String jam,
+            String fileName, String mimeType, byte[] imgBytes) {
+        try {
+            // Pakai https kalau webapps di balik SSL (port 443), selain itu http.
+            // HttpURLConnection Java tidak mengikuti redirect http→https,
+            // jadi skema harus benar dari awal.
+            String skema = "443".equals(koneksiDB.PORTWEB()) ? "https" : "http";
+            String uploadUrl = skema + "://" + koneksiDB.HOSTHYBRIDWEB() + ":" + koneksiDB.PORTWEB()
+                    + "/" + koneksiDB.HYBRIDWEB() + "/radiologi/pages/upload_api.php";
+
+            String boundary = "----KhanzaRIS" + System.currentTimeMillis();
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection)
+                    new java.net.URL(uploadUrl).openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+            conn.setConnectTimeout(15000);
+            conn.setReadTimeout(30000);
+
+            try(java.io.OutputStream out = conn.getOutputStream()) {
+                writeField(out, boundary, "usere", koneksiDB.USERHYBRIDWEB());
+                writeField(out, boundary, "passwordte", koneksiDB.PASHYBRIDWEB());
+                writeField(out, boundary, "no_rawat", noRawat);
+                writeField(out, boundary, "tanggal", tglPeriksa);
+                writeField(out, boundary, "jam", jam);
+                out.write(("--" + boundary + "\r\n").getBytes());
+                out.write(("Content-Disposition: form-data; name=\"gambar\"; filename=\"" + fileName + "\"\r\n").getBytes());
+                out.write(("Content-Type: " + mimeType + "\r\n\r\n").getBytes());
+                out.write(imgBytes);
+                out.write("\r\n".getBytes());
+                out.write(("--" + boundary + "--\r\n").getBytes());
+                out.flush();
+            }
+
+            int respCode = conn.getResponseCode();
+            String respBody = "";
+            try(java.io.BufferedReader br = new java.io.BufferedReader(
+                    new java.io.InputStreamReader(
+                        respCode < 400 ? conn.getInputStream() : conn.getErrorStream()))) {
+                String line;
+                StringBuilder sb = new StringBuilder();
+                while((line = br.readLine()) != null) sb.append(line);
+                respBody = sb.toString();
+            }
+            System.out.println("uploadGambarKeWeb resp(" + respCode + ") " + fileName + ": " + respBody);
+            return respCode == 200 && respBody.contains("\"ok\"");
+        } catch(Exception ex){
+            System.out.println("uploadGambarKeWeb ERR: " + ex);
+            return false;
+        }
+    }
+
+    private void writeField(java.io.OutputStream out, String boundary, String name, String value) throws java.io.IOException {
+        out.write(("--" + boundary + "\r\n").getBytes());
+        out.write(("Content-Disposition: form-data; name=\"" + name + "\"\r\n\r\n").getBytes());
+        out.write((value + "\r\n").getBytes());
     }
 
     private void tampilOrthanc() {
