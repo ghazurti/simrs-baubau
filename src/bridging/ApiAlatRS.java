@@ -622,6 +622,7 @@ public class ApiAlatRS {
         public String issuedAt = "";         // waktu hasil dikeluarkan
         public String radiologId = "";
         public String diagnosticReportId = "";
+        public String namaPemeriksaan = "";   // nama pemeriksaan (untuk judul kalau >1 worklist)
         public String pesan = "";
         public String responseRaw = "";
     }
@@ -657,6 +658,8 @@ public class ApiAlatRS {
         hb.issuedAt   = firstNonEmpty(w, "hasil_issued_at", "issued_at", "tgl_hasil");
         hb.radiologId = firstNonEmpty(w, "radiolog_id", "radiologist_id", "radiolog");
         hb.diagnosticReportId = firstNonEmpty(w, "satu_sehat_diagnosticreport_id", "diagnosticreport_id", "diagnostic_report_id");
+        hb.namaPemeriksaan = firstNonEmpty(w, "nama_pemeriksaan", "pemeriksaan", "ms_pemeriksaan_nama",
+                "study_description", "nama_study", "deskripsi");
         hb.ada = !hb.kesimpulan.isEmpty() || !hb.temuan.isEmpty();
         if (!hb.ada) {
             hb.pesan = "Hasil bacaan belum diinput dokter/radiolog di RIS.";
@@ -664,6 +667,77 @@ public class ApiAlatRS {
             hb.pesan = "Hasil ditemukan (status: " + (hb.status.isEmpty() ? "-" : hb.status) + ").";
         }
         return hb;
+    }
+
+    /**
+     * Tarik & gabung hasil bacaan dari BEBERAPA worklist (dipisah koma), untuk
+     * kasus 1 permintaan berisi >1 pemeriksaan yang gambarnya beda di RIS.
+     * Tiap pemeriksaan diberi judul supaya jelas mana temuan yang mana.
+     *
+     * Field HasilBacaan yang dikembalikan:
+     *   - temuan  = teks gabungan lengkap (siap ditaruh ke kolom hasil)
+     *   - ada     = true kalau minimal 1 worklist punya hasil
+     *   - ok      = true kalau minimal 1 call sukses
+     *   - status  = ringkasan "n dari m pemeriksaan sudah ada hasil"
+     */
+    public HasilBacaan AmbilHasilBacaanGabungan(String worklistIdsCsv) {
+        HasilBacaan gab = new HasilBacaan();
+        if (worklistIdsCsv == null || worklistIdsCsv.trim().isEmpty()) {
+            gab.pesan = "worklist_id kosong (permintaan belum pernah dikirim ke RIS?).";
+            return gab;
+        }
+        String[] ids = worklistIdsCsv.split(",");
+        // buang duplikat & kosong, jaga urutan
+        java.util.LinkedHashSet<String> unik = new java.util.LinkedHashSet<>();
+        for (String id : ids) { if (id != null && !id.trim().isEmpty()) unik.add(id.trim()); }
+        if (unik.isEmpty()) {
+            gab.pesan = "worklist_id kosong.";
+            return gab;
+        }
+        // Kalau cuma 1 worklist, tidak perlu judul — perilaku sama seperti dulu.
+        if (unik.size() == 1) {
+            HasilBacaan hb = AmbilHasilBacaan(unik.iterator().next());
+            hb.temuan = gabungTemuanKesimpulan(hb);
+            hb.kesimpulan = "";
+            return hb;
+        }
+        StringBuilder sb = new StringBuilder();
+        int adaCount = 0, idx = 0, total = unik.size();
+        for (String id : unik) {
+            idx++;
+            HasilBacaan hb = AmbilHasilBacaan(id);
+            if (hb.ok) gab.ok = true;
+            String judul = hb.namaPemeriksaan.isEmpty()
+                    ? ("PEMERIKSAAN " + idx) : hb.namaPemeriksaan.toUpperCase();
+            sb.append("=== ").append(judul).append(" ===\n");
+            if (hb.ada) {
+                adaCount++;
+                sb.append(gabungTemuanKesimpulan(hb)).append("\n");
+            } else {
+                sb.append("(hasil belum diinput dokter/radiolog di RIS)\n");
+            }
+            if (idx < total) sb.append("\n");
+        }
+        gab.temuan = sb.toString().trim();
+        gab.ada = adaCount > 0;
+        gab.status = adaCount + " dari " + total + " pemeriksaan sudah ada hasil";
+        gab.pesan = gab.ada
+                ? ("Hasil ditemukan (" + gab.status + ").")
+                : "Hasil bacaan belum diinput dokter/radiolog di RIS.";
+        return gab;
+    }
+
+    /** Rangkai TEMUAN + KESIMPULAN dari 1 HasilBacaan jadi 1 blok teks. */
+    private String gabungTemuanKesimpulan(HasilBacaan hb) {
+        StringBuilder t = new StringBuilder();
+        if (hb.temuan != null && !hb.temuan.isEmpty()) {
+            t.append("TEMUAN:\n").append(hb.temuan);
+        }
+        if (hb.kesimpulan != null && !hb.kesimpulan.isEmpty()) {
+            if (t.length() > 0) t.append("\n\n");
+            t.append("KESIMPULAN:\n").append(hb.kesimpulan);
+        }
+        return t.toString();
     }
 
     /**

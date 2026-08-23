@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptTagihanOperasiCathlab" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="30" bottomMargin="30">
+	<parameter name="namars"     class="java.lang.String"/>
+	<parameter name="alamatrs"   class="java.lang.String"/>
+	<parameter name="kotars"     class="java.lang.String"/>
+	<parameter name="propinsirs" class="java.lang.String"/>
+	<parameter name="kontakrs"   class="java.lang.String"/>
+	<parameter name="emailrs"    class="java.lang.String"/>
+	<parameter name="logo"       class="java.io.InputStream"/>
+	<queryString><![CDATA[]]></queryString>
+	<field name="no_rawat"          class="java.lang.String"/>
+	<field name="no_rkm_medis"      class="java.lang.String"/>
+	<field name="nm_pasien"         class="java.lang.String"/>
+	<field name="alamat"            class="java.lang.String"/>
+	<field name="tgl_operasi"       class="java.sql.Timestamp"/>
+	<field name="jam_selesai"       class="java.sql.Timestamp"/>
+	<field name="kode_paket"        class="java.lang.String"/>
+	<field name="nm_perawatan"      class="java.lang.String"/>
+	<field name="jenis_prosedur"    class="java.lang.String"/>
+	<field name="kategori"          class="java.lang.String"/>
+	<field name="jenis_anasthesi"   class="java.lang.String"/>
+	<field name="diagnosis_pre"     class="java.lang.String"/>
+	<field name="diagnosis_post"    class="java.lang.String"/>
+	<field name="nomor_kateter"     class="java.lang.String"/>
+	<field name="alat_khusus"       class="java.lang.String"/>
+	<field name="laporan_operasi"   class="java.lang.String"/>
+	<field name="dosis_radiasi_mgy"     class="java.lang.Double"/>
+	<field name="waktu_fluoroskopi_min" class="java.lang.Double"/>
+	<field name="kontras_ml"        class="java.lang.Double"/>
+	<field name="nm_operator1"      class="java.lang.String"/>
+	<field name="nm_operator2"      class="java.lang.String"/>
+	<field name="nm_operator3"      class="java.lang.String"/>
+	<field name="biaya_operator1"   class="java.lang.Double"/>
+	<field name="biaya_operator2"   class="java.lang.Double"/>
+	<field name="biaya_operator3"   class="java.lang.Double"/>
+	<field name="nm_dokter_anestesi" class="java.lang.String"/>
+	<field name="biaya_dokter_anestesi" class="java.lang.Double"/>
+	<field name="nm_scrub1"         class="java.lang.String"/>
+	<field name="nm_scrub2"         class="java.lang.String"/>
+	<field name="biaya_scrub_nurse1" class="java.lang.Double"/>
+	<field name="biaya_scrub_nurse2" class="java.lang.Double"/>
+	<field name="nm_circ1"          class="java.lang.String"/>
+	<field name="nm_circ2"          class="java.lang.String"/>
+	<field name="biaya_circulate_nurse1" class="java.lang.Double"/>
+	<field name="biaya_circulate_nurse2" class="java.lang.Double"/>
+	<field name="nm_rad1"           class="java.lang.String"/>
+	<field name="biaya_radiographer1" class="java.lang.Double"/>
+	<field name="biayaalat"         class="java.lang.Double"/>
+	<field name="biayasewaok"       class="java.lang.Double"/>
+	<field name="akomodasi"         class="java.lang.Double"/>
+	<field name="bagian_rs"         class="java.lang.Double"/>
+	<field name="biayasarpras"      class="java.lang.Double"/>
+	<field name="status"            class="java.lang.String"/>
+
+	<title>
+		<band height="100">
+			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="60" height="60"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement x="65" y="0" width="450" height="14"/>
+				<textElement><font fontName="Arial" size="11" isBold="true"/></textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{namars}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="65" y="15" width="450" height="12"/>
+				<textElement><font fontName="Arial" size="8"/></textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="65" y="27" width="450" height="12"/>
+				<textElement><font fontName="Arial" size="8"/></textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Telp. "+$P{kontakrs}+" · Email: "+$P{emailrs}]]></textFieldExpression>
+			</textField>
+			<line><reportElement x="0" y="55" width="515" height="1"/><graphicElement><pen lineWidth="1.5"/></graphicElement></line>
+			<line><reportElement x="0" y="58" width="515" height="1"/><graphicElement><pen lineWidth="0.5"/></graphicElement></line>
+			<staticText>
+				<reportElement x="0" y="70" width="515" height="20"/>
+				<textElement textAlignment="Center"><font fontName="Arial" size="14" isBold="true"/></textElement>
+				<text><![CDATA[TAGIHAN OPERASI CATHLAB]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="620" splitType="Stretch">
+			<!-- IDENTITAS -->
+			<staticText><reportElement x="0" y="0" width="150" height="14"/><textElement><font fontName="Arial" size="10" isBold="true"/></textElement><text><![CDATA[IDENTITAS PASIEN]]></text></staticText>
+			<staticText><reportElement x="0"  y="16" width="80" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[No. Rawat]]></text></staticText>
+			<staticText><reportElement x="80" y="16" width="8"  height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[:]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="90" y="16" width="180" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{no_rawat}]]></textFieldExpression></textField>
+			<staticText><reportElement x="280" y="16" width="60" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[No. RM]]></text></staticText>
+			<staticText><reportElement x="340" y="16" width="8"  height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[:]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="350" y="16" width="165" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{no_rkm_medis}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"  y="30" width="80" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Nama Pasien]]></text></staticText>
+			<staticText><reportElement x="80" y="30" width="8"  height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[:]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="90" y="30" width="425" height="12"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nm_pasien}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"  y="44" width="80" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Alamat]]></text></staticText>
+			<staticText><reportElement x="80" y="44" width="8"  height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[:]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="90" y="44" width="425" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{alamat}]]></textFieldExpression></textField>
+
+			<!-- PROSEDUR -->
+			<staticText><reportElement x="0" y="66" width="200" height="14"/><textElement><font fontName="Arial" size="10" isBold="true"/></textElement><text><![CDATA[DETAIL PROSEDUR CATHLAB]]></text></staticText>
+			<staticText><reportElement x="0"  y="82" width="100" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Tgl Operasi]]></text></staticText>
+			<staticText><reportElement x="100" y="82" width="8" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[:]]></text></staticText>
+			<textField isBlankWhenNull="true" pattern="dd-MM-yyyy HH:mm"><reportElement x="110" y="82" width="160" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{tgl_operasi}]]></textFieldExpression></textField>
+			<staticText><reportElement x="280" y="82" width="70" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Selesai]]></text></staticText>
+			<staticText><reportElement x="350" y="82" width="8"  height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[:]]></text></staticText>
+			<textField isBlankWhenNull="true" pattern="dd-MM-yyyy HH:mm"><reportElement x="360" y="82" width="155" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{jam_selesai}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"  y="96" width="100" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Jenis Prosedur]]></text></staticText>
+			<staticText><reportElement x="100" y="96" width="8"  height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[:]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="110" y="96" width="405" height="12"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{jenis_prosedur}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"  y="110" width="100" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Paket / Kategori]]></text></staticText>
+			<staticText><reportElement x="100" y="110" width="8"  height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[:]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="110" y="110" width="405" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nm_perawatan}+"  ("+$F{kode_paket}+") · "+$F{kategori}+" · Anestesi: "+$F{jenis_anasthesi}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"  y="124" width="100" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[No. Kateter]]></text></staticText>
+			<staticText><reportElement x="100" y="124" width="8"  height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[:]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="110" y="124" width="405" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nomor_kateter}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"  y="138" width="100" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Alat Khusus]]></text></staticText>
+			<staticText><reportElement x="100" y="138" width="8"  height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[:]]></text></staticText>
+			<textField isBlankWhenNull="true" isStretchWithOverflow="true"><reportElement x="110" y="138" width="405" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{alat_khusus}]]></textFieldExpression></textField>
+
+			<!-- SAFETY RADIASI -->
+			<staticText><reportElement x="0" y="160" width="200" height="14"/><textElement><font fontName="Arial" size="10" isBold="true"/></textElement><text><![CDATA[SAFETY RADIASI]]></text></staticText>
+			<textField><reportElement x="0" y="176" width="515" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA["Dosis Radiasi: "+$F{dosis_radiasi_mgy}+" mGy   ·   Waktu Fluoroskopi: "+$F{waktu_fluoroskopi_min}+" menit   ·   Kontras: "+$F{kontras_ml}+" ml"]]></textFieldExpression></textField>
+
+			<!-- DIAGNOSIS -->
+			<staticText><reportElement x="0" y="200" width="200" height="14"/><textElement><font fontName="Arial" size="10" isBold="true"/></textElement><text><![CDATA[DIAGNOSIS]]></text></staticText>
+			<staticText><reportElement x="0"  y="216" width="100" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Pre-operatif]]></text></staticText>
+			<staticText><reportElement x="100" y="216" width="8"  height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[:]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="110" y="216" width="405" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{diagnosis_pre}]]></textFieldExpression></textField>
+			<staticText><reportElement x="0"  y="230" width="100" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Post-operatif]]></text></staticText>
+			<staticText><reportElement x="100" y="230" width="8"  height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[:]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="110" y="230" width="405" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{diagnosis_post}]]></textFieldExpression></textField>
+
+			<!-- TIM & BIAYA -->
+			<staticText><reportElement x="0" y="256" width="200" height="14"/><textElement><font fontName="Arial" size="10" isBold="true"/></textElement><text><![CDATA[TIM & JASA MEDIS]]></text></staticText>
+			<line><reportElement x="0" y="272" width="515" height="1"/><graphicElement><pen lineWidth="0.5"/></graphicElement></line>
+			<staticText><reportElement x="0"   y="274" width="150" height="12"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Peran]]></text></staticText>
+			<staticText><reportElement x="150" y="274" width="240" height="12"/><textElement><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Nama]]></text></staticText>
+			<staticText><reportElement x="390" y="274" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Jasa (Rp)]]></text></staticText>
+			<line><reportElement x="0" y="288" width="515" height="1"/><graphicElement><pen lineWidth="0.5"/></graphicElement></line>
+
+			<staticText><reportElement x="0"   y="290" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Operator 1]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="150" y="290" width="240" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nm_operator1}]]></textFieldExpression></textField>
+			<textField pattern="#,##0"><reportElement x="390" y="290" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{biaya_operator1}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"   y="304" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Operator 2]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="150" y="304" width="240" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nm_operator2}]]></textFieldExpression></textField>
+			<textField pattern="#,##0"><reportElement x="390" y="304" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{biaya_operator2}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"   y="318" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Operator 3]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="150" y="318" width="240" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nm_operator3}]]></textFieldExpression></textField>
+			<textField pattern="#,##0"><reportElement x="390" y="318" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{biaya_operator3}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"   y="332" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Dokter Anestesi]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="150" y="332" width="240" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nm_dokter_anestesi}]]></textFieldExpression></textField>
+			<textField pattern="#,##0"><reportElement x="390" y="332" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{biaya_dokter_anestesi}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"   y="346" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Scrub Nurse 1]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="150" y="346" width="240" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nm_scrub1}]]></textFieldExpression></textField>
+			<textField pattern="#,##0"><reportElement x="390" y="346" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{biaya_scrub_nurse1}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"   y="360" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Scrub Nurse 2]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="150" y="360" width="240" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nm_scrub2}]]></textFieldExpression></textField>
+			<textField pattern="#,##0"><reportElement x="390" y="360" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{biaya_scrub_nurse2}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"   y="374" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Circulate Nurse 1]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="150" y="374" width="240" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nm_circ1}]]></textFieldExpression></textField>
+			<textField pattern="#,##0"><reportElement x="390" y="374" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{biaya_circulate_nurse1}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"   y="388" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Circulate Nurse 2]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="150" y="388" width="240" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nm_circ2}]]></textFieldExpression></textField>
+			<textField pattern="#,##0"><reportElement x="390" y="388" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{biaya_circulate_nurse2}]]></textFieldExpression></textField>
+
+			<staticText><reportElement x="0"   y="402" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Radiographer]]></text></staticText>
+			<textField isBlankWhenNull="true"><reportElement x="150" y="402" width="240" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{nm_rad1}]]></textFieldExpression></textField>
+			<textField pattern="#,##0"><reportElement x="390" y="402" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{biaya_radiographer1}]]></textFieldExpression></textField>
+
+			<line><reportElement x="0" y="418" width="515" height="1"/><graphicElement><pen lineWidth="0.5"/></graphicElement></line>
+			<staticText><reportElement x="0"   y="420" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Sewa OK]]></text></staticText>
+			<textField pattern="#,##0"><reportElement x="390" y="420" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{biayasewaok}]]></textFieldExpression></textField>
+			<staticText><reportElement x="0"   y="434" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Alat]]></text></staticText>
+			<textField pattern="#,##0"><reportElement x="390" y="434" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{biayaalat}]]></textFieldExpression></textField>
+			<staticText><reportElement x="0"   y="448" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Akomodasi]]></text></staticText>
+			<textField pattern="#,##0"><reportElement x="390" y="448" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{akomodasi}]]></textFieldExpression></textField>
+			<staticText><reportElement x="0"   y="462" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Bagian RS]]></text></staticText>
+			<textField pattern="#,##0"><reportElement x="390" y="462" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{bagian_rs}]]></textFieldExpression></textField>
+			<staticText><reportElement x="0"   y="476" width="150" height="12"/><textElement><font fontName="Arial" size="9"/></textElement><text><![CDATA[Sarpras]]></text></staticText>
+			<textField pattern="#,##0"><reportElement x="390" y="476" width="125" height="12"/><textElement textAlignment="Right"><font fontName="Arial" size="9"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{biayasarpras}]]></textFieldExpression></textField>
+
+			<line><reportElement x="0" y="494" width="515" height="1"/><graphicElement><pen lineWidth="1.5"/></graphicElement></line>
+			<staticText><reportElement x="0"   y="498" width="300" height="16"/><textElement><font fontName="Arial" size="11" isBold="true"/></textElement><text><![CDATA[TOTAL]]></text></staticText>
+			<textField pattern="Rp #,##0"><reportElement x="300" y="498" width="215" height="16"/><textElement textAlignment="Right"><font fontName="Arial" size="11" isBold="true"/></textElement><textFieldExpression class="java.lang.Double"><![CDATA[$F{biaya_operator1}+$F{biaya_operator2}+$F{biaya_operator3}+$F{biaya_dokter_anestesi}+$F{biaya_scrub_nurse1}+$F{biaya_scrub_nurse2}+$F{biaya_circulate_nurse1}+$F{biaya_circulate_nurse2}+$F{biaya_radiographer1}+$F{biayaalat}+$F{biayasewaok}+$F{akomodasi}+$F{bagian_rs}+$F{biayasarpras}]]></textFieldExpression></textField>
+
+			<!-- Footer TTD -->
+			<staticText><reportElement x="0"   y="540" width="200" height="12"/><textElement textAlignment="Center"><font fontName="Arial" size="9"/></textElement><text><![CDATA[Petugas Cathlab]]></text></staticText>
+			<staticText><reportElement x="315" y="540" width="200" height="12"/><textElement textAlignment="Center"><font fontName="Arial" size="9"/></textElement><text><![CDATA[Kepala Unit Cathlab]]></text></staticText>
+			<staticText><reportElement x="0"   y="590" width="200" height="12"/><textElement textAlignment="Center"><font fontName="Arial" size="9"/></textElement><text><![CDATA[(_________________)]]></text></staticText>
+			<staticText><reportElement x="315" y="590" width="200" height="12"/><textElement textAlignment="Center"><font fontName="Arial" size="9"/></textElement><text><![CDATA[(_________________)]]></text></staticText>
+		</band>
+	</detail>
+</jasperReport>

@@ -218,6 +218,7 @@ public class frmUtama extends javax.swing.JFrame {
             private int nilai_jam;
             private int nilai_menit;
             private int nilai_detik;
+            private boolean batchAwalSudah=false;
             public void actionPerformed(ActionEvent e) {
                 nol_jam = "";
                 nol_menit = "";
@@ -245,42 +246,54 @@ public class frmUtama extends javax.swing.JFrame {
                     Tanggal2.setText(tanggalFormat.format(date)); 
                 }
                 
+                if(!batchAwalSudah){
+                    batchAwalSudah=true;
+                    TeksArea.append("Menjalankan pengiriman awal setelah service dinyalakan\n");
+                    encounter2();
+                    servicerequestradiologi();
+                    kirimSemua();
+                }
+
                 if(detik.equals("01")&&(nilai_menit%4==0)){
                     encounter2();
                     servicerequestradiologi();
                 }
-                
+
                 if((nilai_jam%4==0)&&(detik.equals("01")&&menit.equals("01"))){
-                    medication();
-                    encounter();
-                    observationTTV();
-                    vaksin();
-                    prosedur();
-                    condition();
-                    clinicalimpression();
-                    dietgizi();
-                    medicationrequest();
-                    medicationdispense();
-                    medicationstatement();
-                    specimenradiologi();
-                    observationradiologi();
-                    diagnosticreportradiologi();
-                    servicerequestlabpk();
-                    servicerequestlabmb();
-                    specimenlabpk();
-                    specimenlabmb();
-                    observationlabpk();
-                    observationlabmb();
-                    diagnosticreportlabpk();
-                    diagnosticreportlabmb();
-                    careplan();
-                    qrtelaahresep();
-                    alergi();
-                    // kirimdicomrouter(); // pengiriman DICOM sudah ditangani RIS
+                    kirimSemua();
                 }
             }
         };
         new Timer(1000, taskPerformer).start();
+    }
+
+    private void kirimSemua(){
+        medication();
+        encounter();
+        observationTTV();
+        vaksin();
+        prosedur();
+        condition();
+        clinicalimpression();
+        dietgizi();
+        medicationrequest();
+        medicationdispense();
+        medicationstatement();
+        specimenradiologi();
+        observationradiologi();
+        diagnosticreportradiologi();
+        servicerequestlabpk();
+        servicerequestlabmb();
+        specimenlabpk();
+        specimenlabmb();
+        observationlabpk();
+        observationlabmb();
+        diagnosticreportlabpk();
+        diagnosticreportlabmb();
+        careplan();
+        qrtelaahresep();
+        alergi();
+        // kirimdicomrouter(); // pengiriman DICOM sudah ditangani RIS
     }
     
     private void encounter() {

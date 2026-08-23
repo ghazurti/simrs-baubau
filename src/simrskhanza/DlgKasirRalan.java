@@ -126,6 +126,15 @@ import rekammedis.RMHasilEndoskopiHidung;
 import rekammedis.RMHasilEndoskopiTelinga;
 import rekammedis.RMHasilPemeriksaanEKG;
 import rekammedis.RMHasilPemeriksaanEcho;
+import rekammedis.RMHasilTindakanAngiografi;
+import rekammedis.RMLaporanTindakanCathLab;
+import rekammedis.RMChecklistPasienCathLab;
+import rekammedis.RMPemantauanAnastesiLokal;
+import rekammedis.RMPenilaianRisikoJatuhRajal;
+import rekammedis.RMHasilTindakanPCI;
+import rekammedis.RMPenilaianRisikoJatuhCathLab;
+import rekammedis.RMChecklistKeselamatanInvasif;
+import rekammedis.RMCatatanKeperawatanIntraOperasi;
 import rekammedis.RMHasilPemeriksaanEchoPediatrik;
 import rekammedis.RMHasilPemeriksaanOCT;
 import rekammedis.RMHasilPemeriksaanSlitLamp;
@@ -7773,6 +7782,10 @@ private void MnDataRalanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                             @Override
                             public void windowClosed(WindowEvent e) {
                                 formrawatjalan=null;
+                                // Auto-refresh tabel kasir setelah dokter tutup form SOAP,
+                                // supaya pasien yang status-nya berubah jadi Selesai
+                                // langsung terlihat di list tanpa perlu klik Cari.
+                                TabRawatMouseClicked(null);
                             }
                         });
 
@@ -7784,8 +7797,8 @@ private void MnDataRalanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                         formrawatjalan.emptTeks();
                         formrawatjalan.SetPoli(tbKasirRalan.getValueAt(tbKasirRalan.getSelectedRow(),18).toString());
                         formrawatjalan.SetPj(tbKasirRalan.getValueAt(tbKasirRalan.getSelectedRow(),17).toString());
-                        formrawatjalan.setNoRm(TNoRw.getText(),DTPCari1.getDate(),DTPCari2.getDate()); 
-                        formrawatjalan.isCek(); 
+                        formrawatjalan.setNoRm(TNoRw.getText(),DTPCari1.getDate(),DTPCari2.getDate());
+                        formrawatjalan.isCek();
                     }  
                     if (formrawatjalan.isVisible()) {
                         formrawatjalan.toFront();
@@ -9126,15 +9139,26 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
             cmbStatus.setSelectedItem(cacherawatjalan.getStatusPelayanan());
         }
         
+        // HYBRID load:
+        //   1. Tampil data cache dulu (INSTAN, 0ms) supaya user langsung lihat
+        //      pasien dari session sebelumnya
+        //   2. Refresh dari DB via SwingWorker background — akan overwrite
+        //      dengan data terbaru (termasuk pasien baru dari DlgReg)
+        // Ini menghindari:
+        //   • Delay saat buka form (kalau DB lambat / user banyak)
+        //   • Spike DB kalau semua user buka form bersamaan
+        //   • Konfusi "pasien tidak muncul" (masalah cache-only lama)
         if(!cacherawatjalan.getDataPasien().isEmpty()){
             for (Object[] baris : cacherawatjalan.getDataPasien()) {
                 tabModekasir.addRow(baris);
             }
             LCount.setText("" + tabModekasir.getRowCount());
-            cacherawatjalan.clearDataPasien();
-        }else{
-            tampilkasir();
         }
+        cacherawatjalan.clearDataPasien();
+        // Background refresh — SwingWorker di tampilkasir() akan clear
+        // tabel & isi ulang dengan data terbaru. Ada flicker singkat, tapi
+        // pasien baru dari DlgReg pasti muncul tanpa klik Cari.
+        javax.swing.SwingUtilities.invokeLater(() -> tampilkasir());
         
         if(koneksiDB.CARICEPAT().equals("aktif")){
             TCari.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){
@@ -9398,6 +9422,8 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
                             @Override
                             public void windowClosed(WindowEvent e) {
                                 formrawatjalan=null;
+                                // Auto-refresh tabel kasir setelah tutup form SOAP
+                                TabRawatMouseClicked(null);
                             }
                         });
 
@@ -14800,6 +14826,240 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
             }
         }
     }
+
+    private void MnHasilTindakanAngiografiActionPerformed(java.awt.event.ActionEvent evt) {                                                      
+        if(tabModekasir.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+            //TNoReg.requestFocus();
+        }else if(TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            tbKasirRalan.requestFocus();
+        }else{
+            if(tbKasirRalan.getSelectedRow()!= -1){
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                RMHasilTindakanAngiografi form=new RMHasilTindakanAngiografi(null,false);
+                form.isCek();
+                form.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+                form.setLocationRelativeTo(internalFrame1);
+                form.setVisible(true);
+                form.emptTeks();
+                form.setNoRm(TNoRw.getText(),DTPCari2.getDate());
+                this.setCursor(Cursor.getDefaultCursor());
+            }
+        }
+    }
+
+    private void MnPenilaianRisikoJatuhCathLabActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabModekasir.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+        }else if(TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            tbKasirRalan.requestFocus();
+        }else{
+            if(tbKasirRalan.getSelectedRow()!= -1){
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                RMPenilaianRisikoJatuhCathLab form=new RMPenilaianRisikoJatuhCathLab(null,false);
+                form.isCek();
+                form.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+                form.setLocationRelativeTo(internalFrame1);
+                form.setVisible(true);
+                form.emptTeks();
+                form.setNoRm(TNoRw.getText(),DTPCari2.getDate());
+                this.setCursor(Cursor.getDefaultCursor());
+            }
+        }
+    }
+
+    private void MnHasilTindakanPCIActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabModekasir.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+        }else if(TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            tbKasirRalan.requestFocus();
+        }else{
+            if(tbKasirRalan.getSelectedRow()!= -1){
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                RMHasilTindakanPCI form=new RMHasilTindakanPCI(null,false);
+                form.isCek();
+                form.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+                form.setLocationRelativeTo(internalFrame1);
+                form.setVisible(true);
+                form.emptTeks();
+                form.setNoRm(TNoRw.getText(),DTPCari2.getDate());
+                this.setCursor(Cursor.getDefaultCursor());
+            }
+        }
+    }
+
+    private void MnChecklistPasienCathLabActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabModekasir.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+        }else if(TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            tbKasirRalan.requestFocus();
+        }else{
+            if(tbKasirRalan.getSelectedRow()!= -1){
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                RMChecklistPasienCathLab form=new RMChecklistPasienCathLab(null,false);
+                form.isCek();
+                form.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+                form.setLocationRelativeTo(internalFrame1);
+                form.setVisible(true);
+                form.emptTeks();
+                form.setNoRm(TNoRw.getText(),DTPCari2.getDate());
+                this.setCursor(Cursor.getDefaultCursor());
+            }
+        }
+    }
+
+    private void MnPemantauanAnastesiLokalActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabModekasir.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+        }else if(TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            tbKasirRalan.requestFocus();
+        }else{
+            if(tbKasirRalan.getSelectedRow()!= -1){
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                RMPemantauanAnastesiLokal form=new RMPemantauanAnastesiLokal(null,false);
+                form.isCek();
+                form.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+                form.setLocationRelativeTo(internalFrame1);
+                form.setVisible(true);
+                form.emptTeks();
+                form.setNoRm(TNoRw.getText(),DTPCari2.getDate());
+                this.setCursor(Cursor.getDefaultCursor());
+            }
+        }
+    }
+
+    private void MnPenilaianRisikoJatuhRajalActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabModekasir.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+        }else if(TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            tbKasirRalan.requestFocus();
+        }else{
+            if(tbKasirRalan.getSelectedRow()!= -1){
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                RMPenilaianRisikoJatuhRajal form=new RMPenilaianRisikoJatuhRajal(null,false);
+                form.isCek();
+                form.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+                form.setLocationRelativeTo(internalFrame1);
+                form.setVisible(true);
+                form.emptTeks();
+                form.setNoRm(TNoRw.getText(),DTPCari2.getDate());
+                this.setCursor(Cursor.getDefaultCursor());
+            }
+        }
+    }
+
+    private void MnLaporanTindakanCathLabActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabModekasir.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+        }else if(TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            tbKasirRalan.requestFocus();
+        }else{
+            if(tbKasirRalan.getSelectedRow()!= -1){
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                RMLaporanTindakanCathLab form=new RMLaporanTindakanCathLab(null,false);
+                form.isCek();
+                form.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+                form.setLocationRelativeTo(internalFrame1);
+                form.setVisible(true);
+                form.emptTeks();
+                form.setNoRm(TNoRw.getText(),DTPCari2.getDate());
+                this.setCursor(Cursor.getDefaultCursor());
+            }
+        }
+    }
+
+    private void MnCatatanIntraOperasiActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabModekasir.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+        }else if(TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            tbKasirRalan.requestFocus();
+        }else{
+            if(tbKasirRalan.getSelectedRow()!= -1){
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                RMCatatanKeperawatanIntraOperasi form=new RMCatatanKeperawatanIntraOperasi(null,false);
+                form.isCek();
+                form.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+                form.setLocationRelativeTo(internalFrame1);
+                form.setVisible(true);
+                form.emptTeks();
+                form.setNoRm(TNoRw.getText(),DTPCari2.getDate());
+                this.setCursor(Cursor.getDefaultCursor());
+            }
+        }
+    }
+
+    private void MnChecklistKeselamatanInvasifActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabModekasir.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+            //TNoReg.requestFocus();
+        }else if(TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            tbKasirRalan.requestFocus();
+        }else{
+            if(tbKasirRalan.getSelectedRow()!= -1){
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                RMChecklistKeselamatanInvasif form=new RMChecklistKeselamatanInvasif(null,false);
+                form.isCek();
+                form.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+                form.setLocationRelativeTo(internalFrame1);
+                form.setVisible(true);
+                form.emptTeks();
+                form.setNoRm(TNoRw.getText(),DTPCari2.getDate());
+                this.setCursor(Cursor.getDefaultCursor());
+            }
+        }
+    }
+
+    private void MnPemakaianObatAlkesActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabModekasir.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+        }else if(TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            tbKasirRalan.requestFocus();
+        }else{
+            cetakPemakaianObatAlkes(TNoRw.getText());
+        }
+    }
+
+    private void cetakPemakaianObatAlkes(String norwt){
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        java.util.Map<String, Object> param = new java.util.HashMap<>();
+        param.put("namars",akses.getnamars());
+        param.put("alamatrs",akses.getalamatrs());
+        param.put("kotars",akses.getkabupatenrs());
+        param.put("propinsirs",akses.getpropinsirs());
+        param.put("logo",Sequel.cariGambar("select setting.logo from setting"));
+        param.put("nmpasien",Sequel.cariIsi("select pasien.nm_pasien from reg_periksa inner join pasien on pasien.no_rkm_medis=reg_periksa.no_rkm_medis where reg_periksa.no_rawat=?",norwt));
+        param.put("norm",Sequel.cariIsi("select pasien.no_rkm_medis from reg_periksa inner join pasien on pasien.no_rkm_medis=reg_periksa.no_rkm_medis where reg_periksa.no_rawat=?",norwt));
+        param.put("tgllahir",Sequel.cariIsi("select concat(date_format(pasien.tgl_lahir,'%d-%m-%Y'),' / ',pasien.jk) from reg_periksa inner join pasien on pasien.no_rkm_medis=reg_periksa.no_rkm_medis where reg_periksa.no_rawat=?",norwt));
+        param.put("diagnosa",Sequel.cariIsi("select penyakit.nm_penyakit from diagnosa_pasien inner join penyakit on penyakit.kd_penyakit=diagnosa_pasien.kd_penyakit where diagnosa_pasien.no_rawat=? and diagnosa_pasien.prioritas=1 limit 1",norwt));
+        param.put("tindakan",Sequel.cariIsi("select paket_operasi.nm_perawatan from operasi inner join paket_operasi on paket_operasi.kode_paket=operasi.kode_paket where operasi.no_rawat=? order by operasi.tgl_operasi desc limit 1",norwt));
+        param.put("penjab",Sequel.cariIsi("select penjab.png_jawab from reg_periksa inner join penjab on penjab.kd_pj=reg_periksa.kd_pj where reg_periksa.no_rawat=?",norwt));
+        param.put("kelas",Sequel.cariIsi("select kamar.kelas from kamar_inap inner join kamar on kamar.kd_kamar=kamar_inap.kd_kamar where kamar_inap.no_rawat=? order by kamar_inap.tgl_masuk desc limit 1",norwt));
+        param.put("noreg",norwt);
+        param.put("tgltindakan",Sequel.cariIsi("select date_format(max(operasi.tgl_operasi),'%d-%m-%Y') from operasi where operasi.no_rawat=?",norwt));
+        param.put("dokter",Sequel.cariIsi("select dokter.nm_dokter from reg_periksa inner join dokter on dokter.kd_dokter=reg_periksa.kd_dokter where reg_periksa.no_rawat=?",norwt));
+        Valid.MyReportqrypdf("rptPemakaianObatAlkes.jasper","report","::[ Pemakaian Obat & Alkes ]::",
+            "select x.nama, x.jumlah, x.hargasatuan, x.total, x.ket from ("+
+            "select ok.nm_obat as nama, cast(bo.jumlah as char) as jumlah, cast(bo.hargasatuan as char) as hargasatuan, "+
+            "cast(bo.jumlah*bo.hargasatuan as char) as total, 'Obat/BHP OK' as ket "+
+            "from beri_obat_operasi bo inner join obatbhp_ok ok on ok.kd_obat=bo.kd_obat where bo.no_rawat='"+norwt+"' "+
+            "union all "+
+            "select db.nama_brng, cast(dpo.jml as char), cast(dpo.biaya_obat as char), cast(dpo.total as char), 'Depo Farmasi' "+
+            "from detail_pemberian_obat dpo inner join databarang db on db.kode_brng=dpo.kode_brng where dpo.no_rawat='"+norwt+"' "+
+            "and (dpo.tgl_perawatan in (select date(o.tgl_operasi) from operasi o where o.no_rawat='"+norwt+"') "+
+            "or not exists (select 1 from operasi o2 where o2.no_rawat='"+norwt+"')) "+
+            ") x order by x.ket, x.nama",param);
+        this.setCursor(Cursor.getDefaultCursor());
+    }
     
     private void MnPenilaianBayiBaruLahirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnPenilaianAwalMedisRalanKebidananActionPerformed
         if(tabModekasir.getRowCount()==0){
@@ -16123,7 +16383,7 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
                                   MnHasilEndoskopiFaringLaring,MnHasilEndoskopiHidung,MnHasilEndoskopiTelinga,MnPenilaianPasienImunitasRendah,MnCatatanKeseimbanganCairan,MnCatatanObservasiCHBP,MnCatatanObservasiInduksiPersalinan,
                                   MnPermintaanKonsultasiMedik,MnDataOperasi,MnDataKonsultasiMedik,MnSkriningMerokokUsiaSekolahRemaja,MnSkriningKekerasanPadaWanita,MnSkriningObesitas,MnSkriningRisikoKankerPayudara,MnSkriningRisikoKankerParu,
                                   MnSkriningKesehatanGigiMulutRemaja,MnSkriningTBC,MnCatatanAnastesiSedasi,MnSkriningPUMA,MnSkriningAdiksiNikotin,MnSkriningThalassemia,MnSkriningInstrumenSDQ,MnSkriningInstrumenSRQ,MnChecklistPemberianFibrinolitik,
-                                  MnSkriningKankerKolorektal,MnPenilaianPsikologKlinis,MnPenilaianDerajatDehidrasi,MnHasilPemeriksaanECHO,MnPenilaianBayiBaruLahir,MnSkriningDiabetesMelitus,MnLaporanTindakan,MnPelaksanaanInformasiEdukasi,
+                                  MnSkriningKankerKolorektal,MnPenilaianPsikologKlinis,MnPenilaianDerajatDehidrasi,MnHasilPemeriksaanECHO,MnHasilTindakanAngiografi,MnLaporanTindakanCathLab,MnChecklistPasienCathLab,MnPemantauanAnastesiLokal,MnPenilaianRisikoJatuhRajal,MnHasilTindakanPCI,MnPenilaianRisikoJatuhCathLab,MnChecklistKeselamatanInvasif,MnCatatanIntraOperasi,MnPemakaianObatAlkes,MnPenilaianBayiBaruLahir,MnSkriningDiabetesMelitus,MnLaporanTindakan,MnPelaksanaanInformasiEdukasi,
                                   MnLayananKedokteranFisikRehabilitasi,MnSkriningKesehatanGigiMulutBalita,MnSkriningAnemia,MnSkriningHipertensi,MnSkriningKesehatanPenglihatan,MnCatatanObservasiHemodialisa,MnSkriningKesehatanGigiMulutDewasa,
                                   MnSkriningRisikoKankerServiks,MnCatatanCairanHemodialisa,MnSkriningKesehatanGigiMulutLansia,MnSkriningIndraPendengaran,MnCatatanPengkajianPaskaOperasi,MnSkriningFrailtySyndrome,MnCatatanObservasiBayi,
                                   MnCheckListKesiapanAnestesi,MnHasilPemeriksaanSlitLamp,MnHasilPemeriksaanOCT,MnCetakSuratKeteranganLayakTerbang,MnPersetujuanPemeriksaanHIV,MnSkriningInstrumenACRS,MnPernyataanMemilihDPJP,
@@ -16524,6 +16784,16 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
         MnHasilPemeriksaanEKG.setEnabled(akses.gethasil_pemeriksaan_ekg());
         MnHasilPemeriksaanTreadmill.setEnabled(akses.gethasil_pemeriksaan_treadmill());
         MnHasilPemeriksaanECHO.setEnabled(akses.gethasil_pemeriksaan_echo());
+        MnHasilTindakanAngiografi.setEnabled(akses.gethasil_pemeriksaan_echo());
+        MnLaporanTindakanCathLab.setEnabled(akses.gethasil_pemeriksaan_echo());
+        MnChecklistPasienCathLab.setEnabled(akses.gethasil_pemeriksaan_echo());
+        MnPemantauanAnastesiLokal.setEnabled(akses.gethasil_pemeriksaan_echo());
+        MnPenilaianRisikoJatuhRajal.setEnabled(akses.gethasil_pemeriksaan_echo());
+        MnHasilTindakanPCI.setEnabled(akses.gethasil_pemeriksaan_echo());
+        MnPenilaianRisikoJatuhCathLab.setEnabled(akses.gethasil_pemeriksaan_echo());
+        MnChecklistKeselamatanInvasif.setEnabled(akses.gethasil_pemeriksaan_echo());
+        MnCatatanIntraOperasi.setEnabled(akses.gethasil_pemeriksaan_echo());
+        MnPemakaianObatAlkes.setEnabled(akses.gethasil_pemeriksaan_echo());
         MnHasilPemeriksaanECHOPediatrik.setEnabled(akses.gethasil_pemeriksaan_echo_pediatrik());
         MnHasilEndoskopiFaringLaring.setEnabled(akses.gethasil_endoskopi_faring_laring());
         MnHasilEndoskopiHidung.setEnabled(akses.gethasil_endoskopi_hidung());
@@ -17374,6 +17644,126 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
         MnHasilPemeriksaanECHO.setName("MnHasilPemeriksaanECHO");
         MnHasilPemeriksaanECHO.setPreferredSize(new java.awt.Dimension(200, 26));
         MnHasilPemeriksaanECHO.addActionListener(this::MnHasilPemeriksaanECHOActionPerformed);
+
+        MnHasilTindakanAngiografi = new javax.swing.JMenuItem();
+        MnHasilTindakanAngiografi.setBackground(new java.awt.Color(255, 255, 254));
+        MnHasilTindakanAngiografi.setFont(new java.awt.Font("Tahoma", 0, 11)); 
+        MnHasilTindakanAngiografi.setForeground(new java.awt.Color(50, 50, 50));
+        MnHasilTindakanAngiografi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); 
+        MnHasilTindakanAngiografi.setText("Hasil Tindakan Angiografi (Cathlab)");
+        MnHasilTindakanAngiografi.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MnHasilTindakanAngiografi.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        MnHasilTindakanAngiografi.setName("MnHasilTindakanAngiografi");
+        MnHasilTindakanAngiografi.setPreferredSize(new java.awt.Dimension(200, 26));
+        MnHasilTindakanAngiografi.addActionListener(this::MnHasilTindakanAngiografiActionPerformed);
+
+        MnLaporanTindakanCathLab = new javax.swing.JMenuItem();
+        MnLaporanTindakanCathLab.setBackground(new java.awt.Color(255, 255, 254));
+        MnLaporanTindakanCathLab.setFont(new java.awt.Font("Tahoma", 0, 11));
+        MnLaporanTindakanCathLab.setForeground(new java.awt.Color(50, 50, 50));
+        MnLaporanTindakanCathLab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png")));
+        MnLaporanTindakanCathLab.setText("Laporan Tindakan Cath Lab");
+        MnLaporanTindakanCathLab.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MnLaporanTindakanCathLab.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        MnLaporanTindakanCathLab.setName("MnLaporanTindakanCathLab");
+        MnLaporanTindakanCathLab.setPreferredSize(new java.awt.Dimension(200, 26));
+        MnLaporanTindakanCathLab.addActionListener(this::MnLaporanTindakanCathLabActionPerformed);
+
+        MnChecklistPasienCathLab = new javax.swing.JMenuItem();
+        MnChecklistPasienCathLab.setBackground(new java.awt.Color(255, 255, 254));
+        MnChecklistPasienCathLab.setFont(new java.awt.Font("Tahoma", 0, 11));
+        MnChecklistPasienCathLab.setForeground(new java.awt.Color(50, 50, 50));
+        MnChecklistPasienCathLab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png")));
+        MnChecklistPasienCathLab.setText("Check List Pasien di Ruang Cath Lab");
+        MnChecklistPasienCathLab.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MnChecklistPasienCathLab.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        MnChecklistPasienCathLab.setName("MnChecklistPasienCathLab");
+        MnChecklistPasienCathLab.setPreferredSize(new java.awt.Dimension(200, 26));
+        MnChecklistPasienCathLab.addActionListener(this::MnChecklistPasienCathLabActionPerformed);
+
+        MnPemantauanAnastesiLokal = new javax.swing.JMenuItem();
+        MnPemantauanAnastesiLokal.setBackground(new java.awt.Color(255, 255, 254));
+        MnPemantauanAnastesiLokal.setFont(new java.awt.Font("Tahoma", 0, 11));
+        MnPemantauanAnastesiLokal.setForeground(new java.awt.Color(50, 50, 50));
+        MnPemantauanAnastesiLokal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png")));
+        MnPemantauanAnastesiLokal.setText("Pemantauan Anastesi Lokal");
+        MnPemantauanAnastesiLokal.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MnPemantauanAnastesiLokal.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        MnPemantauanAnastesiLokal.setName("MnPemantauanAnastesiLokal");
+        MnPemantauanAnastesiLokal.setPreferredSize(new java.awt.Dimension(200, 26));
+        MnPemantauanAnastesiLokal.addActionListener(this::MnPemantauanAnastesiLokalActionPerformed);
+
+        MnPenilaianRisikoJatuhRajal = new javax.swing.JMenuItem();
+        MnPenilaianRisikoJatuhRajal.setBackground(new java.awt.Color(255, 255, 254));
+        MnPenilaianRisikoJatuhRajal.setFont(new java.awt.Font("Tahoma", 0, 11));
+        MnPenilaianRisikoJatuhRajal.setForeground(new java.awt.Color(50, 50, 50));
+        MnPenilaianRisikoJatuhRajal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png")));
+        MnPenilaianRisikoJatuhRajal.setText("Penilaian Risiko Jatuh Pasien Rawat Jalan");
+        MnPenilaianRisikoJatuhRajal.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MnPenilaianRisikoJatuhRajal.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        MnPenilaianRisikoJatuhRajal.setName("MnPenilaianRisikoJatuhRajal");
+        MnPenilaianRisikoJatuhRajal.setPreferredSize(new java.awt.Dimension(200, 26));
+        MnPenilaianRisikoJatuhRajal.addActionListener(this::MnPenilaianRisikoJatuhRajalActionPerformed);
+
+        MnHasilTindakanPCI = new javax.swing.JMenuItem();
+        MnHasilTindakanPCI.setBackground(new java.awt.Color(255, 255, 254));
+        MnHasilTindakanPCI.setFont(new java.awt.Font("Tahoma", 0, 11));
+        MnHasilTindakanPCI.setForeground(new java.awt.Color(50, 50, 50));
+        MnHasilTindakanPCI.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png")));
+        MnHasilTindakanPCI.setText("Hasil Tindakan PCI (Cathlab)");
+        MnHasilTindakanPCI.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MnHasilTindakanPCI.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        MnHasilTindakanPCI.setName("MnHasilTindakanPCI");
+        MnHasilTindakanPCI.setPreferredSize(new java.awt.Dimension(200, 26));
+        MnHasilTindakanPCI.addActionListener(this::MnHasilTindakanPCIActionPerformed);
+
+        MnPenilaianRisikoJatuhCathLab = new javax.swing.JMenuItem();
+        MnPenilaianRisikoJatuhCathLab.setBackground(new java.awt.Color(255, 255, 254));
+        MnPenilaianRisikoJatuhCathLab.setFont(new java.awt.Font("Tahoma", 0, 11));
+        MnPenilaianRisikoJatuhCathLab.setForeground(new java.awt.Color(50, 50, 50));
+        MnPenilaianRisikoJatuhCathLab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png")));
+        MnPenilaianRisikoJatuhCathLab.setText("Penilaian Risiko Jatuh Pasien Cath Lab");
+        MnPenilaianRisikoJatuhCathLab.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MnPenilaianRisikoJatuhCathLab.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        MnPenilaianRisikoJatuhCathLab.setName("MnPenilaianRisikoJatuhCathLab");
+        MnPenilaianRisikoJatuhCathLab.setPreferredSize(new java.awt.Dimension(200, 26));
+        MnPenilaianRisikoJatuhCathLab.addActionListener(this::MnPenilaianRisikoJatuhCathLabActionPerformed);
+
+        MnChecklistKeselamatanInvasif = new javax.swing.JMenuItem();
+        MnChecklistKeselamatanInvasif.setBackground(new java.awt.Color(255, 255, 254));
+        MnChecklistKeselamatanInvasif.setFont(new java.awt.Font("Tahoma", 0, 11)); 
+        MnChecklistKeselamatanInvasif.setForeground(new java.awt.Color(50, 50, 50));
+        MnChecklistKeselamatanInvasif.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); 
+        MnChecklistKeselamatanInvasif.setText("Checklist Keselamatan Tindakan Invasif");
+        MnChecklistKeselamatanInvasif.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MnChecklistKeselamatanInvasif.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        MnChecklistKeselamatanInvasif.setName("MnChecklistKeselamatanInvasif");
+        MnChecklistKeselamatanInvasif.setPreferredSize(new java.awt.Dimension(200, 26));
+        MnChecklistKeselamatanInvasif.addActionListener(this::MnChecklistKeselamatanInvasifActionPerformed);
+
+        MnCatatanIntraOperasi = new javax.swing.JMenuItem();
+        MnCatatanIntraOperasi.setBackground(new java.awt.Color(255, 255, 254));
+        MnCatatanIntraOperasi.setFont(new java.awt.Font("Tahoma", 0, 11));
+        MnCatatanIntraOperasi.setForeground(new java.awt.Color(50, 50, 50));
+        MnCatatanIntraOperasi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png")));
+        MnCatatanIntraOperasi.setText("Catatan Keperawatan Intra Operasi");
+        MnCatatanIntraOperasi.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MnCatatanIntraOperasi.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        MnCatatanIntraOperasi.setName("MnCatatanIntraOperasi");
+        MnCatatanIntraOperasi.setPreferredSize(new java.awt.Dimension(200, 26));
+        MnCatatanIntraOperasi.addActionListener(this::MnCatatanIntraOperasiActionPerformed);
+
+        MnPemakaianObatAlkes = new javax.swing.JMenuItem();
+        MnPemakaianObatAlkes.setBackground(new java.awt.Color(255, 255, 254));
+        MnPemakaianObatAlkes.setFont(new java.awt.Font("Tahoma", 0, 11)); 
+        MnPemakaianObatAlkes.setForeground(new java.awt.Color(50, 50, 50));
+        MnPemakaianObatAlkes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png"))); 
+        MnPemakaianObatAlkes.setText("Pemakaian Obat & Alkes (Cathlab)");
+        MnPemakaianObatAlkes.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MnPemakaianObatAlkes.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        MnPemakaianObatAlkes.setName("MnPemakaianObatAlkes");
+        MnPemakaianObatAlkes.setPreferredSize(new java.awt.Dimension(200, 26));
+        MnPemakaianObatAlkes.addActionListener(this::MnPemakaianObatAlkesActionPerformed);
         
         MnHasilPemeriksaanECHOPediatrik = new javax.swing.JMenuItem();
         MnHasilPemeriksaanECHOPediatrik.setBackground(new java.awt.Color(255, 255, 254));
@@ -18351,6 +18741,16 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
         MnHasilUSG.add(MnHasilPemeriksaanUSGNeonatus);
         MnRMRawatJalan.add(MnHasilPemeriksaanEKG);
         MnRMRawatJalan.add(MnHasilPemeriksaanECHO);
+        MnRMRawatJalan.add(MnHasilTindakanAngiografi);
+        MnRMRawatJalan.add(MnLaporanTindakanCathLab);
+        MnRMRawatJalan.add(MnChecklistPasienCathLab);
+        MnRMRawatJalan.add(MnPemantauanAnastesiLokal);
+        MnRMRawatJalan.add(MnPenilaianRisikoJatuhRajal);
+        MnRMRawatJalan.add(MnHasilTindakanPCI);
+        MnRMRawatJalan.add(MnPenilaianRisikoJatuhCathLab);
+        MnRMRawatJalan.add(MnChecklistKeselamatanInvasif);
+        MnRMRawatJalan.add(MnCatatanIntraOperasi);
+        MnRMRawatJalan.add(MnPemakaianObatAlkes);
         MnRMRawatJalan.add(MnHasilPemeriksaanECHOPediatrik);
         MnRMRawatJalan.add(MnHasilPemeriksaanSlitLamp);
         MnRMRawatJalan.add(MnHasilPemeriksaanOCT);

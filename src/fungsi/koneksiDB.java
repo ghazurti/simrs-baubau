@@ -904,7 +904,18 @@ public class koneksiDB {
             prop.loadFromXML(fis);
             var=prop.getProperty("AKTIFKANBATCHOBAT");
         }catch(Exception e){
-            var=""; 
+            var="";
+        }
+        return var;
+    }
+
+    public static String AKTIFKANFILTERFORNAS(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=prop.getProperty("AKTIFKANFILTERFORNAS");
+            if(var==null) var="no";
+        }catch(Exception e){
+            var="no";
         }
         return var;
     }

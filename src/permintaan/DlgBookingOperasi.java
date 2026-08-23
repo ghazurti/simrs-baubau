@@ -45,10 +45,12 @@ import simrskhanza.DlgKamarInap;
 import rekammedis.RMRiwayatPerawatan;
 import rekammedis.RMSignInSebelumAnastesi;
 import rekammedis.RMSignOutSebelumMenutupLuka;
+import rekammedis.RMCatatanKeperawatanIntraOperasi;
 import rekammedis.RMTimeOutSebelumInsisi;
 import rekammedis.RMTransferPasienAntarRuang;
 import setting.DlgCariRuangOperasi;
 import simrskhanza.DlgTagihanOperasi;
+import simrskhanza.DlgTagihanOperasiCathlab;
 
 /**
  *
@@ -241,6 +243,7 @@ public class DlgBookingOperasi extends javax.swing.JDialog {
         BtnCatatanAnastesiSedasi = new widget.Button();
         BtnPreAnastesi = new widget.Button();
         BtnTagihanOperasi = new widget.Button();
+        BtnTagihanOperasiCathlab = new widget.Button();
         BtnObatBhp = new widget.Button();
         BtnTransferAntarRuang = new widget.Button();
         BtnSkorAldrettePascaAnestesi = new widget.Button();
@@ -876,7 +879,7 @@ public class DlgBookingOperasi extends javax.swing.JDialog {
         FormMenu.setBackground(new java.awt.Color(255, 255, 255));
         FormMenu.setBorder(null);
         FormMenu.setName("FormMenu"); // NOI18N
-        FormMenu.setPreferredSize(new java.awt.Dimension(115, 460));
+        FormMenu.setPreferredSize(new java.awt.Dimension(115, 490));
         FormMenu.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 1, 1));
 
         BtnKamarInap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/item.png"))); // NOI18N
@@ -1015,6 +1018,20 @@ public class DlgBookingOperasi extends javax.swing.JDialog {
         });
         FormMenu.add(BtnSignOutSebelumMenutupLuka);
 
+        BtnCatatanIntraOperasi = new widget.Button();
+        BtnCatatanIntraOperasi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/item.png")));
+        BtnCatatanIntraOperasi.setText("Catatan Keperawatan Intra Operasi");
+        BtnCatatanIntraOperasi.setFocusPainted(false);
+        BtnCatatanIntraOperasi.setFont(new java.awt.Font("Tahoma", 0, 11));
+        BtnCatatanIntraOperasi.setGlassColor(new java.awt.Color(255, 255, 255));
+        BtnCatatanIntraOperasi.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        BtnCatatanIntraOperasi.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        BtnCatatanIntraOperasi.setName("BtnCatatanIntraOperasi");
+        BtnCatatanIntraOperasi.setPreferredSize(new java.awt.Dimension(190, 23));
+        BtnCatatanIntraOperasi.setRoundRect(false);
+        BtnCatatanIntraOperasi.addActionListener(this::BtnCatatanIntraOperasiActionPerformed);
+        FormMenu.add(BtnCatatanIntraOperasi);
+
         BtnChecklistPostOperasi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/item.png"))); // NOI18N
         BtnChecklistPostOperasi.setText("Check List Post Operasi");
         BtnChecklistPostOperasi.setFocusPainted(false);
@@ -1099,6 +1116,23 @@ public class DlgBookingOperasi extends javax.swing.JDialog {
             }
         });
         FormMenu.add(BtnTagihanOperasi);
+
+        BtnTagihanOperasiCathlab.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/item.png"))); // NOI18N
+        BtnTagihanOperasiCathlab.setText("Tagihan Operasi Cathlab");
+        BtnTagihanOperasiCathlab.setFocusPainted(false);
+        BtnTagihanOperasiCathlab.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        BtnTagihanOperasiCathlab.setGlassColor(new java.awt.Color(255, 255, 255));
+        BtnTagihanOperasiCathlab.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        BtnTagihanOperasiCathlab.setMargin(new java.awt.Insets(1, 1, 1, 1));
+        BtnTagihanOperasiCathlab.setName("BtnTagihanOperasiCathlab"); // NOI18N
+        BtnTagihanOperasiCathlab.setPreferredSize(new java.awt.Dimension(190, 23));
+        BtnTagihanOperasiCathlab.setRoundRect(false);
+        BtnTagihanOperasiCathlab.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnTagihanOperasiCathlabActionPerformed(evt);
+            }
+        });
+        FormMenu.add(BtnTagihanOperasiCathlab);
 
         BtnObatBhp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/item.png"))); // NOI18N
         BtnObatBhp.setText("Permintaan Resep");
@@ -1740,6 +1774,33 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         }
     }//GEN-LAST:event_BtnTagihanOperasiActionPerformed
 
+    private void BtnTagihanOperasiCathlabActionPerformed(java.awt.event.ActionEvent evt) {
+        if (tabMode.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(null, "Maaf, table masih kosong...!!!!");
+            TCari.requestFocus();
+            return;
+        }
+        if (tbObat.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Maaf, silahkan pilih data...!!!!");
+            return;
+        }
+        if (Sequel.cariRegistrasi(TNoRw.getText()) > 0) {
+            JOptionPane.showMessageDialog(rootPane,
+                "Data billing sudah terverifikasi, data tidak boleh dihapus.\nSilahkan hubungi bagian kasir/keuangan ..!!");
+            TCari.requestFocus();
+            return;
+        }
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        DlgTagihanOperasiCathlab dlg = new DlgTagihanOperasiCathlab(null, false);
+        // Auto-populate: paket + dokter operator (sama pola DlgTagihanOperasi standar)
+        dlg.setNoRawat(TNoRw.getText(), TPasien.getText(),
+                       KdOperasi.getText(), KdDokter.getText(), NmDokter.getText());
+        dlg.setSize(internalFrame1.getWidth() - 20, internalFrame1.getHeight() - 20);
+        dlg.setLocationRelativeTo(internalFrame1);
+        dlg.setVisible(true);
+        this.setCursor(Cursor.getDefaultCursor());
+    }
+
     private void BtnObatBhpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnObatBhpActionPerformed
         if(tabMode.getRowCount()==0){
             JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
@@ -1750,7 +1811,22 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                     JOptionPane.showMessageDialog(rootPane,"Data billing sudah terverifikasi ..!!");
                 }else{
                     this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-                    if(tbObat.getValueAt(tbObat.getSelectedRow(),15).toString().equals("Ranap")){
+                    // ---- Prioritas 1: cari depo Ruang OK yang sedang dipilih di form booking ini ----
+                    // Kalau field KdRuangOperasi terisi & ada mapping di set_depo_ruang_ok,
+                    // gunakan depo OK itu (bukan depo bangsal ranap pasien).
+                    String depoOK = "";
+                    try {
+                        if(KdRuangOperasi != null && !KdRuangOperasi.getText().trim().isEmpty()){
+                            depoOK = Sequel.cariIsi(
+                                "select kd_depo from set_depo_ruang_ok where kd_ruang_ok=?",
+                                KdRuangOperasi.getText().trim());
+                            if(depoOK == null) depoOK = "";
+                        }
+                    } catch(Exception ignore) {} // tabel belum ada di DB lama
+
+                    if(!depoOK.equals("")){
+                        akses.setkdbangsal(depoOK);
+                    } else if(tbObat.getValueAt(tbObat.getSelectedRow(),15).toString().equals("Ranap")){
                         if(!DEPOAKTIFOBAT.equals("")){
                             lokasistok=DEPOAKTIFOBAT;
                             akses.setkdbangsal(lokasistok);
@@ -1950,6 +2026,27 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             }
         }
     }//GEN-LAST:event_BtnTimeOutSebelumInsisiActionPerformed
+
+    private void BtnCatatanIntraOperasiActionPerformed(java.awt.event.ActionEvent evt) {
+        if(tabMode.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+            TCari.requestFocus();
+        }else{
+            if(tbObat.getSelectedRow()!= -1){
+                this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+                RMCatatanKeperawatanIntraOperasi form=new RMCatatanKeperawatanIntraOperasi(null,false);
+                form.isCek();
+                form.emptTeks();
+                form.setNoRm(TNoRw.getText(),DTPCari2.getDate(),NmOperasi.getText());
+                form.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+                form.setLocationRelativeTo(internalFrame1);
+                form.setVisible(true);
+                this.setCursor(Cursor.getDefaultCursor());
+            }else{
+                JOptionPane.showMessageDialog(null,"Maaf, silahkan pilih data...!!!!");
+            }
+        }
+    }
 
     private void BtnSignOutSebelumMenutupLukaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSignOutSebelumMenutupLukaActionPerformed
         if(tabMode.getRowCount()==0){
@@ -2164,6 +2261,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private widget.Button BtnSkorBromagePascaAnestesi;
     private widget.Button BtnSkorStewardPascaAnestesi;
     private widget.Button BtnTagihanOperasi;
+    private widget.Button BtnTagihanOperasiCathlab;
     private widget.Button BtnTimeOutSebelumInsisi;
     private widget.Button BtnTransferAntarRuang;
     private widget.CekBox ChkAccor;
@@ -2221,6 +2319,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private widget.panelisi panelGlass8;
     private widget.Table tbObat;
     // End of variables declaration//GEN-END:variables
+    private widget.Button BtnCatatanIntraOperasi;
 
     private void tampil() {     
         if(R1.isSelected()==true){

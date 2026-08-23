@@ -48,8 +48,10 @@ public final class DlgRl32 extends javax.swing.JDialog {
     private ResultSet rs;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private volatile boolean ceksukses = false;
-    private int i=0,rujukan=0,nonrujukan=0,dirawat=0,dirujuk=0,meninggal=0,pulang=0,
-            ttlrujukan=0,ttlnonrujukan=0,ttldirawat=0,ttldirujuk=0,ttlmeninggal=0,ttlpulang=0;   
+    private int i=0,rujukan=0,nonrujukan=0,dirawat=0,dirujuk=0,pulang=0,
+            meninggalL=0,meninggalP=0,doaL=0,doaP=0,lukaL=0,lukaP=0,
+            ttlrujukan=0,ttlnonrujukan=0,ttldirawat=0,ttldirujuk=0,ttlpulang=0,
+            ttlmeninggalL=0,ttlmeninggalP=0,ttldoaL=0,ttldoaP=0,ttllukaL=0,ttllukaP=0;
     /** Creates new form DlgLhtBiaya
      * @param parent
      * @param modal */
@@ -59,7 +61,7 @@ public final class DlgRl32 extends javax.swing.JDialog {
         this.setLocation(8,1);
         setSize(885,674);
 
-        Object[] rowRwJlDr={"No.","Jenis Pelayanan","Rujukan","Non Rujukan","Dirawat","Dirujuk","Pulang","Mati di IGD","Doa"};
+        Object[] rowRwJlDr={"No.","Jenis Pelayanan","Rujukan","Non Rujukan","Dirawat","Dirujuk","Pulang","Luka-luka (L)","Luka-luka (P)","Mati di IGD (L)","Mati di IGD (P)","DOA (L)","DOA (P)"};
         tabMode=new DefaultTableModel(null,rowRwJlDr){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){return false;}
         };
@@ -68,7 +70,7 @@ public final class DlgRl32 extends javax.swing.JDialog {
         tbBangsal.setPreferredScrollableViewportSize(new Dimension(500,500));
         tbBangsal.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 9; i++) {
+        for (i = 0; i < 13; i++) {
             TableColumn column = tbBangsal.getColumnModel().getColumn(i);
             if(i==0){
                 column.setPreferredWidth(25);
@@ -284,7 +286,11 @@ public final class DlgRl32 extends javax.swing.JDialog {
                                     tabMode.getValueAt(r,5).toString()+"','"+
                                     tabMode.getValueAt(r,6).toString()+"','"+
                                     tabMode.getValueAt(r,7).toString()+"','"+
-                                    tabMode.getValueAt(r,8).toString()+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Rekap Nota Pembayaran");
+                                    tabMode.getValueAt(r,8).toString()+"','"+
+                                    tabMode.getValueAt(r,9).toString()+"','"+
+                                    tabMode.getValueAt(r,10).toString()+"','"+
+                                    tabMode.getValueAt(r,11).toString()+"','"+
+                                    tabMode.getValueAt(r,12).toString()+"','','','','','','','','','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Rekap Nota Pembayaran");
                 }                    
             }
                
@@ -418,16 +424,31 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             String tgl1 = Valid.SetTgl(Tgl1.getSelectedItem()+"");
             String tgl2 = Valid.SetTgl(Tgl2.getSelectedItem()+"");
 
-            // [nama, kondisi WHERE tambahan untuk filter jenis kasus]
-            String[][] kasusTypes = {
-                {"Bedah",
+            // Filter dasar kasus bedah (diagnosa utama S%, T%, atau bedah non trauma K35-K81)
+            String bedahDiagnosa =
                     "AND reg_periksa.no_rawat IN (SELECT no_rawat FROM diagnosa_pasien WHERE " +
                     "(kd_penyakit LIKE 'S%' OR kd_penyakit LIKE 'T%' " +
                     "OR kd_penyakit LIKE 'K35%' OR kd_penyakit LIKE 'K36%' OR kd_penyakit LIKE 'K37%' OR kd_penyakit LIKE 'K38%' " +
                     "OR kd_penyakit LIKE 'K40%' OR kd_penyakit LIKE 'K41%' OR kd_penyakit LIKE 'K42%' OR kd_penyakit LIKE 'K43%' OR kd_penyakit LIKE 'K44%' OR kd_penyakit LIKE 'K45%' OR kd_penyakit LIKE 'K46%' " +
                     "OR kd_penyakit LIKE 'K56%' OR kd_penyakit LIKE 'K80%' OR kd_penyakit LIKE 'K81%') " +
-                    "AND prioritas=1)"},
-                {"Non Bedah",
+                    "AND prioritas=1)";
+
+            // [nama, kondisi WHERE tambahan untuk filter jenis kasus]
+            // Kasus bedah dipilah menurut macam kasus pada data triase IGD
+            java.util.List<String[]> kasusTypes = new java.util.ArrayList<>();
+            ps = koneksi.prepareStatement("SELECT kode_kasus, macam_kasus FROM master_triase_macam_kasus ORDER BY kode_kasus");
+            rs = ps.executeQuery();
+            while(rs.next()){
+                kasusTypes.add(new String[]{"Bedah - "+rs.getString("macam_kasus"),
+                    bedahDiagnosa +
+                    " AND reg_periksa.no_rawat IN (SELECT no_rawat FROM data_triase_igd WHERE kode_kasus='"+rs.getString("kode_kasus")+"')"});
+            }
+            rs.close();
+            ps.close();
+            kasusTypes.add(new String[]{"Bedah - Belum Ada Data Triase",
+                bedahDiagnosa +
+                " AND reg_periksa.no_rawat NOT IN (SELECT no_rawat FROM data_triase_igd)"});
+            kasusTypes.add(new String[]{"Non Bedah",
                     "AND TIMESTAMPDIFF(YEAR,pasien.tgl_lahir,reg_periksa.tgl_registrasi) >= 14 " +
                     "AND TIMESTAMPDIFF(YEAR,pasien.tgl_lahir,reg_periksa.tgl_registrasi) < 60 " +
                     "AND reg_periksa.no_rawat NOT IN (SELECT no_rawat FROM diagnosa_pasien WHERE " +
@@ -437,22 +458,32 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     "OR kd_penyakit LIKE 'K56%' OR kd_penyakit LIKE 'K80%' OR kd_penyakit LIKE 'K81%') " +
                     "AND prioritas=1) " +
                     "AND reg_periksa.no_rawat NOT IN (SELECT no_rawat FROM diagnosa_pasien WHERE kd_penyakit LIKE 'F%' AND prioritas=1) " +
-                    "AND reg_periksa.no_rawat NOT IN (SELECT no_rawat FROM diagnosa_pasien WHERE (kd_penyakit LIKE 'O%' OR kd_penyakit LIKE 'Z3%') AND prioritas=1)"},
-                {"Jiwa",
-                    "AND reg_periksa.no_rawat IN (SELECT no_rawat FROM diagnosa_pasien WHERE kd_penyakit LIKE 'F%' AND prioritas=1)"},
-                {"Anak",
-                    "AND TIMESTAMPDIFF(YEAR,pasien.tgl_lahir,reg_periksa.tgl_registrasi) BETWEEN 1 AND 13"},
-                {"Kebidanan",
-                    "AND reg_periksa.no_rawat IN (SELECT no_rawat FROM diagnosa_pasien WHERE (kd_penyakit LIKE 'O%' OR kd_penyakit LIKE 'Z3%') AND prioritas=1)"},
-                {"Geriatri",
-                    "AND TIMESTAMPDIFF(YEAR,pasien.tgl_lahir,reg_periksa.tgl_registrasi) >= 60"},
-                {"Bayi",
-                    "AND TIMESTAMPDIFF(YEAR,pasien.tgl_lahir,reg_periksa.tgl_registrasi) < 1"}
-            };
+                    "AND reg_periksa.no_rawat NOT IN (SELECT no_rawat FROM diagnosa_pasien WHERE (kd_penyakit LIKE 'O%' OR kd_penyakit LIKE 'Z3%') AND prioritas=1)"});
+            kasusTypes.add(new String[]{"Jiwa",
+                    "AND reg_periksa.no_rawat IN (SELECT no_rawat FROM diagnosa_pasien WHERE kd_penyakit LIKE 'F%' AND prioritas=1)"});
+            kasusTypes.add(new String[]{"Anak",
+                    "AND TIMESTAMPDIFF(YEAR,pasien.tgl_lahir,reg_periksa.tgl_registrasi) BETWEEN 1 AND 13"});
+            kasusTypes.add(new String[]{"Kebidanan",
+                    "AND reg_periksa.no_rawat IN (SELECT no_rawat FROM diagnosa_pasien WHERE (kd_penyakit LIKE 'O%' OR kd_penyakit LIKE 'Z3%') AND prioritas=1)"});
+            kasusTypes.add(new String[]{"Geriatri",
+                    "AND TIMESTAMPDIFF(YEAR,pasien.tgl_lahir,reg_periksa.tgl_registrasi) >= 60"});
+            kasusTypes.add(new String[]{"Bayi",
+                    "AND TIMESTAMPDIFF(YEAR,pasien.tgl_lahir,reg_periksa.tgl_registrasi) < 1"});
+
+            // Mati di IGD = meninggal di rumah sakit, DOA = datang sudah meninggal (tempat meninggal di luar RS)
+            String tempatMatiIGD = " AND (pasien_mati.temp_meninggal IS NULL OR pasien_mati.temp_meninggal IN ('-','Rumah Sakit'))";
+            String tempatDOA = " AND pasien_mati.temp_meninggal IN ('Puskesmas','Rumah Bersalin','Rumah Tempat Tinggal','Lain-lain (Termasuk Doa)','Tidak tahu')";
+
+            // Luka-luka = pasien kasus bedah dengan diagnosa utama cedera (S/T) yang masih hidup
+            String lukaFilter = " AND reg_periksa.no_rawat IN (SELECT no_rawat FROM diagnosa_pasien WHERE " +
+                    "(kd_penyakit LIKE 'S%' OR kd_penyakit LIKE 'T%') AND prioritas=1)" +
+                    " AND reg_periksa.no_rkm_medis NOT IN (SELECT no_rkm_medis FROM pasien_mati)";
 
             i=1;
             ttlrujukan=0;ttlnonrujukan=0;ttldirawat=0;
-            ttldirujuk=0;ttlmeninggal=0;ttlpulang=0;
+            ttldirujuk=0;ttlpulang=0;
+            ttlmeninggalL=0;ttlmeninggalP=0;ttldoaL=0;ttldoaP=0;
+            ttllukaL=0;ttllukaP=0;
 
             for(String[] kasus : kasusTypes){
                 String nmKasus  = kasus[0];
@@ -483,10 +514,37 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     "INNER JOIN rujuk ON rujuk.no_rawat=reg_periksa.no_rawat " +
                     baseWhere);
 
-                meninggal = Sequel.cariInteger(
+                meninggalL = Sequel.cariInteger(
                     "SELECT COUNT(DISTINCT reg_periksa.no_rawat) " + baseFrom +
                     "INNER JOIN pasien_mati ON pasien_mati.no_rkm_medis=reg_periksa.no_rkm_medis " +
-                    baseWhere);
+                    baseWhere + " AND pasien.jk='L'" + tempatMatiIGD);
+
+                meninggalP = Sequel.cariInteger(
+                    "SELECT COUNT(DISTINCT reg_periksa.no_rawat) " + baseFrom +
+                    "INNER JOIN pasien_mati ON pasien_mati.no_rkm_medis=reg_periksa.no_rkm_medis " +
+                    baseWhere + " AND pasien.jk='P'" + tempatMatiIGD);
+
+                doaL = Sequel.cariInteger(
+                    "SELECT COUNT(DISTINCT reg_periksa.no_rawat) " + baseFrom +
+                    "INNER JOIN pasien_mati ON pasien_mati.no_rkm_medis=reg_periksa.no_rkm_medis " +
+                    baseWhere + " AND pasien.jk='L'" + tempatDOA);
+
+                doaP = Sequel.cariInteger(
+                    "SELECT COUNT(DISTINCT reg_periksa.no_rawat) " + baseFrom +
+                    "INNER JOIN pasien_mati ON pasien_mati.no_rkm_medis=reg_periksa.no_rkm_medis " +
+                    baseWhere + " AND pasien.jk='P'" + tempatDOA);
+
+                if(nmKasus.startsWith("Bedah")){
+                    lukaL = Sequel.cariInteger(
+                        "SELECT COUNT(DISTINCT reg_periksa.no_rawat) " + baseFrom + baseWhere +
+                        " AND pasien.jk='L'" + lukaFilter);
+                    lukaP = Sequel.cariInteger(
+                        "SELECT COUNT(DISTINCT reg_periksa.no_rawat) " + baseFrom + baseWhere +
+                        " AND pasien.jk='P'" + lukaFilter);
+                }else{
+                    lukaL = 0;
+                    lukaP = 0;
+                }
 
                 pulang = Sequel.cariInteger(
                     "SELECT COUNT(DISTINCT reg_periksa.no_rawat) " + baseFrom + baseWhere +
@@ -495,15 +553,17 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
                     "AND reg_periksa.no_rkm_medis NOT IN (SELECT no_rkm_medis FROM pasien_mati)");
 
                 ttlrujukan+=rujukan;ttlnonrujukan+=nonrujukan;ttldirawat+=dirawat;
-                ttldirujuk+=dirujuk;ttlmeninggal+=meninggal;ttlpulang+=pulang;
+                ttldirujuk+=dirujuk;ttlpulang+=pulang;
+                ttlmeninggalL+=meninggalL;ttlmeninggalP+=meninggalP;ttldoaL+=doaL;ttldoaP+=doaP;
+                ttllukaL+=lukaL;ttllukaP+=lukaP;
                 tabMode.addRow(new Object[]{
-                    i, nmKasus, rujukan, nonrujukan, dirawat, dirujuk, pulang, meninggal, "0"
+                    i, nmKasus, rujukan, nonrujukan, dirawat, dirujuk, pulang, lukaL, lukaP, meninggalL, meninggalP, doaL, doaP
                 });
                 i++;
             }
             tabMode.addRow(new Object[]{
                 ">>","TOTAL",
-                ttlrujukan,ttlnonrujukan,ttldirawat,ttldirujuk,ttlpulang,ttlmeninggal,"0"
+                ttlrujukan,ttlnonrujukan,ttldirawat,ttldirujuk,ttlpulang,ttllukaL,ttllukaP,ttlmeninggalL,ttlmeninggalP,ttldoaL,ttldoaP
             });
             this.setCursor(Cursor.getDefaultCursor());
         }catch(Exception e){

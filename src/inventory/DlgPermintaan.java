@@ -64,7 +64,7 @@ public class DlgPermintaan extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        Object[] judul={"Jml","Kode Barang","Nama Barang","Satuan","Jenis Obat","Kategori","Golongan","Keterangan"};
+        Object[] judul={"Jml","Kode Barang","Nama Barang","Satuan","Jenis Obat","Kategori","Golongan","Keterangan","Stok Asal","Stok Tujuan"};
         tabMode=new DefaultTableModel(null,judul){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){
                 boolean a = false;
@@ -79,7 +79,7 @@ public class DlgPermintaan extends javax.swing.JDialog {
         tbDokter.setPreferredScrollableViewportSize(new Dimension(800,800));
         tbDokter.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 8; i++) {
+        for (i = 0; i < 10; i++) {
             TableColumn column = tbDokter.getColumnModel().getColumn(i);
             if(i==0){
                 column.setPreferredWidth(42);
@@ -97,6 +97,10 @@ public class DlgPermintaan extends javax.swing.JDialog {
                 column.setPreferredWidth(100);
             }else if(i==7){
                 column.setPreferredWidth(180);
+            }else if(i==8){
+                column.setPreferredWidth(70);
+            }else if(i==9){
+                column.setPreferredWidth(70);
             }
         }
         warna.kolom=0;
@@ -775,11 +779,12 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
             public void windowClosing(WindowEvent e) {}
             @Override
             public void windowClosed(WindowEvent e) {
-                if(bangsal.getTable().getSelectedRow()!= -1){   
+                if(bangsal.getTable().getSelectedRow()!= -1){
                     kdgudangTujuan.setText(bangsal.getTable().getValueAt(bangsal.getTable().getSelectedRow(),0).toString());
                     nmgudangTujuan.setText(bangsal.getTable().getValueAt(bangsal.getTable().getSelectedRow(),1).toString());
                     kdgudangTujuan.requestFocus();
-                } 
+                    runBackground(() ->tampil2());
+                }
             }
             @Override
             public void windowIconified(WindowEvent e) {}
@@ -818,6 +823,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
             NoPermintaan.requestFocus();
         }else if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             Sequel.cariIsi("select bangsal.nm_bangsal from bangsal where bangsal.kd_bangsal=?", nmgudangTujuan,kdgudangTujuan.getText());
+            runBackground(() ->tampil2());
             kdptg.requestFocus();
         }else if(evt.getKeyCode()==KeyEvent.VK_UP){
             btnSuplierActionPerformed(null);
@@ -846,10 +852,11 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
             bangsal.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-                    if(bangsal.getTable().getSelectedRow()!= -1){                   
+                    if(bangsal.getTable().getSelectedRow()!= -1){
                         kdgudangasal.setText(bangsal.getTable().getValueAt(bangsal.getTable().getSelectedRow(),0).toString());
                         nmgudangasal.setText(bangsal.getTable().getValueAt(bangsal.getTable().getSelectedRow(),1).toString());
-                    } 
+                        runBackground(() ->tampil2());
+                    }
                     kdgudangasal.requestFocus();
                     bangsal=null;
                 }
@@ -984,8 +991,20 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         }
     }
     
+    private String getStok(String kodeBrng, String kdBangsal){
+        if(kodeBrng==null||kodeBrng.trim().isEmpty()||kdBangsal==null||kdBangsal.trim().isEmpty()){
+            return "";
+        }
+        String hasil = Sequel.cariIsi(
+            "select ifnull(sum(stok),0) from gudangbarang where kode_brng='"+kodeBrng.replace("'","")+
+            "' and kd_bangsal='"+kdBangsal.replace("'","")+"'");
+        return (hasil==null||hasil.isEmpty())?"0":hasil;
+    }
+
     private void tampil2() {
         try{
+            String kdAsal = kdgudangasal.getText().trim();
+            String kdTujuan = kdgudangTujuan.getText().trim();
             row=tbDokter.getRowCount();
             jml=0;
             for(i=0;i<row;i++){
@@ -1002,8 +1021,8 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
             kategori=new String[jml];
             golongan=new String[jml];
             keterangan=new String[jml];
-            
-            index=0;        
+
+            index=0;
             for(i=0;i<row;i++){
                 if(!tbDokter.getValueAt(i,0).toString().equals("")){
                     jumlah[index]=tbDokter.getValueAt(i,0).toString();
@@ -1019,9 +1038,10 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
             }
             Valid.tabelKosong(tabMode);
             for(i=0;i<jml;i++){
-                tabMode.addRow(new Object[]{jumlah[i],kodebarang[i],namabarang[i],satuan[i],jenis[i],kategori[i],golongan[i],keterangan[i]});
+                tabMode.addRow(new Object[]{jumlah[i],kodebarang[i],namabarang[i],satuan[i],jenis[i],kategori[i],golongan[i],keterangan[i],
+                    getStok(kodebarang[i],kdAsal), getStok(kodebarang[i],kdTujuan)});
             }
-            
+
             kodebarang=null;
             namabarang=null;
             satuan=null;
@@ -1030,22 +1050,26 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
             kategori=null;
             golongan=null;
             keterangan=null;
-            
+
             myObj = new FileReader("./cache/permintaanobat.iyem");
             root = mapper.readTree(myObj);
             response = root.path("permintaanobat");
             if(response.isArray()){
                 if(TCari.getText().trim().equals("")){
                     for(JsonNode list:response){
+                        String kd = list.path("KodeBarang").asText();
                         tabMode.addRow(new Object[]{
-                            "",list.path("KodeBarang").asText(),list.path("NamaBarang").asText(),list.path("Satuan").asText(),list.path("JenisObat").asText(),list.path("Kategori").asText(),list.path("Golongan").asText(),""
+                            "",kd,list.path("NamaBarang").asText(),list.path("Satuan").asText(),list.path("JenisObat").asText(),list.path("Kategori").asText(),list.path("Golongan").asText(),"",
+                            getStok(kd,kdAsal), getStok(kd,kdTujuan)
                         });
                     }
                 }else{
                     for(JsonNode list:response){
                         if(list.path("KodeBarang").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaBarang").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("JenisObat").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("Kategori").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("Golongan").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
+                            String kd = list.path("KodeBarang").asText();
                             tabMode.addRow(new Object[]{
-                                "",list.path("KodeBarang").asText(),list.path("NamaBarang").asText(),list.path("Satuan").asText(),list.path("JenisObat").asText(),list.path("Kategori").asText(),list.path("Golongan").asText(),""
+                                "",kd,list.path("NamaBarang").asText(),list.path("Satuan").asText(),list.path("JenisObat").asText(),list.path("Kategori").asText(),list.path("Golongan").asText(),"",
+                                getStok(kd,kdAsal), getStok(kd,kdTujuan)
                             });
                         }
                     }

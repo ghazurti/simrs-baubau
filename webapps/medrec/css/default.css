@@ -442,3 +442,32 @@ background:#7bbcc7; color:#aaceaf;background-position:5px 5px;font: 11px  Tahoma
         border-bottom:1px #ffffff solid;
         color:#323232;
 }
+
+@media (max-width: 700px) {
+	body {
+		font-size: 15px;
+	}
+
+	.head td, .head2 td, .head3 td, .isi td, .isi3 td, .isi4 td, .isi5 td, .isi6 td {
+		font-size: 13px;
+	}
+
+	.button {
+		font-size: 15px;
+		padding: 10px 14px;
+		margin: 4px 4px 4px 0;
+	}
+
+	.text {
+		font-size: 15px;
+		padding: 8px 6px;
+	}
+
+	input[type="text"], input[type="file"], select {
+		font-size: 15px;
+	}
+
+	#post {
+		width: 100%;
+	}
+}

@@ -1,0 +1,1076 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptCatatanKeperawatanIntraOperasi" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="namars" class="java.lang.String"/>
+	<parameter name="alamatrs" class="java.lang.String"/>
+	<parameter name="kotars" class="java.lang.String"/>
+	<parameter name="propinsirs" class="java.lang.String"/>
+	<parameter name="logo" class="java.io.InputStream"/>
+	<queryString><![CDATA[select 1]]></queryString>
+	<field name="no_rawat" class="java.lang.String"/>
+	<field name="no_rkm_medis" class="java.lang.String"/>
+	<field name="nm_pasien" class="java.lang.String"/>
+	<field name="tgl_lahir" class="java.lang.String"/>
+	<field name="jk" class="java.lang.String"/>
+	<field name="tgl_operasi" class="java.lang.String"/>
+	<field name="jam_mulai" class="java.lang.String"/>
+	<field name="jam_selesai" class="java.lang.String"/>
+	<field name="tindakan_operasi" class="java.lang.String"/>
+	<field name="tipe_operasi" class="java.lang.String"/>
+	<field name="tipe_pembiusan" class="java.lang.String"/>
+	<field name="gcs_e" class="java.lang.String"/>
+	<field name="gcs_m" class="java.lang.String"/>
+	<field name="gcs_v" class="java.lang.String"/>
+	<field name="status_emosi" class="java.lang.String"/>
+	<field name="posisi_kanula" class="java.lang.String"/>
+	<field name="kanula_ket" class="java.lang.String"/>
+	<field name="posisi_operasi" class="java.lang.String"/>
+	<field name="posisi_diawasi" class="java.lang.String"/>
+	<field name="risiko_luka_tekan" class="java.lang.String"/>
+	<field name="skor_braden" class="java.lang.String"/>
+	<field name="stocking_vte" class="java.lang.String"/>
+	<field name="posisi_lengan" class="java.lang.String"/>
+	<field name="alat_bantu" class="java.lang.String"/>
+	<field name="kateter" class="java.lang.String"/>
+	<field name="kateter_oleh" class="java.lang.String"/>
+	<field name="jenis_kateter" class="java.lang.String"/>
+	<field name="no_kateter" class="java.lang.String"/>
+	<field name="isi_balon" class="java.lang.String"/>
+	<field name="kateter_arah" class="java.lang.String"/>
+	<field name="kateter_traksi" class="java.lang.String"/>
+	<field name="persiapan_kulit" class="java.lang.String"/>
+	<field name="persiapan_kulit_ket" class="java.lang.String"/>
+	<field name="diathermy" class="java.lang.String"/>
+	<field name="elektroda_lokasi" class="java.lang.String"/>
+	<field name="elektroda_oleh" class="java.lang.String"/>
+	<field name="kulit_sebelum" class="java.lang.String"/>
+	<field name="kulit_sesudah" class="java.lang.String"/>
+	<field name="kode_elektrosurgical" class="java.lang.String"/>
+	<field name="unit_pemanas" class="java.lang.String"/>
+	<field name="suhu_pemanas" class="java.lang.String"/>
+	<field name="torniket_oleh" class="java.lang.String"/>
+	<field name="tor_lka_mulai" class="java.lang.String"/>
+	<field name="tor_lka_selesai" class="java.lang.String"/>
+	<field name="tor_lka_tekanan" class="java.lang.String"/>
+	<field name="tor_lki_mulai" class="java.lang.String"/>
+	<field name="tor_lki_selesai" class="java.lang.String"/>
+	<field name="tor_lki_tekanan" class="java.lang.String"/>
+	<field name="tor_pka_mulai" class="java.lang.String"/>
+	<field name="tor_pka_selesai" class="java.lang.String"/>
+	<field name="tor_pka_tekanan" class="java.lang.String"/>
+	<field name="tor_pki_mulai" class="java.lang.String"/>
+	<field name="tor_pki_selesai" class="java.lang.String"/>
+	<field name="tor_pki_tekanan" class="java.lang.String"/>
+	<field name="laser" class="java.lang.String"/>
+	<field name="laser_diawasi" class="java.lang.String"/>
+	<field name="implant" class="java.lang.String"/>
+	<field name="drain" class="java.lang.String"/>
+	<field name="jenis_drain" class="java.lang.String"/>
+	<field name="sifat_drain" class="java.lang.String"/>
+	<field name="cairan_glycine" class="java.lang.String"/>
+	<field name="cairan_wfi" class="java.lang.String"/>
+	<field name="cairan_nacl" class="java.lang.String"/>
+	<field name="cairan_bss" class="java.lang.String"/>
+	<field name="cairan_lain" class="java.lang.String"/>
+	<field name="balutan" class="java.lang.String"/>
+	<field name="jenis_balutan" class="java.lang.String"/>
+	<field name="spesimen" class="java.lang.String"/>
+	<field name="spesimen_ket" class="java.lang.String"/>
+	<field name="jumlah_total_jaringan" class="java.lang.String"/>
+	<field name="spesimen_diberikan" class="java.lang.String"/>
+	<field name="jenis_jaringan" class="java.lang.String"/>
+	<field name="jumlah_jaringan" class="java.lang.String"/>
+	<field name="nama_penerima" class="java.lang.String"/>
+	<field name="keterangan" class="java.lang.String"/>
+	<field name="perawat_steril" class="java.lang.String"/>
+	<field name="perawat_sirkuler" class="java.lang.String"/>
+	<background><band splitType="Stretch"/></background>
+	<title><band height="116" splitType="Stretch">
+			<image scaleImage="FillFrame" onErrorType="Blank">
+				<reportElement x="20" y="0" width="40" height="40"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement x="66" y="2" width="420" height="14"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{namars}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="66" y="17" width="460" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="20" y="42" width="533" height="1"/>
+				<graphicElement><pen lineWidth="1.5"/></graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="20" y="48" width="533" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CATATAN KEPERAWATAN INTRA OPERASI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="70" width="55" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Nama]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="77" y="70" width="220" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{nm_pasien}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="83" width="55" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Tgl. Lahir]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="77" y="83" width="220" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{tgl_lahir}+"  ("+$F{jk}+")"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="320" y="70" width="70" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[No. RM]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="70" width="161" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{no_rkm_medis}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="320" y="83" width="70" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[No. Rawat]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="83" width="161" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{no_rawat}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="320" y="96" width="70" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Tgl. Operasi]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="392" y="96" width="161" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{tgl_operasi}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="20" y="112" width="533" height="1"/>
+				<graphicElement><pen lineWidth="0.5"/></graphicElement>
+			</line>
+	</band></title>
+	<detail><band height="528" splitType="Stretch">
+			<staticText>
+				<reportElement x="20" y="3" width="262" height="13"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[IDENTITAS OPERASI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="19" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Jam mulai s.d selesai]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="19" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{jam_mulai}+" s.d "+$F{jam_selesai}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="31" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Tindakan operasi]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="31" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{tindakan_operasi}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="43" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Tipe operasi]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="43" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{tipe_operasi}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="55" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Tipe pembiusan]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="55" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{tipe_pembiusan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="67" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[GCS  E / M / V]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="67" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{gcs_e}+" / "+$F{gcs_m}+" / "+$F{gcs_v}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="79" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Status emosi masuk OK]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="79" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{status_emosi}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="94" width="262" height="13"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[POSISI & PERSIAPAN PASIEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="110" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Posisi kanula infus]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="110" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{posisi_kanula}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="122" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Keterangan kanula]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="122" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{kanula_ket}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="134" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Posisi operasi]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="134" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{posisi_operasi}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="146" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Posisi diawasi oleh]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="146" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{posisi_diawasi}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="158" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Risiko luka tekan]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="158" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{risiko_luka_tekan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="170" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Skor Braden/Glamorgan]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="170" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{skor_braden}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="182" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Stocking anti-VTE]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="182" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{stocking_vte}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="194" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Posisi lengan]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="194" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{posisi_lengan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="206" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Alat bantu]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="206" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{alat_bantu}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="221" width="262" height="13"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PEMAKAIAN KATETER URINE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="237" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Pemakaian kateter]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="237" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{kateter}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="249" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Dipasang oleh]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="249" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{kateter_oleh}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="261" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Jenis / No. kateter]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="261" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{jenis_kateter}+"  /  "+$F{no_kateter}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="273" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Isi balon (ml)]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="273" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{isi_balon}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="285" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Aliran urine]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="285" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{kateter_arah}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="297" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Ditraksi ke paha (irigasi blass)]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="297" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{kateter_traksi}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="291" y="3" width="262" height="13"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PERSIAPAN KULIT & DIATHERMY]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="19" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Persiapan kulit]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="19" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{persiapan_kulit}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="31" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Keterangan persiapan kulit]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="31" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{persiapan_kulit_ket}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="43" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Pemakaian diathermy]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="43" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{diathermy}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="55" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Lokasi elektroda]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="55" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{elektroda_lokasi}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="67" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Elektroda dipasang oleh]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="67" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{elektroda_oleh}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="79" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Kulit sebelum operasi]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="79" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{kulit_sebelum}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="91" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Kulit sesudah operasi]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="91" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{kulit_sesudah}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="103" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Kode unit elektrosurgical]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="103" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{kode_elektrosurgical}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="115" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Unit pemanas/pendingin]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="115" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{unit_pemanas}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="127" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Pengaturan temperatur (°C)]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="127" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{suhu_pemanas}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="291" y="142" width="262" height="13"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOURNIQUET (mulai - selesai - mmHg)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="158" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Dipasang oleh]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="158" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{torniket_oleh}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="170" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Lengan kanan]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="170" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{tor_lka_mulai}+" - "+$F{tor_lka_selesai}+" - "+$F{tor_lka_tekanan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="182" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Lengan kiri]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="182" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{tor_lki_mulai}+" - "+$F{tor_lki_selesai}+" - "+$F{tor_lki_tekanan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="194" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Paha kanan]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="194" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{tor_pka_mulai}+" - "+$F{tor_pka_selesai}+" - "+$F{tor_pka_tekanan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="206" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Paha kiri]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="206" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{tor_pki_mulai}+" - "+$F{tor_pki_selesai}+" - "+$F{tor_pki_tekanan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="291" y="221" width="262" height="13"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LASER, IMPLANT, DRAIN & CAIRAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="237" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Pemakaian laser]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="237" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{laser}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="249" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Laser diawasi oleh]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="249" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{laser_diawasi}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="261" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Pemakaian implant]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="261" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{implant}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="273" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Pemakaian drain]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="273" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{drain}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="285" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Jenis drain]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="285" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{jenis_drain}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="297" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Sifat drain]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="297" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{sifat_drain}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="309" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Glycine (ml)]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="309" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{cairan_glycine}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="321" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Water for irigation (ml)]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="321" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{cairan_wfi}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="333" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Sodium Chloride 0,9% (ml)]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="333" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{cairan_nacl}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="345" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[BSS - operasi mata (ml)]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="345" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{cairan_bss}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="357" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Cairan lain-lain]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="357" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{cairan_lain}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="376" width="262" height="13"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BALUTAN & SPESIMEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="392" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Balutan]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="392" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{balutan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="404" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Jenis balutan]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="404" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{jenis_balutan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="416" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Spesimen]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="416" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{spesimen}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="428" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Keterangan spesimen]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="428" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{spesimen_ket}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="440" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Jumlah total jaringan/cairan]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="142" y="440" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{jumlah_total_jaringan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="291" y="376" width="262" height="13"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="295" y="392" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Diberikan ke pasien/keluarga]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="392" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{spesimen_diberikan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="404" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Jenis jaringan]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="404" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{jenis_jaringan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="416" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Jumlah jaringan]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="416" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{jumlah_jaringan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="428" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Nama penerima]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="428" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{nama_penerima}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="295" y="440" width="118" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Keterangan]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="413" y="440" width="140" height="12"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[": "+$F{keterangan}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="60" y="464" width="160" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Perawat Steril]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="340" y="464" width="160" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Perawat Sirkuler]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="60" y="508" width="160" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["( "+$F{perawat_steril}+" )"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="340" y="508" width="160" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["( "+$F{perawat_sirkuler}+" )"]]></textFieldExpression>
+			</textField>
+	</band></detail>
+</jasperReport>

@@ -62,6 +62,16 @@ public final class RMSignOutSebelumMenutupLuka extends javax.swing.JDialog {
     private StringBuilder htmlContent;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private volatile boolean ceksukses = false;
+    // Field tambahan sesuai formulir RM 22.OK-03 (di luar blok GEN NetBeans)
+    private widget.TextBox MasalahPeralatan;
+    private widget.ComboBox Komplikasi;
+    private widget.TextBox KomplikasiKet;
+    private widget.TextBox PerhatianPemulihanAnestesi;
+    private widget.ComboBox Disposisi;
+    private widget.TextBox KdPerawatInstrumen;
+    private widget.TextBox NmPerawatInstrumen;
+    private widget.Button btnPerawatInstrumen;
+    private DlgCariPetugas petugas2;
     /** Creates new form DlgRujuk
      * @param parent
      * @param modal */
@@ -70,6 +80,7 @@ public final class RMSignOutSebelumMenutupLuka extends javax.swing.JDialog {
         initComponents();
         this.setLocation(8,1);
         setSize(628,674);
+        tambahFieldRM22OK03();
 
         tabMode=new DefaultTableModel(null,new Object[]{
             "No.Rawat","No.RM","Nama Pasien","Tgl.Lahir","J.K.","Tanggal","SN/CN","Tindakan","Kode Dokter Bedah","Nama Dokter Bedah",
@@ -168,6 +179,85 @@ public final class RMSignOutSebelumMenutupLuka extends javax.swing.JDialog {
         LoadHTML.setDocument(doc);
     }
 
+
+    // Menambahkan field formulir RM 22.OK-03 secara program (aman dari regenerasi NetBeans)
+    private widget.ComboBox comboRM(String... isi){
+        widget.ComboBox c=new widget.ComboBox();
+        c.setModel(new javax.swing.DefaultComboBoxModel(isi));
+        return c;
+    }
+    private void labelRM(String teks, int x, int y, int w){
+        widget.Label l=new widget.Label();
+        l.setText(teks);
+        l.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        FormInput.add(l);
+        l.setBounds(x, y, w, 23);
+    }
+    private void tambahFieldRM22OK03(){
+        FormInput.setPreferredSize(new java.awt.Dimension(810, 470));
+        labelRM("Masalah peralatan yang perlu disampaikan :", 0, 310, 250);
+        MasalahPeralatan=new widget.TextBox();
+        FormInput.add(MasalahPeralatan); MasalahPeralatan.setBounds(254, 310, 300, 23);
+        labelRM("Ada kejadian penting intra operatif (komplikasi) :", 0, 340, 250);
+        Komplikasi=comboRM("Tidak","Ada");
+        FormInput.add(Komplikasi); Komplikasi.setBounds(254, 340, 100, 23);
+        labelRM("Sebutkan komplikasi (jika ada) :", 360, 340, 180);
+        KomplikasiKet=new widget.TextBox();
+        FormInput.add(KomplikasiKet); KomplikasiKet.setBounds(544, 340, 245, 23);
+        labelRM("Perhatian khusus pemulihan (dokter anestesi) :", 0, 370, 250);
+        PerhatianPemulihanAnestesi=new widget.TextBox();
+        FormInput.add(PerhatianPemulihanAnestesi); PerhatianPemulihanAnestesi.setBounds(254, 370, 300, 23);
+        labelRM("Disposisi pasien :", 0, 400, 250);
+        Disposisi=comboRM("Ruang Recovery","ICU");
+        FormInput.add(Disposisi); Disposisi.setBounds(254, 400, 150, 23);
+        labelRM("Perawat Instrumen :", 0, 430, 250);
+        KdPerawatInstrumen=new widget.TextBox(); KdPerawatInstrumen.setEditable(false);
+        FormInput.add(KdPerawatInstrumen); KdPerawatInstrumen.setBounds(254, 430, 110, 23);
+        NmPerawatInstrumen=new widget.TextBox(); NmPerawatInstrumen.setEditable(false);
+        FormInput.add(NmPerawatInstrumen); NmPerawatInstrumen.setBounds(366, 430, 295, 23);
+        btnPerawatInstrumen=new widget.Button();
+        btnPerawatInstrumen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png")));
+        btnPerawatInstrumen.setToolTipText("Cari perawat instrumen");
+        btnPerawatInstrumen.addActionListener(evt -> btnPerawatInstrumenActionPerformed(evt));
+        FormInput.add(btnPerawatInstrumen); btnPerawatInstrumen.setBounds(663, 430, 28, 23);
+        MasalahPeralatan.setDocument(new batasInput((int)100).getKata(MasalahPeralatan));
+        KomplikasiKet.setDocument(new batasInput((int)100).getKata(KomplikasiKet));
+        PerhatianPemulihanAnestesi.setDocument(new batasInput((int)100).getKata(PerhatianPemulihanAnestesi));
+        javax.swing.JMenuItem mnSSC=new javax.swing.JMenuItem();
+        mnSSC.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png")));
+        mnSSC.setText("Formulir Surgical Safety Checklist (RM 22.OK-03)");
+        mnSSC.setPreferredSize(new java.awt.Dimension(320, 26));
+        mnSSC.addActionListener(evt -> CetakSurgicalSafetyChecklist.cetak(TNoRw.getText()));
+        jPopupMenu1.add(mnSSC);
+        FormInput.revalidate();
+    }
+
+    private void btnPerawatInstrumenActionPerformed(java.awt.event.ActionEvent evt) {
+        if (petugas2 == null || !petugas2.isDisplayable()) {
+            petugas2=new DlgCariPetugas(null,false);
+            petugas2.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            petugas2.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    if(petugas2.getTable().getSelectedRow()!= -1){
+                        KdPerawatInstrumen.setText(petugas2.getTable().getValueAt(petugas2.getTable().getSelectedRow(),0).toString());
+                        NmPerawatInstrumen.setText(petugas2.getTable().getValueAt(petugas2.getTable().getSelectedRow(),1).toString());
+                    }
+                    btnPerawatInstrumen.requestFocus();
+                    petugas2=null;
+                }
+            });
+            petugas2.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+            petugas2.setLocationRelativeTo(internalFrame1);
+        }
+        if (petugas2 == null) return;
+        petugas2.isCek();
+        if (petugas2.isVisible()) {
+            petugas2.toFront();
+            return;
+        }
+        petugas2.setVisible(true);
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -1016,12 +1106,13 @@ public final class RMSignOutSebelumMenutupLuka extends javax.swing.JDialog {
         }else if(SNCN.getText().trim().equals("")){
             Valid.textKosong(SNCN,"SN/CN");
         }else{
-            if(Sequel.menyimpantf("signout_sebelum_menutup_luka","?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?","Data",17,new String[]{
+            if(Sequel.menyimpantf("signout_sebelum_menutup_luka","?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?","Data",23,new String[]{
                 TNoRw.getText(),Valid.SetTgl(Tanggal.getSelectedItem()+"")+" "+Tanggal.getSelectedItem().toString().substring(11,19),SNCN.getText(),Tindakan.getText(),
-                KodeDokterBedah.getText(),KodeDokterAnestesi.getText(),VerbalTindakan.getSelectedItem().toString(),VerbalKasa.getSelectedItem().toString(), 
-                VerbalInstrumen.getSelectedItem().toString(),VerbalAlatTajam.getSelectedItem().toString(),KelengkapanSpesimenLabel.getSelectedItem().toString(), 
-                KelengkapanSpesimenFormulir.getSelectedItem().toString(),PeninjauanKembaliDokterBedah.getSelectedItem().toString(),PeninjauanKembaliDokterAnestesi.getSelectedItem().toString(), 
-                PeninjauanKembaliPerawatKamarOK.getSelectedItem().toString(),PerhatianUtamaFasePemulihan.getText(),KdPetugasOK.getText()
+                KodeDokterBedah.getText(),KodeDokterAnestesi.getText(),VerbalTindakan.getSelectedItem().toString(),VerbalKasa.getSelectedItem().toString(),
+                VerbalInstrumen.getSelectedItem().toString(),VerbalAlatTajam.getSelectedItem().toString(),KelengkapanSpesimenLabel.getSelectedItem().toString(),
+                KelengkapanSpesimenFormulir.getSelectedItem().toString(),PeninjauanKembaliDokterBedah.getSelectedItem().toString(),PeninjauanKembaliDokterAnestesi.getSelectedItem().toString(),
+                PeninjauanKembaliPerawatKamarOK.getSelectedItem().toString(),PerhatianUtamaFasePemulihan.getText(),KdPetugasOK.getText(),
+                MasalahPeralatan.getText(),Komplikasi.getSelectedItem().toString(),KomplikasiKet.getText(),PerhatianPemulihanAnestesi.getText(),Disposisi.getSelectedItem().toString(),KdPerawatInstrumen.getText()
             })==true){
                 runBackground(() ->tampil());
                 emptTeks();
@@ -1776,8 +1867,17 @@ public final class RMSignOutSebelumMenutupLuka extends javax.swing.JDialog {
         PeninjauanKembaliDokterAnestesi.setSelectedIndex(0);
         PeninjauanKembaliPerawatKamarOK.setSelectedIndex(0);
         PerhatianUtamaFasePemulihan.setText("");
+        if(Komplikasi!=null){
+            MasalahPeralatan.setText("");
+            Komplikasi.setSelectedIndex(0);
+            KomplikasiKet.setText("");
+            PerhatianPemulihanAnestesi.setText("");
+            Disposisi.setSelectedIndex(0);
+            KdPerawatInstrumen.setText("");
+            NmPerawatInstrumen.setText("");
+        }
         SNCN.requestFocus();
-    } 
+    }
 
     private void getData() {
         if(tbObat.getSelectedRow()!= -1){
@@ -1804,8 +1904,35 @@ public final class RMSignOutSebelumMenutupLuka extends javax.swing.JDialog {
             KdPetugasOK.setText(tbObat.getValueAt(tbObat.getSelectedRow(),22).toString());
             NmPetugasOK.setText(tbObat.getValueAt(tbObat.getSelectedRow(),23).toString());
             Valid.SetTgl2(Tanggal,tbObat.getValueAt(tbObat.getSelectedRow(),5).toString());
+            ambilFieldRM22OK03(tbObat.getValueAt(tbObat.getSelectedRow(),0).toString(),tbObat.getValueAt(tbObat.getSelectedRow(),5).toString());
         }
     }
+
+    // Memuat field RM 22.OK-03 langsung dari tabel (di luar tabMode agar aman)
+    private void ambilFieldRM22OK03(String norawat,String tanggal){
+        try{
+            koneksi=koneksiDB.condb();
+            PreparedStatement psd=koneksi.prepareStatement("select masalah_peralatan,komplikasi,komplikasi_ket,perhatian_pemulihan_anestesi,disposisi,nip_perawat_instrumen from signout_sebelum_menutup_luka where no_rawat=? and tanggal=?");
+            psd.setString(1,norawat);
+            psd.setString(2,tanggal);
+            ResultSet rsd=psd.executeQuery();
+            if(rsd.next()){
+                MasalahPeralatan.setText(rsd.getString("masalah_peralatan"));
+                Komplikasi.setSelectedItem(rsd.getString("komplikasi"));
+                KomplikasiKet.setText(rsd.getString("komplikasi_ket"));
+                PerhatianPemulihanAnestesi.setText(rsd.getString("perhatian_pemulihan_anestesi"));
+                Disposisi.setSelectedItem(rsd.getString("disposisi"));
+                String nip=rsd.getString("nip_perawat_instrumen");
+                KdPerawatInstrumen.setText(nip);
+                NmPerawatInstrumen.setText(Sequel.cariIsi("select nama from petugas where nip=? limit 1",nip));
+            }
+            rsd.close();
+            psd.close();
+        }catch(Exception e){
+            System.out.println("Notifikasi ambil RM22OK03 : "+e);
+        }
+    }
+
     private void isRawat() {
          Sequel.cariIsi("select reg_periksa.no_rkm_medis from reg_periksa where reg_periksa.no_rawat='"+TNoRw.getText()+"' ",TNoRM);
     }

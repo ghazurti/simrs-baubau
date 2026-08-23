@@ -399,72 +399,39 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         try {
             Valid.tabelKosong(tabMode); 
             koneksi=koneksiDB.condb();
-            ps=koneksi.prepareStatement("select paket_operasi.kode_paket,paket_operasi.nm_perawatan from paket_operasi where paket_operasi.kategori='Operasi' "+(TCari.getText().trim().equals("")?"":"and paket_operasi.nm_perawatan like ? ")+"order by paket_operasi.nm_perawatan");  
+            // Rekap menurut spesialisasi DPJP (dokter operator1), bukan per jenis tindakan
+            ps=koneksi.prepareStatement(
+                "select ifnull(nullif(trim(spesialis.nm_sps),''),'Tidak Diketahui') as nm_sps, "
+              + "sum(operasi.kategori='Khusus') as khusus, "
+              + "sum(operasi.kategori='Besar') as besar, "
+              + "sum(operasi.kategori='Sedang') as sedang, "
+              + "sum(operasi.kategori='Kecil') as kecil "
+              + "from operasi "
+              + "left join dokter on dokter.kd_dokter=operasi.operator1 "
+              + "left join spesialis on spesialis.kd_sps=dokter.kd_sps "
+              + "where operasi.tgl_operasi between ? and ? "
+              + "and operasi.kategori in ('Khusus','Besar','Sedang','Kecil') "
+              + (TCari.getText().trim().equals("")?"":"and spesialis.nm_sps like ? ")
+              + "group by ifnull(nullif(trim(spesialis.nm_sps),''),'Tidak Diketahui') "
+              + "order by nm_sps");
             try {
+                ps.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+"")+" 00:00:00.0");
+                ps.setString(2,Valid.SetTgl(Tgl2.getSelectedItem()+"")+" 23:59:59.0");
                 if(!TCari.getText().trim().equals("")){
-                    ps.setString(1,"%"+TCari.getText().trim()+"%");
+                    ps.setString(3,"%"+TCari.getText().trim()+"%");
                 }
                 rs=ps.executeQuery();
                 i=1;
                 while(rs.next()){
-                    koneksi=koneksiDB.condb();
-                    pscari=koneksi.prepareStatement("select count(operasi.kode_paket) from operasi where operasi.kode_paket=? and operasi.tgl_operasi between ? and ? and operasi.kategori=?");
-                    try{
-                        pscari.setString(1,rs.getString("kode_paket"));
-                        pscari.setString(2,Valid.SetTgl(Tgl1.getSelectedItem()+"")+" 00:00:00.0");
-                        pscari.setString(3,Valid.SetTgl(Tgl2.getSelectedItem()+"")+" 23:59:59.0");
-                        pscari.setString(4,"Khusus");
-                        rscari=pscari.executeQuery();
-                        khusus=0;
-                        if(rscari.next()){
-                            khusus=rscari.getInt(1);
-                        }
-
-                        pscari.setString(1,rs.getString("kode_paket"));
-                        pscari.setString(2,Valid.SetTgl(Tgl1.getSelectedItem()+"")+" 00:00:00.0");
-                        pscari.setString(3,Valid.SetTgl(Tgl2.getSelectedItem()+"")+" 23:59:59.0");
-                        pscari.setString(4,"Besar");
-                        rscari=pscari.executeQuery();
-                        besar=0;
-                        if(rscari.next()){
-                            besar=rscari.getInt(1);
-                        }
-
-                        pscari.setString(1,rs.getString("kode_paket"));
-                        pscari.setString(2,Valid.SetTgl(Tgl1.getSelectedItem()+"")+" 00:00:00.0");
-                        pscari.setString(3,Valid.SetTgl(Tgl2.getSelectedItem()+"")+" 23:59:59.0");
-                        pscari.setString(4,"Sedang");
-                        rscari=pscari.executeQuery();
-                        sedang=0;
-                        if(rscari.next()){
-                            sedang=rscari.getInt(1);
-                        }
-
-                        pscari.setString(1,rs.getString("kode_paket"));
-                        pscari.setString(2,Valid.SetTgl(Tgl1.getSelectedItem()+"")+" 00:00:00.0");
-                        pscari.setString(3,Valid.SetTgl(Tgl2.getSelectedItem()+"")+" 23:59:59.0");
-                        pscari.setString(4,"Kecil");
-                        rscari=pscari.executeQuery();
-                        kecil=0;
-                        if(rscari.next()){
-                            kecil=rscari.getInt(1);
-                        }
-                    }catch (Exception e) {
-                        System.out.println(e);
-                    } finally{
-                        if(rscari!=null){
-                            rscari.close();
-                        }
-                        if(pscari!=null){
-                            pscari.close();
-                        }
-                    }
-
+                    khusus=rs.getInt("khusus");
+                    besar=rs.getInt("besar");
+                    sedang=rs.getInt("sedang");
+                    kecil=rs.getInt("kecil");
                     tabMode.addRow(new Object[]{
-                        i,rs.getString("nm_perawatan"),(khusus+besar+sedang+kecil),khusus,besar,sedang,kecil
+                        i,rs.getString("nm_sps"),(khusus+besar+sedang+kecil),khusus,besar,sedang,kecil
                     });
                     i++;
-                }   
+                }
             } catch (Exception e) {
                 System.out.println(e);
             } finally{

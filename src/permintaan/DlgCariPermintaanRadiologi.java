@@ -2423,6 +2423,11 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
             api.Login();
             StringBuilder ringkasan=new StringBuilder();
             int ok=0, gagal=0;
+            // Kumpulkan SEMUA worklist/accession (bisa >1 pemeriksaan per order)
+            // lalu simpan sekali dipisah koma, supaya tidak saling menimpa.
+            java.util.List<String> daftarWorklist=new java.util.ArrayList<>();
+            java.util.List<String> daftarAccession=new java.util.ArrayList<>();
+            String patientIdTerakhir="", statusTerakhir="", responseTerakhir="";
             for(String[] it: itemPeriksa){
                 String kd=it[0], nama=it[1], loinc=it[2], display=it[3];
                 ApiAlatRS.HasilKirim h=api.KirimPermintaanRadiologi(
@@ -2430,8 +2435,21 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
                         hdr[10], hdr[6], hdr[5], hdr[8], hdr[9], // dokter: kd_dokter, nama, nik, jk, tgl_lahir
                         kd, loinc, display, nama,            // kd_jenis_prw sebagai id ms_pemeriksaan
                         hdr[7], jamNow, encId, aeTitleFinal); // aeTitleFinal = pilihan user (kosong = auto)
-                if(h.ok){ ok++; simpanLogAlatRS(noorder, h); } else { gagal++; }
+                if(h.ok){
+                    ok++;
+                    if(h.worklistId!=null && !h.worklistId.isEmpty()) daftarWorklist.add(h.worklistId);
+                    if(h.accessionNumber!=null && !h.accessionNumber.isEmpty()) daftarAccession.add(h.accessionNumber);
+                    patientIdTerakhir=h.patientIdAlatRS;
+                    statusTerakhir=h.satuSehatStatus;
+                    responseTerakhir=h.responseRaw;
+                }else{ gagal++; }
                 ringkasan.append("- ").append(nama).append(": ").append(h.pesan).append("\n");
+            }
+            if(ok>0){
+                simpanLogAlatRSGabung(noorder,
+                        String.join(",", daftarAccession),
+                        String.join(",", daftarWorklist),
+                        patientIdTerakhir, statusTerakhir, responseTerakhir);
             }
             final String hasil="Kirim ke RIS alat_rs selesai.\nBerhasil: "+ok+"  |  Gagal: "+gagal+"\n\n"+
                     encounterWarn+ringkasan;
@@ -2443,6 +2461,34 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
                         "Hasil Kirim ke RIS alat_rs", JOptionPane.INFORMATION_MESSAGE);
             });
         }, "alat_rs-kirim").start();
+    }
+
+    /**
+     * Simpan 1 baris log per noorder, tapi accession & worklist_id bisa berisi
+     * BEBERAPA nilai dipisah koma (untuk order dengan >1 pemeriksaan).
+     * Overwrite penuh: dipanggil sekali setelah semua item terkirim.
+     */
+    private void simpanLogAlatRSGabung(String noorder, String accessionCsv, String worklistCsv,
+            String patientId, String status, String response){
+        try{
+            koneksi=koneksiDB.condb();
+            ps=koneksi.prepareStatement(
+                "insert into bridging_alatrs_log "+
+                "(noorder, accession_number, worklist_id_alatrs, patient_id_alatrs, satu_sehat_status, response_terakhir) "+
+                "values (?,?,?,?,?,?) "+
+                "on duplicate key update accession_number=values(accession_number), "+
+                "worklist_id_alatrs=values(worklist_id_alatrs), patient_id_alatrs=values(patient_id_alatrs), "+
+                "satu_sehat_status=values(satu_sehat_status), response_terakhir=values(response_terakhir)");
+            ps.setString(1, noorder);
+            ps.setString(2, accessionCsv);
+            ps.setString(3, worklistCsv);
+            ps.setString(4, patientId);
+            ps.setString(5, status);
+            ps.setString(6, response);
+            ps.executeUpdate();
+        }catch(Exception e){
+            System.out.println("Gagal simpan bridging_alatrs_log (gabung): "+e);
+        }
     }
 
     private void simpanLogAlatRS(String noorder, ApiAlatRS.HasilKirim h){
@@ -2509,7 +2555,9 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
         new Thread(() -> {
             ApiAlatRS api=new ApiAlatRS();
             api.Login();
-            final ApiAlatRS.HasilBacaan hb=api.AmbilHasilBacaan(wl[0]);
+            // Gabungan: wl[0] bisa berisi >1 worklist (dipisah koma) kalau order
+            // punya lebih dari satu pemeriksaan. Hasil digabung per pemeriksaan.
+            final ApiAlatRS.HasilBacaan hb=api.AmbilHasilBacaanGabungan(wl[0]);
 
             String pesan;
             if(!hb.ok){
@@ -2517,20 +2565,14 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
             }else if(!hb.ada){
                 pesan="Belum ada hasil di RIS.\n"+hb.pesan;
             }else{
-                // Gabung kesimpulan + temuan jadi teks hasil Khanza.
-                StringBuilder teks=new StringBuilder();
-                if(!hb.temuan.isEmpty()){
-                    teks.append("TEMUAN:\n").append(hb.temuan).append("\n\n");
-                }
-                if(!hb.kesimpulan.isEmpty()){
-                    teks.append("KESIMPULAN:\n").append(hb.kesimpulan);
-                }
-                boolean tersimpan=simpanHasilRadiologi(noorder, norawat, teks.toString().trim());
+                // hb.temuan sudah berisi teks gabungan siap simpan.
+                String teks=hb.temuan.trim();
+                boolean tersimpan=simpanHasilRadiologi(noorder, norawat, teks);
                 pesan=(tersimpan?"Hasil berhasil ditarik & disimpan ke Khanza.":
                         "Hasil ditemukan tapi GAGAL disimpan ke Khanza (cek log).")+
                       "\n\nStatus RIS: "+(hb.status.isEmpty()?"-":hb.status)+
                       (hb.issuedAt.isEmpty()?"":("\nWaktu hasil: "+hb.issuedAt))+
-                      "\n\n--- Isi Hasil ---\n"+teks.toString().trim();
+                      "\n\n--- Isi Hasil ---\n"+teks;
             }
             final String out=pesan;
             SwingUtilities.invokeLater(() -> {

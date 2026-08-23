@@ -4,6 +4,7 @@
             exit(header("Location:../index.php"));
         }
     }
+    require_once 'conf/jpgToPdf.php';
 ?>
 <div id="post">
     <div class="entry">        
@@ -101,12 +102,63 @@
                 </tr>                
                 <tr class="head">
                     <td width="31%" >File Retensi</td><td width="">:</td>
-                    <td width="67%"><input name="dokumen" class="text" onkeydown="setDefault(this, document.getElementById('MsgIsi3'));" type=file id="TxtIsi3" value="<?php echo $dokumen;?>" size="30" maxlength="255" accept="application/pdf,image/jpeg,image/jpg"/>
-                    <span id="MsgIsi3" style="color:#CC0000; font-size:10px;"></span>
+                    <td width="67%">
+                        <input type="button" class="button" id="btnAmbilFoto" value="&nbsp;&nbsp;Ambil Foto&nbsp;&nbsp;">
+                        <span id="jmlFoto">0 foto</span>
+                        <div id="previewFoto" style="margin-top:6px;"></div>
+                        <input type="file" accept="image/*" capture="environment" id="fotoCapture" style="display:none">
+                        <input type="file" name="dokumen[]" multiple id="TxtIsi3" style="display:none" onkeydown="setDefault(this, document.getElementById('MsgIsi3'));">
+                        <span id="MsgIsi3" style="color:#CC0000; font-size:10px;"></span>
                     </td>
-                </tr>        
+                </tr>
             </table>
             </div>
+            <script>
+                var daftarFoto = [];
+
+                document.getElementById('btnAmbilFoto').addEventListener('click', function () {
+                    document.getElementById('fotoCapture').click();
+                });
+
+                document.getElementById('fotoCapture').addEventListener('change', function () {
+                    if (this.files && this.files[0]) {
+                        daftarFoto.push(this.files[0]);
+                        renderPreviewFoto();
+                        sinkronInputFoto();
+                    }
+                    this.value = "";
+                });
+
+                function renderPreviewFoto() {
+                    var wrap = document.getElementById('previewFoto');
+                    wrap.innerHTML = "";
+                    daftarFoto.forEach(function (file, idx) {
+                        var url = URL.createObjectURL(file);
+                        var box = document.createElement('span');
+                        box.style.position = "relative";
+                        box.style.display = "inline-block";
+                        box.style.marginRight = "6px";
+                        box.innerHTML = '<img src="' + url + '" style="width:60px;height:60px;object-fit:cover;border:1px solid #999;">' +
+                            '<a href="javascript:void(0)" onclick="hapusFoto(' + idx + ')" style="position:absolute;top:-6px;right:-6px;background:#CC0000;color:#fff;border-radius:50%;width:16px;height:16px;font-size:10px;line-height:16px;text-align:center;text-decoration:none;">x</a>';
+                        wrap.appendChild(box);
+                    });
+                    document.getElementById('jmlFoto').innerText = daftarFoto.length + " foto";
+                }
+
+                function hapusFoto(idx) {
+                    daftarFoto.splice(idx, 1);
+                    renderPreviewFoto();
+                    sinkronInputFoto();
+                }
+
+                function sinkronInputFoto() {
+                    var dt = new DataTransfer();
+                    daftarFoto.forEach(function (file) {
+                        dt.items.add(file);
+                    });
+                    document.getElementById('TxtIsi3').files = dt.files;
+                }
+            </script>
             <div align="center"><input name=BtnSimpan type=submit class="button" value="&nbsp;&nbsp;Simpan&nbsp;&nbsp;">&nbsp<input name=BtnKosong type=reset class="button" value="&nbsp;&nbsp;Kosong&nbsp;&nbsp;"></div><br>
             <?php
                 $BtnSimpan=isset($_POST['BtnSimpan'])?$_POST['BtnSimpan']:NULL;
@@ -114,30 +166,43 @@
                     $id                 = validTeks4(trim($_POST['id']),15);
                     $terakhir_daftar    = validTeks4(trim($_POST['ThnTerakhir'])."-".trim($_POST['BlnTerakhir'])."-".trim($_POST['TglTerakhir']),20);
                     $tgl_retensi        = validTeks4(trim($_POST['ThnRetensi'])."-".trim($_POST['BlnRetensi'])."-".trim($_POST['TglRetensi']),20);
-                    $dokumen            = validTeks(str_replace(" ","_","pages/upload/".$_FILES['dokumen']['name']));
-                    if((strtolower(substr($dokumen,-4))==".jpg")||(strtolower(substr($dokumen,-4))==".pdf")||(strtolower(substr($dokumen,-5))==".jpeg")){
-                        if(($_FILES['dokumen']['type'] == 'application/pdf')||($_FILES['dokumen']['type'] == 'image/jpeg')||($_FILES['dokumen']['type'] == 'image/jpg')){
-                            if((@mime_content_type($_FILES['dokumen']['tmp_name'])== 'application/pdf')||(@mime_content_type($_FILES['dokumen']['tmp_name'])== 'image/jpeg')||(@mime_content_type($_FILES['dokumen']['tmp_name'])== 'image/jpg')){
-                                if ((!empty($id))&&(!empty($dokumen))) {
-                                    switch($action) {
-                                        case "TAMBAH":
-                                            if(Tambah(" retensi_pasien "," '$id','$terakhir_daftar','$tgl_retensi','$dokumen'", " Riwayat Retensi " )){
-                                                move_uploaded_file($_FILES['dokumen']['tmp_name'],$dokumen);
-                                            }
-                                            echo"<meta http-equiv='refresh' content='1;URL=?act=Detail&action=TAMBAH&id=$id'>";
-                                            break;
-                                    }
-                                }else if ((empty($id))||(empty($dokumen))){
-                                    echo 'Semua field harus isi..!!!';
-                                }
-                            }else{
-                                echo "Berkas harus PDF/JPG/JPEG";
+
+                    $fotoTmp = array();
+                    if (!empty($_FILES['dokumen']['name'][0])) {
+                        foreach ($_FILES['dokumen']['name'] as $i => $namaFoto) {
+                            $ext  = strtolower(substr($namaFoto,-4));
+                            $ext5 = strtolower(substr($namaFoto,-5));
+                            $tipe = $_FILES['dokumen']['type'][$i];
+                            $tmp  = $_FILES['dokumen']['tmp_name'][$i];
+                            $mime = @mime_content_type($tmp);
+                            if((($ext==".jpg")||($ext5==".jpeg"))
+                                && (($tipe=='image/jpeg')||($tipe=='image/jpg'))
+                                && (($mime=='image/jpeg')||($mime=='image/jpg'))){
+                                $fotoTmp[] = $tmp;
+                            } else {
+                                $fotoTmp = array();
+                                break;
                             }
-                        }else{
-                            echo "Berkas harus PDF/JPG/JPEG";
                         }
-                    }else{
-                        echo "Berkas harus PDF/JPG/JPEG";
+                    }
+
+                    if (empty($fotoTmp)) {
+                        echo "Berkas harus berupa foto JPG/JPEG";
+                    } else if (empty($id)) {
+                        echo 'Semua field harus isi..!!!';
+                    } else {
+                        switch($action) {
+                            case "TAMBAH":
+                                $namaPdf = "pages/upload/retensi_".$id."_".date("YmdHis").".pdf";
+                                if (buatPdfDariFoto($fotoTmp, $namaPdf)) {
+                                    if(Tambah(" retensi_pasien "," '$id','$terakhir_daftar','$tgl_retensi','$namaPdf'", " Riwayat Retensi " )){
+                                        echo"<meta http-equiv='refresh' content='1;URL=?act=Detail&action=TAMBAH&id=$id'>";
+                                    }
+                                } else {
+                                    echo "Gagal membuat PDF dari foto, silakan coba lagi.";
+                                }
+                                break;
+                        }
                     }
                 }
             ?>
@@ -185,7 +250,10 @@
         </form>
         <?php
             if ($action=="HAPUS") {
-                unlink($_GET['lokasi_pdf']);
+                $lokasi_pdf_hapus = "pages/upload/".basename($_GET['lokasi_pdf']);
+                if (is_file($lokasi_pdf_hapus)) {
+                    unlink($lokasi_pdf_hapus);
+                }
                 Hapus(" retensi_pasien "," no_rkm_medis ='".validTeks($_GET['id'])."' and tgl_retensi ='".validTeks($_GET['tgl_retensi'])."' ","?act=Detail&action=TAMBAH&id=$id");
             }
 

@@ -2686,7 +2686,7 @@ public final class akses {
                         akses.mapping_prosedur_smart_klaim_bpjs=rs2.getBoolean("mapping_prosedur_smart_klaim_bpjs");
                         akses.mapping_penyakit_smart_klaim_bpjs=rs2.getBoolean("mapping_penyakit_smart_klaim_bpjs");
                         akses.permintaan_binrohtal=rs2.getBoolean("permintaan_binrohtal");
-                        akses.restriksi_obat_bpjs=rs2.getBoolean("restriksi_obat_bpjs");
+                        try{akses.restriksi_obat_bpjs=rs2.getBoolean("restriksi_obat_bpjs");}catch(Exception e){akses.restriksi_obat_bpjs=false;}
                         }else if((rs.getRow()==0)&&(rs2.getRow()==0)){
                         setLogOut();
                     }

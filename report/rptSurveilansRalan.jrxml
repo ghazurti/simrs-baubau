@@ -383,19 +383,38 @@
 				<text><![CDATA[70+]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="749" y="2" width="50" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Bottom" lineSpacing="Single">
-					<font fontName="Tahoma" size="8" isBold="false"/>
+				<reportElement mode="Transparent" x="749" y="2" width="50" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Total]]></text>
+				<text><![CDATA[Ttl.Kunjungan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="749" y="13" width="50" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" lineSpacing="Single">
+				<reportElement mode="Transparent" x="749" y="14" width="24" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="8" isBold="false"/>
 				</textElement>
-				<text><![CDATA[Kunjungan]]></text>
+				<text><![CDATA[L]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="774" y="14" width="25" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[P]]></text>
+			</staticText>
+			<line>
+				<reportElement x="748" y="13" width="53" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="773" y="14" width="1" height="21"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
 			<staticText>
 				<reportElement mode="Transparent" x="613" y="2" width="134" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
@@ -550,11 +569,18 @@
 				<text><![CDATA[17]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="749" y="26" width="50" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="749" y="26" width="24" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[18]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="774" y="26" width="25" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[19]]></text>
 			</staticText>
 			<line>
 				<reportElement x="1" y="35" width="800" height="1"/>
@@ -813,12 +839,25 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp18}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="749" y="1" width="50" height="10"/>
+				<reportElement stretchType="RelativeToBandHeight" x="749" y="1" width="24" height="10"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp19}]]></textFieldExpression>
 			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="774" y="1" width="25" height="10"/>
+				<textElement textAlignment="Center" lineSpacing="Single">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp20}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement stretchType="RelativeToBandHeight" x="773" y="0" width="1" height="12"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
 			<line>
 				<reportElement stretchType="RelativeToBandHeight" x="248" y="0" width="1" height="12"/>
 				<graphicElement>

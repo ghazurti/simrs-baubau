@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rptWarningStokObat" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="namars"     class="java.lang.String"/>
+	<parameter name="alamatrs"   class="java.lang.String"/>
+	<parameter name="kotars"     class="java.lang.String"/>
+	<parameter name="propinsirs" class="java.lang.String"/>
+	<parameter name="kontakrs"   class="java.lang.String"/>
+	<parameter name="emailrs"    class="java.lang.String"/>
+	<parameter name="logo"       class="java.io.InputStream"/>
+	<parameter name="periode"    class="java.lang.String"/>
+	<parameter name="gudang"     class="java.lang.String"/>
+	<queryString><![CDATA[]]></queryString>
+	<field name="temp1"  class="java.lang.String"/>
+	<field name="temp2"  class="java.lang.String"/>
+	<field name="temp3"  class="java.lang.String"/>
+	<field name="temp4"  class="java.lang.String"/>
+	<field name="temp5"  class="java.lang.String"/>
+	<field name="temp6"  class="java.lang.String"/>
+	<field name="temp7"  class="java.lang.String"/>
+	<field name="temp8"  class="java.lang.String"/>
+	<field name="temp9"  class="java.lang.String"/>
+	<field name="temp10" class="java.lang.String"/>
+	<field name="temp11" class="java.lang.String"/>
+
+	<title>
+		<band height="90">
+			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="60" height="60"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="0" width="600" height="16"/>
+				<textElement><font fontName="Arial" size="12" isBold="true"/></textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{namars}==null?"":$P{namars}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="16" width="600" height="12"/>
+				<textElement><font fontName="Arial" size="8"/></textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{alamatrs}+", "+$P{kotars}+", "+$P{propinsirs}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="70" y="28" width="600" height="12"/>
+				<textElement><font fontName="Arial" size="8"/></textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Telp. "+$P{kontakrs}+" · Email: "+$P{emailrs}]]></textFieldExpression>
+			</textField>
+			<line><reportElement x="0" y="46" width="802" height="1"/><graphicElement><pen lineWidth="1.5"/></graphicElement></line>
+			<line><reportElement x="0" y="49" width="802" height="1"/><graphicElement><pen lineWidth="0.5"/></graphicElement></line>
+			<staticText>
+				<reportElement x="0" y="55" width="802" height="18"/>
+				<textElement textAlignment="Center"><font fontName="Arial" size="13" isBold="true"/></textElement>
+				<text><![CDATA[PERINGATAN STOK OBAT — DINAMIS BERDASARKAN PEMAKAIAN AKTUAL]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="74" width="802" height="12"/>
+				<textElement textAlignment="Center"><font fontName="Arial" size="9" isItalic="true"/></textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($P{gudang}==null?"":$P{gudang})+"  ·  "+($P{periode}==null?"":$P{periode})]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+
+	<columnHeader>
+		<band height="24">
+			<line><reportElement x="0" y="0" width="802" height="1"/><graphicElement><pen lineWidth="1.0"/></graphicElement></line>
+			<staticText><reportElement x="2"   y="4" width="30"  height="16"/><textElement textAlignment="Center"><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[No]]></text></staticText>
+			<staticText><reportElement x="34"  y="4" width="75"  height="16"/><textElement textAlignment="Left"  ><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Kode]]></text></staticText>
+			<staticText><reportElement x="112" y="4" width="220" height="16"/><textElement textAlignment="Left"  ><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Nama Obat]]></text></staticText>
+			<staticText><reportElement x="334" y="4" width="90"  height="16"/><textElement textAlignment="Left"  ><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Jenis]]></text></staticText>
+			<staticText><reportElement x="426" y="4" width="60"  height="16"/><textElement textAlignment="Right" ><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Stok]]></text></staticText>
+			<staticText><reportElement x="488" y="4" width="45"  height="16"/><textElement textAlignment="Left"  ><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Satuan]]></text></staticText>
+			<staticText><reportElement x="535" y="4" width="70"  height="16"/><textElement textAlignment="Right" ><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Pakai/Bln]]></text></staticText>
+			<staticText><reportElement x="607" y="4" width="60"  height="16"/><textElement textAlignment="Right" ><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Pakai/Hr]]></text></staticText>
+			<staticText><reportElement x="669" y="4" width="50"  height="16"/><textElement textAlignment="Right" ><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Sisa Hr]]></text></staticText>
+			<staticText><reportElement x="721" y="4" width="80"  height="16"/><textElement textAlignment="Center"><font fontName="Arial" size="9" isBold="true"/></textElement><text><![CDATA[Status]]></text></staticText>
+			<line><reportElement x="0" y="22" width="802" height="1"/><graphicElement><pen lineWidth="0.5"/></graphicElement></line>
+		</band>
+	</columnHeader>
+
+	<detail>
+		<band height="16">
+			<textField isBlankWhenNull="true"><reportElement x="2"   y="1" width="30"  height="12"/><textElement textAlignment="Center"><font fontName="Arial" size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{temp1}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true"><reportElement x="34"  y="1" width="75"  height="12"/><textElement textAlignment="Left"  ><font fontName="Arial" size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{temp2}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true" isStretchWithOverflow="true"><reportElement stretchType="RelativeToBandHeight" x="112" y="1" width="220" height="12"/><textElement textAlignment="Left"><font fontName="Arial" size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{temp3}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true"><reportElement x="334" y="1" width="90"  height="12"/><textElement textAlignment="Left"  ><font fontName="Arial" size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{temp4}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true"><reportElement x="426" y="1" width="60"  height="12"/><textElement textAlignment="Right" ><font fontName="Arial" size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{temp5}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true"><reportElement x="488" y="1" width="45"  height="12"/><textElement textAlignment="Left"  ><font fontName="Arial" size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{temp6}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true"><reportElement x="535" y="1" width="70"  height="12"/><textElement textAlignment="Right" ><font fontName="Arial" size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{temp7}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true"><reportElement x="607" y="1" width="60"  height="12"/><textElement textAlignment="Right" ><font fontName="Arial" size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{temp8}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true"><reportElement x="669" y="1" width="50"  height="12"/><textElement textAlignment="Right" ><font fontName="Arial" size="8"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{temp9}]]></textFieldExpression></textField>
+			<textField isBlankWhenNull="true"><reportElement x="721" y="1" width="80"  height="12"/><textElement textAlignment="Center"><font fontName="Arial" size="8" isBold="true"/></textElement><textFieldExpression class="java.lang.String"><![CDATA[$F{temp11}]]></textFieldExpression></textField>
+			<line><reportElement x="0" y="14" width="802" height="1"/><graphicElement><pen lineStyle="Dotted" lineWidth="0.25"/></graphicElement></line>
+		</band>
+	</detail>
+
+	<pageFooter>
+		<band height="20">
+			<line><reportElement x="0" y="0" width="802" height="1"/><graphicElement><pen lineWidth="0.5"/></graphicElement></line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="4" width="500" height="12"/>
+				<textElement><font fontName="Arial" size="8" isItalic="true"/></textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Sisa Hari = Stok saat ini ÷ Rata-rata pemakaian per hari. SANGAT KRITIS <7 hari, KRITIS <30 hari."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="700" y="4" width="102" height="12"/>
+				<textElement textAlignment="Right"><font fontName="Arial" size="8"/></textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Halaman " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

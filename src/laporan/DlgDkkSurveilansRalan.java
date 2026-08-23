@@ -49,7 +49,7 @@ public final class DlgDkkSurveilansRalan extends javax.swing.JDialog {
     private ResultSet rs,rs2;
     private final java.util.List<String> kodePoli = new java.util.ArrayList<>();
     private int i=0,hr0s7=0,hr8s28=0,kr1th=0,th1s4=0,th5s9=0,th10s14=0,th15s19=0,th20s44=0,th45s54=0,th55s59=0,
-                th60s69=0,th70plus=0,laki=0,per=0,jml=0,ttl=0,jmltotal;
+                th60s69=0,th70plus=0,laki=0,per=0,jml=0,ttl=0,ttll=0,ttlp=0,jmltotal;
     /** Creates new form DlgLhtBiaya
      * @param parent
      * @param modal */
@@ -60,7 +60,7 @@ public final class DlgDkkSurveilansRalan extends javax.swing.JDialog {
         setSize(885,674);
 
         Object[] rowRwJlDr={"No.","Kode ICD 10","Jenis Penyakit","0-7 Hr","8-28 Hr","< 1","1-4","5-9","10-14","15-19",
-                            "20-44","45-54","55-59","60-69","70+","Laki","Perp","Jumlah","Ttl.Kunjungan"};
+                            "20-44","45-54","55-59","60-69","70+","Laki","Perp","Jumlah","Ttl.Kunjungan L","Ttl.Kunjungan P"};
         tabMode=new DefaultTableModel(null,rowRwJlDr){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){return false;}
         };
@@ -69,7 +69,7 @@ public final class DlgDkkSurveilansRalan extends javax.swing.JDialog {
         tbBangsal.setPreferredScrollableViewportSize(new Dimension(500,500));
         tbBangsal.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 19; i++) {
+        for (i = 0; i < 20; i++) {
             TableColumn column = tbBangsal.getColumnModel().getColumn(i);
             if(i==0){
                 column.setPreferredWidth(30);
@@ -77,7 +77,7 @@ public final class DlgDkkSurveilansRalan extends javax.swing.JDialog {
                 column.setPreferredWidth(80);
             }else if(i==2){
                 column.setPreferredWidth(150);
-            }else if(i==18){
+            }else if(i==18||i==19){
                 column.setPreferredWidth(100);
             }else{
                 column.setPreferredWidth(45);
@@ -282,7 +282,8 @@ public final class DlgDkkSurveilansRalan extends javax.swing.JDialog {
                                         tabMode.getValueAt(r,15).toString().replaceAll("'","`")+"','"+
                                         tabMode.getValueAt(r,16).toString().replaceAll("'","`")+"','"+
                                         tabMode.getValueAt(r,17).toString().replaceAll("'","`")+"','"+
-                                        tabMode.getValueAt(r,18).toString().replaceAll("'","`")+"','','','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Rekap Nota Pembayaran");
+                                        tabMode.getValueAt(r,18).toString().replaceAll("'","`")+"','"+
+                                        tabMode.getValueAt(r,19).toString().replaceAll("'","`")+"','','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Rekap Nota Pembayaran");
                 }
 
                 param.put("namars",akses.getnamars());
@@ -383,13 +384,18 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
             i=1;
             jmltotal=0;
             while(rs.next()){
-                hr0s7=0;hr8s28=0;kr1th=0;th1s4=0;th5s9=0;th10s14=0;th15s19=0;th20s44=0;th45s54=0;th55s59=0;th60s69=0;th70plus=0;laki=0;per=0;jml=0;ttl=0;
+                hr0s7=0;hr8s28=0;kr1th=0;th1s4=0;th5s9=0;th10s14=0;th15s19=0;th20s44=0;th45s54=0;th55s59=0;th60s69=0;th70plus=0;laki=0;per=0;jml=0;ttl=0;ttll=0;ttlp=0;
                 ps2.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+""));
                 ps2.setString(2,Valid.SetTgl(Tgl2.getSelectedItem()+""));
                 ps2.setString(3,rs.getString("kd_penyakit"));
                 rs2=ps2.executeQuery();
-                while(rs2.next()){            
+                while(rs2.next()){
                     ttl=ttl+1;
+                    if(rs2.getString("jk").equals("L")){
+                        ttll=ttll+1;
+                    }else if(rs2.getString("jk").equals("P")){
+                        ttlp=ttlp+1;
+                    }
                     jmltotal=jmltotal+1;
                     if(Sequel.cariInteger("select count(diagnosa_pasien.no_rawat) from reg_periksa inner join diagnosa_pasien "+
                         "on reg_periksa.no_rawat=diagnosa_pasien.no_rawat where "+
@@ -437,7 +443,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                 }
                 jml=per+laki;
                 tabMode.addRow(new Object[]{
-                   i,rs.getString("kd_penyakit"),rs.getString("nm_penyakit"),hr0s7,hr8s28,kr1th,th1s4,th5s9,th10s14,th15s19,th20s44,th45s54,th55s59,th60s69,th70plus,laki,per,jml,ttl
+                   i,rs.getString("kd_penyakit"),rs.getString("nm_penyakit"),hr0s7,hr8s28,kr1th,th1s4,th5s9,th10s14,th15s19,th20s44,th45s54,th55s59,th60s69,th70plus,laki,per,jml,ttll,ttlp
                 });
                 i++;
             }

@@ -61,8 +61,23 @@ public class DlgKIPPasienRalan extends javax.swing.JDialog {
         );
         Document doc = kit.createDefaultDocument();
         LoadHTML.setDocument(doc);
+
+        aktifkanScrollRoda(LoadHTML,Scroll);
     }
     private int i=0,z=0;
+
+    /** Pastikan roda mouse (mouse wheel) menggeser scrollpane meskipun kursor
+     * berada di atas editorpane HTML. */
+    private void aktifkanScrollRoda(final javax.swing.JEditorPane pane, final javax.swing.JScrollPane sp){
+        pane.addMouseWheelListener(new java.awt.event.MouseWheelListener(){
+            @Override
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent e){
+                javax.swing.JScrollBar bar = e.isShiftDown()?sp.getHorizontalScrollBar():sp.getVerticalScrollBar();
+                bar.setValue(bar.getValue() + e.getUnitsToScroll()*bar.getUnitIncrement());
+                e.consume();
+            }
+        });
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -443,7 +458,7 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
                     "reg_periksa.umurdaftar,reg_periksa.sttsumur,pasien.jk,reg_periksa.stts,diagnosa_pasien.status_penyakit, "+
                     "reg_periksa.kd_pj from reg_periksa inner join diagnosa_pasien on reg_periksa.no_rawat=diagnosa_pasien.no_rawat "+
                     "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis where reg_periksa.tgl_registrasi between ? and ? "+
-                    "and reg_periksa.status_lanjut='Ralan' and diagnosa_pasien.status='Ralan' and diagnosa_pasien.prioritas='1' and "+
+                    "and reg_periksa.status_lanjut='Ralan' and diagnosa_pasien.status='Ralan' and "+
                     "diagnosa_pasien.kd_penyakit=? order by reg_periksa.tgl_registrasi");
             try {
                 ps.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+""));
@@ -602,9 +617,10 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
                     }
                     
                     diagnosa="";
-                    ps2=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit from diagnosa_pasien where diagnosa_pasien.status='Ralan' and diagnosa_pasien.prioritas>1 and diagnosa_pasien.no_rawat=?");    
+                    ps2=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit from diagnosa_pasien where diagnosa_pasien.status='Ralan' and diagnosa_pasien.kd_penyakit<>? and diagnosa_pasien.no_rawat=? order by diagnosa_pasien.prioritas");
                     try {
-                        ps2.setString(1,rs.getString("no_rawat"));
+                        ps2.setString(1,kdpenyakit.getText());
+                        ps2.setString(2,rs.getString("no_rawat"));
                         rs2=ps2.executeQuery();
                         while(rs2.next()){
                             if(diagnosa.equals("")){
@@ -661,12 +677,16 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
                     "</tr>"
                 );
             }
-            LoadHTML.setText(
+            String hasil=
                     "<html>"+
                       "<table width='"+(1750+(70*kolom))+"px' border='0' align='center' cellpadding='3px' cellspacing='0' class='tbl_form'>"+
                        htmlContent.toString()+
                       "</table>"+
-                    "</html>");
+                    "</html>";
+            SwingUtilities.invokeLater(() -> {
+                LoadHTML.setText(hasil);
+                LoadHTML.setCaretPosition(0);
+            });
             htmlContent=null;
         } catch (Exception e) {
             System.out.println("Notif : "+e);

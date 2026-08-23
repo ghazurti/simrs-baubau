@@ -22,6 +22,7 @@ import fungsi.validasi;
 import fungsi.akses;
 import fungsi.akuntindakanradiologi;
 import bridging.koneksiDBFUJI;
+import bridging.ApiAlatRS;
 import ipsrs.IPSRSBarang;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -275,6 +276,7 @@ public final class DlgPeriksaRadiologi extends javax.swing.JDialog {
         HasilPeriksa = new widget.TextArea();
         panelisi7 = new widget.panelisi();
         btnAmbilPhoto = new widget.Button();
+        BtnAmbilHasilRIS = new widget.Button();
 
         Penjab.setEditable(false);
         Penjab.setFocusTraversalPolicyProvider(true);
@@ -872,6 +874,19 @@ public final class DlgPeriksaRadiologi extends javax.swing.JDialog {
         });
         panelisi7.add(btnAmbilPhoto);
 
+        BtnAmbilHasilRIS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/refresh.png"))); // NOI18N
+        BtnAmbilHasilRIS.setMnemonic('R');
+        BtnAmbilHasilRIS.setText("Ambil dari RIS");
+        BtnAmbilHasilRIS.setToolTipText("Tarik hasil bacaan dokter dari RIS alat_rs (Alt+R)");
+        BtnAmbilHasilRIS.setName("BtnAmbilHasilRIS"); // NOI18N
+        BtnAmbilHasilRIS.setPreferredSize(new java.awt.Dimension(140, 30));
+        BtnAmbilHasilRIS.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAmbilHasilRISActionPerformed(evt);
+            }
+        });
+        panelisi7.add(BtnAmbilHasilRIS);
+
         jPanel4.add(panelisi7, java.awt.BorderLayout.PAGE_END);
 
         jPanel1.add(jPanel4);
@@ -886,6 +901,96 @@ public final class DlgPeriksaRadiologi extends javax.swing.JDialog {
     private void BtnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnBatalActionPerformed
         emptTeks();
 }//GEN-LAST:event_BtnBatalActionPerformed
+
+    /**
+     * Tarik hasil bacaan dokter/radiolog dari RIS alat_rs ke kolom Hasil
+     * Pemeriksaan, supaya dokter tidak input dua kali (cukup input di RIS).
+     * Setelah ditarik, review lalu Simpan seperti biasa.
+     */
+    private void BtnAmbilHasilRISActionPerformed(java.awt.event.ActionEvent evt) {
+        final String noRawat = TNoRw.getText();
+        if(noRawat==null || noRawat.trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, silahkan pilih pasien/permintaan terlebih dulu...");
+            return;
+        }
+        // Cari noorder terbaru dari permintaan_radiologi
+        String order = "";
+        try(java.sql.Connection kon=koneksiDB.condb();
+            java.sql.PreparedStatement psq=kon.prepareStatement(
+                "select noorder from permintaan_radiologi where no_rawat=? order by tgl_permintaan desc, jam_permintaan desc limit 1")){
+            psq.setString(1, noRawat);
+            try(java.sql.ResultSet rsq=psq.executeQuery()){
+                if(rsq.next()){ order = rsq.getString("noorder"); }
+            }
+        }catch(Exception e){
+            System.out.println("Cari noorder gagal: "+e);
+        }
+        if(order==null || order.equals("")){
+            JOptionPane.showMessageDialog(null,"Tidak ada permintaan radiologi (noorder) untuk No.Rawat "+noRawat+".");
+            return;
+        }
+        // Ambil worklist_id dari bridging_alatrs_log
+        String worklistId = "";
+        try(java.sql.Connection kon=koneksiDB.condb();
+            java.sql.PreparedStatement psq=kon.prepareStatement(
+                "select ifnull(worklist_id_alatrs,'') as wid from bridging_alatrs_log where noorder=?")){
+            psq.setString(1, order);
+            try(java.sql.ResultSet rsq=psq.executeQuery()){
+                if(rsq.next()){ worklistId = rsq.getString("wid"); }
+            }
+        }catch(Exception e){
+            System.out.println("Cek bridging_alatrs_log gagal: "+e);
+        }
+        if(worklistId==null || worklistId.equals("")){
+            JOptionPane.showMessageDialog(null,
+                "Permintaan "+order+" belum pernah dikirim ke RIS alat_rs.\n"+
+                "Silakan kirim dulu lewat menu Data Permintaan Radiologi.");
+            return;
+        }
+
+        final String worklistIdFinal = worklistId;   // bisa berisi >1 worklist (dipisah koma)
+        final String orderFinal = order;
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        new Thread(() -> {
+            ApiAlatRS api = new ApiAlatRS();
+            api.Login();
+            // Gabungan: tarik semua worklist (kalau order berisi >1 pemeriksaan).
+            final ApiAlatRS.HasilBacaan hb = api.AmbilHasilBacaanGabungan(worklistIdFinal);
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                this.setCursor(Cursor.getDefaultCursor());
+                if(!hb.ok){
+                    JOptionPane.showMessageDialog(this,
+                        "Gagal ambil hasil dari RIS.\n"+hb.pesan,
+                        "Ambil dari RIS", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if(!hb.ada){
+                    JOptionPane.showMessageDialog(this,
+                        "Belum ada hasil bacaan di RIS untuk order "+orderFinal+".\n"+hb.pesan,
+                        "Ambil dari RIS", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                // hb.temuan sudah berisi teks gabungan siap pakai (per pemeriksaan).
+                String teks = hb.temuan;
+                String existing = HasilPeriksa.getText();
+                if(existing!=null && !existing.trim().isEmpty()){
+                    int pil = JOptionPane.showConfirmDialog(this,
+                        "Kolom Hasil Pemeriksaan sudah berisi teks.\nTimpa dengan hasil dari RIS?",
+                        "Timpa Hasil", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if(pil!=JOptionPane.YES_OPTION) return;
+                }
+                HasilPeriksa.setText(teks.trim());
+                HasilPeriksa.setCaretPosition(0);
+                HasilPeriksa.requestFocus();
+                JOptionPane.showMessageDialog(this,
+                    "Hasil dari RIS berhasil ditarik.\n"+
+                    "Status RIS: "+(hb.status.isEmpty()?"-":hb.status)+
+                    (hb.issuedAt.isEmpty()?"":("\nWaktu hasil: "+hb.issuedAt))+"\n\n"+
+                    "Review lalu klik \"Simpan\".",
+                    "Ambil dari RIS", JOptionPane.INFORMATION_MESSAGE);
+            });
+        }, "alat_rs-ambil-hasil-input").start();
+    }
 
     private void BtnKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnKeluarActionPerformed
         dispose();
@@ -1565,6 +1670,7 @@ private void ChkJlnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:
     private widget.Tanggal Tanggal;
     private widget.TextBox Umur;
     private widget.Button btnAmbilPhoto;
+    private widget.Button BtnAmbilHasilRIS;
     private widget.Button btnCariBhp;
     private widget.Button btnCariPeriksa;
     private widget.Button btnDokter;

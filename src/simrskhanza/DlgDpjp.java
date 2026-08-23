@@ -1189,12 +1189,65 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 if(ps!=null){
                     ps.close();
                 }
-            }         
+            }
+            // Auto-check DPJP dari SEP ranap kalau ada, supaya perawat
+            // tidak perlu cari dokter manual (mengurangi kelupaan input).
+            autoCheckDpjpDariSep();
         }catch(Exception e){
             System.out.println("Notifikasi : "+e);
         }
     }
-    
+
+    /**
+     * Auto-centang baris tbDiagnosa yang kd_dokter-nya match dengan
+     * kddpjp di bridging_sep ranap (jnspelayanan='2'), dan langsung
+     * SIMPAN kalau DPJP belum ada di dpjp_ranap. Kalau SEP belum ada
+     * / kddpjp kosong / DPJP sudah tersimpan, tidak ada aksi otomatis.
+     */
+    private void autoCheckDpjpDariSep() {
+        try {
+            String noRw = TNoRw.getText().trim();
+            if (noRw.isEmpty()) return;
+            // Kalau sudah ada di dpjp_ranap → tidak perlu auto-simpan lagi
+            int sudahAda = Sequel.cariInteger(
+                "select count(*) from dpjp_ranap where no_rawat='"+noRw+"'");
+            if (sudahAda > 0) return;
+            // Ambil kddpjp dari SEP ranap
+            String kdDpjp = Sequel.cariIsi(
+                "select kddpjp from bridging_sep "+
+                "where no_rawat='"+noRw+"' "+
+                "and jnspelayanan='2' and kddpjp<>'' "+
+                "order by tglsep desc limit 1");
+            if (kdDpjp == null || kdDpjp.trim().isEmpty()) return;
+            // Loop tbDiagnosa, cari baris dengan kd_dokter match, set checkbox=true
+            for (int r = 0; r < tbDiagnosa.getRowCount(); r++) {
+                Object col1 = tbDiagnosa.getValueAt(r, 1);
+                if (col1 != null && kdDpjp.equals(col1.toString())) {
+                    tbDiagnosa.setValueAt(true, r, 0);
+                    tbDiagnosa.setRowSelectionInterval(r, r);
+                    tbDiagnosa.scrollRectToVisible(tbDiagnosa.getCellRect(r, 0, true));
+                    // Auto-simpan: langsung insert ke dpjp_ranap tanpa perlu klik BtnSimpan
+                    if (Sequel.menyimpantf("dpjp_ranap","?,?","Dokter",2,new String[]{
+                            noRw, kdDpjp
+                        })==true) {
+                        Object nmDokter = tbDiagnosa.getValueAt(r, 2);
+                        TabModePasien.addRow(new Object[]{
+                            false, Tanggal.getText(), noRw, TNoRM.getText(),
+                            TPasien.getText(), kdDpjp,
+                            nmDokter == null ? "" : nmDokter.toString()
+                        });
+                        LCount.setText(""+TabModePasien.getRowCount());
+                        // Un-check biar tidak double-simpan kalau user klik BtnSimpan lagi
+                        tbDiagnosa.setValueAt(false, r, 0);
+                    }
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Notif autoCheckDpjpDariSep : " + e);
+        }
+    }
+
     private void runBackground(Runnable task) {
         if (ceksukses) return;
         if (executor.isShutdown() || executor.isTerminated()) return;

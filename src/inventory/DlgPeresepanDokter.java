@@ -1905,6 +1905,18 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
             file.createNewFile();
             fileWriter = new FileWriter(file);
             StringBuilder iyembuilder = new StringBuilder();
+            // Filter obat Fornas untuk pasien BPJS: hanya aktif kalau
+            // setting AKTIFKANFILTERFORNAS='yes' di setting/database.xml
+            String qryFornas = "";
+            try {
+                if ("yes".equalsIgnoreCase(koneksiDB.AKTIFKANFILTERFORNAS())) {
+                    String kdBpjs = fungsi.kodebpjs.getKodeBPJS();
+                    if (KdPj != null && kdBpjs != null && !kdBpjs.isEmpty()
+                            && kdBpjs.equals(KdPj.getText())) {
+                        qryFornas = " and exists(select 1 from obat_fornas where obat_fornas.kode_brng=databarang.kode_brng) ";
+                    }
+                }
+            } catch (Exception ignore) { /* fallback: no filter kalau kode BPJS belum siap */ }
             if(kenaikan>0){
                 if(aktifkanbatch.equals("yes")){
                     qrystokkosong="";
@@ -1917,7 +1929,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                         " from databarang inner join jenis on databarang.kdjns=jenis.kdjns "+
                         " inner join industrifarmasi on industrifarmasi.kode_industri=databarang.kode_industri "+
                         " inner join gudangbarang on databarang.kode_brng=gudangbarang.kode_brng "+
-                        " where databarang.status='1' "+qrystokkosong+" and gudangbarang.no_batch<>'' and gudangbarang.no_faktur<>'' and gudangbarang.kd_bangsal=? "+
+                        " where databarang.status='1' "+qrystokkosong+qryFornas+" and gudangbarang.no_batch<>'' and gudangbarang.no_faktur<>'' and gudangbarang.kd_bangsal=? "+
                         " group by gudangbarang.kode_brng order by databarang.nama_brng");
                 }else{
                     qrystokkosong="";
@@ -1930,7 +1942,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                         " from databarang inner join jenis on databarang.kdjns=jenis.kdjns "+
                         " inner join industrifarmasi on industrifarmasi.kode_industri=databarang.kode_industri "+
                         " inner join gudangbarang on databarang.kode_brng=gudangbarang.kode_brng "+
-                        " where databarang.status='1' "+qrystokkosong+" and gudangbarang.no_batch='' and gudangbarang.no_faktur='' and gudangbarang.kd_bangsal=?  "+
+                        " where databarang.status='1' "+qrystokkosong+qryFornas+" and gudangbarang.no_batch='' and gudangbarang.no_faktur='' and gudangbarang.kd_bangsal=?  "+
                         " order by databarang.nama_brng");
                 }
                     
@@ -1967,7 +1979,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                         " from databarang inner join jenis on databarang.kdjns=jenis.kdjns "+
                         " inner join industrifarmasi on industrifarmasi.kode_industri=databarang.kode_industri "+
                         " inner join gudangbarang on databarang.kode_brng=gudangbarang.kode_brng "+
-                        " where  databarang.status='1' "+qrystokkosong+" and gudangbarang.no_batch<>'' and gudangbarang.no_faktur<>'' and gudangbarang.kd_bangsal=? "+
+                        " where  databarang.status='1' "+qrystokkosong+qryFornas+" and gudangbarang.no_batch<>'' and gudangbarang.no_faktur<>'' and gudangbarang.kd_bangsal=? "+
                         " group by gudangbarang.kode_brng order by databarang.nama_brng");
                 }else{
                     qrystokkosong="";
@@ -1983,7 +1995,7 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                         " from databarang inner join jenis on databarang.kdjns=jenis.kdjns "+
                         " inner join industrifarmasi on industrifarmasi.kode_industri=databarang.kode_industri "+
                         " inner join gudangbarang on databarang.kode_brng=gudangbarang.kode_brng "+
-                        " where  databarang.status='1' "+qrystokkosong+" and gudangbarang.no_batch='' and gudangbarang.no_faktur='' and gudangbarang.kd_bangsal=? "+
+                        " where  databarang.status='1' "+qrystokkosong+qryFornas+" and gudangbarang.no_batch='' and gudangbarang.no_faktur='' and gudangbarang.kd_bangsal=? "+
                         " order by databarang.nama_brng");
                 }
                     
@@ -2333,10 +2345,30 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         return BtnSimpan;
     }
     
-    public void isCek(){   
+    public void isCek(){
         BtnTambah.setEnabled(akses.getresep_dokter());
         TCari.requestFocus();
-        if(!DEPOAKTIFOBAT.equals("")){
+
+        // Prioritas #0: cek konteks resep dari Jadwal Operasi.
+        // Kalau no_rawat + tgl beri match booking_operasi + mapping ruang OK ada,
+        // pakai depo OK. Override bahkan DEPOAKTIFOBAT (depo login) karena user
+        // input di form ini utamanya untuk melayani resep dari OK.
+        String depoOK = "";
+        try {
+            String noRw = TNoRw.getText().trim();
+            String tglBeri = Valid.SetTgl(DTPBeri.getSelectedItem()+"");
+            if(!noRw.isEmpty() && !tglBeri.isEmpty()){
+                depoOK = Sequel.cariIsi(
+                    "select sok.kd_depo from booking_operasi bo "+
+                    "inner join set_depo_ruang_ok sok on bo.kd_ruang_ok=sok.kd_ruang_ok "+
+                    "where bo.no_rawat='"+noRw+"' and bo.tanggal='"+tglBeri+"' limit 1");
+                if(depoOK == null) depoOK = "";
+            }
+        } catch(Exception ignore) {} // tabel set_depo_ruang_ok mungkin belum ada di DB lama
+
+        if(!depoOK.equals("")){
+            bangsal=depoOK;
+        }else if(!DEPOAKTIFOBAT.equals("")){
             bangsal=DEPOAKTIFOBAT;
         }else{
             if(status.equals("ralan")){
@@ -2349,8 +2381,8 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                 }
             }else if(status.equals("ranap")){
                 bangsal=akses.getkdbangsal();
-            } 
-        } 
+            }
+        }
         
         if(TANGGALMUNDUR.equals("no")){
             if(!akses.getkode().equals("Admin Utama")){

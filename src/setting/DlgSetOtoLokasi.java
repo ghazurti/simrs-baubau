@@ -127,10 +127,206 @@ public class DlgSetOtoLokasi extends javax.swing.JDialog {
         tbRanap.setDefaultRenderer(Object.class, new WarnaTable());
 
         kdbangsal.setDocument(new batasInput((byte)5).getKata(kdbangsal));
-        KodePoli.setDocument(new batasInput((byte)5).getKata(KodePoli)); 
-        KodeDepoRalan.setDocument(new batasInput((byte)5).getKata(KodeDepoRalan)); 
-        KodeDepoRanap.setDocument(new batasInput((byte)5).getKata(KodeDepoRanap)); 
-        KodeBangsalRanap.setDocument(new batasInput((byte)5).getKata(KodeBangsalRanap)); 
+        KodePoli.setDocument(new batasInput((byte)5).getKata(KodePoli));
+        KodeDepoRalan.setDocument(new batasInput((byte)5).getKata(KodeDepoRalan));
+        KodeDepoRanap.setDocument(new batasInput((byte)5).getKata(KodeDepoRanap));
+        KodeBangsalRanap.setDocument(new batasInput((byte)5).getKata(KodeBangsalRanap));
+
+        setupBangsalOperasi();
+    }
+
+    // =====================================================================
+    // Setting Depo Ruang Operasi
+    // -----
+    // Multi-row mapping kd_ruang_ok → kd_depo (bangsal yang jadi depo).
+    // Data di tabel `set_depo_ruang_ok`. Digunakan oleh
+    // DlgDaftarPermintaanResep.cariBangsalOK() saat validasi resep dari
+    // Jadwal Operasi.
+    // UI di-inject ke tab "Pengaturan Umum" (internalFrame2) PAGE_END.
+    // TIDAK menyentuh initComponents() supaya aman dari NetBeans regen.
+    // =====================================================================
+    private widget.TextBox kdRuangOK, nmRuangOK, kdDepoOK, nmDepoOK;
+    private widget.Button  btnCariRuangOK, btnCariDepoOK, btnSimpanRuangOK, btnHapusRuangOK;
+    private widget.Table   tbRuangOK;
+    private DefaultTableModel tabRuangOK;
+
+    private void setupBangsalOperasi() {
+        // ---- form input ----
+        javax.swing.JPanel form = new javax.swing.JPanel(null);
+        form.setBackground(new java.awt.Color(235, 255, 235));
+        form.setPreferredSize(new java.awt.Dimension(74, 77));
+
+        javax.swing.JLabel l1 = new javax.swing.JLabel("Ruang Operasi :");
+        l1.setBounds(4, 12, 100, 23);
+        form.add(l1);
+        kdRuangOK = new widget.TextBox();
+        kdRuangOK.setBounds(107, 12, 40, 23);
+        kdRuangOK.setDocument(new batasInput((byte)2).getKata(kdRuangOK));
+        form.add(kdRuangOK);
+        nmRuangOK = new widget.TextBox();
+        nmRuangOK.setBounds(149, 12, 240, 23);
+        nmRuangOK.setEditable(false);
+        form.add(nmRuangOK);
+        btnCariRuangOK = new widget.Button();
+        btnCariRuangOK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png")));
+        btnCariRuangOK.setBounds(391, 12, 28, 23);
+        btnCariRuangOK.setToolTipText("Cari ruang operasi");
+        btnCariRuangOK.addActionListener(e -> pilihRuangOK());
+        form.add(btnCariRuangOK);
+
+        javax.swing.JLabel l2 = new javax.swing.JLabel("Depo Obat :");
+        l2.setBounds(4, 42, 100, 23);
+        form.add(l2);
+        kdDepoOK = new widget.TextBox();
+        kdDepoOK.setBounds(107, 42, 40, 23);
+        kdDepoOK.setDocument(new batasInput((byte)5).getKata(kdDepoOK));
+        form.add(kdDepoOK);
+        nmDepoOK = new widget.TextBox();
+        nmDepoOK.setBounds(149, 42, 240, 23);
+        nmDepoOK.setEditable(false);
+        form.add(nmDepoOK);
+        btnCariDepoOK = new widget.Button();
+        btnCariDepoOK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png")));
+        btnCariDepoOK.setBounds(391, 42, 28, 23);
+        btnCariDepoOK.setToolTipText("Cari depo (bangsal)");
+        btnCariDepoOK.addActionListener(e -> pilihDepoOK());
+        form.add(btnCariDepoOK);
+
+        btnSimpanRuangOK = new widget.Button();
+        btnSimpanRuangOK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/save-16x16.png")));
+        btnSimpanRuangOK.setText("Simpan");
+        btnSimpanRuangOK.setBounds(430, 12, 100, 23);
+        btnSimpanRuangOK.addActionListener(e -> simpanDepoRuangOK());
+        form.add(btnSimpanRuangOK);
+
+        btnHapusRuangOK = new widget.Button();
+        btnHapusRuangOK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/stop_f2.png")));
+        btnHapusRuangOK.setText("Hapus");
+        btnHapusRuangOK.setBounds(430, 42, 100, 23);
+        btnHapusRuangOK.addActionListener(e -> hapusDepoRuangOK());
+        form.add(btnHapusRuangOK);
+
+        // ---- tabel list mapping ----
+        tabRuangOK = new DefaultTableModel(null, new Object[]{"Kd Ruang","Nama Ruang OK","Kd Depo","Nama Depo"}){
+            @Override public boolean isCellEditable(int r, int c){ return false; }
+        };
+        tbRuangOK = new widget.Table();
+        tbRuangOK.setModel(tabRuangOK);
+        tbRuangOK.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        tbRuangOK.getColumnModel().getColumn(0).setPreferredWidth(80);
+        tbRuangOK.getColumnModel().getColumn(1).setPreferredWidth(220);
+        tbRuangOK.getColumnModel().getColumn(2).setPreferredWidth(80);
+        tbRuangOK.getColumnModel().getColumn(3).setPreferredWidth(220);
+        tbRuangOK.setDefaultRenderer(Object.class, new WarnaTable());
+        tbRuangOK.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override public void mouseClicked(java.awt.event.MouseEvent e) {
+                int r = tbRuangOK.getSelectedRow();
+                if (r >= 0) {
+                    kdRuangOK.setText(tabRuangOK.getValueAt(r,0).toString());
+                    nmRuangOK.setText(tabRuangOK.getValueAt(r,1).toString());
+                    kdDepoOK.setText(tabRuangOK.getValueAt(r,2).toString());
+                    nmDepoOK.setText(tabRuangOK.getValueAt(r,3).toString());
+                }
+            }
+        });
+        javax.swing.JScrollPane sp = new javax.swing.JScrollPane(tbRuangOK);
+
+        // ---- assemble sebagai tab baru, mengikuti pola tab existing ----
+        widget.InternalFrame frameOK = new widget.InternalFrame();
+        frameOK.setBackground(new java.awt.Color(235, 255, 235));
+        frameOK.setBorder(null);
+        frameOK.setLayout(new java.awt.BorderLayout(1, 1));
+        frameOK.add(form, java.awt.BorderLayout.PAGE_START);
+        frameOK.add(sp,   java.awt.BorderLayout.CENTER);
+
+        // Tambah tab ke TabRawat (di-append setelah "Pengaturan Depo Ranap")
+        TabRawat.addTab("Pengaturan Depo Ruang Operasi", frameOK);
+
+        loadDepoRuangOK();
+    }
+
+    private void loadDepoRuangOK() {
+        tabRuangOK.setRowCount(0);
+        try {
+            Connection kon = koneksiDB.condb();
+            java.sql.Statement st = kon.createStatement();
+            java.sql.ResultSet r = st.executeQuery(
+                "select s.kd_ruang_ok, ifnull(r.nm_ruang_ok,'') nm_ruang_ok, s.kd_depo, ifnull(b.nm_bangsal,'') nm_bangsal "+
+                "from set_depo_ruang_ok s "+
+                "left join ruang_ok r on s.kd_ruang_ok=r.kd_ruang_ok "+
+                "left join bangsal b on s.kd_depo=b.kd_bangsal "+
+                "order by s.kd_ruang_ok");
+            while (r.next()) {
+                tabRuangOK.addRow(new Object[]{
+                    r.getString("kd_ruang_ok"), r.getString("nm_ruang_ok"),
+                    r.getString("kd_depo"),     r.getString("nm_bangsal")
+                });
+            }
+            r.close(); st.close();
+        } catch (Exception e) {
+            System.out.println("Notif loadDepoRuangOK : " + e);
+        }
+    }
+
+    private void pilihRuangOK() {
+        setting.DlgCariRuangOperasi dlg = new setting.DlgCariRuangOperasi(null, false);
+        dlg.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override public void windowClosed(java.awt.event.WindowEvent e) {
+                if (dlg.getTable().getSelectedRow() != -1) {
+                    kdRuangOK.setText(dlg.getTable().getValueAt(dlg.getTable().getSelectedRow(), 0).toString());
+                    nmRuangOK.setText(dlg.getTable().getValueAt(dlg.getTable().getSelectedRow(), 1).toString());
+                }
+            }
+        });
+        dlg.setSize(500, 400);
+        dlg.setLocationRelativeTo(this);
+        dlg.setVisible(true);
+    }
+
+    private void pilihDepoOK() {
+        DlgCariBangsal dlg = new DlgCariBangsal(null, false);
+        dlg.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override public void windowClosed(java.awt.event.WindowEvent e) {
+                if (dlg.getTable().getSelectedRow() != -1) {
+                    kdDepoOK.setText(dlg.getTable().getValueAt(dlg.getTable().getSelectedRow(), 0).toString());
+                    nmDepoOK.setText(dlg.getTable().getValueAt(dlg.getTable().getSelectedRow(), 1).toString());
+                }
+            }
+        });
+        dlg.setSize(500, 400);
+        dlg.setLocationRelativeTo(this);
+        dlg.setVisible(true);
+    }
+
+    private void simpanDepoRuangOK() {
+        String kdR = kdRuangOK.getText().trim();
+        String kdD = kdDepoOK.getText().trim();
+        if (kdR.isEmpty() || kdD.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pilih ruang operasi dan depo dulu.");
+            return;
+        }
+        try {
+            // Upsert single-row per kd_ruang_ok
+            Sequel.queryu("delete from set_depo_ruang_ok where kd_ruang_ok='"+kdR+"'");
+            Sequel.queryu("insert into set_depo_ruang_ok (kd_ruang_ok,kd_depo) values ('"+kdR+"','"+kdD+"')");
+            JOptionPane.showMessageDialog(this, "Mapping depo untuk ruang '"+kdR+"' disimpan.");
+            loadDepoRuangOK();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal simpan : " + e.getMessage());
+        }
+    }
+
+    private void hapusDepoRuangOK() {
+        int r = tbRuangOK.getSelectedRow();
+        if (r < 0) { JOptionPane.showMessageDialog(this, "Pilih baris yang mau dihapus."); return; }
+        String kdR = tabRuangOK.getValueAt(r,0).toString();
+        try {
+            Sequel.queryu("delete from set_depo_ruang_ok where kd_ruang_ok='"+kdR+"'");
+            JOptionPane.showMessageDialog(this, "Mapping ruang '"+kdR+"' dihapus.");
+            loadDepoRuangOK();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal hapus : " + e.getMessage());
+        }
     }
     
 

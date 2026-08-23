@@ -190,35 +190,133 @@
 				</textElement>
 				<text><![CDATA[NO]]></text>
 			</staticText>
-			<line>
-				<reportElement x="19" y="1" width="1" height="35"/>
-				<graphicElement>
-					<pen lineWidth="0.5"/>
-				</graphicElement>
-			</line>
 			<staticText>
-				<reportElement mode="Transparent" x="45" y="2" width="129" height="23" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="45" y="2" width="99" height="23" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="8" isBold="false"/>
 				</textElement>
 				<text><![CDATA[JENIS PELAYANAN]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="278" y="14" width="50" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="145" y="2" width="81" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TOTAL PASIEN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="227" y="2" width="122" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TINDAK LANJUT PELAYANAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="350" y="2" width="69" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[LUKA-LUKA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="420" y="2" width="67" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[MATI DI IGD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="488" y="2" width="65" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[DOA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="145" y="14" width="37" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[RUJUKAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="183" y="14" width="43" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[NON RUJUKAN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="227" y="14" width="40" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<text><![CDATA[DIRAWAT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="331" y="14" width="50" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="268" y="14" width="40" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font fontName="Tahoma" size="8" isBold="false"/>
+					<font fontName="Tahoma" size="6" isBold="false"/>
 				</textElement>
 				<text><![CDATA[DIRUJUK]]></text>
 			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="309" y="14" width="40" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="6" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PULANG]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="350" y="14" width="34" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[L]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="385" y="14" width="34" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[P]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="420" y="14" width="33" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[L]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="454" y="14" width="33" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[P]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="488" y="14" width="32" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[L]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="521" y="14" width="32" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[P]]></text>
+			</staticText>
 			<line>
-				<reportElement x="20" y="26" width="533" height="1"/>
+				<reportElement x="144" y="13" width="409" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="19" y="1" width="1" height="35"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
@@ -230,38 +328,31 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="174" y="1" width="1" height="35"/>
+				<reportElement x="144" y="1" width="1" height="35"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="329" y="14" width="1" height="22"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<staticText>
-				<reportElement mode="Transparent" x="278" y="2" width="156" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font fontName="Tahoma" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[TINDAK LANJUT PELAYANAN]]></text>
-			</staticText>
-			<line>
-				<reportElement x="277" y="1" width="1" height="35"/>
+				<reportElement x="226" y="1" width="1" height="35"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="435" y="1" width="1" height="35"/>
+				<reportElement x="349" y="1" width="1" height="35"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="499" y="1" width="1" height="35"/>
+				<reportElement x="419" y="1" width="1" height="35"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="487" y="1" width="1" height="35"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
@@ -272,66 +363,48 @@
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
-			<staticText>
-				<reportElement mode="Transparent" x="501" y="2" width="51" height="23" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font fontName="Tahoma" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[DOA]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Transparent" x="176" y="2" width="101" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font fontName="Tahoma" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[TOTAL PASIEN]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Transparent" x="436" y="2" width="63" height="23" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font fontName="Tahoma" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[MATI DI IGD]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Transparent" x="176" y="14" width="43" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font fontName="Tahoma" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[RUJUKAN]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Transparent" x="221" y="14" width="56" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font fontName="Tahoma" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[NONRUJUKAN]]></text>
-			</staticText>
 			<line>
-				<reportElement x="174" y="13" width="261" height="1"/>
+				<reportElement x="182" y="14" width="1" height="22"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="220" y="14" width="1" height="22"/>
+				<reportElement x="267" y="14" width="1" height="22"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="382" y="14" width="1" height="22"/>
+				<reportElement x="308" y="14" width="1" height="22"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>
 			</line>
-			<staticText>
-				<reportElement mode="Transparent" x="384" y="14" width="50" height="11" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-					<font fontName="Tahoma" size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[PULANG]]></text>
-			</staticText>
+			<line>
+				<reportElement x="384" y="14" width="1" height="22"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="453" y="14" width="1" height="22"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="520" y="14" width="1" height="22"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="20" y="26" width="533" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
 			<staticText>
 				<reportElement mode="Transparent" x="20" y="27" width="23" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
@@ -340,60 +413,88 @@
 				<text><![CDATA[1]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="45" y="27" width="129" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="45" y="27" width="99" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[2]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="176" y="27" width="43" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="145" y="27" width="37" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[3]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="221" y="27" width="56" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="183" y="27" width="43" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[4]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="278" y="27" width="50" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="227" y="27" width="40" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[5]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="331" y="27" width="50" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="268" y="27" width="40" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[6]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="384" y="27" width="50" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="309" y="27" width="40" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[7]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="436" y="27" width="63" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="350" y="27" width="34" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[8]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="501" y="27" width="51" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="385" y="27" width="34" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="7" isBold="false"/>
 				</textElement>
 				<text><![CDATA[9]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="420" y="27" width="33" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[10]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="454" y="27" width="33" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[11]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="488" y="27" width="32" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[12]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="521" y="27" width="32" height="9" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+					<font fontName="Tahoma" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[13]]></text>
 			</staticText>
 			<line>
 				<reportElement x="20" y="36" width="533" height="1"/>
@@ -413,53 +514,88 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp1}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="46" y="1" width="128" height="10"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="46" y="1" width="97" height="10"/>
 				<textElement textAlignment="Left" lineSpacing="Single">
 					<font fontName="Tahoma" size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp2}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="221" y="1" width="56" height="10"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="145" y="1" width="37" height="10"/>
+				<textElement textAlignment="Center" lineSpacing="Single">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp3}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="183" y="1" width="43" height="10"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp4}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="278" y="1" width="50" height="10"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="227" y="1" width="40" height="10"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp5}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="384" y="1" width="50" height="10"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="268" y="1" width="40" height="10"/>
+				<textElement textAlignment="Center" lineSpacing="Single">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp6}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="309" y="1" width="40" height="10"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp7}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="436" y="1" width="63" height="10"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="350" y="1" width="34" height="10"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp8}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="501" y="1" width="52" height="10"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="385" y="1" width="34" height="10"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="8"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp9}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="176" y="1" width="43" height="10"/>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="420" y="1" width="33" height="10"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Tahoma" size="8"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp3}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp10}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="454" y="1" width="33" height="10"/>
+				<textElement textAlignment="Center" lineSpacing="Single">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp11}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="488" y="1" width="32" height="10"/>
+				<textElement textAlignment="Center" lineSpacing="Single">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp12}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="521" y="1" width="32" height="10"/>
+				<textElement textAlignment="Center" lineSpacing="Single">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp13}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement stretchType="RelativeToBandHeight" x="19" y="0" width="1" height="12"/>
@@ -474,31 +610,31 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="174" y="0" width="1" height="12"/>
+				<reportElement stretchType="RelativeToBandHeight" x="144" y="0" width="1" height="12"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="277" y="0" width="1" height="12"/>
+				<reportElement stretchType="RelativeToBandHeight" x="226" y="0" width="1" height="12"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="435" y="0" width="1" height="12"/>
+				<reportElement stretchType="RelativeToBandHeight" x="349" y="0" width="1" height="12"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="382" y="0" width="1" height="12"/>
+				<reportElement stretchType="RelativeToBandHeight" x="419" y="0" width="1" height="12"/>
 				<graphicElement>
-					<pen lineWidth="0.25"/>
+					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="499" y="0" width="1" height="12"/>
+				<reportElement stretchType="RelativeToBandHeight" x="487" y="0" width="1" height="12"/>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
@@ -510,26 +646,43 @@
 				</graphicElement>
 			</line>
 			<line>
+				<reportElement stretchType="RelativeToBandHeight" x="182" y="0" width="1" height="12"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement stretchType="RelativeToBandHeight" x="267" y="0" width="1" height="12"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement stretchType="RelativeToBandHeight" x="308" y="0" width="1" height="12"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement stretchType="RelativeToBandHeight" x="384" y="0" width="1" height="12"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement stretchType="RelativeToBandHeight" x="453" y="0" width="1" height="12"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement stretchType="RelativeToBandHeight" x="520" y="0" width="1" height="12"/>
+				<graphicElement>
+					<pen lineWidth="0.25"/>
+				</graphicElement>
+			</line>
+			<line>
 				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="20" y="11" width="533" height="1"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<textField isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="331" y="1" width="50" height="10"/>
-				<textElement textAlignment="Center" lineSpacing="Single">
-					<font fontName="Tahoma" size="8"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{temp6}]]></textFieldExpression>
-			</textField>
-			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="329" y="0" width="1" height="12"/>
-				<graphicElement>
-					<pen lineWidth="0.25"/>
-				</graphicElement>
-			</line>
-			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="220" y="0" width="1" height="12"/>
 				<graphicElement>
 					<pen lineWidth="0.25"/>
 				</graphicElement>

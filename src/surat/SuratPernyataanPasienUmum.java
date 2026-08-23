@@ -115,6 +115,7 @@ public final class SuratPernyataanPasienUmum extends javax.swing.JDialog {
             }
         }
         tbObat.setDefaultRenderer(Object.class, new WarnaTable());
+        tambahComboCaraBayar();
         
         TNoRw.setDocument(new batasInput((byte)17).getKata(TNoRw));    
         KdPetugas.setDocument(new batasInput((byte)20).getKata(KdPetugas));  
@@ -488,7 +489,7 @@ public final class SuratPernyataanPasienUmum extends javax.swing.JDialog {
 
         PanelInput.setName("PanelInput"); // NOI18N
         PanelInput.setOpaque(false);
-        PanelInput.setPreferredSize(new java.awt.Dimension(192, 205));
+        PanelInput.setPreferredSize(new java.awt.Dimension(192, 240));
         PanelInput.setLayout(new java.awt.BorderLayout(1, 1));
 
         FormInput.setName("FormInput"); // NOI18N
@@ -1241,10 +1242,17 @@ public final class SuratPernyataanPasienUmum extends javax.swing.JDialog {
                 param.put("photo","http://"+koneksiDB.HOSTHYBRIDWEB()+":"+koneksiDB.PORTWEB()+"/"+koneksiDB.HYBRIDWEB()+"/pernyataanumum/"+lokasifile);
                 finger=Sequel.cariIsi("select sha1(sidikjari.sidikjari) from sidikjari inner join pegawai on pegawai.id=sidikjari.id where pegawai.nik=?",tbObat.getValueAt(tbObat.getSelectedRow(),16).toString());
                 param.put("finger","Dikeluarkan di "+akses.getnamars()+", Kabupaten/Kota "+akses.getkabupatenrs()+"\nDitandatangani secara elektronik oleh "+tbObat.getValueAt(tbObat.getSelectedRow(),17).toString()+"\nID "+(finger.equals("")?tbObat.getValueAt(tbObat.getSelectedRow(),16).toString():finger)+"\n"+Valid.SetTgl3(tbObat.getValueAt(tbObat.getSelectedRow(),7).toString()));
+                param.put("caraBayarPilihan", (CaraBayar!=null && CaraBayar.getSelectedItem()!=null) ? CaraBayar.getSelectedItem().toString() : "Umum");
                 Valid.MyReportqry("rptSuratPernyataanPasienUmum.jasper","report","::[ Surat Pernyataan Pasien Umum ]::",
                     "select surat_pernyataan_pasien_umum.no_surat,reg_periksa.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,reg_periksa.umurdaftar,pasien.pekerjaan,pasien.tmp_lahir,concat(pasien.alamat,', ',kelurahan.nm_kel,', ',kecamatan.nm_kec,', ',kabupaten.nm_kab,', ',propinsi.nm_prop) as alamat,reg_periksa.sttsumur,pasien.jk,pasien.tgl_lahir,surat_pernyataan_pasien_umum.tanggal,surat_pernyataan_pasien_umum.nama_pj,"+
-		    "surat_pernyataan_pasien_umum.no_ktppj,surat_pernyataan_pasien_umum.tempat_lahirpj,surat_pernyataan_pasien_umum.lahirpj,surat_pernyataan_pasien_umum.jkpj,surat_pernyataan_pasien_umum.alamatpj,surat_pernyataan_pasien_umum.hubungan,surat_pernyataan_pasien_umum.no_telp,surat_pernyataan_pasien_umum.nip,petugas.nama from surat_pernyataan_pasien_umum inner join reg_periksa on surat_pernyataan_pasien_umum.no_rawat=reg_periksa.no_rawat "+
+		    "surat_pernyataan_pasien_umum.no_ktppj,surat_pernyataan_pasien_umum.tempat_lahirpj,surat_pernyataan_pasien_umum.lahirpj,surat_pernyataan_pasien_umum.jkpj,surat_pernyataan_pasien_umum.alamatpj,surat_pernyataan_pasien_umum.hubungan,surat_pernyataan_pasien_umum.no_telp,surat_pernyataan_pasien_umum.nip,petugas.nama,"+
+		    "ifnull(bangsal.nm_bangsal,'') as nm_bangsal,ifnull(kamar.kelas,'') as kelas,ki_first.tgl_masuk as tgl_masuk,ifnull(penjab.png_jawab,'') as png_jawab "+
+		    "from surat_pernyataan_pasien_umum inner join reg_periksa on surat_pernyataan_pasien_umum.no_rawat=reg_periksa.no_rawat "+
 		    "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis inner join petugas on surat_pernyataan_pasien_umum.nip=petugas.nip inner join kelurahan on pasien.kd_kel=kelurahan.kd_kel inner join kecamatan on pasien.kd_kec=kecamatan.kd_kec inner join kabupaten on pasien.kd_kab=kabupaten.kd_kab inner join propinsi on pasien.kd_prop=propinsi.kd_prop "+
+		    "left join penjab on penjab.kd_pj=reg_periksa.kd_pj "+
+		    "left join (select no_rawat,min(tgl_masuk) as tgl_masuk,substring_index(group_concat(kd_kamar order by tgl_masuk desc),',',1) as kd_kamar from kamar_inap group by no_rawat) ki_first on ki_first.no_rawat=reg_periksa.no_rawat "+
+		    "left join kamar on kamar.kd_kamar=ki_first.kd_kamar "+
+		    "left join bangsal on bangsal.kd_bangsal=kamar.kd_bangsal "+
                     "where surat_pernyataan_pasien_umum.no_surat='"+tbObat.getValueAt(tbObat.getSelectedRow(),0).toString()+"'",param);
             }
         }else{
@@ -1314,6 +1322,8 @@ public final class SuratPernyataanPasienUmum extends javax.swing.JDialog {
     private widget.PanelBiasa FormPass3;
     private widget.PanelBiasa FormPhoto;
     private widget.ComboBox Hubungan;
+    private widget.ComboBox CaraBayar;
+    private widget.Label lblCaraBayar;
     private widget.TextBox JK;
     private widget.ComboBox JKPJ;
     private widget.TextBox KdPetugas;
@@ -1418,7 +1428,7 @@ public final class SuratPernyataanPasienUmum extends javax.swing.JDialog {
                         rs.getString("umurdaftar")+" "+rs.getString("sttsumur"),rs.getString("jk"),rs.getDate("tgl_lahir"),
                         rs.getString("tanggal"),rs.getString("nama_pj"),rs.getString("tempat_lahirpj"),rs.getString("lahirpj"),
                         rs.getString("hubungan"),rs.getString("jkpj"),rs.getString("no_telp"),rs.getString("no_ktppj"),
-                        rs.getString("alamatpj"),rs.getString("nip"),rs.getString("nama") 
+                        rs.getString("alamatpj"),rs.getString("nip"),rs.getString("nama")
                     });
                 }
             } catch (Exception e) {
@@ -1437,6 +1447,70 @@ public final class SuratPernyataanPasienUmum extends javax.swing.JDialog {
         LCount.setText(""+tabMode.getRowCount());
     }
 
+    /**
+     * Tambah komponen Cara Bayar ke FormInput. Dipanggil sekali dari
+     * konstruktor setelah initComponents() supaya blok GEN-BEGIN NetBeans
+     * tidak dimodifikasi (aman kalau form dibuka lagi di NetBeans).
+     * Layout: baris baru y=180 di FormInput.
+     */
+    private void tambahComboCaraBayar() {
+        try {
+            lblCaraBayar = new widget.Label();
+            lblCaraBayar.setText("Cara Bayar :");
+            lblCaraBayar.setBounds(0, 180, 100, 23);
+            FormInput.add(lblCaraBayar);
+
+            CaraBayar = new widget.ComboBox();
+            CaraBayar.setModel(new javax.swing.DefaultComboBoxModel(new String[]{
+                "Umum", "Jaminan Kesehatan Nasional", "Bahteramas", "Asuransi Lain"
+            }));
+            CaraBayar.setBounds(104, 180, 220, 23);
+            FormInput.add(CaraBayar);
+
+            // Perbesar FormInput + PanelInput agar baris baru terlihat
+            FormInput.setPreferredSize(new java.awt.Dimension(
+                FormInput.getPreferredSize().width, 215));
+            if (PanelInput != null) {
+                PanelInput.setPreferredSize(new java.awt.Dimension(
+                    PanelInput.getPreferredSize().width, 240));
+                PanelInput.revalidate();
+                PanelInput.repaint();
+            }
+        } catch (Exception e) {
+            System.out.println("Notif tambahComboCaraBayar : " + e);
+        }
+    }
+
+    /**
+     * Set default Cara Bayar dari kd_pj pasien (mapping BPJS/JKN → JKN,
+     * BAHTERAMAS → Bahteramas, UMUM → Umum, lainnya → Asuransi Lain).
+     */
+    private void setDefaultCaraBayarDariRegistrasi() {
+        if (TNoRw.getText().trim().isEmpty() || CaraBayar == null) return;
+        try {
+            String pj = Sequel.cariIsi("select ifnull(penjab.png_jawab,'') from reg_periksa "+
+                "left join penjab on penjab.kd_pj=reg_periksa.kd_pj where reg_periksa.no_rawat=?",
+                TNoRw.getText());
+            if (pj == null) pj = "";
+            String upper = pj.toUpperCase();
+            String pilih;
+            if (upper.contains("BPJS") || upper.contains("JKN")) {
+                pilih = "Jaminan Kesehatan Nasional";
+            } else if (upper.contains("BAHTERAMAS")) {
+                pilih = "Bahteramas";
+            } else if (upper.equals("UMUM")) {
+                pilih = "Umum";
+            } else if (upper.isEmpty()) {
+                pilih = "Umum";
+            } else {
+                pilih = "Asuransi Lain";
+            }
+            CaraBayar.setSelectedItem(pilih);
+        } catch (Exception e) {
+            System.out.println("Notif setDefaultCaraBayar : " + e);
+        }
+    }
+
     public void emptTeks() {
         NamaPJ.setText("");
         TempatLahir.setText("");
@@ -1446,6 +1520,7 @@ public final class SuratPernyataanPasienUmum extends javax.swing.JDialog {
         NoTelp.setText("");
         NoKTP.setText("");
         AlamatPj.setText("");
+        if (CaraBayar != null) setDefaultCaraBayarDariRegistrasi();
         Valid.autoNomer3("select ifnull(MAX(CONVERT(RIGHT(surat_pernyataan_pasien_umum.no_surat,3),signed)),0) from surat_pernyataan_pasien_umum where surat_pernyataan_pasien_umum.tanggal='"+Valid.SetTgl(Tanggal.getSelectedItem()+"")+"' ",
                 "PPU"+Tanggal.getSelectedItem().toString().substring(6,10)+Tanggal.getSelectedItem().toString().substring(3,5)+Tanggal.getSelectedItem().toString().substring(0,2),3,NoSurat);
         NamaPJ.requestFocus();
@@ -1470,6 +1545,7 @@ public final class SuratPernyataanPasienUmum extends javax.swing.JDialog {
             AlamatPj.setText(tbObat.getValueAt(tbObat.getSelectedRow(),15).toString()); 
             Valid.SetTgl(Tanggal,tbObat.getValueAt(tbObat.getSelectedRow(),7).toString());
             Valid.SetTgl(TglLahir,tbObat.getValueAt(tbObat.getSelectedRow(),10).toString());
+            setDefaultCaraBayarDariRegistrasi();
         }
     }
 
@@ -1518,7 +1594,7 @@ public final class SuratPernyataanPasienUmum extends javax.swing.JDialog {
     private void isForm(){
         if(ChkInput.isSelected()==true){
             ChkInput.setVisible(false);
-            PanelInput.setPreferredSize(new Dimension(WIDTH,205));
+            PanelInput.setPreferredSize(new Dimension(WIDTH,240));
             FormInput.setVisible(true);      
             ChkInput.setVisible(true);
         }else if(ChkInput.isSelected()==false){           

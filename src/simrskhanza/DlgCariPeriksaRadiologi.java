@@ -1884,7 +1884,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         new Thread(() -> {
             ApiAlatRS api = new ApiAlatRS();
             api.Login();
-            final ApiAlatRS.HasilBacaan hb = api.AmbilHasilBacaan(worklistIdFinal);
+            final ApiAlatRS.HasilBacaan hb = api.AmbilHasilBacaanGabungan(worklistIdFinal);
             javax.swing.SwingUtilities.invokeLater(() -> {
                 this.setCursor(Cursor.getDefaultCursor());
                 if(!hb.ok){
@@ -1899,13 +1899,8 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         "Ambil Hasil di RIS", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
-                StringBuilder teks = new StringBuilder();
-                if(!hb.temuan.isEmpty()){
-                    teks.append("TEMUAN:\n").append(hb.temuan).append("\n\n");
-                }
-                if(!hb.kesimpulan.isEmpty()){
-                    teks.append("KESIMPULAN:\n").append(hb.kesimpulan);
-                }
+                // hb.temuan sudah berisi teks gabungan siap pakai (per pemeriksaan).
+                String teks = hb.temuan;
                 String existing = HasilPeriksa.getText();
                 if(existing!=null && !existing.trim().isEmpty()){
                     int pil = JOptionPane.showConfirmDialog(this,
@@ -1913,7 +1908,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         "Timpa Hasil", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                     if(pil!=JOptionPane.YES_OPTION) return;
                 }
-                HasilPeriksa.setText(teks.toString().trim());
+                HasilPeriksa.setText(teks.trim());
                 HasilPeriksa.setCaretPosition(0);
                 HasilPeriksa.requestFocus();
                 JOptionPane.showMessageDialog(this,
@@ -1959,10 +1954,21 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                 "jadi tidak ada study yang bisa dibuka di viewer RIS.");
             return;
         }
+        // 1 order bisa berisi >1 pemeriksaan → accession dipisah koma.
+        // Kalau >1, minta user pilih study mana yang dibuka.
+        String accToOpen = accession;
+        if(accession.contains(",")){
+            String[] opsi = accession.split(",");
+            Object pil = JOptionPane.showInputDialog(this,
+                "Pemeriksaan ini punya beberapa study di RIS.\nPilih yang ingin dibuka:",
+                "Buka Viewer RIS", JOptionPane.QUESTION_MESSAGE, null, opsi, opsi[0]);
+            if(pil==null) return; // batal
+            accToOpen = pil.toString();
+        }
         try{
             // Pola URL viewer RIS — sesuaikan dengan info vendor kalau beda.
             String base = koneksiDB.URLALATRS()+":"+koneksiDB.PORTALATRS();
-            String url = base + "/viewer?accession=" + java.net.URLEncoder.encode(accession,"UTF-8");
+            String url = base + "/viewer?accession=" + java.net.URLEncoder.encode(accToOpen.trim(),"UTF-8");
             java.awt.Desktop.getDesktop().browse(new java.net.URI(url));
         }catch(Exception e){
             JOptionPane.showMessageDialog(this,"Gagal buka browser: "+e.getMessage());
@@ -2942,88 +2948,52 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     return;
                 }
 
-                // 3. Download ZIP gambar dari RIS.
-                //    orderId = worklist_id; kalau kosong, resolve dari accession.
+                // 3. Kumpulkan daftar orderId (bisa >1 pemeriksaan per order).
+                //    Sumber: worklist_id (dipisah koma); yang kosong di-resolve
+                //    dari accession number masing-masing.
                 ApiAlatRS api = new ApiAlatRS();
                 api.Login();
-                String orderId = worklistId;
-                if(orderId==null || orderId.isEmpty()){
-                    orderId = api.CariOrderIdByAccession(accession);
+                java.util.LinkedHashSet<String> orderIds = new java.util.LinkedHashSet<>();
+                if(worklistId!=null && !worklistId.isEmpty()){
+                    for(String w : worklistId.split(",")){
+                        if(w!=null && !w.trim().isEmpty()) orderIds.add(w.trim());
+                    }
                 }
-                if(orderId==null || orderId.isEmpty()){
+                if(orderIds.isEmpty() && accession!=null && !accession.isEmpty()){
+                    for(String a : accession.split(",")){
+                        if(a==null || a.trim().isEmpty()) continue;
+                        String oid = api.CariOrderIdByAccession(a.trim());
+                        if(oid!=null && !oid.isEmpty()) orderIds.add(oid);
+                    }
+                }
+                if(orderIds.isEmpty()){
                     System.out.println("autoTarikGambarRIS: orderId tidak ketemu (acc="+accession+")");
                     pesanTarikGambar(interaktif, "Order tidak ditemukan di RIS (accession: "+accession+").", true);
                     return;
                 }
-                byte[] respBytes = api.DownloadPreviewGambar(orderId);
-                if(respBytes == null || respBytes.length == 0){
-                    System.out.println("autoTarikGambarRIS: gambar belum tersedia di RIS untuk order "+orderId);
-                    pesanTarikGambar(interaktif,
-                        "Gambar belum tersedia di RIS untuk order ini.\n"+
-                        "Kemungkinan pemeriksaan belum di-scan atau gambar belum masuk PACS.", true);
-                    return;
-                }
 
                 String namaDasar = noRawat.replaceAll("[^a-zA-Z0-9]","_") + "_" + tglPeriksa + "_" + jam.replace(":","");
+                // Tiap pemeriksaan → 1 lembar terpisah (jangan campur slice CT & foto biasa).
                 boolean adaSukses = false;
-
-                if(respBytes.length > 4 && respBytes[0]=='P' && respBytes[1]=='K'){
-                    // ZIP dari vendor: ekstrak hanya JPG/PNG, lalu GABUNG jadi
-                    // 1 lembar grid (seperti film CT) sebelum di-upload.
-                    // Nama file di-generate sendiri (bukan dari dalam ZIP)
-                    // supaya aman dari path traversal.
-                    java.util.List<java.awt.image.BufferedImage> gambarList = new java.util.ArrayList<>();
-                    try(java.util.zip.ZipInputStream zis = new java.util.zip.ZipInputStream(
-                            new java.io.ByteArrayInputStream(respBytes))){
-                        java.util.zip.ZipEntry entry;
-                        while((entry = zis.getNextEntry()) != null && gambarList.size() < 40){
-                            if(entry.isDirectory()){ zis.closeEntry(); continue; }
-                            String namaEntry = entry.getName().toLowerCase();
-                            if(!namaEntry.endsWith(".jpg") && !namaEntry.endsWith(".jpeg")
-                                    && !namaEntry.endsWith(".png")){ zis.closeEntry(); continue; }
-                            // baca isi entry, max 20MB per gambar
-                            java.io.ByteArrayOutputStream bos = new java.io.ByteArrayOutputStream();
-                            byte[] buf = new byte[8192];
-                            int n, total = 0;
-                            while((n = zis.read(buf)) > 0){
-                                total += n;
-                                if(total > 20*1024*1024) break;
-                                bos.write(buf, 0, n);
-                            }
-                            zis.closeEntry();
-                            if(total > 20*1024*1024){
-                                System.out.println("autoTarikGambarRIS: skip entry kebesaran: "+entry.getName());
-                                continue;
-                            }
-                            java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(
-                                    new java.io.ByteArrayInputStream(bos.toByteArray()));
-                            if(img != null) gambarList.add(img);
-                        }
+                int belumAda = 0, idxOrder = 0;
+                for(String orderId : orderIds){
+                    idxOrder++;
+                    byte[] respBytes = api.DownloadPreviewGambar(orderId);
+                    if(respBytes == null || respBytes.length == 0){
+                        belumAda++;
+                        System.out.println("autoTarikGambarRIS: gambar belum ada untuk order "+orderId);
+                        continue;
                     }
-                    if(gambarList.size() == 1){
-                        // cuma 1 gambar → langsung upload tanpa grid
-                        byte[] jpg = bufferedImageKeJpg(gambarList.get(0));
-                        adaSukses = uploadGambarKeWeb(noRawat, tglPeriksa, jam,
-                                namaDasar + "_ris.jpg", "image/jpeg", jpg);
-                    }else if(gambarList.size() > 1){
-                        byte[] lembarJpg = gabungGambarGrid(gambarList);
-                        if(lembarJpg != null){
-                            adaSukses = uploadGambarKeWeb(noRawat, tglPeriksa, jam,
-                                    namaDasar + "_ris_sheet.jpg", "image/jpeg", lembarJpg);
-                        }
+                    String suffix = (orderIds.size() > 1) ? ("_"+idxOrder) : "";
+                    if(prosesGambarSatuOrder(respBytes, noRawat, tglPeriksa, jam, namaDasar + suffix)){
+                        adaSukses = true;
                     }
-                }else{
-                    // Bukan ZIP: anggap 1 gambar langsung (PNG/JPG).
-                    // Re-encode ke JPG terkompresi supaya file kecil.
-                    java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(
-                            new java.io.ByteArrayInputStream(respBytes));
-                    if(img != null){
-                        byte[] jpg = bufferedImageKeJpg(img);
-                        adaSukses = uploadGambarKeWeb(noRawat, tglPeriksa, jam,
-                                namaDasar + "_ris.jpg", "image/jpeg", jpg);
-                    }else{
-                        System.out.println("autoTarikGambarRIS: respons bukan gambar valid");
-                    }
+                }
+                if(!adaSukses && belumAda>0){
+                    pesanTarikGambar(interaktif,
+                        "Gambar belum tersedia di RIS untuk pemeriksaan ini.\n"+
+                        "Kemungkinan belum di-scan atau gambar belum masuk PACS.", true);
+                    return;
                 }
 
                 if(adaSukses){
@@ -3039,6 +3009,74 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                 pesanTarikGambar(interaktif, "Gagal tarik gambar dari RIS: "+ex.getMessage(), true);
             }
         }, "alat_rs-auto-pull-gambar").start();
+    }
+
+    /**
+     * Proses 1 respons gambar dari RIS (ZIP berisi PNG/JPG, atau 1 gambar
+     * langsung) untuk SATU pemeriksaan: ekstrak, gabung jadi 1 lembar grid,
+     * kompres, lalu upload ke web + catat di gambar_radiologi.
+     * Nama file di-generate sendiri (bukan dari dalam ZIP) → aman path traversal.
+     * Return true kalau berhasil upload.
+     */
+    private boolean prosesGambarSatuOrder(byte[] respBytes, String noRawat, String tglPeriksa,
+            String jam, String namaDasar){
+        try{
+            if(respBytes.length > 4 && respBytes[0]=='P' && respBytes[1]=='K'){
+                java.util.List<java.awt.image.BufferedImage> gambarList = new java.util.ArrayList<>();
+                try(java.util.zip.ZipInputStream zis = new java.util.zip.ZipInputStream(
+                        new java.io.ByteArrayInputStream(respBytes))){
+                    java.util.zip.ZipEntry entry;
+                    while((entry = zis.getNextEntry()) != null && gambarList.size() < 40){
+                        if(entry.isDirectory()){ zis.closeEntry(); continue; }
+                        String namaEntry = entry.getName().toLowerCase();
+                        if(!namaEntry.endsWith(".jpg") && !namaEntry.endsWith(".jpeg")
+                                && !namaEntry.endsWith(".png")){ zis.closeEntry(); continue; }
+                        java.io.ByteArrayOutputStream bos = new java.io.ByteArrayOutputStream();
+                        byte[] buf = new byte[8192];
+                        int n, total = 0;
+                        while((n = zis.read(buf)) > 0){
+                            total += n;
+                            if(total > 20*1024*1024) break;
+                            bos.write(buf, 0, n);
+                        }
+                        zis.closeEntry();
+                        if(total > 20*1024*1024){
+                            System.out.println("prosesGambarSatuOrder: skip entry kebesaran: "+entry.getName());
+                            continue;
+                        }
+                        java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(
+                                new java.io.ByteArrayInputStream(bos.toByteArray()));
+                        if(img != null) gambarList.add(img);
+                    }
+                }
+                if(gambarList.size() == 1){
+                    byte[] jpg = bufferedImageKeJpg(gambarList.get(0));
+                    return uploadGambarKeWeb(noRawat, tglPeriksa, jam,
+                            namaDasar + "_ris.jpg", "image/jpeg", jpg);
+                }else if(gambarList.size() > 1){
+                    byte[] lembarJpg = gabungGambarGrid(gambarList);
+                    if(lembarJpg != null){
+                        return uploadGambarKeWeb(noRawat, tglPeriksa, jam,
+                                namaDasar + "_ris_sheet.jpg", "image/jpeg", lembarJpg);
+                    }
+                }
+                return false;
+            }else{
+                // Bukan ZIP: anggap 1 gambar langsung (PNG/JPG).
+                java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(
+                        new java.io.ByteArrayInputStream(respBytes));
+                if(img != null){
+                    byte[] jpg = bufferedImageKeJpg(img);
+                    return uploadGambarKeWeb(noRawat, tglPeriksa, jam,
+                            namaDasar + "_ris.jpg", "image/jpeg", jpg);
+                }
+                System.out.println("prosesGambarSatuOrder: respons bukan gambar valid");
+                return false;
+            }
+        }catch(Exception ex){
+            System.out.println("prosesGambarSatuOrder ERR: " + ex);
+            return false;
+        }
     }
 
     /** Tampilkan pesan hasil tarik gambar hanya kalau mode interaktif (dari tombol). */

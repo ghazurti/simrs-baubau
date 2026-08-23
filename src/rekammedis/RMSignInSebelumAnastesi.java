@@ -62,6 +62,11 @@ public final class RMSignInSebelumAnastesi extends javax.swing.JDialog {
     private StringBuilder htmlContent;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private volatile boolean ceksukses = false;
+    // Field tambahan sesuai formulir RM 22.OK-03 (di luar blok GEN NetBeans)
+    private widget.ComboBox PersetujuanPenandaan;
+    private widget.ComboBox PersetujuanBedah;
+    private widget.ComboBox PersetujuanAnestesi;
+    private widget.ComboBox HasilRadiologi;
     /** Creates new form DlgRujuk
      * @param parent
      * @param modal */
@@ -70,6 +75,7 @@ public final class RMSignInSebelumAnastesi extends javax.swing.JDialog {
         initComponents();
         this.setLocation(8,1);
         setSize(628,674);
+        tambahFieldRM22OK03();
 
         tabMode=new DefaultTableModel(null,new Object[]{
             "No.Rawat","No.RM","Nama Pasien","Tgl.Lahir","J.K.","Tanggal","SN/CN","Tindakan","Kode Dokter Bedah","Nama Dokter Bedah",
@@ -172,6 +178,43 @@ public final class RMSignInSebelumAnastesi extends javax.swing.JDialog {
         LoadHTML.setDocument(doc);
     }
 
+
+    // Menambahkan field formulir RM 22.OK-03 yang belum ada di form NetBeans,
+    // dipasang secara program supaya tidak ditimpa saat form dibuka di editor NetBeans.
+    private widget.ComboBox comboRM(String... isi){
+        widget.ComboBox c=new widget.ComboBox();
+        c.setModel(new javax.swing.DefaultComboBoxModel(isi));
+        return c;
+    }
+    private void labelRM(String teks, int x, int y, int w){
+        widget.Label l=new widget.Label();
+        l.setText(teks);
+        l.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        FormInput.add(l);
+        l.setBounds(x, y, w, 23);
+    }
+    private void tambahFieldRM22OK03(){
+        FormInput.setPreferredSize(new java.awt.Dimension(810, 420));
+        labelRM("Persetujuan Tindakan Bedah ada :", 0, 310, 220);
+        PersetujuanBedah=comboRM("Ya","Tidak");
+        FormInput.add(PersetujuanBedah); PersetujuanBedah.setBounds(224, 310, 100, 23);
+        labelRM("Persetujuan Tindakan Anestesi ada :", 340, 310, 210);
+        PersetujuanAnestesi=comboRM("Ya","Tidak");
+        FormInput.add(PersetujuanAnestesi); PersetujuanAnestesi.setBounds(554, 310, 100, 23);
+        labelRM("Persetujuan Penandaan Area Operasi ada :", 0, 340, 220);
+        PersetujuanPenandaan=comboRM("Ya","Tidak");
+        FormInput.add(PersetujuanPenandaan); PersetujuanPenandaan.setBounds(224, 340, 100, 23);
+        labelRM("Hasil radiologi yang diperlukan sudah ada :", 340, 340, 210);
+        HasilRadiologi=comboRM("Ya","Tidak Diperlukan");
+        FormInput.add(HasilRadiologi); HasilRadiologi.setBounds(554, 340, 135, 23);
+        javax.swing.JMenuItem mnSSC=new javax.swing.JMenuItem();
+        mnSSC.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png")));
+        mnSSC.setText("Formulir Surgical Safety Checklist (RM 22.OK-03)");
+        mnSSC.setPreferredSize(new java.awt.Dimension(320, 26));
+        mnSSC.addActionListener(evt -> CetakSurgicalSafetyChecklist.cetak(TNoRw.getText()));
+        jPopupMenu1.add(mnSSC);
+        FormInput.revalidate();
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -1028,11 +1071,12 @@ public final class RMSignInSebelumAnastesi extends javax.swing.JDialog {
         }else if(SNCN.getText().trim().equals("")){
             Valid.textKosong(SNCN,"SN/CN");
         }else{
-            if(Sequel.menyimpantf("signin_sebelum_anestesi","?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?","Data",17,new String[]{
+            if(Sequel.menyimpantf("signin_sebelum_anestesi","?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?","Data",21,new String[]{
                 TNoRw.getText(),Valid.SetTgl(Tanggal.getSelectedItem()+"")+" "+Tanggal.getSelectedItem().toString().substring(11,19),SNCN.getText(),Tindakan.getText(),
-                KodeDokterBedah.getText(),KodeDokterAnestesi.getText(),Identitas.getSelectedItem().toString(),AreaOperasi.getSelectedItem().toString(),Alergi.getText(), 
-                ResikoAspirasi.getSelectedItem().toString(),AntisipasiResikoAspirasi.getText(),ResikoKehilanganDarah.getSelectedItem().toString(),JalurIVLine.getText(), 
-                RencanaAntisipasiKehilanganDarah.getText(),KesiapanAlatAnes.getSelectedItem().toString(),RencanaAntisipasiKesiapanAlat.getText(),KdPetugasOK.getText()
+                KodeDokterBedah.getText(),KodeDokterAnestesi.getText(),Identitas.getSelectedItem().toString(),AreaOperasi.getSelectedItem().toString(),Alergi.getText(),
+                ResikoAspirasi.getSelectedItem().toString(),AntisipasiResikoAspirasi.getText(),ResikoKehilanganDarah.getSelectedItem().toString(),JalurIVLine.getText(),
+                RencanaAntisipasiKehilanganDarah.getText(),KesiapanAlatAnes.getSelectedItem().toString(),RencanaAntisipasiKesiapanAlat.getText(),KdPetugasOK.getText(),
+                PersetujuanPenandaan.getSelectedItem().toString(),PersetujuanBedah.getSelectedItem().toString(),PersetujuanAnestesi.getSelectedItem().toString(),HasilRadiologi.getSelectedItem().toString()
             })==true){
                 runBackground(() ->tampil());
                 emptTeks();
@@ -1779,9 +1823,15 @@ public final class RMSignInSebelumAnastesi extends javax.swing.JDialog {
         RencanaAntisipasiKehilanganDarah.setText("");
         KesiapanAlatAnes.setSelectedIndex(0);
         RencanaAntisipasiKesiapanAlat.setText("");
+        if(PersetujuanPenandaan!=null){
+            PersetujuanPenandaan.setSelectedIndex(0);
+            PersetujuanBedah.setSelectedIndex(0);
+            PersetujuanAnestesi.setSelectedIndex(0);
+            HasilRadiologi.setSelectedIndex(0);
+        }
         Tanggal.setDate(new Date());
         SNCN.requestFocus();
-    } 
+    }
 
     private void getData() {
         if(tbObat.getSelectedRow()!= -1){
@@ -1808,6 +1858,28 @@ public final class RMSignInSebelumAnastesi extends javax.swing.JDialog {
             KdPetugasOK.setText(tbObat.getValueAt(tbObat.getSelectedRow(),22).toString());
             NmPetugasOK.setText(tbObat.getValueAt(tbObat.getSelectedRow(),23).toString());
             Valid.SetTgl2(Tanggal,tbObat.getValueAt(tbObat.getSelectedRow(),5).toString());
+            ambilFieldRM22OK03(tbObat.getValueAt(tbObat.getSelectedRow(),0).toString(),tbObat.getValueAt(tbObat.getSelectedRow(),5).toString());
+        }
+    }
+
+    // Memuat field RM 22.OK-03 langsung dari tabel (di luar tabMode agar aman)
+    private void ambilFieldRM22OK03(String norawat,String tanggal){
+        try{
+            koneksi=koneksiDB.condb();
+            PreparedStatement psd=koneksi.prepareStatement("select persetujuan_penandaan,persetujuan_bedah,persetujuan_anestesi,hasil_radiologi from signin_sebelum_anestesi where no_rawat=? and tanggal=?");
+            psd.setString(1,norawat);
+            psd.setString(2,tanggal);
+            ResultSet rsd=psd.executeQuery();
+            if(rsd.next()){
+                PersetujuanPenandaan.setSelectedItem(rsd.getString("persetujuan_penandaan"));
+                PersetujuanBedah.setSelectedItem(rsd.getString("persetujuan_bedah"));
+                PersetujuanAnestesi.setSelectedItem(rsd.getString("persetujuan_anestesi"));
+                HasilRadiologi.setSelectedItem(rsd.getString("hasil_radiologi"));
+            }
+            rsd.close();
+            psd.close();
+        }catch(Exception e){
+            System.out.println("Notifikasi ambil RM22OK03 : "+e);
         }
     }
     private void isRawat() {

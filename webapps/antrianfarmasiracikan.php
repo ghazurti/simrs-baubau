@@ -117,7 +117,26 @@
             function() { 
                 $('#judul').load('data_antrianfarmasijudulracikan.php').fadeIn("fast"); 
             }, 9000
-        ); 
+        );
+    </script>
+
+    <!-- Kontrol ukuran TV (tersimpan per-TV) + suara panggilan -->
+    <div id="ctrlukuran" style="position:fixed;right:10px;bottom:10px;z-index:99999;opacity:0.85;">
+        <button type="button" onclick="ubahUkuran(-0.1)" style="font-size:16px;padding:4px 12px;cursor:pointer;">A&minus;</button>
+        <button type="button" onclick="ubahUkuran(0.1)" style="font-size:16px;padding:4px 12px;cursor:pointer;">A+</button>
+        <button type="button" onclick="resetUkuran()" style="font-size:13px;padding:4px 10px;cursor:pointer;">Reset</button>
+        <button type="button" onclick="aktifkanSuara()" style="font-size:13px;padding:4px 10px;cursor:pointer;">&#128266; Suara</button>
+    </div>
+    <script type="text/javascript">
+        var KEY_UKURAN='ukuranTVfarmasiRacikan';
+        function terapkanUkuran(z){ var m=document.querySelector('main'); if(m){ m.style.zoom=z; } }
+        function ubahUkuran(d){ var z=parseFloat(localStorage.getItem(KEY_UKURAN)||'1')+d; if(z<0.5)z=0.5; if(z>3)z=3; z=Math.round(z*10)/10; localStorage.setItem(KEY_UKURAN,z); terapkanUkuran(z); }
+        function resetUkuran(){ localStorage.setItem(KEY_UKURAN,'1'); terapkanUkuran(1); }
+        terapkanUkuran(parseFloat(localStorage.getItem(KEY_UKURAN)||'1'));
+
+        // Suara panggilan (TTS). Dipanggil dari fragmen judul via jQuery .load.
+        function bilang(teks){ try{ if(!('speechSynthesis' in window))return; var u=new SpeechSynthesisUtterance(teks); u.lang='id-ID'; u.rate=0.9; window.speechSynthesis.speak(u);}catch(e){} }
+        function aktifkanSuara(){ try{ if('speechSynthesis' in window){ var u=new SpeechSynthesisUtterance('Suara panggilan diaktifkan'); u.lang='id-ID'; window.speechSynthesis.speak(u);} }catch(e){} }
     </script>
 </body>
 </html>

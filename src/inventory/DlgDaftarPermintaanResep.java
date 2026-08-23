@@ -1,6 +1,7 @@
 package inventory;
 import bridging.ApotekBPJSInputResepObat;
 import bridging.BPJSDataSEP;
+import bridging.BPJSPeserta;
 import fungsi.BackgroundMusic;
 import fungsi.WarnaTable;
 import fungsi.batasInput;
@@ -406,6 +407,77 @@ public class DlgDaftarPermintaanResep extends javax.swing.JDialog {
         
         ChkAccor.setSelected(false);
         isMenu();
+        setupCekBPJS();
+    }
+
+    /**
+     * Inject tombol "Cek BPJS" ke toolbar bawah (panelisi1) tanpa
+     * menyentuh initComponents() supaya aman kalau .form NetBeans
+     * di-regenerate. Klik → ambil no_peserta pasien dari row terpilih
+     * di tab aktif, panggil BPJSPeserta.tampil().
+     */
+    private widget.Button BtnCekBPJS;
+    private void setupCekBPJS() {
+        BtnCekBPJS = new widget.Button();
+        BtnCekBPJS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png")));
+        BtnCekBPJS.setText("Cek BPJS");
+        BtnCekBPJS.setToolTipText("Cek status kepesertaan BPJS pasien terpilih");
+        BtnCekBPJS.setPreferredSize(new java.awt.Dimension(110, 30));
+        BtnCekBPJS.addActionListener(e -> cekBPJSPeserta());
+        // Sisipkan sebelum tombol Keluar (paling kanan)
+        panelisi1.add(BtnCekBPJS, panelisi1.getComponentCount() - 1);
+        panelisi1.revalidate();
+        panelisi1.repaint();
+    }
+
+    private void cekBPJSPeserta() {
+        String noRw = getNoRawatTerpilih();
+        if (noRw == null || noRw.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pilih baris data (resep/permintaan) dulu.");
+            return;
+        }
+        String noPeserta = Sequel.cariIsi(
+            "select ifnull(pasien.no_peserta,'') from reg_periksa "+
+            "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
+            "where reg_periksa.no_rawat=?", noRw);
+        if (noPeserta == null || noPeserta.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nomor kepesertaan BPJS kosong untuk pasien ini.");
+            return;
+        }
+        try {
+            setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+            BPJSPeserta form = new BPJSPeserta(null, true);
+            form.tampil(noPeserta);
+            form.setSize(640, internalFrame1.getHeight()-20);
+            form.setLocationRelativeTo(internalFrame1);
+            form.setVisible(true);
+        } finally {
+            setCursor(Cursor.getDefaultCursor());
+        }
+    }
+
+    /** Ambil no_rawat dari row terpilih di tab yang sedang aktif. */
+    private String getNoRawatTerpilih() {
+        // Kolom no_rawat di semua tabel = index 3
+        try {
+            int idxRawat = TabPilihRawat.getSelectedIndex();
+            if (idxRawat == 0) { // Rawat Jalan
+                int t = TabRawatJalan.getSelectedIndex();
+                javax.swing.JTable tb = (t==0) ? tbResepRalan : tbPermintaanResepPulang;
+                int r = tb.getSelectedRow();
+                if (r >= 0) return tb.getValueAt(r, 3).toString();
+            } else { // Rawat Inap
+                int t = TabRawatInap.getSelectedIndex();
+                javax.swing.JTable tb;
+                if      (t==0) tb = tbResepRanap;
+                else if (t==1) tb = tbPermintaanStok;
+                else           tb = tbPermintaanResepPulang;
+                int r = tb.getSelectedRow();
+                if (r >= 0) return tb.getValueAt(r, 3).toString();
+            }
+        } catch (Exception ignore) {}
+        // Fallback ke variabel NoRawat yang di-set oleh mouseClicked handler
+        return NoRawat;
     }
 
     /** This method is called from within the constructor to
@@ -1814,9 +1886,18 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     if(Status.equals("Sudah Terlayani")){
                         JOptionPane.showMessageDialog(rootPane,"Resep sudah tervalidasi ..!!");
                     }else {
-                        kamar=Sequel.cariIsi("select kd_bangsal from kamar inner join kamar_inap on kamar_inap.kd_kamar=kamar.kd_kamar "+
-                                "where kamar_inap.no_rawat=? order by kamar_inap.tgl_masuk desc limit 1 ",NoRawat); 
-                        bangsal=Sequel.cariIsi("select set_depo_ranap.kd_depo from set_depo_ranap where set_depo_ranap.kd_bangsal=?",kamar);
+                        // Cek dulu apakah resep dibuat pada hari operasi.
+                        // Kalau ya, cariBangsalOK() sudah return kd_depo (langsung dari
+                        // set_depo_ruang_ok berdasarkan ruang OK yang dipakai).
+                        String depoOK = cariBangsalOK(NoRawat, Valid.SetTgl(TglPeresepan));
+                        if(!depoOK.equals("")){
+                            kamar = depoOK;      // kamar dipakai sebagai fallback stok bangsal
+                            bangsal = depoOK;    // bangsal = kd_depo yang aktif
+                        } else {
+                            kamar=Sequel.cariIsi("select kd_bangsal from kamar inner join kamar_inap on kamar_inap.kd_kamar=kamar.kd_kamar "+
+                                    "where kamar_inap.no_rawat=? order by kamar_inap.tgl_masuk desc limit 1 ",NoRawat);
+                            bangsal=Sequel.cariIsi("select set_depo_ranap.kd_depo from set_depo_ranap where set_depo_ranap.kd_bangsal=?",kamar);
+                        }
                         if(bangsal.equals("")){
                             if(lokasidepoutama.getDepoDefault().equals("")){
                                 lokasidepoutama.SetLokasiDepoUtama();
@@ -1837,8 +1918,8 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         resep.isCek();
                         resep.tampilobat3(NoResep);
                         TeksKosong();
-                        resep.setVisible(true);                          
-                    }                    
+                        resep.setVisible(true);
+                    }
                 }
             }else if(TabRawatInap.getSelectedIndex()==1){
                 JOptionPane.showMessageDialog(null,"Maaf, silahkan buka Daftar Resep...!!!!");
@@ -4423,6 +4504,48 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
         KodeRuang="";
         baris=0;
     }
+
+    /**
+     * Cari kd_bangsal Kamar Operasi kalau tanggal resep sama dengan tanggal
+     * booking_operasi atau operasi untuk no_rawat tsb. Digunakan supaya saat
+     * validasi resep yang dibuat dari Jadwal Operasi, sumber stok obat
+     * diambil dari depo OK — bukan depo bangsal ranap pasien.
+     *
+     * Bangsal OK dideteksi dari nama bangsal yang mengandung 'operasi' atau
+     * 'kamar operasi' (case-insensitive). Kalau RS punya beberapa bangsal
+     * OK (OK 1, OK 2, dsb), ambil yang pertama.
+     *
+     * @return kd_bangsal OK, atau "" kalau bukan konteks operasi / tidak ada
+     *         bangsal OK di master.
+     */
+    /**
+     * Cari kd_bangsal (depo obat) yang di-setup untuk ruang operasi tempat
+     * pasien dijadwalkan pada tanggal resep. Return "" kalau bukan konteks
+     * operasi atau mapping depo OK belum di-setup.
+     *
+     * Flow:
+     *   1. Ambil kd_ruang_ok dari booking_operasi (no_rawat + tanggal)
+     *   2. Lookup depo-nya di set_depo_ruang_ok
+     *   3. Kalau tidak ketemu, fallback ke bangsal ranap pasien (return "")
+     */
+    private String cariBangsalOK(String noRawat, String tglPeresepan){
+        try{
+            String kdRuangOK = Sequel.cariIsi(
+                "select kd_ruang_ok from booking_operasi "+
+                "where no_rawat='"+noRawat+"' and tanggal='"+tglPeresepan+"' "+
+                "order by jam_mulai desc limit 1");
+            if(kdRuangOK == null || kdRuangOK.isEmpty()) return "";
+            String kdDepo = "";
+            try {
+                kdDepo = Sequel.cariIsi(
+                    "select kd_depo from set_depo_ruang_ok where kd_ruang_ok='"+kdRuangOK+"'");
+            } catch(Exception ignore) {} // tabel belum ada di DB lama
+            return kdDepo == null ? "" : kdDepo;
+        } catch(Exception e){
+            System.out.println("Notif cariBangsalOK : "+e);
+            return "";
+        }
+    }
     
     private void panggilform2() {
         kamar=KodeRuang;
@@ -4599,7 +4722,23 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             ps=koneksi.prepareStatement("select resep_obat.no_resep,resep_obat.tgl_peresepan,resep_obat.jam_peresepan,"+
                                     " resep_obat.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,resep_obat.kd_dokter,dokter.nm_dokter, "+
                                     " if(resep_obat.tgl_perawatan='0000-00-00','Belum Terlayani','Sudah Terlayani') as status,"+
-                                    " bangsal.nm_bangsal,kamar.kd_bangsal,penjab.png_jawab,"+
+                                    " concat(coalesce((select ruang_ok.nm_ruang_ok from booking_operasi "+
+                                    "                  inner join ruang_ok on booking_operasi.kd_ruang_ok=ruang_ok.kd_ruang_ok "+
+                                    "                  where booking_operasi.no_rawat=resep_obat.no_rawat and booking_operasi.tanggal=resep_obat.tgl_peresepan "+
+                                    "                  order by booking_operasi.jam_mulai desc limit 1), bangsal.nm_bangsal), "+
+                                    "        case "+
+                                    "          when exists(select 1 from jadwal_hemodialisa jh "+
+                                    "                      where jh.no_rawat=resep_obat.no_rawat "+
+                                    "                        and jh.tanggal=resep_obat.tgl_peresepan "+
+                                    "                        and jh.status='Selesai' "+
+                                    "                        and jh.jam_selesai is not null "+
+                                    "                        and jh.jam_selesai <= resep_obat.jam_peresepan) then '' "+
+                                    "          when exists(select 1 from jadwal_hemodialisa jh "+
+                                    "                      where jh.no_rawat=resep_obat.no_rawat "+
+                                    "                        and jh.tanggal=resep_obat.tgl_peresepan "+
+                                    "                        and jh.status<>'Batal') then ' [HD]' "+
+                                    "          else '' end) as nm_bangsal,"+
+                                    "kamar.kd_bangsal,penjab.png_jawab,"+
                                     " if(resep_obat.tgl_perawatan='0000-00-00','',resep_obat.tgl_perawatan) as tgl_perawatan,"+
                                     " if(resep_obat.jam='00:00:00','',resep_obat.jam) as jam from resep_obat  "+
                                     " inner join reg_periksa on resep_obat.no_rawat=reg_periksa.no_rawat "+
@@ -4619,7 +4758,23 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             ps=koneksi.prepareStatement("select resep_obat.no_resep,resep_obat.tgl_peresepan,resep_obat.jam_peresepan,"+
                                     " resep_obat.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,resep_obat.kd_dokter,dokter.nm_dokter, "+
                                     " if(resep_obat.tgl_perawatan='0000-00-00','Belum Terlayani','Sudah Terlayani') as status,"+
-                                    " bangsal.nm_bangsal,kamar.kd_bangsal,penjab.png_jawab,"+
+                                    " concat(coalesce((select ruang_ok.nm_ruang_ok from booking_operasi "+
+                                    "                  inner join ruang_ok on booking_operasi.kd_ruang_ok=ruang_ok.kd_ruang_ok "+
+                                    "                  where booking_operasi.no_rawat=resep_obat.no_rawat and booking_operasi.tanggal=resep_obat.tgl_peresepan "+
+                                    "                  order by booking_operasi.jam_mulai desc limit 1), bangsal.nm_bangsal), "+
+                                    "        case "+
+                                    "          when exists(select 1 from jadwal_hemodialisa jh "+
+                                    "                      where jh.no_rawat=resep_obat.no_rawat "+
+                                    "                        and jh.tanggal=resep_obat.tgl_peresepan "+
+                                    "                        and jh.status='Selesai' "+
+                                    "                        and jh.jam_selesai is not null "+
+                                    "                        and jh.jam_selesai <= resep_obat.jam_peresepan) then '' "+
+                                    "          when exists(select 1 from jadwal_hemodialisa jh "+
+                                    "                      where jh.no_rawat=resep_obat.no_rawat "+
+                                    "                        and jh.tanggal=resep_obat.tgl_peresepan "+
+                                    "                        and jh.status<>'Batal') then ' [HD]' "+
+                                    "          else '' end) as nm_bangsal,"+
+                                    "kamar.kd_bangsal,penjab.png_jawab,"+
                                     " if(resep_obat.tgl_perawatan='0000-00-00','',resep_obat.tgl_perawatan) as tgl_perawatan,"+
                                     " if(resep_obat.jam='00:00:00','',resep_obat.jam) as jam from resep_obat  "+
                                     " inner join reg_periksa on resep_obat.no_rawat=reg_periksa.no_rawat "+
@@ -4629,8 +4784,10 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                     " inner join kamar_inap on reg_periksa.no_rawat=kamar_inap.no_rawat "+
                                     " inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                                     " inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
-                                    " inner join set_depo_ranap on set_depo_ranap.kd_bangsal=bangsal.kd_bangsal "+
-                                    " where set_depo_ranap.kd_depo='"+DEPOAKTIFOBAT+"' and resep_obat.tgl_peresepan<>'0000-00-00' and kamar_inap.stts_pulang='-' and resep_obat.status='ranap' and resep_obat.tgl_peresepan between ? and ? "+
+                                    " left join set_depo_ranap on set_depo_ranap.kd_bangsal=bangsal.kd_bangsal "+
+                                    " left join booking_operasi bo_ok on bo_ok.no_rawat=resep_obat.no_rawat and bo_ok.tanggal=resep_obat.tgl_peresepan "+
+                                    " left join set_depo_ruang_ok sok_ok on sok_ok.kd_ruang_ok=bo_ok.kd_ruang_ok "+
+                                    " where (set_depo_ranap.kd_depo='"+DEPOAKTIFOBAT+"' or sok_ok.kd_depo='"+DEPOAKTIFOBAT+"') and resep_obat.tgl_peresepan<>'0000-00-00' and kamar_inap.stts_pulang='-' and resep_obat.status='ranap' and resep_obat.tgl_peresepan between ? and ? "+
                                     (semua?"":"and dokter.nm_dokter like ? and bangsal.nm_bangsal like ? and "+
                                     "(resep_obat.no_resep like ? or resep_obat.no_rawat like ? or "+
                                     "pasien.no_rkm_medis like ? or pasien.nm_pasien like ? or penjab.png_jawab like ?)")+
@@ -4691,7 +4848,23 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             ps=koneksi.prepareStatement("select resep_obat.no_resep,resep_obat.tgl_peresepan,resep_obat.jam_peresepan,"+
                                     " resep_obat.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,resep_obat.kd_dokter,dokter.nm_dokter, "+
                                     " if(resep_obat.tgl_perawatan='0000-00-00','Belum Terlayani','Sudah Terlayani') as status,"+
-                                    " bangsal.nm_bangsal,kamar.kd_bangsal,penjab.png_jawab,"+
+                                    " concat(coalesce((select ruang_ok.nm_ruang_ok from booking_operasi "+
+                                    "                  inner join ruang_ok on booking_operasi.kd_ruang_ok=ruang_ok.kd_ruang_ok "+
+                                    "                  where booking_operasi.no_rawat=resep_obat.no_rawat and booking_operasi.tanggal=resep_obat.tgl_peresepan "+
+                                    "                  order by booking_operasi.jam_mulai desc limit 1), bangsal.nm_bangsal), "+
+                                    "        case "+
+                                    "          when exists(select 1 from jadwal_hemodialisa jh "+
+                                    "                      where jh.no_rawat=resep_obat.no_rawat "+
+                                    "                        and jh.tanggal=resep_obat.tgl_peresepan "+
+                                    "                        and jh.status='Selesai' "+
+                                    "                        and jh.jam_selesai is not null "+
+                                    "                        and jh.jam_selesai <= resep_obat.jam_peresepan) then '' "+
+                                    "          when exists(select 1 from jadwal_hemodialisa jh "+
+                                    "                      where jh.no_rawat=resep_obat.no_rawat "+
+                                    "                        and jh.tanggal=resep_obat.tgl_peresepan "+
+                                    "                        and jh.status<>'Batal') then ' [HD]' "+
+                                    "          else '' end) as nm_bangsal,"+
+                                    "kamar.kd_bangsal,penjab.png_jawab,"+
                                     " if(resep_obat.tgl_perawatan='0000-00-00','',resep_obat.tgl_perawatan) as tgl_perawatan,"+
                                     " if(resep_obat.jam='00:00:00','',resep_obat.jam) as jam from resep_obat  "+
                                     " inner join ranap_gabung on ranap_gabung.no_rawat2=resep_obat.no_rawat "+
@@ -4712,7 +4885,23 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                             ps=koneksi.prepareStatement("select resep_obat.no_resep,resep_obat.tgl_peresepan,resep_obat.jam_peresepan,"+
                                     " resep_obat.no_rawat,pasien.no_rkm_medis,pasien.nm_pasien,resep_obat.kd_dokter,dokter.nm_dokter, "+
                                     " if(resep_obat.tgl_perawatan='0000-00-00','Belum Terlayani','Sudah Terlayani') as status,"+
-                                    " bangsal.nm_bangsal,kamar.kd_bangsal,penjab.png_jawab,"+
+                                    " concat(coalesce((select ruang_ok.nm_ruang_ok from booking_operasi "+
+                                    "                  inner join ruang_ok on booking_operasi.kd_ruang_ok=ruang_ok.kd_ruang_ok "+
+                                    "                  where booking_operasi.no_rawat=resep_obat.no_rawat and booking_operasi.tanggal=resep_obat.tgl_peresepan "+
+                                    "                  order by booking_operasi.jam_mulai desc limit 1), bangsal.nm_bangsal), "+
+                                    "        case "+
+                                    "          when exists(select 1 from jadwal_hemodialisa jh "+
+                                    "                      where jh.no_rawat=resep_obat.no_rawat "+
+                                    "                        and jh.tanggal=resep_obat.tgl_peresepan "+
+                                    "                        and jh.status='Selesai' "+
+                                    "                        and jh.jam_selesai is not null "+
+                                    "                        and jh.jam_selesai <= resep_obat.jam_peresepan) then '' "+
+                                    "          when exists(select 1 from jadwal_hemodialisa jh "+
+                                    "                      where jh.no_rawat=resep_obat.no_rawat "+
+                                    "                        and jh.tanggal=resep_obat.tgl_peresepan "+
+                                    "                        and jh.status<>'Batal') then ' [HD]' "+
+                                    "          else '' end) as nm_bangsal,"+
+                                    "kamar.kd_bangsal,penjab.png_jawab,"+
                                     " if(resep_obat.tgl_perawatan='0000-00-00','',resep_obat.tgl_perawatan) as tgl_perawatan,"+
                                     " if(resep_obat.jam='00:00:00','',resep_obat.jam) as jam from resep_obat  "+
                                     " inner join ranap_gabung on ranap_gabung.no_rawat2=resep_obat.no_rawat "+
@@ -4723,8 +4912,10 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                     " inner join kamar_inap on ranap_gabung.no_rawat=kamar_inap.no_rawat "+
                                     " inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                                     " inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
-                                    " inner join set_depo_ranap on set_depo_ranap.kd_bangsal=bangsal.kd_bangsal "+
-                                    " where set_depo_ranap.kd_depo='"+DEPOAKTIFOBAT+"' and resep_obat.tgl_peresepan<>'0000-00-00' and kamar_inap.stts_pulang='-' and resep_obat.status='ranap' and resep_obat.tgl_peresepan between ? and ? "+
+                                    " left join set_depo_ranap on set_depo_ranap.kd_bangsal=bangsal.kd_bangsal "+
+                                    " left join booking_operasi bo_ok on bo_ok.no_rawat=resep_obat.no_rawat and bo_ok.tanggal=resep_obat.tgl_peresepan "+
+                                    " left join set_depo_ruang_ok sok_ok on sok_ok.kd_ruang_ok=bo_ok.kd_ruang_ok "+
+                                    " where (set_depo_ranap.kd_depo='"+DEPOAKTIFOBAT+"' or sok_ok.kd_depo='"+DEPOAKTIFOBAT+"') and resep_obat.tgl_peresepan<>'0000-00-00' and kamar_inap.stts_pulang='-' and resep_obat.status='ranap' and resep_obat.tgl_peresepan between ? and ? "+
                                     (semua?"":"and dokter.nm_dokter like ? and bangsal.nm_bangsal like ? and "+
                                     "(resep_obat.no_resep like ? or resep_obat.no_rawat like ? or "+
                                     "pasien.no_rkm_medis like ? or pasien.nm_pasien like ? or penjab.png_jawab like ?)")+
@@ -4833,8 +5024,10 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         " inner join kamar_inap on reg_periksa.no_rawat=kamar_inap.no_rawat "+
                         " inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                         " inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
-                        " inner join set_depo_ranap on set_depo_ranap.kd_bangsal=bangsal.kd_bangsal "+
-                        " where set_depo_ranap.kd_depo='"+DEPOAKTIFOBAT+"' and resep_obat.tgl_peresepan<>'0000-00-00' and kamar_inap.stts_pulang='-' and resep_obat.status='ranap' and resep_obat.tgl_peresepan between ? and ? "+
+                        " left join set_depo_ranap on set_depo_ranap.kd_bangsal=bangsal.kd_bangsal "+
+                        " left join booking_operasi bo_ok on bo_ok.no_rawat=resep_obat.no_rawat and bo_ok.tanggal=resep_obat.tgl_peresepan "+
+                        " left join set_depo_ruang_ok sok_ok on sok_ok.kd_ruang_ok=bo_ok.kd_ruang_ok "+
+                        " where (set_depo_ranap.kd_depo='"+DEPOAKTIFOBAT+"' or sok_ok.kd_depo='"+DEPOAKTIFOBAT+"') and resep_obat.tgl_peresepan<>'0000-00-00' and kamar_inap.stts_pulang='-' and resep_obat.status='ranap' and resep_obat.tgl_peresepan between ? and ? "+
                         (semua?"":"and dokter.nm_dokter like ? and bangsal.nm_bangsal like ? and "+
                         "(resep_obat.no_resep like ? or resep_obat.no_rawat like ? or "+
                         "pasien.no_rkm_medis like ? or pasien.nm_pasien like ? or penjab.png_jawab like ?)")+
@@ -5066,8 +5259,10 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                         " inner join kamar_inap on ranap_gabung.no_rawat=kamar_inap.no_rawat "+
                         " inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                         " inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
-                        " inner join set_depo_ranap on set_depo_ranap.kd_bangsal=bangsal.kd_bangsal "+
-                        " where set_depo_ranap.kd_depo='"+DEPOAKTIFOBAT+"' and resep_obat.tgl_peresepan<>'0000-00-00' and kamar_inap.stts_pulang='-' and resep_obat.status='ranap' and resep_obat.tgl_peresepan between ? and ? "+
+                        " left join set_depo_ranap on set_depo_ranap.kd_bangsal=bangsal.kd_bangsal "+
+                        " left join booking_operasi bo_ok on bo_ok.no_rawat=resep_obat.no_rawat and bo_ok.tanggal=resep_obat.tgl_peresepan "+
+                        " left join set_depo_ruang_ok sok_ok on sok_ok.kd_ruang_ok=bo_ok.kd_ruang_ok "+
+                        " where (set_depo_ranap.kd_depo='"+DEPOAKTIFOBAT+"' or sok_ok.kd_depo='"+DEPOAKTIFOBAT+"') and resep_obat.tgl_peresepan<>'0000-00-00' and kamar_inap.stts_pulang='-' and resep_obat.status='ranap' and resep_obat.tgl_peresepan between ? and ? "+
                         (semua?"":"and dokter.nm_dokter like ? and bangsal.nm_bangsal like ? and "+
                         "(resep_obat.no_resep like ? or resep_obat.no_rawat like ? or "+
                         "pasien.no_rkm_medis like ? or pasien.nm_pasien like ? or penjab.png_jawab like ?)")+

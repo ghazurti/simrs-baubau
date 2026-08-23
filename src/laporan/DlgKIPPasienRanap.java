@@ -63,9 +63,36 @@ public class DlgKIPPasienRanap extends javax.swing.JDialog {
         Document doc = kit.createDefaultDocument();
         LoadHTML.setDocument(doc);
         LoadHTML1.setDocument(doc);
-        
+
         kdpenyakit.setDocument(new batasInput((byte)30).getKata(kdpenyakit));
-        nmpenyakit.setDocument(new batasInput((byte)30).getKata(nmpenyakit)); 
+        nmpenyakit.setDocument(new batasInput((byte)30).getKata(nmpenyakit));
+
+        // Form editor menaruh editorpane langsung ke tab tanpa scroll -> bungkus dengan ScrollPane
+        widget.ScrollPane Scroll = new widget.ScrollPane();
+        internalFrame2.remove(LoadHTML);
+        Scroll.setViewportView(LoadHTML);
+        internalFrame2.add(Scroll, java.awt.BorderLayout.CENTER);
+
+        widget.ScrollPane Scroll1 = new widget.ScrollPane();
+        internalFrame3.remove(LoadHTML1);
+        Scroll1.setViewportView(LoadHTML1);
+        internalFrame3.add(Scroll1, java.awt.BorderLayout.CENTER);
+
+        aktifkanScrollRoda(LoadHTML,Scroll);
+        aktifkanScrollRoda(LoadHTML1,Scroll1);
+    }
+
+    /** Pastikan roda mouse (mouse wheel) menggeser scrollpane meskipun kursor
+     * berada di atas editorpane HTML. */
+    private void aktifkanScrollRoda(final javax.swing.JEditorPane pane, final javax.swing.JScrollPane sp){
+        pane.addMouseWheelListener(new java.awt.event.MouseWheelListener(){
+            @Override
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent e){
+                javax.swing.JScrollBar bar = e.isShiftDown()?sp.getHorizontalScrollBar():sp.getVerticalScrollBar();
+                bar.setValue(bar.getValue() + e.getUnitsToScroll()*bar.getUnitIncrement());
+                e.consume();
+            }
+        });
     }
     private int i=0;
 
@@ -478,7 +505,7 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
                     "select reg_periksa.no_rkm_medis,pasien.nm_pasien,pasien.no_ktp,reg_periksa.tgl_registrasi,reg_periksa.jam_reg,reg_periksa.no_rawat,reg_periksa.umurdaftar,reg_periksa.sttsumur,pasien.jk "+
                     "from reg_periksa inner join diagnosa_pasien on reg_periksa.no_rawat=diagnosa_pasien.no_rawat "+
                     "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
-                    "where reg_periksa.tgl_registrasi between ? and ? and reg_periksa.status_lanjut='Ranap' and diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1' and "+
+                    "where reg_periksa.tgl_registrasi between ? and ? and reg_periksa.status_lanjut='Ranap' and diagnosa_pasien.status='Ranap' and "+
                     "diagnosa_pasien.kd_penyakit=? order by reg_periksa.tgl_registrasi");
             try {
                 ps.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+""));
@@ -582,9 +609,10 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
                     }
                     
                     diagnosa="";
-                    ps2=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit from diagnosa_pasien where diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas>1 and diagnosa_pasien.no_rawat=?");    
+                    ps2=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit from diagnosa_pasien where diagnosa_pasien.status='Ranap' and diagnosa_pasien.kd_penyakit<>? and diagnosa_pasien.no_rawat=? order by diagnosa_pasien.prioritas");
                     try {
-                        ps2.setString(1,rs.getString("no_rawat"));
+                        ps2.setString(1,kdpenyakit.getText());
+                        ps2.setString(2,rs.getString("no_rawat"));
                         rs2=ps2.executeQuery();
                         while(rs2.next()){
                             if(diagnosa.equals("")){
@@ -711,12 +739,16 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
                 htmlContent.append("<tr class='isi'><td valign='middle' align='right' colspan='7'>Total :</td><td valign='middle' align='center'>").append(hr0s6l).append("</td><td valign='middle' align='center'>").append(hr0s6p).append("</td><td valign='middle' align='center'>").append(hr7s28l).append("</td><td valign='middle' align='center'>").append(hr7s28p).append("</td><td valign='middle' align='center'>").append(hr28s1thl).append("</td><td valign='middle' align='center'>").append(hr28s1thp).append("</td><td valign='middle' align='center'>").append(th1s4l).append("</td><td valign='middle' align='center'>").append(th1s4p).append("</td><td valign='middle' align='center'>").append(th5s14l).append("</td><td valign='middle' align='center'>").append(th5s14p).append("</td><td valign='middle' align='center'>").append(th15s24l).append("</td><td valign='middle' align='center'>").append(th15s24p).append("</td><td valign='middle' align='center'>").append(th25s44l).append("</td><td valign='middle' align='center'>").append(th25s44p).append("</td><td valign='middle' align='center'>").append(th45s64l).append("</td><td valign='middle' align='center'>").append(th45s64p).append("</td><td valign='middle' align='center'>").append(lbth65l).append("</td><td valign='middle' align='center'>").append(lbth65p).append("</td><td valign='middle' align='center'></td><td valign='middle' align='center'>").append(pulang).append("</td><td valign='middle' align='center'>").append(aps).append("</td><td valign='middle' align='center'>").append(lari).append("</td><td valign='middle' align='center'>").append(rujuk).append("</td><td valign='middle' align='center'>").append(matilb48).append("</td><td valign='middle' align='center'>").append(matikr48).append("</td></tr>");
             }
             
-            LoadHTML.setText(
+            String hasil=
                     "<html>"+
                       "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0' class='tbl_form'>"+
                        htmlContent.toString()+
                       "</table>"+
-                    "</html>");
+                    "</html>";
+            SwingUtilities.invokeLater(() -> {
+                LoadHTML.setText(hasil);
+                LoadHTML.setCaretPosition(0);
+            });
             htmlContent=null;
         } catch (Exception e) {
             System.out.println("Notif 5 : "+e);
@@ -733,7 +765,7 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
                     "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                     "inner join kamar_inap on reg_periksa.no_rawat=kamar_inap.no_rawat "+
                     "where kamar_inap.tgl_keluar between ? and ? and "+
-                    "kamar_inap.stts_pulang<>'Pindah Kamar' and reg_periksa.status_lanjut='Ranap' and diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas='1' and "+
+                    "kamar_inap.stts_pulang<>'Pindah Kamar' and reg_periksa.status_lanjut='Ranap' and diagnosa_pasien.status='Ranap' and "+
                     "diagnosa_pasien.kd_penyakit=? order by reg_periksa.tgl_registrasi");
             try {
                 ps.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+""));
@@ -838,9 +870,10 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
                     
                     diagnosa="";
                     
-                    ps2=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit from diagnosa_pasien where diagnosa_pasien.status='Ranap' and diagnosa_pasien.prioritas>1 and diagnosa_pasien.no_rawat=?");    
+                    ps2=koneksi.prepareStatement("select diagnosa_pasien.kd_penyakit from diagnosa_pasien where diagnosa_pasien.status='Ranap' and diagnosa_pasien.kd_penyakit<>? and diagnosa_pasien.no_rawat=? order by diagnosa_pasien.prioritas");
                     try {
-                        ps2.setString(1,rs.getString("no_rawat"));
+                        ps2.setString(1,kdpenyakit.getText());
+                        ps2.setString(2,rs.getString("no_rawat"));
                         rs2=ps2.executeQuery();
                         while(rs2.next()){
                             if(diagnosa.equals("")){
@@ -968,12 +1001,16 @@ private void btnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_b
                 htmlContent.append("<tr class='isi'><td valign='middle' align='right' colspan='7'>Total :</td><td valign='middle' align='center'>").append(hr0s6l).append("</td><td valign='middle' align='center'>").append(hr0s6p).append("</td><td valign='middle' align='center'>").append(hr7s28l).append("</td><td valign='middle' align='center'>").append(hr7s28p).append("</td><td valign='middle' align='center'>").append(hr28s1thl).append("</td><td valign='middle' align='center'>").append(hr28s1thp).append("</td><td valign='middle' align='center'>").append(th1s4l).append("</td><td valign='middle' align='center'>").append(th1s4p).append("</td><td valign='middle' align='center'>").append(th5s14l).append("</td><td valign='middle' align='center'>").append(th5s14p).append("</td><td valign='middle' align='center'>").append(th15s24l).append("</td><td valign='middle' align='center'>").append(th15s24p).append("</td><td valign='middle' align='center'>").append(th25s44l).append("</td><td valign='middle' align='center'>").append(th25s44p).append("</td><td valign='middle' align='center'>").append(th45s64l).append("</td><td valign='middle' align='center'>").append(th45s64p).append("</td><td valign='middle' align='center'>").append(lbth65l).append("</td><td valign='middle' align='center'>").append(lbth65p).append("</td><td valign='middle' align='center'></td><td valign='middle' align='center'>").append(pulang).append("</td><td valign='middle' align='center'>").append(aps).append("</td><td valign='middle' align='center'>").append(lari).append("</td><td valign='middle' align='center'>").append(rujuk).append("</td><td valign='middle' align='center'>").append(matilb48).append("</td><td valign='middle' align='center'>").append(matikr48).append("</td></tr>");
             }
             
-            LoadHTML.setText(
+            String hasil=
                     "<html>"+
                       "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0' class='tbl_form'>"+
                        htmlContent.toString()+
                       "</table>"+
-                    "</html>");
+                    "</html>";
+            SwingUtilities.invokeLater(() -> {
+                LoadHTML.setText(hasil);
+                LoadHTML.setCaretPosition(0);
+            });
             htmlContent=null;
         } catch (Exception e) {
             System.out.println("Notif 5 : "+e);

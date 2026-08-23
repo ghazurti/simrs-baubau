@@ -27,3 +27,12 @@ CREATE TABLE IF NOT EXISTS bridging_alatrs_log (
 
 -- Kalau sebelumnya sudah terlanjur membuat tabel mapping manual, boleh dihapus:
 -- DROP TABLE IF EXISTS bridging_alatrs_pemeriksaan;
+
+-- ------------------------------------------------------------
+-- 1 order bisa berisi >1 pemeriksaan (mis. Foto Toraks + CT Sinus),
+-- masing-masing punya worklist & accession sendiri di RIS. Supaya
+-- semuanya tersimpan (dipisah koma), lebarkan 2 kolom ini.
+-- Aman dijalankan berkali-kali; data lama tetap utuh.
+-- ------------------------------------------------------------
+ALTER TABLE bridging_alatrs_log MODIFY accession_number   VARCHAR(255) DEFAULT '';
+ALTER TABLE bridging_alatrs_log MODIFY worklist_id_alatrs  VARCHAR(255) DEFAULT '';

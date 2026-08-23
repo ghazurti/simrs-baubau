@@ -9590,14 +9590,14 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         TNoRw.setText(norwt);
         isRawat();
         KdDok2.setText(KdDok.getText());
-        TDokter2.setText(TDokter.getText()); 
+        TDokter2.setText(TDokter.getText());
         DTPCari1.setDate(awal);
         DTPCari2.setDate(akhir);
         TCari.setText(norwt);
         ChkInput.setSelected(true);
         isForm();
         ChkInput1.setSelected(true);
-        isForm2(); 
+        isForm2();
         TabRawatMouseClicked(null);
     }
     

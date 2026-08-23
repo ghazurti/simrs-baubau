@@ -62,6 +62,13 @@ public final class RMTimeOutSebelumInsisi extends javax.swing.JDialog {
     private volatile boolean ceksukses = false;
     private String finger="",finger2="";
     private StringBuilder htmlContent;
+    // Field tambahan sesuai formulir RM 22.OK-03 (di luar blok GEN NetBeans)
+    private widget.ComboBox KonfirmasiTim;
+    private widget.TextBox PosisiPasien;
+    private widget.TextBox AlatKhusus;
+    private widget.TextBox PerhatianAnestesi;
+    private widget.ComboBox Berdoa;
+    private widget.TextBox JamDimulai;
     /** Creates new form DlgRujuk
      * @param parent
      * @param modal */
@@ -70,6 +77,7 @@ public final class RMTimeOutSebelumInsisi extends javax.swing.JDialog {
         initComponents();
         this.setLocation(8,1);
         setSize(628,674);
+        tambahFieldRM22OK03();
 
         tabMode=new DefaultTableModel(null,new Object[]{
             "No.Rawat","No.RM","Nama Pasien","Tgl.Lahir","J.K.","Tanggal","SN/CN","Tindakan","Kode Dokter Bedah","Nama Dokter Bedah",
@@ -188,6 +196,52 @@ public final class RMTimeOutSebelumInsisi extends javax.swing.JDialog {
         LoadHTML.setDocument(doc);
     }
 
+
+    // Menambahkan field formulir RM 22.OK-03 secara program (aman dari regenerasi NetBeans)
+    private widget.ComboBox comboRM(String... isi){
+        widget.ComboBox c=new widget.ComboBox();
+        c.setModel(new javax.swing.DefaultComboBoxModel(isi));
+        return c;
+    }
+    private void labelRM(String teks, int x, int y, int w){
+        widget.Label l=new widget.Label();
+        l.setText(teks);
+        l.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        FormInput.add(l);
+        l.setBounds(x, y, w, 23);
+    }
+    private void tambahFieldRM22OK03(){
+        FormInput.setPreferredSize(new java.awt.Dimension(810, 510));
+        labelRM("Seluruh tim mengkonfirmasi nama & peran :", 0, 410, 250);
+        KonfirmasiTim=comboRM("Ya","Tidak");
+        FormInput.add(KonfirmasiTim); KonfirmasiTim.setBounds(254, 410, 100, 23);
+        labelRM("Berdoa dipimpin dokter operator :", 380, 410, 190);
+        Berdoa=comboRM("Ya","Tidak");
+        FormInput.add(Berdoa); Berdoa.setBounds(574, 410, 100, 23);
+        labelRM("Posisi pasien selama operasi :", 0, 440, 250);
+        PosisiPasien=new widget.TextBox();
+        FormInput.add(PosisiPasien); PosisiPasien.setBounds(254, 440, 300, 23);
+        labelRM("Alat khusus yang digunakan :", 0, 470, 250);
+        AlatKhusus=new widget.TextBox();
+        FormInput.add(AlatKhusus); AlatKhusus.setBounds(254, 470, 300, 23);
+        labelRM("Perhatian khusus dokter anestesi :", 0, 500, 250);
+        PerhatianAnestesi=new widget.TextBox();
+        FormInput.add(PerhatianAnestesi); PerhatianAnestesi.setBounds(254, 500, 300, 23);
+        labelRM("Jam prosedur dimulai (hh:mm) :", 574, 470, 160);
+        JamDimulai=new widget.TextBox();
+        FormInput.add(JamDimulai); JamDimulai.setBounds(574, 500, 100, 23);
+        PosisiPasien.setDocument(new batasInput((int)100).getKata(PosisiPasien));
+        AlatKhusus.setDocument(new batasInput((int)100).getKata(AlatKhusus));
+        PerhatianAnestesi.setDocument(new batasInput((int)100).getKata(PerhatianAnestesi));
+        JamDimulai.setDocument(new batasInput((int)10).getKata(JamDimulai));
+        javax.swing.JMenuItem mnSSC=new javax.swing.JMenuItem();
+        mnSSC.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png")));
+        mnSSC.setText("Formulir Surgical Safety Checklist (RM 22.OK-03)");
+        mnSSC.setPreferredSize(new java.awt.Dimension(320, 26));
+        mnSSC.addActionListener(evt -> CetakSurgicalSafetyChecklist.cetak(TNoRw.getText()));
+        jPopupMenu1.add(mnSSC);
+        FormInput.revalidate();
+    }
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -1202,14 +1256,15 @@ public final class RMTimeOutSebelumInsisi extends javax.swing.JDialog {
         }else if(SNCN.getText().trim().equals("")){
             Valid.textKosong(SNCN,"SN/CN");
         }else{
-            if(Sequel.menyimpantf("timeout_sebelum_insisi","?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?","Data",24,new String[]{
+            if(Sequel.menyimpantf("timeout_sebelum_insisi","?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?","Data",30,new String[]{
                 TNoRw.getText(),Valid.SetTgl(Tanggal.getSelectedItem()+"")+" "+Tanggal.getSelectedItem().toString().substring(11,19),SNCN.getText(),Tindakan.getText(),
                 KdDokter.getText(),KdDokter2.getText(),VerbalIdentitas.getSelectedItem().toString(),VerbalTindakan.getSelectedItem().toString(),
                 VerbalArea.getSelectedItem().toString(),AreaOperasi.getSelectedItem().toString(),PerkiraanLama.getText(),PenayanganRadiologi.getSelectedItem().toString(),
                 PenayanganCTScan.getSelectedItem().toString(),PenayanganMRI.getSelectedItem().toString(),PemberianAntibiotik.getSelectedItem().toString(),
                 NamaAntibiotikDIberikan.getText(),JamPemberianAntibiotik.getText(),AntisipisasiKehialnganDarah.getText(),AdaHalKhusus.getSelectedItem().toString(),
                 HalKhususDiperhatikan.getText(),Valid.SetTgl(TanggalSeteril.getSelectedItem()+""),PetunjukSterilisasi.getSelectedItem().toString(),
-                VerifikasiOperatif.getSelectedItem().toString(),KdPetugas.getText()
+                VerifikasiOperatif.getSelectedItem().toString(),KdPetugas.getText(),
+                KonfirmasiTim.getSelectedItem().toString(),PosisiPasien.getText(),AlatKhusus.getText(),PerhatianAnestesi.getText(),Berdoa.getSelectedItem().toString(),JamDimulai.getText()
             })==true){
                 runBackground(() ->tampil());
                 emptTeks();
@@ -2042,8 +2097,16 @@ public final class RMTimeOutSebelumInsisi extends javax.swing.JDialog {
         Tanggal.setDate(new Date());
         PetunjukSterilisasi.setSelectedIndex(0);
         VerifikasiOperatif.setSelectedIndex(0);
+        if(KonfirmasiTim!=null){
+            KonfirmasiTim.setSelectedIndex(0);
+            Berdoa.setSelectedIndex(0);
+            PosisiPasien.setText("");
+            AlatKhusus.setText("");
+            PerhatianAnestesi.setText("");
+            JamDimulai.setText("");
+        }
         SNCN.requestFocus();
-    } 
+    }
 
     private void getData() {
         if(tbObat.getSelectedRow()!= -1){
@@ -2077,8 +2140,33 @@ public final class RMTimeOutSebelumInsisi extends javax.swing.JDialog {
             NmPetugas.setText(tbObat.getValueAt(tbObat.getSelectedRow(),30).toString());
             Valid.SetTgl2(Tanggal,tbObat.getValueAt(tbObat.getSelectedRow(),5).toString());
             Valid.SetTgl(TanggalSeteril,tbObat.getValueAt(tbObat.getSelectedRow(),26).toString());
+            ambilFieldRM22OK03(tbObat.getValueAt(tbObat.getSelectedRow(),0).toString(),tbObat.getValueAt(tbObat.getSelectedRow(),5).toString());
         }
     }
+
+    // Memuat field RM 22.OK-03 langsung dari tabel (di luar tabMode agar aman)
+    private void ambilFieldRM22OK03(String norawat,String tanggal){
+        try{
+            koneksi=koneksiDB.condb();
+            PreparedStatement psd=koneksi.prepareStatement("select konfirmasi_tim,posisi_pasien,alat_khusus,perhatian_anestesi,berdoa,jam_dimulai from timeout_sebelum_insisi where no_rawat=? and tanggal=?");
+            psd.setString(1,norawat);
+            psd.setString(2,tanggal);
+            ResultSet rsd=psd.executeQuery();
+            if(rsd.next()){
+                KonfirmasiTim.setSelectedItem(rsd.getString("konfirmasi_tim"));
+                PosisiPasien.setText(rsd.getString("posisi_pasien"));
+                AlatKhusus.setText(rsd.getString("alat_khusus"));
+                PerhatianAnestesi.setText(rsd.getString("perhatian_anestesi"));
+                Berdoa.setSelectedItem(rsd.getString("berdoa"));
+                JamDimulai.setText(rsd.getString("jam_dimulai"));
+            }
+            rsd.close();
+            psd.close();
+        }catch(Exception e){
+            System.out.println("Notifikasi ambil RM22OK03 : "+e);
+        }
+    }
+
     private void isRawat() {
          Sequel.cariIsi("select reg_periksa.no_rkm_medis from reg_periksa where reg_periksa.no_rawat='"+TNoRw.getText()+"' ",TNoRM);
     }

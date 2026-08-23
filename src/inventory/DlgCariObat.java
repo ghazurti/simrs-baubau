@@ -3492,8 +3492,27 @@ private void JeniskelasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
         return BtnSimpan;
     }
     
-    public void isCek(){   
-        if(!DEPOAKTIFOBAT.equals("")){
+    public void isCek(){
+        // Prioritas #0: cek konteks resep dari Jadwal Operasi.
+        // Kalau no_rawat + tgl match booking_operasi + mapping ruang OK ada,
+        // pakai depo OK — override bahkan DEPOAKTIFOBAT (depo login user).
+        String depoOK = "";
+        try {
+            String noRw = TNoRw.getText().trim();
+            String tglBeri = Valid.SetTgl(DTPTgl.getSelectedItem()+"");
+            if(!noRw.isEmpty() && !tglBeri.isEmpty()){
+                depoOK = Sequel.cariIsi(
+                    "select sok.kd_depo from booking_operasi bo "+
+                    "inner join set_depo_ruang_ok sok on bo.kd_ruang_ok=sok.kd_ruang_ok "+
+                    "where bo.no_rawat='"+noRw+"' and bo.tanggal='"+tglBeri+"' limit 1");
+                if(depoOK == null) depoOK = "";
+            }
+        } catch(Exception ignore) {} // tabel set_depo_ruang_ok belum ada di DB lama
+
+        if(!depoOK.equals("")){
+            kdgudang.setText(depoOK);
+            nmgudang.setText(Sequel.CariBangsal(depoOK));
+        }else if(!DEPOAKTIFOBAT.equals("")){
             kdgudang.setText(DEPOAKTIFOBAT);
             nmgudang.setText(Sequel.CariBangsal(DEPOAKTIFOBAT));
         }else{
@@ -3503,7 +3522,7 @@ private void JeniskelasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                     lokasidepoutama.SetLokasiDepoUtama();
                 }
                 bangsal=lokasidepoutama.getDepoDefault();
-            }     
+            }
             kdgudang.setText(bangsal);
             nmgudang.setText(Sequel.CariBangsal(kdgudang.getText()));
         }

@@ -54,7 +54,7 @@ public final class DlgDkkSurveilansRanap extends javax.swing.JDialog {
     private volatile boolean ceksukses = false;
     private final java.util.List<String> kodeBangsal = new java.util.ArrayList<>();
     private int i=0,hr0s7=0,hr8s28=0,kr1th=0,th1s4=0,th5s9=0,th10s14=0,th15s19=0,th20s44=0,th45s54=0,th55s59=0,
-                th60s69=0,th70plus=0,laki=0,per=0,jml=0,ttl=0,jmltotal,meninggal;
+                th60s69=0,th70plus=0,laki=0,per=0,jml=0,ttl=0,jmltotal,meninggalL=0,meninggalP=0;
     /** Creates new form DlgLhtBiaya
      * @param parent
      * @param modal */
@@ -67,7 +67,7 @@ public final class DlgDkkSurveilansRanap extends javax.swing.JDialog {
         
         tabMode=new DefaultTableModel(null,new String[]{
             "No.","Kode ICD 10","Jenis Penyakit","0-7 Hr","8-28 Hr","< 1","1-4","5-9","10-14","15-19",
-            "20-44","45-54","55-59","60-69","70+","Laki","Perp","Jumlah","Ttl.Kunjungan","Meninggal"}){
+            "20-44","45-54","55-59","60-69","70+","Laki","Perp","Jumlah","Ttl.Kunjungan","Meninggal L","Meninggal P"}){
             @Override public boolean isCellEditable(int rowIndex, int colIndex){return false;}
         };
         tbBangsal.setModel(tabMode);
@@ -75,7 +75,7 @@ public final class DlgDkkSurveilansRanap extends javax.swing.JDialog {
         tbBangsal.setPreferredScrollableViewportSize(new Dimension(500,500));
         tbBangsal.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 20; i++) {
+        for (i = 0; i < 21; i++) {
             TableColumn column = tbBangsal.getColumnModel().getColumn(i);
             if(i==0){
                 column.setPreferredWidth(30);
@@ -85,8 +85,8 @@ public final class DlgDkkSurveilansRanap extends javax.swing.JDialog {
                 column.setPreferredWidth(150);
             }else if(i==18){
                 column.setPreferredWidth(100);
-            }else if(i==19){
-                column.setPreferredWidth(100);
+            }else if(i==19||i==20){
+                column.setPreferredWidth(90);
             }else{
                 column.setPreferredWidth(45);
             }
@@ -95,7 +95,7 @@ public final class DlgDkkSurveilansRanap extends javax.swing.JDialog {
         
         tabMode2=new DefaultTableModel(null,new String[]{
             "No.","Kode ICD 10","Jenis Penyakit","0-7 Hr","8-28 Hr","< 1","1-4","5-9","10-14","15-19",
-            "20-44","45-54","55-59","60-69","70+","Laki","Perp","Jumlah","Ttl.Kunjungan","Meninggal"}){
+            "20-44","45-54","55-59","60-69","70+","Laki","Perp","Jumlah","Ttl.Kunjungan","Meninggal L","Meninggal P"}){
             @Override public boolean isCellEditable(int rowIndex, int colIndex){return false;}
         };
         tbBangsal2.setModel(tabMode2);
@@ -103,7 +103,7 @@ public final class DlgDkkSurveilansRanap extends javax.swing.JDialog {
         tbBangsal2.setPreferredScrollableViewportSize(new Dimension(500,500));
         tbBangsal2.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 20; i++) {
+        for (i = 0; i < 21; i++) {
             TableColumn column = tbBangsal2.getColumnModel().getColumn(i);
             if(i==0){
                 column.setPreferredWidth(30);
@@ -113,8 +113,8 @@ public final class DlgDkkSurveilansRanap extends javax.swing.JDialog {
                 column.setPreferredWidth(150);
             }else if(i==18){
                 column.setPreferredWidth(100);
-            }else if(i==19){
-                column.setPreferredWidth(100);
+            }else if(i==19||i==20){
+                column.setPreferredWidth(90);
             }else{
                 column.setPreferredWidth(45);
             }
@@ -410,7 +410,8 @@ public final class DlgDkkSurveilansRanap extends javax.swing.JDialog {
                                         tabMode.getValueAt(r,16).toString().replaceAll("'","`")+"','"+
                                         tabMode.getValueAt(r,17).toString().replaceAll("'","`")+"','"+
                                         tabMode.getValueAt(r,18).toString().replaceAll("'","`")+"','"+
-                                        tabMode.getValueAt(r,19).toString().replaceAll("'","`")+"','','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Rekap Nota Pembayaran");
+                                        tabMode.getValueAt(r,19).toString().replaceAll("'","`")+"','"+
+                                        tabMode.getValueAt(r,20).toString().replaceAll("'","`")+"','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Rekap Nota Pembayaran");
                     }
 
 
@@ -452,7 +453,8 @@ public final class DlgDkkSurveilansRanap extends javax.swing.JDialog {
                                         tabMode2.getValueAt(r,16).toString().replaceAll("'","`")+"','"+
                                         tabMode2.getValueAt(r,17).toString().replaceAll("'","`")+"','"+
                                         tabMode2.getValueAt(r,18).toString().replaceAll("'","`")+"','"+
-                                        tabMode2.getValueAt(r,19).toString().replaceAll("'","`")+"','','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Rekap Nota Pembayaran");
+                                        tabMode2.getValueAt(r,19).toString().replaceAll("'","`")+"','"+
+                                        tabMode2.getValueAt(r,20).toString().replaceAll("'","`")+"','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Rekap Nota Pembayaran");
                     }
 
 
@@ -516,7 +518,8 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         if(tbBangsal.getSelectedRow()>-1){
             DefaultPieDataset dpd = new DefaultPieDataset();
             dpd.setValue("Hidup ("+tbBangsal.getValueAt(tbBangsal.getSelectedRow(),18).toString()+")",Integer.parseInt(tbBangsal.getValueAt(tbBangsal.getSelectedRow(),18).toString()));
-            dpd.setValue("Meninggal ("+tbBangsal.getValueAt(tbBangsal.getSelectedRow(),19).toString()+")",Integer.parseInt(tbBangsal.getValueAt(tbBangsal.getSelectedRow(),19).toString()));
+            int mnggl=Integer.parseInt(tbBangsal.getValueAt(tbBangsal.getSelectedRow(),19).toString())+Integer.parseInt(tbBangsal.getValueAt(tbBangsal.getSelectedRow(),20).toString());
+            dpd.setValue("Meninggal ("+mnggl+")",mnggl);
             JFreeChart freeChart = ChartFactory.createPieChart("Grafik Pie Perbandingan Pasien Hidup & Mati Periode "+Valid.SetTgl(Tgl1.getSelectedItem()+"")+" S.D. "+Valid.SetTgl(Tgl2.getSelectedItem()+""),dpd,true,true, false); //String title,PieDatasheet datasheet,boolean legends,boolean tooltips,boolean url 
             ChartFrame cf = new ChartFrame("Grafik Pasien Hidup & Mati",freeChart);
             cf.setSize(internalFrame1.getWidth()-20, internalFrame1.getHeight()-20);
@@ -642,7 +645,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                 i=1;
                 jmltotal=0;
                 while(rs.next()){
-                    hr0s7=0;hr8s28=0;kr1th=0;th1s4=0;th5s9=0;th10s14=0;th15s19=0;th20s44=0;th45s54=0;th55s59=0;th60s69=0;th70plus=0;laki=0;per=0;jml=0;ttl=0;meninggal=0;
+                    hr0s7=0;hr8s28=0;kr1th=0;th1s4=0;th5s9=0;th10s14=0;th15s19=0;th20s44=0;th45s54=0;th55s59=0;th60s69=0;th70plus=0;laki=0;per=0;jml=0;ttl=0;meninggalL=0;meninggalP=0;
                     
                     koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement("select concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.jk,pasien.no_rkm_medis from pasien "+
@@ -656,7 +659,16 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         ps2.setString(3,rs.getString("kd_penyakit"));
                         rs2=ps2.executeQuery();
                         while(rs2.next()){       
-                            meninggal=meninggal+Sequel.cariInteger("select ifnull(count(pasien_mati.no_rkm_medis),0) from pasien_mati where pasien_mati.no_rkm_medis=?",rs2.getString("no_rkm_medis"));
+                            if(Sequel.cariInteger("select ifnull(count(pasien_mati.no_rkm_medis),0) from pasien_mati where pasien_mati.no_rkm_medis=?",rs2.getString("no_rkm_medis"))>0){
+                                switch (rs2.getString("jk")) {
+                                    case "L":
+                                        meninggalL=meninggalL+1;
+                                        break;
+                                    case "P":
+                                        meninggalP=meninggalP+1;
+                                        break;
+                                }
+                            }
                             ttl=ttl+1;
                             jmltotal=jmltotal+1;
                             if(Sequel.cariInteger("select count(diagnosa_pasien.no_rawat) from reg_periksa inner join diagnosa_pasien "+
@@ -715,7 +727,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     }
                     jml=per+laki;
                     tabMode.addRow(new Object[]{
-                       i,rs.getString("kd_penyakit"),rs.getString("nm_penyakit"),hr0s7,hr8s28,kr1th,th1s4,th5s9,th10s14,th15s19,th20s44,th45s54,th55s59,th60s69,th70plus,laki,per,jml,ttl,meninggal
+                       i,rs.getString("kd_penyakit"),rs.getString("nm_penyakit"),hr0s7,hr8s28,kr1th,th1s4,th5s9,th10s14,th15s19,th20s44,th45s54,th55s59,th60s69,th70plus,laki,per,jml,ttl,meninggalL,meninggalP
                     });
                     i++;
                 }
@@ -757,7 +769,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                 i=1;
                 jmltotal=0;
                 while(rs.next()){
-                    hr0s7=0;hr8s28=0;kr1th=0;th1s4=0;th5s9=0;th10s14=0;th15s19=0;th20s44=0;th45s54=0;th55s59=0;th60s69=0;th70plus=0;laki=0;per=0;jml=0;ttl=0;meninggal=0;
+                    hr0s7=0;hr8s28=0;kr1th=0;th1s4=0;th5s9=0;th10s14=0;th15s19=0;th20s44=0;th45s54=0;th55s59=0;th60s69=0;th70plus=0;laki=0;per=0;jml=0;ttl=0;meninggalL=0;meninggalP=0;
                     
                     koneksi=koneksiDB.condb();
                     ps4=koneksi.prepareStatement("select concat(reg_periksa.umurdaftar,' ',reg_periksa.sttsumur) as umur,pasien.jk,pasien.no_rkm_medis from pasien "+
@@ -772,7 +784,16 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         ps4.setString(3,rs.getString("kd_penyakit"));
                         rs2=ps4.executeQuery();
                         while(rs2.next()){       
-                            meninggal=meninggal+Sequel.cariInteger("select ifnull(count(pasien_mati.no_rkm_medis),0) from pasien_mati where pasien_mati.no_rkm_medis=?",rs2.getString("no_rkm_medis"));
+                            if(Sequel.cariInteger("select ifnull(count(pasien_mati.no_rkm_medis),0) from pasien_mati where pasien_mati.no_rkm_medis=?",rs2.getString("no_rkm_medis"))>0){
+                                switch (rs2.getString("jk")) {
+                                    case "L":
+                                        meninggalL=meninggalL+1;
+                                        break;
+                                    case "P":
+                                        meninggalP=meninggalP+1;
+                                        break;
+                                }
+                            }
                             ttl=ttl+1;
                             jmltotal=jmltotal+1;
                             if(Sequel.cariInteger("select count(diagnosa_pasien.no_rawat) from reg_periksa "+
@@ -832,7 +853,7 @@ private void BtnCari1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                     }
                     jml=per+laki;
                     tabMode2.addRow(new Object[]{
-                       i,rs.getString("kd_penyakit"),rs.getString("nm_penyakit"),hr0s7,hr8s28,kr1th,th1s4,th5s9,th10s14,th15s19,th20s44,th45s54,th55s59,th60s69,th70plus,laki,per,jml,ttl,meninggal
+                       i,rs.getString("kd_penyakit"),rs.getString("nm_penyakit"),hr0s7,hr8s28,kr1th,th1s4,th5s9,th10s14,th15s19,th20s44,th45s54,th55s59,th60s69,th70plus,laki,per,jml,ttl,meninggalL,meninggalP
                     });
                     i++;
                 }
