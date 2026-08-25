@@ -2421,6 +2421,21 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
 
             ApiAlatRS api=new ApiAlatRS();
             api.Login();
+            // Ambil diagnosa klinis + informasi tambahan (per order) untuk ikut
+            // dikirim ke RIS pada tiap worklist.
+            String diagKlinis="", infoTambahan="";
+            try(java.sql.Connection kon=koneksiDB.condb();
+                java.sql.PreparedStatement psq=kon.prepareStatement(
+                    "select ifnull(diagnosa_klinis,'') as dk, ifnull(informasi_tambahan,'') as it "+
+                    "from permintaan_radiologi where noorder=?")){
+                psq.setString(1, noorder);
+                try(java.sql.ResultSet rsq=psq.executeQuery()){
+                    if(rsq.next()){ diagKlinis=rsq.getString("dk"); infoTambahan=rsq.getString("it"); }
+                }
+            }catch(Exception e){
+                System.out.println("Ambil diagnosa klinis gagal: "+e);
+            }
+            api.setInfoKlinis(diagKlinis, infoTambahan);
             StringBuilder ringkasan=new StringBuilder();
             int ok=0, gagal=0;
             // Kumpulkan SEMUA worklist/accession (bisa >1 pemeriksaan per order)

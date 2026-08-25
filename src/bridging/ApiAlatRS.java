@@ -38,6 +38,11 @@ public class ApiAlatRS {
     private String baseUrl;
     private String token;
 
+    // Info klinis per-order (diagnosa klinis & informasi tambahan) yang ikut
+    // dikirim di payload worklist. Di-set sekali sebelum loop kirim.
+    private String diagnosaKlinisWorklist = "";
+    private String informasiTambahanWorklist = "";
+
     private SSLContext sslContext;
     private SSLSocketFactory sslFactory;
     private Scheme scheme;
@@ -444,6 +449,16 @@ public class ApiAlatRS {
      * @param tanggal           yyyy-MM-dd
      * @param jam               HHmmss
      */
+    /**
+     * Set info klinis (diagnosa klinis & informasi tambahan) yang ikut dikirim
+     * pada payload worklist berikutnya. Cukup dipanggil sekali per order,
+     * sebelum loop kirim pemeriksaan.
+     */
+    public void setInfoKlinis(String diagnosaKlinis, String informasiTambahan) {
+        this.diagnosaKlinisWorklist = diagnosaKlinis == null ? "" : diagnosaKlinis;
+        this.informasiTambahanWorklist = informasiTambahan == null ? "" : informasiTambahan;
+    }
+
     public JsonNode RegisterWorklistWithRm(
             String rmId, String namaPasien, String nik, String jenisKelamin, String tanggalLahir,
             String patientIHS, String tenagaMedisId, String pemeriksaanId,
@@ -479,6 +494,15 @@ public class ApiAlatRS {
             // Encounter baru, tapi pakai yang sama dengan kunjungan Khanza.
             if (encounterId != null && !encounterId.isEmpty()) {
                 sb.append(",\"encounter_id\":\"").append(escape(encounterId)).append("\"");
+            }
+            // Info klinis: diagnosa klinis + informasi tambahan dari permintaan
+            // radiologi Khanza. Berguna untuk radiolog & jadi bahan Condition/
+            // ClinicalImpression di SATUSEHAT. Konfirmasi nama field ke vendor RIS.
+            if (diagnosaKlinisWorklist != null && !diagnosaKlinisWorklist.isEmpty()) {
+                sb.append(",\"diagnosa_klinis\":\"").append(escape(diagnosaKlinisWorklist)).append("\"");
+            }
+            if (informasiTambahanWorklist != null && !informasiTambahanWorklist.isEmpty()) {
+                sb.append(",\"informasi_tambahan\":\"").append(escape(informasiTambahanWorklist)).append("\"");
             }
             sb.append("}");
             requestJson = sb.toString();
