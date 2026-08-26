@@ -1921,6 +1921,87 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         }, "alat_rs-ambil-hasil-cari").start();
     }//GEN-LAST:event_BtnAmbilRISActionPerformed
 
+    // Cache hasil auto-tarik per pemeriksaan (per sesi). Sekaligus jadi penanda
+    // "sudah pernah dicoba" supaya RIS tidak dipanggil berulang tiap pilih baris:
+    //   - berisi teks  → tampilkan ulang tanpa panggil RIS
+    //   - berisi ""    → sudah dicoba, RIS belum ada hasil → jangan panggil lagi
+    private final java.util.Map<String,String> autoHasilCache = new java.util.HashMap<>();
+
+    /**
+     * Auto-tarik hasil bacaan dari RIS untuk DITAMPILKAN saja (tidak menyimpan),
+     * dipanggil dari panggilPhoto() HANYA saat hasil_radiologi Khanza kosong.
+     * Diam-diam (tanpa dialog), jalan di background. Kalau hasil sudah tersimpan
+     * di Khanza, method ini tidak dipanggil — jadi hasil tersimpan tidak tertimpa.
+     * Untuk tarik ulang paksa, pakai tombol "Ambil Hasil di RIS".
+     */
+    private void autoTarikHasilRIS(final String noRawat, final String tglPeriksa, final String jam){
+        final String key = noRawat+"|"+tglPeriksa+"|"+jam;
+        // Sudah pernah dicoba sesi ini → pakai cache, jangan panggil RIS lagi.
+        if(autoHasilCache.containsKey(key)){
+            final String cached = autoHasilCache.get(key);
+            if(cached!=null && !cached.isEmpty()){
+                javax.swing.SwingUtilities.invokeLater(() -> tampilHasilAuto(noRawat, cached));
+            }
+            return;
+        }
+        new Thread(() -> {
+            try{
+                // noorder terbaru untuk no_rawat
+                String order="";
+                try(java.sql.Connection kon=koneksiDB.condb();
+                    java.sql.PreparedStatement psq=kon.prepareStatement(
+                        "select noorder from permintaan_radiologi where no_rawat=? order by tgl_permintaan desc, jam_permintaan desc limit 1")){
+                    psq.setString(1, noRawat);
+                    try(java.sql.ResultSet rsq=psq.executeQuery()){ if(rsq.next()) order=rsq.getString("noorder"); }
+                }
+                if(order==null || order.isEmpty()){ autoHasilCache.put(key,""); return; }
+                // worklist (bisa dipisah koma) dari log bridging
+                String worklistId="";
+                try(java.sql.Connection kon=koneksiDB.condb();
+                    java.sql.PreparedStatement psq=kon.prepareStatement(
+                        "select ifnull(worklist_id_alatrs,'') as wid from bridging_alatrs_log where noorder=?")){
+                    psq.setString(1, order);
+                    try(java.sql.ResultSet rsq=psq.executeQuery()){ if(rsq.next()) worklistId=rsq.getString("wid"); }
+                }
+                if(worklistId==null || worklistId.isEmpty()){ autoHasilCache.put(key,""); return; }
+
+                ApiAlatRS api=new ApiAlatRS();
+                api.Login();
+                final ApiAlatRS.HasilBacaan hb=api.AmbilHasilBacaanGabungan(worklistId);
+                if(!hb.ok || !hb.ada){
+                    autoHasilCache.put(key,"");   // tandai sudah dicoba (tak spam RIS)
+                    // Notif SEKALI: sudah dikirim ke RIS tapi hasil belum diinput dokter.
+                    if(hb.ok && !hb.ada){
+                        final String noRawatF=noRawat;
+                        javax.swing.SwingUtilities.invokeLater(() -> {
+                            if(tbDokter.getSelectedRow()==-1) return;
+                            if(!NoRawatDicari.getText().equals(noRawatF)) return;
+                            JOptionPane.showMessageDialog(this,
+                                "Hasil bacaan belum diinput dokter/radiolog di RIS.\n"+
+                                "Klik \"Ambil Hasil di RIS\" untuk cek ulang setelah dokter mengisi.",
+                                "Hasil Belum Tersedia", JOptionPane.INFORMATION_MESSAGE);
+                        });
+                    }
+                    return;
+                }
+                final String teks=hb.temuan.trim();
+                autoHasilCache.put(key, teks);
+                javax.swing.SwingUtilities.invokeLater(() -> tampilHasilAuto(noRawat, teks));
+            }catch(Exception ex){
+                System.out.println("autoTarikHasilRIS ERR: "+ex);
+            }
+        }, "alat_rs-auto-hasil").start();
+    }
+
+    /** Tampilkan hasil auto ke field, hanya kalau masih baris yang sama & field kosong. */
+    private void tampilHasilAuto(String noRawat, String teks){
+        if(tbDokter.getSelectedRow()==-1) return;
+        if(!NoRawatDicari.getText().equals(noRawat)) return;
+        if(!HasilPeriksa.getText().trim().isEmpty()) return; // jangan timpa yang sudah ada
+        HasilPeriksa.setText(teks);
+        HasilPeriksa.setCaretPosition(0);
+    }
+
     /**
      * Buka DICOM viewer milik RIS alat_rs di browser, langsung ke study
      * pasien yang dipilih (by accession number dari bridging_alatrs_log).
@@ -2856,10 +2937,18 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                             ps5.setString(2,tbDokter.getValueAt(tbDokter.getSelectedRow(),3).toString());
                             ps5.setString(3,tbDokter.getValueAt(tbDokter.getSelectedRow(),4).toString());
                             rs5=ps5.executeQuery();
-                            if(rs5.next()){  
+                            if(rs5.next()){
                                 HasilPeriksa.setText(rs5.getString("hasil"));
                             }else{
                                 HasilPeriksa.setText("");
+                                // Hasil di Khanza masih kosong → tarik otomatis dari RIS
+                                // untuk ditampilkan. Kalau sudah ada hasil (blok if di
+                                // atas), TIDAK menarik — biar tidak menimpa yang tersimpan.
+                                autoTarikHasilRIS(
+                                    tbDokter.getValueAt(tbDokter.getSelectedRow(),0).toString(),
+                                    tbDokter.getValueAt(tbDokter.getSelectedRow(),3).toString(),
+                                    tbDokter.getValueAt(tbDokter.getSelectedRow(),4).toString()
+                                );
                             }
                         } catch (Exception e) {
                             System.out.println("Notif ps5 : "+e);
