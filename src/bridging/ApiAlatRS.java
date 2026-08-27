@@ -667,6 +667,18 @@ public class ApiAlatRS {
             return hb;
         }
         hb.responseRaw = resp.toString();
+        // Deteksi error dari RIS (mis. HTTP 500) supaya TIDAK disalahartikan
+        // sebagai "hasil belum ada". Body error: {"status":500,"message":"..."}.
+        int statusResp = resp.path("status").asInt(0);
+        JsonNode dataNode = resp.path("data");
+        if (statusResp >= 400 || (dataNode.isMissingNode() && resp.has("message") && !resp.has("hasil_temuan") && !resp.has("temuan") && !resp.has("kesimpulan"))) {
+            hb.ok = false;
+            String m = resp.path("message").asText();
+            hb.pesan = "RIS error saat ambil hasil"
+                    + (statusResp > 0 ? " (HTTP " + statusResp + ")" : "")
+                    + (m == null || m.isEmpty() ? "." : ": " + m);
+            return hb;
+        }
         // ambil node worklist: data (object) / data[0] / root
         JsonNode w = resp.path("data");
         if (w.isArray()) {
