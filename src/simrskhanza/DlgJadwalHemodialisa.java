@@ -37,8 +37,7 @@ public final class DlgJadwalHemodialisa extends javax.swing.JDialog {
     private ResultSet rs;
 
     private widget.InternalFrame internalFrame1;
-    private widget.panelisi panelTop, panelToolbar;
-    private widget.PanelBiasa panelInput;
+    private widget.panelisi panelTop, panelToolbar, panelInput, panelBawah;
     private widget.ScrollPane Scroll;
     private widget.Table tbData;
     private widget.Tanggal tglCari1, tglCari2, tglJadwal;
@@ -93,8 +92,9 @@ public final class DlgJadwalHemodialisa extends javax.swing.JDialog {
     private void initUI() {
         internalFrame1 = new widget.InternalFrame();
         panelTop      = new widget.panelisi();
-        panelInput    = new widget.PanelBiasa();
+        panelInput    = new widget.panelisi();
         panelToolbar  = new widget.panelisi();
+        panelBawah    = new widget.panelisi();
         Scroll        = new widget.ScrollPane();
         tbData        = new widget.Table();
 
@@ -135,21 +135,20 @@ public final class DlgJadwalHemodialisa extends javax.swing.JDialog {
         BtnCari.addActionListener(e -> tampil());
         BtnAll = new widget.Button();
         BtnAll.setText("Semua");
-        BtnAll.setPreferredSize(new Dimension(75,23));
+        BtnAll.setPreferredSize(new Dimension(90,23));
         BtnAll.addActionListener(e -> { TCari.setText(""); tampil(); });
         panelTop.add(lblCari); panelTop.add(tglCari1); panelTop.add(lblSd); panelTop.add(tglCari2);
         panelTop.add(lblKey); panelTop.add(TCari); panelTop.add(BtnCari); panelTop.add(BtnAll);
         internalFrame1.add(panelTop, java.awt.BorderLayout.PAGE_START);
 
-        // ---- CENTER split ----
+        // ---- CENTER: tabel data ----
         Scroll.setViewportView(tbData);
+        internalFrame1.add(Scroll, java.awt.BorderLayout.CENTER);
+
+        // ---- SOUTH: form input (tinggi tetap) ----
         panelInput.setLayout(null);
-        panelInput.setPreferredSize(new Dimension(100, 130));
+        panelInput.setPreferredSize(new Dimension(100, 104));
         buildFormFields(panelInput);
-        javax.swing.JSplitPane split = new javax.swing.JSplitPane(javax.swing.JSplitPane.VERTICAL_SPLIT, Scroll, panelInput);
-        split.setResizeWeight(0.6);
-        split.setDividerLocation(280);
-        internalFrame1.add(split, java.awt.BorderLayout.CENTER);
 
         // ---- TOOLBAR ----
         panelToolbar.setPreferredSize(new Dimension(100, 40));
@@ -188,20 +187,29 @@ public final class DlgJadwalHemodialisa extends javax.swing.JDialog {
         panelToolbar.add(BtnSimpan); panelToolbar.add(BtnBaru);
         panelToolbar.add(BtnEdit); panelToolbar.add(BtnHapus);
         panelToolbar.add(BtnKeluar);
-        internalFrame1.add(panelToolbar, java.awt.BorderLayout.PAGE_END);
+
+        panelBawah.setLayout(new java.awt.BorderLayout());
+        panelBawah.add(panelInput, java.awt.BorderLayout.CENTER);
+        panelBawah.add(panelToolbar, java.awt.BorderLayout.PAGE_END);
+        internalFrame1.add(panelBawah, java.awt.BorderLayout.PAGE_END);
 
         getContentPane().add(internalFrame1, java.awt.BorderLayout.CENTER);
         pack();
     }
 
-    private void buildFormFields(widget.PanelBiasa p) {
-        int y = 8, h = 22, dy = 26;
+    private void buildFormFields(widget.panelisi p) {
+        final int h = 23;
+        final int y1 = 12, y2 = 41, y3 = 70;      // 3 baris
+        final int lx1 = 0,   fx1 = 95;            // kolom kiri  (label / field)
+        final int lx2 = 285, fx2 = 385;           // kolom tengah
+        final int lx3 = 650, fx3 = 725;           // kolom kanan
 
-        addLabel(p, "No.Rawat :", 0, y, 100);
-        TNoRw = new widget.TextBox(); TNoRw.setBounds(110, y, 160, h); p.add(TNoRw);
+        // ---- Baris 1 ----
+        addLabel(p, "No.Rawat :", lx1, y1, 90);
+        TNoRw = new widget.TextBox(); TNoRw.setBounds(fx1, y1, 150, h); p.add(TNoRw);
         BtnCariRawat = new widget.Button();
         BtnCariRawat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/Search-16x16.png")));
-        BtnCariRawat.setBounds(272, y, 24, h);
+        BtnCariRawat.setBounds(fx1 + 152, y1, 24, h);
         BtnCariRawat.addActionListener(e -> pilihNoRawat());
         p.add(BtnCariRawat);
         TNoRw.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -210,45 +218,44 @@ public final class DlgJadwalHemodialisa extends javax.swing.JDialog {
             }
         });
 
-        addLabel(p, "Nama Pasien :", 300, y, 100);
-        TPasien = new widget.TextBox(); TPasien.setBounds(405, y, 260, h);
+        addLabel(p, "Nama Pasien :", lx2, y1, 95);
+        TPasien = new widget.TextBox(); TPasien.setBounds(fx2, y1, 250, h);
         TPasien.setEditable(false); p.add(TPasien);
 
-        addLabel(p, "Tanggal :", 680, y, 80);
-        tglJadwal = new widget.Tanggal(); tglJadwal.setBounds(765, y, 130, h);
+        addLabel(p, "Tanggal :", lx3, y1, 70);
+        tglJadwal = new widget.Tanggal(); tglJadwal.setBounds(fx3, y1, 130, h);
         tglJadwal.setDisplayFormat("dd-MM-yyyy"); p.add(tglJadwal);
 
-        y += dy;
-        addLabel(p, "Jam Mulai :", 0, y, 100);
-        cmbJam = new widget.ComboBox(); cmbJam.setBounds(110, y, 60, h); p.add(cmbJam);
+        // ---- Baris 2 ----
+        addLabel(p, "Jam Mulai :", lx1, y2, 90);
+        cmbJam = new widget.ComboBox(); cmbJam.setBounds(fx1, y2, 55, h); p.add(cmbJam);
         widget.Label lblJP = new widget.Label(); lblJP.setText(":");
-        lblJP.setBounds(172, y, 10, h); p.add(lblJP);
-        cmbMenit = new widget.ComboBox(); cmbMenit.setBounds(185, y, 60, h); p.add(cmbMenit);
+        lblJP.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblJP.setBounds(fx1 + 55, y2, 12, h); p.add(lblJP);
+        cmbMenit = new widget.ComboBox(); cmbMenit.setBounds(fx1 + 69, y2, 55, h); p.add(cmbMenit);
 
-        addLabel(p, "Status :", 300, y, 100);
-        cmbStatus = new widget.ComboBox(); cmbStatus.setBounds(405, y, 160, h); p.add(cmbStatus);
+        addLabel(p, "Status :", lx2, y2, 95);
+        cmbStatus = new widget.ComboBox(); cmbStatus.setBounds(fx2, y2, 150, h); p.add(cmbStatus);
 
-        addLabel(p, "Dokter :", 680, y, 80);
-        TKdDokter = new widget.TextBox(); TKdDokter.setBounds(765, y, 60, h); p.add(TKdDokter);
-        TNmDokter = new widget.TextBox(); TNmDokter.setBounds(827, y, 130, h);
+        addLabel(p, "Dokter :", lx3, y2, 70);
+        TKdDokter = new widget.TextBox(); TKdDokter.setBounds(fx3, y2, 55, h); p.add(TKdDokter);
+        TNmDokter = new widget.TextBox(); TNmDokter.setBounds(fx3 + 57, y2, 130, h);
         TNmDokter.setEditable(false); p.add(TNmDokter);
         BtnCariDokter = new widget.Button();
         BtnCariDokter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/Search-16x16.png")));
-        BtnCariDokter.setBounds(959, y, 24, h);
+        BtnCariDokter.setBounds(fx3 + 189, y2, 24, h);
         BtnCariDokter.addActionListener(e -> pilihDokter());
         p.add(BtnCariDokter);
 
-        y += dy;
-        addLabel(p, "Keterangan :", 0, y, 100);
-        TKeterangan = new widget.TextBox(); TKeterangan.setBounds(110, y, 873, h); p.add(TKeterangan);
-
-        p.setPreferredSize(new Dimension(1000, y + 40));
+        // ---- Baris 3 ----
+        addLabel(p, "Keterangan :", lx1, y3, 90);
+        TKeterangan = new widget.TextBox(); TKeterangan.setBounds(fx1, y3, 838, h); p.add(TKeterangan);
     }
 
-    private void addLabel(widget.PanelBiasa p, String txt, int x, int y, int w) {
+    private void addLabel(widget.panelisi p, String txt, int x, int y, int w) {
         widget.Label l = new widget.Label();
         l.setText(txt);
-        l.setBounds(x, y, w, 22);
+        l.setBounds(x, y, w, 23);
         l.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         p.add(l);
     }
