@@ -186,7 +186,11 @@ public final class DlgPeresepanDokter extends javax.swing.JDialog {
         };
         warnaResep.kolom=1;
         tbResep.setDefaultRenderer(Object.class,warnaResep);
-        
+        // Perbesar tampilan tabel pemilihan obat agar mudah dibaca dokter (permintaan dokter)
+        tbResep.setRowHeight(30);
+        tbResep.setFont(new java.awt.Font("Tahoma", 0, 14));
+        tbResep.getTableHeader().setFont(new java.awt.Font("Tahoma", 1, 13));
+
         tabModeResepRacikan=new DefaultTableModel(null,new Object[]{
                 "No","Nama Racikan","Kode Racik","Metode Racik","Jml.Racik",
                 "Aturan Pakai","Keterangan"
@@ -234,7 +238,11 @@ public final class DlgPeresepanDokter extends javax.swing.JDialog {
 
         warna2.kolom=4;
         tbObatResepRacikan.setDefaultRenderer(Object.class,warna2);
-        
+        // Perbesar tampilan tabel pemilihan obat racikan agar mudah dibaca dokter
+        tbObatResepRacikan.setRowHeight(30);
+        tbObatResepRacikan.setFont(new java.awt.Font("Tahoma", 0, 14));
+        tbObatResepRacikan.getTableHeader().setFont(new java.awt.Font("Tahoma", 1, 13));
+
         tabModeDetailResepRacikan=new DefaultTableModel(null,new Object[]{
                 "No","Kode Barang","Nama Barang","Satuan","Harga(Rp)","H.Beli",
                 "Jenis Obat","Stok","Kps","P1","/","P2","Kandungan","Jml","I.F.",

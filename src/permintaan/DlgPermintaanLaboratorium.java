@@ -121,6 +121,10 @@ public final class DlgPermintaanLaboratorium extends javax.swing.JDialog {
         }
         
         tbDetailPK.setDefaultRenderer(Object.class, new WarnaTable());
+        // Perbesar tampilan tabel lab agar mudah dibaca dokter
+        tbDetailPK.setRowHeight(30);
+        tbDetailPK.setFont(new java.awt.Font("Tahoma", 0, 14));
+        tbDetailPK.getTableHeader().setFont(new java.awt.Font("Tahoma", 1, 13));
         
         Object[] row2={"P","Kode Periksa","Nama Pemeriksaan"};
         tabMode2=new DefaultTableModel(null,row2){
@@ -155,6 +159,9 @@ public final class DlgPermintaanLaboratorium extends javax.swing.JDialog {
             }
         }
         tbTarifPK.setDefaultRenderer(Object.class, new WarnaTable());
+        tbTarifPK.setRowHeight(30);
+        tbTarifPK.setFont(new java.awt.Font("Tahoma", 0, 14));
+        tbTarifPK.getTableHeader().setFont(new java.awt.Font("Tahoma", 1, 13));
         
         Object[] row3={"P","Kode Periksa","Nama Pemeriksaan"};
         tabMode3=new DefaultTableModel(null,row3){
@@ -189,6 +196,9 @@ public final class DlgPermintaanLaboratorium extends javax.swing.JDialog {
             }
         }
         tbTarifPA.setDefaultRenderer(Object.class, new WarnaTable());
+        tbTarifPA.setRowHeight(30);
+        tbTarifPA.setFont(new java.awt.Font("Tahoma", 0, 14));
+        tbTarifPA.getTableHeader().setFont(new java.awt.Font("Tahoma", 1, 13));
         
         tabModeDetailMB=new DefaultTableModel(null,new Object[]{"P","Pemeriksaan","Satuan","Nilai Rujukan","id_template","Kode Jenis"}){
              @Override public boolean isCellEditable(int rowIndex, int colIndex){
@@ -233,6 +243,9 @@ public final class DlgPermintaanLaboratorium extends javax.swing.JDialog {
             }
         }
         tbDetailMB.setDefaultRenderer(Object.class, new WarnaTable());
+        tbDetailMB.setRowHeight(30);
+        tbDetailMB.setFont(new java.awt.Font("Tahoma", 0, 14));
+        tbDetailMB.getTableHeader().setFont(new java.awt.Font("Tahoma", 1, 13));
         
         tabModeMB=new DefaultTableModel(null,new Object[]{"P","Kode Periksa","Nama Pemeriksaan"}){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){
@@ -266,6 +279,9 @@ public final class DlgPermintaanLaboratorium extends javax.swing.JDialog {
             }
         }
         tbTarifMB.setDefaultRenderer(Object.class, new WarnaTable());
+        tbTarifMB.setRowHeight(30);
+        tbTarifMB.setFont(new java.awt.Font("Tahoma", 0, 14));
+        tbTarifMB.getTableHeader().setFont(new java.awt.Font("Tahoma", 1, 13));
 
         TNoRw.setDocument(new batasInput((byte)17).getKata(TNoRw));
         KodePerujuk.setDocument(new batasInput((byte)20).getKata(KodePerujuk));
@@ -708,14 +724,14 @@ public final class DlgPermintaanLaboratorium extends javax.swing.JDialog {
 
         panelGlass11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         panelGlass11.setName("panelGlass11"); // NOI18N
-        panelGlass11.setPreferredSize(new java.awt.Dimension(44, 157));
+        panelGlass11.setPreferredSize(new java.awt.Dimension(44, 267));
         panelGlass11.setLayout(null);
 
         jLabel6.setText("Detail Pemeriksaan :");
         jLabel6.setName("jLabel6"); // NOI18N
         jLabel6.setPreferredSize(new java.awt.Dimension(110, 23));
         panelGlass11.add(jLabel6);
-        jLabel6.setBounds(4, 130, 110, 23);
+        jLabel6.setBounds(4, 240, 110, 23);
 
         TCari.setName("TCari"); // NOI18N
         TCari.setPreferredSize(new java.awt.Dimension(625, 23));
@@ -725,7 +741,7 @@ public final class DlgPermintaanLaboratorium extends javax.swing.JDialog {
             }
         });
         panelGlass11.add(TCari);
-        TCari.setBounds(117, 130, 623, 23);
+        TCari.setBounds(117, 240, 623, 23);
 
         BtnCari2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/accept.png"))); // NOI18N
         BtnCari2.setMnemonic('4');
@@ -743,7 +759,7 @@ public final class DlgPermintaanLaboratorium extends javax.swing.JDialog {
             }
         });
         panelGlass11.add(BtnCari2);
-        BtnCari2.setBounds(744, 130, 28, 23);
+        BtnCari2.setBounds(744, 240, 28, 23);
 
         jLabel11.setText("Pemeriksaan :");
         jLabel11.setName("jLabel11"); // NOI18N
@@ -772,7 +788,7 @@ public final class DlgPermintaanLaboratorium extends javax.swing.JDialog {
         Scroll1.setViewportView(tbTarifPK);
 
         panelGlass11.add(Scroll1);
-        Scroll1.setBounds(85, 35, 687, 90);
+        Scroll1.setBounds(85, 35, 687, 200);
 
         BtnCari1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/accept.png"))); // NOI18N
         BtnCari1.setMnemonic('1');
@@ -1024,14 +1040,14 @@ public final class DlgPermintaanLaboratorium extends javax.swing.JDialog {
 
         panelGlass13.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
         panelGlass13.setName("panelGlass13"); // NOI18N
-        panelGlass13.setPreferredSize(new java.awt.Dimension(44, 157));
+        panelGlass13.setPreferredSize(new java.awt.Dimension(44, 267));
         panelGlass13.setLayout(null);
 
         jLabel22.setText("Detail Pemeriksaan :");
         jLabel22.setName("jLabel22"); // NOI18N
         jLabel22.setPreferredSize(new java.awt.Dimension(110, 23));
         panelGlass13.add(jLabel22);
-        jLabel22.setBounds(4, 130, 110, 23);
+        jLabel22.setBounds(4, 240, 110, 23);
 
         TCariMB.setName("TCariMB"); // NOI18N
         TCariMB.setPreferredSize(new java.awt.Dimension(625, 23));
@@ -1041,7 +1057,7 @@ public final class DlgPermintaanLaboratorium extends javax.swing.JDialog {
             }
         });
         panelGlass13.add(TCariMB);
-        TCariMB.setBounds(117, 130, 623, 23);
+        TCariMB.setBounds(117, 240, 623, 23);
 
         BtnCariMB.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/accept.png"))); // NOI18N
         BtnCariMB.setMnemonic('4');
@@ -1059,7 +1075,7 @@ public final class DlgPermintaanLaboratorium extends javax.swing.JDialog {
             }
         });
         panelGlass13.add(BtnCariMB);
-        BtnCariMB.setBounds(744, 130, 28, 23);
+        BtnCariMB.setBounds(744, 240, 28, 23);
 
         jLabel23.setText("Pemeriksaan :");
         jLabel23.setName("jLabel23"); // NOI18N
@@ -1088,7 +1104,7 @@ public final class DlgPermintaanLaboratorium extends javax.swing.JDialog {
         Scroll4.setViewportView(tbTarifMB);
 
         panelGlass13.add(Scroll4);
-        Scroll4.setBounds(85, 35, 687, 90);
+        Scroll4.setBounds(85, 35, 687, 200);
 
         BtnCari5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/accept.png"))); // NOI18N
         BtnCari5.setMnemonic('1');

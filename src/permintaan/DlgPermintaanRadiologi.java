@@ -116,6 +116,10 @@ public final class DlgPermintaanRadiologi extends javax.swing.JDialog {
             }
         }
         tbPemeriksaan.setDefaultRenderer(Object.class, new WarnaTable());
+        // Perbesar tampilan tabel pemilihan pemeriksaan agar mudah dibaca dokter
+        tbPemeriksaan.setRowHeight(30);
+        tbPemeriksaan.setFont(new java.awt.Font("Tahoma", 0, 14));
+        tbPemeriksaan.getTableHeader().setFont(new java.awt.Font("Tahoma", 1, 13));
 
         TNoRw.setDocument(new batasInput((byte)17).getKata(TNoRw));
         KodePerujuk.setDocument(new batasInput((byte)20).getKata(KodePerujuk));
