@@ -2455,7 +2455,6 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
     private void isiOtomatis(String norwt) {
         StringBuilder keluhan=new StringBuilder(),jalannya=new StringBuilder(),penunjang=new StringBuilder(),
                 lab=new StringBuilder(),obat=new StringBuilder();
-        int jmllab=0;
         // Jalannya penyakit = riwayat kunjungan (sama dengan "5 Riwayat Terakhir" di Riwayat Perawatan)
         riwayatKunjungan(norwt,jalannya);
         // Keluhan utama dari SOAP; utamakan isian dokter, isian perawat hanya jika dokter belum mengisi
@@ -2492,28 +2491,35 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
             System.out.println("Notif Auto Radiologi : "+e);
         }
 
+        // Hasil lab = isi Riwayat Pemeriksaan Laboratorium (RMCariHasilLaborat) kunjungan ini, ditandai H/L bila di luar nilai normal
         try (PreparedStatement ps2=koneksi.prepareStatement(
-                "select template_laboratorium.Pemeriksaan,detail_periksa_lab.nilai,template_laboratorium.satuan,detail_periksa_lab.nilai_rujukan "+
+                "select date_format(detail_periksa_lab.tgl_periksa,'%d-%m-%Y') as tgl,left(detail_periksa_lab.jam,5) as jam,"+
+                "template_laboratorium.Pemeriksaan,detail_periksa_lab.nilai,template_laboratorium.satuan,detail_periksa_lab.nilai_rujukan "+
                 "from detail_periksa_lab inner join template_laboratorium on template_laboratorium.id_template=detail_periksa_lab.id_template "+
                 "where detail_periksa_lab.no_rawat=? order by detail_periksa_lab.tgl_periksa,detail_periksa_lab.jam,template_laboratorium.urut")) {
             ps2.setString(1,norwt);
             try (ResultSet rs2=ps2.executeQuery()) {
+                String waktu="";
                 while(rs2.next()){
-                    jmllab++;
-                    String nilai=rs2.getString("nilai")==null?"":rs2.getString("nilai").trim();
-                    String flag=flagLab(nilai,rs2.getString("nilai_rujukan"));
-                    if(!flag.isEmpty()){
-                        if(lab.length()>0) lab.append(", ");
-                        lab.append(rs2.getString("Pemeriksaan").trim()).append(" ").append(nilai);
-                        if(rs2.getString("satuan")!=null&&!rs2.getString("satuan").trim().isEmpty()) lab.append(" ").append(rs2.getString("satuan").trim());
-                        lab.append(" (").append(flag).append(")");
+                    String w=rs2.getString("tgl")+" "+rs2.getString("jam");
+                    if(!w.equals(waktu)){
+                        waktu=w;
+                        lab.append(lab.length()>0?"\n":"").append(w).append(":\n");
                     }
+                    String nilai=rs2.getString("nilai")==null?"":rs2.getString("nilai").trim();
+                    String rujukan=rs2.getString("nilai_rujukan")==null?"":rs2.getString("nilai_rujukan").trim();
+                    String satuan=rs2.getString("satuan")==null?"":rs2.getString("satuan").trim();
+                    lab.append("- ").append(rs2.getString("Pemeriksaan").trim()).append(" : ").append(nilai.isEmpty()?"-":nilai);
+                    if(!nilai.isEmpty()&&!satuan.isEmpty()) lab.append(" ").append(satuan);
+                    String flag=flagLab(nilai,rujukan);
+                    if(!flag.isEmpty()) lab.append(" (").append(flag).append(")");
+                    if(!rujukan.isEmpty()) lab.append(" [Nilai Normal: ").append(rujukan).append("]");
+                    lab.append("\n");
                 }
             }
         } catch (Exception e) {
             System.out.println("Notif Auto Lab : "+e);
         }
-        if(lab.length()==0&&jmllab>0) lab.append("Hasil laboratorium dalam batas normal");
 
         try (PreparedStatement ps2=koneksi.prepareStatement(
                 "select databarang.nama_brng,sum(detail_pemberian_obat.jml) as jml,databarang.kode_sat,"+
@@ -2571,7 +2577,7 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
         if(Keluhan.getText().trim().isEmpty()) Keluhan.setText(keluhan.toString());
         if(JalannyaPenyakit.getText().trim().isEmpty()) JalannyaPenyakit.setText(jalannya.toString().trim());
         if(PemeriksaanPenunjang.getText().trim().isEmpty()) PemeriksaanPenunjang.setText(penunjang.toString().trim());
-        if(HasilLaborat.getText().trim().isEmpty()) HasilLaborat.setText(lab.toString());
+        if(HasilLaborat.getText().trim().isEmpty()) HasilLaborat.setText(lab.toString().trim());
         if(Obat2an.getText().trim().isEmpty()) Obat2an.setText(obat.toString().trim());
         Keluhan.setCaretPosition(0);
         JalannyaPenyakit.setCaretPosition(0);
