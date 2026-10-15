@@ -64,7 +64,7 @@ public class DlgPermintaan extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        Object[] judul={"Jml","Kode Barang","Nama Barang","Satuan","Jenis Obat","Kategori","Golongan","Keterangan","Stok Asal","Stok Tujuan"};
+        Object[] judul={"Jml","Kode Barang","Nama Barang","Satuan","Jenis Obat","Kategori","Golongan","Keterangan","Stok Asal","Stok Tujuan","Penjualan","Ke Pasien","Obat Pulang"};
         tabMode=new DefaultTableModel(null,judul){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){
                 boolean a = false;
@@ -79,7 +79,7 @@ public class DlgPermintaan extends javax.swing.JDialog {
         tbDokter.setPreferredScrollableViewportSize(new Dimension(800,800));
         tbDokter.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 10; i++) {
+        for (i = 0; i < 13; i++) {
             TableColumn column = tbDokter.getColumnModel().getColumn(i);
             if(i==0){
                 column.setPreferredWidth(42);
@@ -101,6 +101,12 @@ public class DlgPermintaan extends javax.swing.JDialog {
                 column.setPreferredWidth(70);
             }else if(i==9){
                 column.setPreferredWidth(70);
+            }else if(i==10){
+                column.setPreferredWidth(75);
+            }else if(i==11){
+                column.setPreferredWidth(75);
+            }else if(i==12){
+                column.setPreferredWidth(75);
             }
         }
         warna.kolom=0;
@@ -339,6 +345,40 @@ public class DlgPermintaan extends javax.swing.JDialog {
             }
         });
         panelisi1.add(BtnCari);
+
+        chkPenjualan = new javax.swing.JCheckBox("Penjualan & Ke Pasien");
+        chkPenjualan.setFont(new java.awt.Font("Tahoma", 1, 11));
+        chkPenjualan.setForeground(new java.awt.Color(0, 80, 0));
+        chkPenjualan.setPreferredSize(new java.awt.Dimension(180, 23));
+        chkPenjualan.setToolTipText("Aktifkan untuk hitung total penjualan & pemberian obat ke pasien di periode terpilih.");
+        chkPenjualan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runBackground(() -> tampil2());
+            }
+        });
+        panelisi1.add(chkPenjualan);
+
+        java.util.Calendar calAwal = java.util.Calendar.getInstance();
+        calAwal.add(java.util.Calendar.MONTH, -1);
+        DTPPeriode1 = new widget.Tanggal();
+        DTPPeriode1.setDate(calAwal.getTime());
+        DTPPeriode1.setDisplayFormat("dd-MM-yyyy");
+        DTPPeriode1.setPreferredSize(new java.awt.Dimension(105, 23));
+        DTPPeriode1.setToolTipText("Periode awal untuk Penjualan & Ke Pasien");
+        panelisi1.add(DTPPeriode1);
+
+        widget.Label lblSd = new widget.Label();
+        lblSd.setText("s.d.");
+        lblSd.setPreferredSize(new java.awt.Dimension(24, 23));
+        lblSd.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        panelisi1.add(lblSd);
+
+        DTPPeriode2 = new widget.Tanggal();
+        DTPPeriode2.setDate(new java.util.Date());
+        DTPPeriode2.setDisplayFormat("dd-MM-yyyy");
+        DTPPeriode2.setPreferredSize(new java.awt.Dimension(105, 23));
+        DTPPeriode2.setToolTipText("Periode akhir untuk Penjualan & Ke Pasien");
+        panelisi1.add(DTPPeriode2);
 
         BtnKeluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/exit.png"))); // NOI18N
         BtnKeluar.setMnemonic('K');
@@ -918,6 +958,8 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     private widget.Button BtnKeluar;
     private widget.Button BtnSimpan;
     private widget.Button BtnTambah;
+    private javax.swing.JCheckBox chkPenjualan;
+    private widget.Tanggal DTPPeriode1, DTPPeriode2;
     private widget.TextBox NoPermintaan;
     private javax.swing.JPopupMenu Popup;
     private widget.TextBox TCari;
@@ -1001,6 +1043,63 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         return (hasil==null||hasil.isEmpty())?"0":hasil;
     }
 
+    /** Format angka pendek: buang trailing .0 kalau bulat, atau round 2 desimal. */
+    private String formatQty(String raw){
+        if(raw==null||raw.isEmpty()) return "0";
+        try {
+            double d = Double.parseDouble(raw);
+            if(d == Math.floor(d)) return String.valueOf((long) d); // integer bersih
+            return String.format(java.util.Locale.US, "%.2f", d);
+        } catch (Exception e) { return raw; }
+    }
+
+    /** Total obat X terjual di bangsal asal (kdgudangasal) dalam periode DTP. Kosong kalau checkbox off atau bangsal asal kosong. */
+    private String getPenjualan(String kodeBrng, String kdBangsal){
+        if(chkPenjualan==null || !chkPenjualan.isSelected()) return "";
+        if(kodeBrng==null||kodeBrng.trim().isEmpty()) return "";
+        if(kdBangsal==null||kdBangsal.trim().isEmpty()) return "";
+        String tglAwal  = Valid.SetTgl(DTPPeriode1.getSelectedItem()+"");
+        String tglAkhir = Valid.SetTgl(DTPPeriode2.getSelectedItem()+"");
+        String hasil = Sequel.cariIsi(
+            "select ifnull(round(sum(detailjual.jumlah),2),0) from detailjual "+
+            "inner join penjualan on detailjual.nota_jual=penjualan.nota_jual "+
+            "where detailjual.kode_brng='"+kodeBrng.replace("'","")+"' "+
+            "and penjualan.kd_bangsal='"+kdBangsal.replace("'","")+"' "+
+            "and penjualan.status='Sudah Dibayar' "+
+            "and penjualan.tgl_jual between '"+tglAwal+"' and '"+tglAkhir+"'");
+        return formatQty(hasil);
+    }
+
+    /** Total obat X diberikan ke pasien via detail_pemberian_obat di bangsal asal (kdgudangasal) dalam periode DTP. Kosong kalau checkbox off atau bangsal asal kosong. */
+    private String getKePasien(String kodeBrng, String kdBangsal){
+        if(chkPenjualan==null || !chkPenjualan.isSelected()) return "";
+        if(kodeBrng==null||kodeBrng.trim().isEmpty()) return "";
+        if(kdBangsal==null||kdBangsal.trim().isEmpty()) return "";
+        String tglAwal  = Valid.SetTgl(DTPPeriode1.getSelectedItem()+"");
+        String tglAkhir = Valid.SetTgl(DTPPeriode2.getSelectedItem()+"");
+        String hasil = Sequel.cariIsi(
+            "select ifnull(round(sum(jml),2),0) from detail_pemberian_obat "+
+            "where kode_brng='"+kodeBrng.replace("'","")+"' "+
+            "and kd_bangsal='"+kdBangsal.replace("'","")+"' "+
+            "and tgl_perawatan between '"+tglAwal+"' and '"+tglAkhir+"'");
+        return formatQty(hasil);
+    }
+
+    /** Total obat X keluar sebagai resep pulang (tabel resep_pulang) di bangsal asal (kdgudangasal) dalam periode DTP. Kosong kalau checkbox off atau bangsal asal kosong. */
+    private String getObatPulang(String kodeBrng, String kdBangsal){
+        if(chkPenjualan==null || !chkPenjualan.isSelected()) return "";
+        if(kodeBrng==null||kodeBrng.trim().isEmpty()) return "";
+        if(kdBangsal==null||kdBangsal.trim().isEmpty()) return "";
+        String tglAwal  = Valid.SetTgl(DTPPeriode1.getSelectedItem()+"");
+        String tglAkhir = Valid.SetTgl(DTPPeriode2.getSelectedItem()+"");
+        String hasil = Sequel.cariIsi(
+            "select ifnull(round(sum(jml_barang),2),0) from resep_pulang "+
+            "where kode_brng='"+kodeBrng.replace("'","")+"' "+
+            "and kd_bangsal='"+kdBangsal.replace("'","")+"' "+
+            "and tanggal between '"+tglAwal+"' and '"+tglAkhir+"'");
+        return formatQty(hasil);
+    }
+
     private void tampil2() {
         try{
             String kdAsal = kdgudangasal.getText().trim();
@@ -1039,7 +1138,8 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
             Valid.tabelKosong(tabMode);
             for(i=0;i<jml;i++){
                 tabMode.addRow(new Object[]{jumlah[i],kodebarang[i],namabarang[i],satuan[i],jenis[i],kategori[i],golongan[i],keterangan[i],
-                    getStok(kodebarang[i],kdAsal), getStok(kodebarang[i],kdTujuan)});
+                    getStok(kodebarang[i],kdAsal), getStok(kodebarang[i],kdTujuan),
+                    getPenjualan(kodebarang[i],kdAsal), getKePasien(kodebarang[i],kdAsal), getObatPulang(kodebarang[i],kdAsal)});
             }
 
             kodebarang=null;
@@ -1060,7 +1160,8 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         String kd = list.path("KodeBarang").asText();
                         tabMode.addRow(new Object[]{
                             "",kd,list.path("NamaBarang").asText(),list.path("Satuan").asText(),list.path("JenisObat").asText(),list.path("Kategori").asText(),list.path("Golongan").asText(),"",
-                            getStok(kd,kdAsal), getStok(kd,kdTujuan)
+                            getStok(kd,kdAsal), getStok(kd,kdTujuan),
+                            getPenjualan(kd,kdAsal), getKePasien(kd,kdAsal), getObatPulang(kd,kdAsal)
                         });
                     }
                 }else{
@@ -1069,7 +1170,8 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                             String kd = list.path("KodeBarang").asText();
                             tabMode.addRow(new Object[]{
                                 "",kd,list.path("NamaBarang").asText(),list.path("Satuan").asText(),list.path("JenisObat").asText(),list.path("Kategori").asText(),list.path("Golongan").asText(),"",
-                                getStok(kd,kdAsal), getStok(kd,kdTujuan)
+                                getStok(kd,kdAsal), getStok(kd,kdTujuan),
+                                getPenjualan(kd,kdAsal), getKePasien(kd,kdAsal), getObatPulang(kd,kdAsal)
                             });
                         }
                     }
