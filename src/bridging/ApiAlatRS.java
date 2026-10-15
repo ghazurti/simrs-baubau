@@ -642,6 +642,7 @@ public class ApiAlatRS {
         public boolean ok;           // true kalau call sukses (walau hasil belum ada)
         public String kesimpulan = "";
         public String temuan = "";
+        public String saran = "";             // hasil_saran (anjuran radiolog)
         public String status = "";           // final/preliminary/amended
         public String issuedAt = "";         // waktu hasil dikeluarkan
         public String radiologId = "";
@@ -690,13 +691,14 @@ public class ApiAlatRS {
         hb.ok = true;
         hb.kesimpulan = firstNonEmpty(w, "hasil_kesimpulan", "kesimpulan", "conclusion");
         hb.temuan     = firstNonEmpty(w, "hasil_temuan", "temuan", "findings", "hasil");
+        hb.saran      = firstNonEmpty(w, "hasil_saran", "saran", "recommendation");
         hb.status     = firstNonEmpty(w, "hasil_status", "status_hasil", "result_status");
         hb.issuedAt   = firstNonEmpty(w, "hasil_issued_at", "issued_at", "tgl_hasil");
         hb.radiologId = firstNonEmpty(w, "radiolog_id", "radiologist_id", "radiolog");
         hb.diagnosticReportId = firstNonEmpty(w, "satu_sehat_diagnosticreport_id", "diagnosticreport_id", "diagnostic_report_id");
         hb.namaPemeriksaan = firstNonEmpty(w, "nama_pemeriksaan", "pemeriksaan", "ms_pemeriksaan_nama",
                 "study_description", "nama_study", "deskripsi");
-        hb.ada = !hb.kesimpulan.isEmpty() || !hb.temuan.isEmpty();
+        hb.ada = !hb.kesimpulan.isEmpty() || !hb.temuan.isEmpty() || !hb.saran.isEmpty();
         if (!hb.ada) {
             hb.pesan = "Hasil bacaan belum diinput dokter/radiolog di RIS.";
         } else {
@@ -763,7 +765,7 @@ public class ApiAlatRS {
         return gab;
     }
 
-    /** Rangkai TEMUAN + KESIMPULAN dari 1 HasilBacaan jadi 1 blok teks. */
+    /** Rangkai TEMUAN + KESIMPULAN + SARAN dari 1 HasilBacaan jadi 1 blok teks. */
     private String gabungTemuanKesimpulan(HasilBacaan hb) {
         StringBuilder t = new StringBuilder();
         if (hb.temuan != null && !hb.temuan.isEmpty()) {
@@ -772,6 +774,10 @@ public class ApiAlatRS {
         if (hb.kesimpulan != null && !hb.kesimpulan.isEmpty()) {
             if (t.length() > 0) t.append("\n\n");
             t.append("KESIMPULAN:\n").append(hb.kesimpulan);
+        }
+        if (hb.saran != null && !hb.saran.isEmpty()) {
+            if (t.length() > 0) t.append("\n\n");
+            t.append("SARAN:\n").append(hb.saran);
         }
         return t.toString();
     }
@@ -937,10 +943,18 @@ public class ApiAlatRS {
             int st = (rp == null) ? -1 : rp.path("status").asInt();
             // 200/201 = baru dibuat, 409 = sudah ada. Dua-duanya berarti id kd_jenis_prw valid dipakai.
             if (st != 200 && st != 201 && st != 409) {
-                // gagal lain (mis. modality tidak ada di RIS) → coba fallback resolve by nama/LOINC
+                // Register gagal (mis. HTTP 500 "Validation error" saat id sudah ada,
+                // atau modality tak dikenal RIS). PENTING: JANGAN asal ambil hasil
+                // pertama by LOINC — 1 LOINC bisa dipakai banyak pemeriksaan di master
+                // RIS (mis. 24741-1 dipakai Foto Pelvis DAN Foto Mandibula), sehingga
+                // bisa terkirim pemeriksaan yang SALAH. Prioritas resolve:
+                //   (a) id kita sendiri (kd_jenis_prw) memang ada di master RIS → pakai
+                //   (b) cocok EXACT by nama_pemeriksaan
+                //   (c) terakhir baru by LOINC (rawan salah cocok, hanya jika mentok)
                 String fb = "";
-                if (loincCode != null && !loincCode.isEmpty()) fb = CariPemeriksaanIdByLoinc(loincCode);
+                if (PemeriksaanIdAda(kdJenisPrw, namaPemeriksaan, loincCode)) fb = kdJenisPrw;
                 if (fb.isEmpty()) fb = CariPemeriksaanIdByNama(namaPemeriksaan);
+                if (fb.isEmpty() && loincCode != null && !loincCode.isEmpty()) fb = CariPemeriksaanIdByLoinc(loincCode);
                 if (!fb.isEmpty()) {
                     idPemeriksaan = fb;
                 } else {
@@ -1106,6 +1120,40 @@ public class ApiAlatRS {
         }
         if (arr.size() == 1) return arr.get(0).path("id").asText();
         return "";
+    }
+
+    /**
+     * True kalau ms_pemeriksaan dengan id ini benar-benar ADA di master RIS.
+     * Dipakai saat register balas error ambigu (mis. 500 "Validation error"
+     * yang sebenarnya berarti id sudah ada): kita verifikasi id kita sendiri
+     * (kd_jenis_prw) lewat list by nama & by LOINC, lalu cocokkan field "id".
+     * Ini mencegah salah pilih pemeriksaan lain yang kebetulan 1 LOINC.
+     */
+    public boolean PemeriksaanIdAda(String id, String nama, String loincCode) {
+        if (id == null || id.isEmpty()) return false;
+        if (nama != null && !nama.isEmpty()) {
+            JsonNode r = postJsonAuth("CEK_PEMERIKSAAN_ID",
+                    baseUrl + "/api/ms_pemeriksaan/list",
+                    "{\"halaman\":0,\"jumlah\":50,\"search\":\"" + escape(nama) + "\"}");
+            if (idExistsInList(r, id)) return true;
+        }
+        if (loincCode != null && !loincCode.isEmpty()) {
+            JsonNode r = postJsonAuth("CEK_PEMERIKSAAN_ID",
+                    baseUrl + "/api/ms_pemeriksaan/list",
+                    "{\"halaman\":0,\"jumlah\":50,\"loinc_code\":\"" + escape(loincCode) + "\"}");
+            if (idExistsInList(r, id)) return true;
+        }
+        return false;
+    }
+
+    /** True kalau salah satu item pada response punya field "id" == id. */
+    private boolean idExistsInList(JsonNode resp, String id) {
+        JsonNode arr = extractArray(resp);
+        if (arr == null || !arr.isArray()) return false;
+        for (JsonNode it : arr) {
+            if (id.equals(it.path("id").asText())) return true;
+        }
+        return false;
     }
 
     /** Ekstrak id dari response register (data.id ATAU data[0].id). */
