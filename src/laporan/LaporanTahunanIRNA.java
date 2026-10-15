@@ -530,7 +530,9 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
                     int[] ttl = hitungBulanan(sqlBulananRanap(
                         "and bangsal.kd_bangsal='" + kd + "'"));
                     htmlContent.append(htmlRow(String.valueOf(i), esc(rs.getString("nm_bangsal")), ttl, true));
-                    // Ambil penjab yang dipakai di bangsal ini
+                    // Ambil penjab yang dipakai di bangsal ini, lalu breakdown per Kelas.
+                    // Daftar kelas diambil DINAMIS dari kamar_inap → cover Kelas 1/2/3/Utama/VIP/VVIP
+                    // + kelas custom lain + baris NULL/kosong (label "Non Kelas").
                     try (PreparedStatement psp = koneksi.prepareStatement(
                             "select distinct penjab.kd_pj, penjab.png_jawab " +
                             "from kamar_inap " +
@@ -543,10 +545,43 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
                         psp.setString(2, rs.getString("kd_bangsal"));
                         try (ResultSet rsp = psp.executeQuery()) {
                             while (rsp.next()) {
+                                String kdPj = esc(rsp.getString("kd_pj"));
                                 int[] bp = hitungBulanan(sqlBulananRanap(
                                     "and bangsal.kd_bangsal='" + kd +
-                                    "' and reg_periksa.kd_pj='" + esc(rsp.getString("kd_pj")) + "'"));
+                                    "' and reg_periksa.kd_pj='" + kdPj + "'"));
                                 htmlContent.append(htmlRow("", esc(rsp.getString("png_jawab")), bp, false));
+                                // Level 3: ambil daftar kelas yang benar-benar dipakai di bangsal+penjab ini
+                                try (PreparedStatement psk = koneksi.prepareStatement(
+                                        "select distinct ifnull(nullif(kamar.kelas,''),'Non Kelas') as kls " +
+                                        "from kamar_inap " +
+                                        "inner join reg_periksa on reg_periksa.no_rawat=kamar_inap.no_rawat " +
+                                        "inner join kamar on kamar.kd_kamar=kamar_inap.kd_kamar " +
+                                        "where year(kamar_inap.tgl_masuk)=? " +
+                                        "and kamar.kd_bangsal=? and reg_periksa.kd_pj=? " +
+                                        "order by kls")) {
+                                    psk.setString(1, ThnCari.getSelectedItem().toString());
+                                    psk.setString(2, rs.getString("kd_bangsal"));
+                                    psk.setString(3, rsp.getString("kd_pj"));
+                                    try (ResultSet rsk = psk.executeQuery()) {
+                                        while (rsk.next()) {
+                                            String kls = rsk.getString("kls");
+                                            String filterKls;
+                                            if ("Non Kelas".equals(kls)) {
+                                                filterKls = " and (kamar.kelas is null or kamar.kelas='')";
+                                            } else {
+                                                filterKls = " and kamar.kelas='" + esc(kls) + "'";
+                                            }
+                                            int[] bpk = hitungBulanan(sqlBulananRanap(
+                                                "and bangsal.kd_bangsal='" + kd +
+                                                "' and reg_periksa.kd_pj='" + kdPj + "'" +
+                                                filterKls));
+                                            int totalKls = 0;
+                                            for (int m : bpk) totalKls += m;
+                                            if (totalKls == 0) continue;
+                                            htmlContent.append(htmlRow("", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + esc(kls), bpk, false));
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
