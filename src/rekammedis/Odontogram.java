@@ -212,7 +212,7 @@ public final class Odontogram extends javax.swing.JDialog {
         pSearch.add(BtnTerapkan);
         widget.Button BtnCariKw = new widget.Button();
         BtnCariKw.setText("Cari");
-        try { BtnCariKw.setIcon(new ImageIcon(getClass().getResource("/picture/find.png"))); } catch (Exception ignored) {}
+        try { BtnCariKw.setIcon(new ImageIcon(getClass().getResource("/picture/accept.png"))); } catch (Exception ignored) {}
         BtnCariKw.setPreferredSize(new Dimension(80, 23));
         pSearch.add(BtnCariKw);
         BtnTerapkan.addActionListener(e -> tampilData());
@@ -225,7 +225,7 @@ public final class Odontogram extends javax.swing.JDialog {
         BtnSimpan = btn("Simpan", "/picture/save-16x16.png");
         BtnBaru   = btn("Baru",   "/picture/new.png");
         BtnHapus  = btn("Hapus",  "/picture/stop_f2.png");
-        BtnGanti  = btn("Ganti",  "/picture/edit.png");
+        BtnGanti  = btn("Ganti",  "/picture/inventaris.png");
         BtnCetak  = btn("Cetak",  "/picture/print.png");
         BtnKeluar = btn("Keluar", "/picture/exit.png");
         pBtn.add(BtnSimpan); pBtn.add(BtnBaru); pBtn.add(BtnGanti);

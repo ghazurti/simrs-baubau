@@ -206,7 +206,7 @@ public final class DlgTagihanOperasiCathlab extends javax.swing.JDialog {
         BtnBaru.addActionListener(e -> emptTeks());
 
         BtnEdit = new widget.Button();
-        BtnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/edit.png")));
+        BtnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/inventaris.png")));
         BtnEdit.setText("Ganti"); BtnEdit.setMnemonic('G'); BtnEdit.setToolTipText("Alt+G");
         BtnEdit.setPreferredSize(new Dimension(90,25));
         BtnEdit.addActionListener(e -> edit());
