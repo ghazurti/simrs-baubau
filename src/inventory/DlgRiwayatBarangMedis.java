@@ -697,14 +697,14 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                  ps.setString(13,"%"+TCari.getText().trim()+"%");
                                  ps.setString(14,"%"+TCari.getText().trim()+"%");
                             }
-                            rs=ps.executeQuery(); 
+                            rs=ps.executeQuery();
                             i=0;
-                            while(rs.next()){ 
+                            while(rs.next()){
                                 i++;
                                 publish(new Object[]{
                                      rs.getString("kode_brng")+" "+rs.getString("nama_brng"),
-                                     rs.getString("stok_awal"),rs.getString("masuk"),
-                                     rs.getString("keluar"),rs.getString("stok_akhir"),
+                                     bersihAngka(rs.getString("stok_awal")),bersihAngka(rs.getString("masuk")),
+                                     bersihAngka(rs.getString("keluar")),bersihAngka(rs.getString("stok_akhir")),
                                      rs.getString("posisi"),rs.getString("tanggal"),
                                      rs.getString("jam"),rs.getString("petugas"),
                                      rs.getString("kd_bangsal")+" "+rs.getString("nm_bangsal"),
@@ -746,5 +746,15 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     public void isCek(){
          BtnPrint.setEnabled(akses.getriwayat_obat_alkes_bhp());
     }
-    
+
+    /** Bersihkan angka double drift dari MySQL. "412.0000000000002" -> "412", "1.5" -> "1.5". */
+    private String bersihAngka(String raw){
+        if(raw==null||raw.isEmpty()) return raw;
+        try {
+            double d = Double.parseDouble(raw);
+            if(d == Math.floor(d) && !Double.isInfinite(d)) return String.valueOf((long) d);
+            return String.format(java.util.Locale.US, "%.2f", d);
+        } catch (Exception e) { return raw; }
+    }
+
 }
