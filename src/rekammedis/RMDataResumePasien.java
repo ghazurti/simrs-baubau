@@ -2457,10 +2457,15 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
                 lab=new StringBuilder(),obat=new StringBuilder();
         String ttv="";
         int jmllab=0;
+        riwayatKunjungan(norwt,jalannya);
+        // Utamakan SOAP isian dokter; isian perawat dipakai hanya jika dokter belum mengisi
         try (PreparedStatement ps2=koneksi.prepareStatement(
                 "select keluhan,pemeriksaan,penilaian,instruksi,tensi,nadi,respirasi,suhu_tubuh,spo2,kesadaran "+
-                "from pemeriksaan_ralan where no_rawat=? order by tgl_perawatan,jam_rawat")) {
+                "from pemeriksaan_ralan where no_rawat=? and (nip in (select kd_dokter from dokter) or not exists("+
+                "select 1 from pemeriksaan_ralan x inner join dokter on dokter.kd_dokter=x.nip where x.no_rawat=?)) "+
+                "order by tgl_perawatan,jam_rawat")) {
             ps2.setString(1,norwt);
+            ps2.setString(2,norwt);
             try (ResultSet rs2=ps2.executeQuery()) {
                 StringBuilder fisik=new StringBuilder(),penilaian=new StringBuilder(),instruksi=new StringBuilder();
                 while(rs2.next()){
@@ -2472,10 +2477,13 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
                             rs2.getString("suhu_tubuh"),rs2.getString("spo2"),rs2.getString("kesadaran"));
                     if(!t.isEmpty()) ttv=t;
                 }
-                if(!ttv.isEmpty()) jalannya.append("TTV: ").append(ttv).append("\n");
-                if(fisik.length()>0) jalannya.append("Pemeriksaan Fisik: ").append(fisik).append("\n");
-                if(penilaian.length()>0) jalannya.append("Assessment: ").append(penilaian).append("\n");
-                if(instruksi.length()>0) jalannya.append("Instruksi: ").append(instruksi).append("\n");
+                StringBuilder kini=new StringBuilder();
+                if(!ttv.isEmpty()) kini.append("TTV: ").append(ttv).append("\n");
+                if(fisik.length()>0) kini.append("Pemeriksaan Fisik: ").append(fisik).append("\n");
+                if(penilaian.length()>0) kini.append("Assessment: ").append(penilaian).append("\n");
+                if(instruksi.length()>0) kini.append("Instruksi: ").append(instruksi).append("\n");
+                if(kini.length()>0&&jalannya.length()>0) jalannya.append("\nKunjungan saat ini:\n");
+                jalannya.append(kini);
             }
         } catch (Exception e) {
             System.out.println("Notif Auto SOAP : "+e);
@@ -2565,6 +2573,45 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
         PemeriksaanPenunjang.setCaretPosition(0);
         HasilLaborat.setCaretPosition(0);
         Obat2an.setCaretPosition(0);
+    }
+
+    // 5 kunjungan sebelumnya (seperti "5 Riwayat Terakhir" di Riwayat Perawatan), urut dari yang terlama
+    private void riwayatKunjungan(String norwt,StringBuilder sb) {
+        java.util.List<String> baris=new java.util.ArrayList<>();
+        try (PreparedStatement ps2=koneksi.prepareStatement(
+                "select r.stts,date_format(r.tgl_registrasi,'%d-%m-%Y') as tgl,if(r.status_lanjut='Ranap','Rawat Inap',poliklinik.nm_poli) as poli,dokter.nm_dokter,"+
+                "(select concat(dp.kd_penyakit,' ',penyakit.nm_penyakit) from diagnosa_pasien dp inner join penyakit on penyakit.kd_penyakit=dp.kd_penyakit "+
+                " where dp.no_rawat=r.no_rawat order by dp.prioritas limit 1) as dx,"+
+                "(select pr.keluhan from pemeriksaan_ralan pr where pr.no_rawat=r.no_rawat and pr.keluhan<>'' "+
+                " order by pr.nip in (select kd_dokter from dokter) desc,pr.tgl_perawatan desc,pr.jam_rawat desc limit 1) as s,"+
+                "(select pr.penilaian from pemeriksaan_ralan pr where pr.no_rawat=r.no_rawat and pr.penilaian<>'' "+
+                " order by pr.nip in (select kd_dokter from dokter) desc,pr.tgl_perawatan desc,pr.jam_rawat desc limit 1) as a "+
+                "from reg_periksa r inner join reg_periksa ini on ini.no_rawat=? "+
+                "inner join poliklinik on poliklinik.kd_poli=r.kd_poli inner join dokter on dokter.kd_dokter=r.kd_dokter "+
+                "where r.no_rkm_medis=ini.no_rkm_medis and r.no_rawat<>ini.no_rawat and r.stts<>'Batal' "+
+                "and concat(r.tgl_registrasi,' ',r.jam_reg)<concat(ini.tgl_registrasi,' ',ini.jam_reg) "+
+                "order by r.tgl_registrasi desc,r.jam_reg desc limit 5")) {
+            ps2.setString(1,norwt);
+            try (ResultSet rs2=ps2.executeQuery()) {
+                while(rs2.next()){
+                    StringBuilder b=new StringBuilder("- ").append(rs2.getString("tgl")).append(" ").append(rs2.getString("poli"))
+                            .append(" (").append(rs2.getString("nm_dokter")).append(")");
+                    String isi="";
+                    if(rs2.getString("s")!=null) isi+="S: "+rs2.getString("s").trim().replaceAll("\\s+"," ")+"; ";
+                    if(rs2.getString("a")!=null) isi+="A: "+rs2.getString("a").trim().replaceAll("\\s+"," ")+"; ";
+                    if(rs2.getString("dx")!=null) isi+="Dx: "+rs2.getString("dx")+"; ";
+                    if(isi.isEmpty()&&"Belum".equals(rs2.getString("stts"))) continue;
+                    if(!isi.isEmpty()) b.append(": ").append(isi.substring(0,isi.length()-2));
+                    baris.add(0,b.toString());
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Notif Auto Riwayat : "+e);
+        }
+        if(!baris.isEmpty()){
+            sb.append("Riwayat kunjungan sebelumnya:\n");
+            for(String b:baris) sb.append(b).append("\n");
+        }
     }
 
     private void tambahUnik(StringBuilder sb,String teks) {
