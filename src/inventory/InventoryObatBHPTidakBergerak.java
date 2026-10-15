@@ -8,12 +8,15 @@ import fungsi.akses;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import simrskhanza.DlgCariBangsal;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
@@ -43,7 +46,7 @@ public class InventoryObatBHPTidakBergerak extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        Object[] row={"Kode Barang", "Nama Barang", "Satuan", "Jenis","Stok","Harga","Nilai Aset"};
+        Object[] row={"Kode Barang", "Nama Barang", "Satuan", "Jenis","Lokasi","Stok","Harga","Nilai Aset"};
         tabMode=new DefaultTableModel(null,row){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){return false;}
         };
@@ -52,22 +55,24 @@ public class InventoryObatBHPTidakBergerak extends javax.swing.JDialog {
         tbDokter.setPreferredScrollableViewportSize(new Dimension(800,800));
         tbDokter.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 8; i++) {
             TableColumn column = tbDokter.getColumnModel().getColumn(i);
             if(i==0){
-                column.setPreferredWidth(90);
-            }else if(i==1){
-                column.setPreferredWidth(230);
-            }else if(i==2){
-                column.setPreferredWidth(90);
-            }else if(i==3){
-                column.setPreferredWidth(130);
-            }else if(i==4){
-                column.setPreferredWidth(60);
-            }else if(i==5){
                 column.setPreferredWidth(85);
+            }else if(i==1){
+                column.setPreferredWidth(180);
+            }else if(i==2){
+                column.setPreferredWidth(60);
+            }else if(i==3){
+                column.setPreferredWidth(95);
+            }else if(i==4){
+                column.setPreferredWidth(120);
+            }else if(i==5){
+                column.setPreferredWidth(55);
             }else if(i==6){
-                column.setPreferredWidth(105);
+                column.setPreferredWidth(80);
+            }else if(i==7){
+                column.setPreferredWidth(95);
             }
         }
         tbDokter.setDefaultRenderer(Object.class, new WarnaTable());         
@@ -101,6 +106,7 @@ public class InventoryObatBHPTidakBergerak extends javax.swing.JDialog {
         scrollPane1 = new widget.ScrollPane();
         tbDokter = new widget.Table();
         panelisi1 = new widget.panelisi();
+        panelisi2 = new widget.panelisi();
         R1 = new widget.RadioButton();
         R2 = new widget.RadioButton();
         R3 = new widget.RadioButton();
@@ -113,6 +119,14 @@ public class InventoryObatBHPTidakBergerak extends javax.swing.JDialog {
         label9 = new widget.Label();
         BtnPrint = new widget.Button();
         BtnKeluar = new widget.Button();
+        DTPCari1 = new widget.Tanggal();
+        DTPCari2 = new widget.Tanggal();
+        lblSD = new widget.Label();
+        lblPeriode = new widget.Label();
+        lblLokasi = new widget.Label();
+        kdBangsal = new widget.TextBox();
+        nmBangsal = new widget.TextBox();
+        btnBangsal = new widget.Button();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -146,9 +160,72 @@ public class InventoryObatBHPTidakBergerak extends javax.swing.JDialog {
 
         internalFrame1.add(scrollPane1, java.awt.BorderLayout.CENTER);
 
+        javax.swing.JPanel panelSouth = new javax.swing.JPanel();
+        panelSouth.setLayout(new java.awt.BorderLayout(0,0));
+        panelSouth.setOpaque(false);
+
+        panelisi2.setName("panelisi2");
+        panelisi2.setPreferredSize(new java.awt.Dimension(100, 32));
+        panelisi2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 5));
+
+        lblPeriode.setText("Periode :");
+        lblPeriode.setPreferredSize(new Dimension(60, 23));
+        panelisi2.add(lblPeriode);
+
+        java.util.Calendar cAwal = java.util.Calendar.getInstance();
+        cAwal.add(java.util.Calendar.MONTH, -1);
+        DTPCari1.setDate(cAwal.getTime());
+        DTPCari1.setDisplayFormat("dd-MM-yyyy");
+        DTPCari1.setPreferredSize(new Dimension(110, 23));
+        panelisi2.add(DTPCari1);
+
+        lblSD.setText("s.d.");
+        lblSD.setPreferredSize(new Dimension(30, 23));
+        lblSD.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        panelisi2.add(lblSD);
+
+        DTPCari2.setDate(new java.util.Date());
+        DTPCari2.setDisplayFormat("dd-MM-yyyy");
+        DTPCari2.setPreferredSize(new Dimension(110, 23));
+        panelisi2.add(DTPCari2);
+
+        lblLokasi.setText("     Lokasi :");
+        lblLokasi.setPreferredSize(new Dimension(80, 23));
+        panelisi2.add(lblLokasi);
+
+        kdBangsal.setName("kdBangsal");
+        kdBangsal.setPreferredSize(new Dimension(70, 23));
+        panelisi2.add(kdBangsal);
+
+        nmBangsal.setEditable(false);
+        nmBangsal.setName("nmBangsal");
+        nmBangsal.setPreferredSize(new Dimension(200, 23));
+        panelisi2.add(nmBangsal);
+
+        btnBangsal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png")));
+        btnBangsal.setToolTipText("Cari Bangsal (kosongkan = semua)");
+        btnBangsal.setPreferredSize(new Dimension(28, 23));
+        btnBangsal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) { btnBangsalActionPerformed(evt); }
+        });
+        panelisi2.add(btnBangsal);
+
+        widget.Button btnClearBangsal = new widget.Button();
+        btnClearBangsal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/cancel.png")));
+        btnClearBangsal.setToolTipText("Kosongkan lokasi (semua bangsal)");
+        btnClearBangsal.setPreferredSize(new Dimension(28, 23));
+        btnClearBangsal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kdBangsal.setText(""); nmBangsal.setText("");
+            }
+        });
+        panelisi2.add(btnClearBangsal);
+
+        panelSouth.add(panelisi2, java.awt.BorderLayout.NORTH);
+
         panelisi1.setName("panelisi1"); // NOI18N
-        panelisi1.setPreferredSize(new java.awt.Dimension(100, 56));
-        panelisi1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 9));
+        panelisi1.setPreferredSize(new java.awt.Dimension(100, 48));
+        panelisi1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 6));
 
         buttonGroup1.add(R1);
         R1.setSelected(true);
@@ -157,6 +234,9 @@ public class InventoryObatBHPTidakBergerak extends javax.swing.JDialog {
         R1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         R1.setName("R1"); // NOI18N
         R1.setPreferredSize(new java.awt.Dimension(70, 23));
+        R1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) { setPeriodeBulan(1); }
+        });
         panelisi1.add(R1);
 
         buttonGroup1.add(R2);
@@ -165,6 +245,9 @@ public class InventoryObatBHPTidakBergerak extends javax.swing.JDialog {
         R2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         R2.setName("R2"); // NOI18N
         R2.setPreferredSize(new java.awt.Dimension(70, 23));
+        R2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) { setPeriodeBulan(3); }
+        });
         panelisi1.add(R2);
 
         buttonGroup1.add(R3);
@@ -173,6 +256,9 @@ public class InventoryObatBHPTidakBergerak extends javax.swing.JDialog {
         R3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         R3.setName("R3"); // NOI18N
         R3.setPreferredSize(new java.awt.Dimension(70, 23));
+        R3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) { setPeriodeBulan(6); }
+        });
         panelisi1.add(R3);
 
         buttonGroup1.add(R4);
@@ -181,6 +267,9 @@ public class InventoryObatBHPTidakBergerak extends javax.swing.JDialog {
         R4.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         R4.setName("R4"); // NOI18N
         R4.setPreferredSize(new java.awt.Dimension(70, 23));
+        R4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) { setPeriodeBulan(9); }
+        });
         panelisi1.add(R4);
 
         buttonGroup1.add(R5);
@@ -189,6 +278,9 @@ public class InventoryObatBHPTidakBergerak extends javax.swing.JDialog {
         R5.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         R5.setName("R5"); // NOI18N
         R5.setPreferredSize(new java.awt.Dimension(70, 23));
+        R5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) { setPeriodeBulan(12); }
+        });
         panelisi1.add(R5);
 
         label10.setText("Key Word :");
@@ -280,7 +372,8 @@ public class InventoryObatBHPTidakBergerak extends javax.swing.JDialog {
         });
         panelisi1.add(BtnKeluar);
 
-        internalFrame1.add(panelisi1, java.awt.BorderLayout.PAGE_END);
+        panelSouth.add(panelisi1, java.awt.BorderLayout.CENTER);
+        internalFrame1.add(panelSouth, java.awt.BorderLayout.PAGE_END);
 
         getContentPane().add(internalFrame1, java.awt.BorderLayout.CENTER);
 
@@ -301,15 +394,19 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
             if(ceksukses==false){
                 Sequel.queryu("delete from temporary where temp37='"+akses.getalamatip()+"'");
                 int row=tabMode.getRowCount();
-                for(int i=0;i<row;i++){  
+                for(int i=0;i<row;i++){
+                    // kolom baru: 0=kode, 1=nama, 2=satuan, 3=jenis, 4=lokasi, 5=stok, 6=harga, 7=nilai
+                    // temp1..temp7 dipakai untuk kolom lama (kode/nama/satuan/jenis/stok/harga/nilai),
+                    // lokasi diisi di temp8 supaya rptObatBHPTidakBergerak.jrxml existing tetap jalan.
                     Sequel.menyimpan("temporary","'"+i+"','"+
                                     tabMode.getValueAt(i,0).toString()+"','"+
                                     tabMode.getValueAt(i,1).toString()+"','"+
                                     tabMode.getValueAt(i,2).toString()+"','"+
                                     tabMode.getValueAt(i,3).toString()+"','"+
-                                    tabMode.getValueAt(i,4).toString()+"','"+
                                     tabMode.getValueAt(i,5).toString()+"','"+
-                                    tabMode.getValueAt(i,6).toString()+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Sirkulasi Barang Keluar Masuk"); 
+                                    tabMode.getValueAt(i,6).toString()+"','"+
+                                    tabMode.getValueAt(i,7).toString()+"','"+
+                                    tabMode.getValueAt(i,4).toString()+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','"+akses.getalamatip()+"'","Sirkulasi Barang Keluar Masuk");
                 }
 
                 Map<String, Object> param = new HashMap<>(); 
@@ -438,26 +535,65 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
     private widget.Label label10;
     private widget.Label label9;
     private widget.panelisi panelisi1;
+    private widget.panelisi panelisi2;
+    private widget.Tanggal DTPCari1, DTPCari2;
+    private widget.Label lblSD, lblPeriode, lblLokasi;
+    private widget.TextBox kdBangsal, nmBangsal;
+    private widget.Button btnBangsal;
     private widget.ScrollPane scrollPane1;
     private widget.Table tbDokter;
     // End of variables declaration//GEN-END:variables
 
-    private void prosesCari() {
-       Valid.tabelKosong(tabMode);      
-       try{   
-            pilihan="";
-            if(R1.isSelected()==true){
-                pilihan="where riwayat_barang_medis.posisi<>'Opname' and riwayat_barang_medis.tanggal between SUBDATE(current_date(), INTERVAL 1 MONTH) and current_date()";
-            }else if(R2.isSelected()==true){
-                pilihan="where riwayat_barang_medis.posisi<>'Opname' and riwayat_barang_medis.tanggal between SUBDATE(current_date(), INTERVAL 3 MONTH) and current_date()";
-            }else if(R3.isSelected()==true){
-                pilihan="where riwayat_barang_medis.posisi<>'Opname' and riwayat_barang_medis.tanggal between SUBDATE(current_date(), INTERVAL 6 MONTH) and current_date()";
-            }else if(R4.isSelected()==true){
-                pilihan="where riwayat_barang_medis.posisi<>'Opname' and riwayat_barang_medis.tanggal between SUBDATE(current_date(), INTERVAL 9 MONTH) and current_date()";
-            }else if(R5.isSelected()==true){
-                pilihan="where riwayat_barang_medis.posisi<>'Opname' and riwayat_barang_medis.tanggal between SUBDATE(current_date(), INTERVAL 12 MONTH) and current_date()";
+    /** Set DTPCari1 = today - bulan, DTPCari2 = today. Dipanggil dari radio button. */
+    private void setPeriodeBulan(int bulan) {
+        java.util.Calendar c = java.util.Calendar.getInstance();
+        DTPCari2.setDate(c.getTime());
+        c.add(java.util.Calendar.MONTH, -bulan);
+        DTPCari1.setDate(c.getTime());
+    }
+
+    /** Buka picker bangsal — user pilih 1 bangsal untuk filter.
+     *  Modal=true supaya blocking + alwaysOnTop=true supaya picker muncul di ATAS menu utama,
+     *  bukan di belakang (yang bikin picker baru terlihat setelah menu ditutup). */
+    private void btnBangsalActionPerformed(java.awt.event.ActionEvent evt) {
+        final DlgCariBangsal bangsal = new DlgCariBangsal(null, true);
+        bangsal.addWindowListener(new WindowListener() {
+            @Override public void windowOpened(WindowEvent e) {}
+            @Override public void windowClosing(WindowEvent e) {}
+            @Override public void windowClosed(WindowEvent e) {
+                if(bangsal.getTable().getSelectedRow()!= -1){
+                    kdBangsal.setText(bangsal.getTable().getValueAt(bangsal.getTable().getSelectedRow(),0).toString());
+                    nmBangsal.setText(bangsal.getTable().getValueAt(bangsal.getTable().getSelectedRow(),1).toString());
+                }
             }
+            @Override public void windowIconified(WindowEvent e) {}
+            @Override public void windowDeiconified(WindowEvent e) {}
+            @Override public void windowActivated(WindowEvent e) {}
+            @Override public void windowDeactivated(WindowEvent e) {}
+        });
+        bangsal.isCek();
+        bangsal.emptTeks();
+        bangsal.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+        bangsal.setLocationRelativeTo(internalFrame1);
+        bangsal.setAlwaysOnTop(true);
+        bangsal.setVisible(true);
+    }
+
+    private void prosesCari() {
+       Valid.tabelKosong(tabMode);
+       try{
+            String tglAwal  = Valid.SetTgl(DTPCari1.getSelectedItem()+"");
+            String tglAkhir = Valid.SetTgl(DTPCari2.getSelectedItem()+"");
+            pilihan = "where riwayat_barang_medis.posisi<>'Opname' and riwayat_barang_medis.tanggal between '"+tglAwal+"' and '"+tglAkhir+"'";
+
+            String filterBangsalGB = "";
+            String kdBgs = kdBangsal.getText().trim();
+            if(!kdBgs.isEmpty()){
+                filterBangsalGB = " and gudangbarang.kd_bangsal='"+kdBgs.replace("'","")+"' ";
+            }
+
             koneksi=koneksiDB.condb();
+            // Query utama: obat aktif yang TIDAK punya movement di periode terpilih
             ps=koneksi.prepareStatement(
                     "select databarang.kode_brng,databarang.nama_brng,kodesatuan.satuan,jenis.nama,databarang."+hppfarmasi+" as harga "+
                     "from databarang inner join kodesatuan on databarang.kode_sat=kodesatuan.kode_sat inner join jenis on databarang.kdjns=jenis.kdjns "+
@@ -470,53 +606,47 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                     ps.setString(2,"%"+TCari.getText().trim()+"%");
                     ps.setString(3,"%"+TCari.getText().trim()+"%");
                 }
-                    
-                rs=ps.executeQuery();            
-                while(rs.next()){ 
-                    if(aktifkanbatch.equals("yes")){
-                        koneksi=koneksiDB.condb();
-                        psstok=koneksi.prepareStatement("select sum(gudangbarang.stok) from gudangbarang inner join bangsal on gudangbarang.kd_bangsal=bangsal.kd_bangsal where bangsal.status='1' and gudangbarang.no_batch<>'' and gudangbarang.no_faktur<>'' and gudangbarang.kode_brng=?"); 
-                    }else{
-                        koneksi=koneksiDB.condb();
-                        psstok=koneksi.prepareStatement("select sum(gudangbarang.stok) from gudangbarang inner join bangsal on gudangbarang.kd_bangsal=bangsal.kd_bangsal where bangsal.status='1' and gudangbarang.no_batch='' and gudangbarang.no_faktur='' and gudangbarang.kode_brng=?"); 
-                    }
-                               
+
+                rs=ps.executeQuery();
+                while(rs.next()){
+                    // Query stok per bangsal (bukan sum lintas bangsal) supaya kolom Lokasi punya nilai.
+                    // Filter batch DIBUANG di sini — untuk laporan "tidak bergerak" yang dinilai adalah
+                    // stok fisik di rak, bukan tracking per batch. Kalau tidak dibuang, banyak barang
+                    // dengan stok campur batch/non-batch tidak muncul sama sekali.
+                    String sqlStok = "select bangsal.nm_bangsal, sum(gudangbarang.stok) as stok "+
+                                     "from gudangbarang inner join bangsal on gudangbarang.kd_bangsal=bangsal.kd_bangsal "+
+                                     "where bangsal.status='1' and gudangbarang.kode_brng=? "+filterBangsalGB+
+                                     "group by gudangbarang.kd_bangsal, bangsal.nm_bangsal having sum(gudangbarang.stok)>0 "+
+                                     "order by bangsal.nm_bangsal";
+                    koneksi=koneksiDB.condb();
+                    psstok=koneksi.prepareStatement(sqlStok);
                     try {
                         psstok.setString(1,rs.getString(1));
                         rsstok=psstok.executeQuery();
-                        if(rsstok.next()){
-                            stok=rsstok.getDouble(1);
+                        while(rsstok.next()){
+                            double stokBangsal = rsstok.getDouble("stok");
+                            tabMode.addRow(new Object[]{
+                                rs.getString("kode_brng"),rs.getString("nama_brng"),rs.getString("satuan"),rs.getString("nama"),
+                                rsstok.getString("nm_bangsal"),
+                                stokBangsal,
+                                Valid.SetAngka(rs.getDouble("harga")),
+                                Valid.SetAngka(stokBangsal*rs.getDouble("harga"))
+                            });
                         }
                     } finally{
-                        if(rsstok!=null){
-                            rsstok.close();
-                        }
-                        if(psstok!=null){
-                            psstok.close();
-                        }
+                        if(rsstok!=null){ rsstok.close(); }
+                        if(psstok!=null){ psstok.close(); }
                     }
-                    
-                    if(stok>0){
-                        tabMode.addRow(new Object[]{
-                            rs.getString("kode_brng"),rs.getString("nama_brng"),rs.getString("satuan"),rs.getString("nama"),
-                            stok,Valid.SetAngka(rs.getDouble("harga")),Valid.SetAngka(stok*rs.getDouble("harga"))
-                        });
-                    }
-                }                  
+                }
             } catch (Exception e) {
                 System.out.println("Notifikasi : "+e);
             } finally{
-                if(rs!=null){
-                    rs.close();
-                }
-                if(ps!=null){
-                    ps.close();
-                }
+                if(rs!=null){ rs.close(); }
+                if(ps!=null){ ps.close(); }
             }
         }catch(SQLException e){
             System.out.println("Notifikasi : "+e);
         }
-        
     }
     
     public void isCek(){
