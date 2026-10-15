@@ -2548,6 +2548,26 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
             }
         }
 
+        // Diagnosa utama belum diinput: pakai diagnosa awal SEP BPJS kunjungan ini
+        if(KodeDiagnosaUtama.getText().trim().isEmpty()){
+            try (PreparedStatement ps2=koneksi.prepareStatement(
+                    "select bridging_sep.diagawal,ifnull(penyakit.nm_penyakit,bridging_sep.nmdiagnosaawal) as nama "+
+                    "from bridging_sep left join penyakit on penyakit.kd_penyakit=bridging_sep.diagawal "+
+                    "where bridging_sep.no_rawat=? and bridging_sep.diagawal<>'' order by bridging_sep.tglsep desc limit 1")) {
+                ps2.setString(1,norwt);
+                try (ResultSet rs2=ps2.executeQuery()) {
+                    if(rs2.next()){
+                        String kode=rs2.getString("diagawal").trim(),nama=rs2.getString("nama")==null?"":rs2.getString("nama").trim();
+                        if(nama.startsWith(kode+" - ")) nama=nama.substring(kode.length()+3);
+                        KodeDiagnosaUtama.setText(kode);
+                        DiagnosaUtama.setText(nama);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Notif Auto Diagnosa SEP : "+e);
+            }
+        }
+
         if(Keluhan.getText().trim().isEmpty()) Keluhan.setText(keluhan.toString());
         if(JalannyaPenyakit.getText().trim().isEmpty()) JalannyaPenyakit.setText(jalannya.toString().trim());
         if(PemeriksaanPenunjang.getText().trim().isEmpty()) PemeriksaanPenunjang.setText(penunjang.toString().trim());
