@@ -257,6 +257,90 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         initComponents();
         initRawatJalan();
 
+        // Perbesar font kotak SOAP tab Pemeriksaan agar mudah dibaca dokter
+        java.awt.Font fontSoap = new java.awt.Font("Tahoma", 0, 14);
+        TKeluhan.setFont(fontSoap);
+        TPemeriksaan.setFont(fontSoap);
+        TPenilaian.setFont(fontSoap);
+        TindakLanjut.setFont(fontSoap);
+        TInstruksi.setFont(fontSoap);
+        TEvaluasi.setFont(fontSoap);
+
+        // Auto-perbesar kotak SOAP model AKORDEON + tombol mic dikte suara (voice-to-text) tiap kotak.
+        // Kotak yang difokuskan membesar; kotak lain di kolom sama mengecil jadi strip (tetap bisa diklik),
+        // tidak saling menutupi. Tombol mic mengikuti posisi kotak. Kembali normal saat fokus keluar kolom.
+        class AkordeonSoap {
+            final javax.swing.JScrollPane[] col; final javax.swing.JTextArea[] ta;
+            final int top, total; final java.awt.Rectangle[] asli; final javax.swing.JButton[] mic;
+            AkordeonSoap(javax.swing.JScrollPane[] col, javax.swing.JTextArea[] ta, int top, int total){
+                this.col=col; this.ta=ta; this.top=top; this.total=total;
+                this.asli=new java.awt.Rectangle[col.length];
+                this.mic=new javax.swing.JButton[col.length];
+                java.awt.Container p=col[0].getParent();
+                for(int k=0;k<col.length;k++){
+                    asli[k]=col[k].getBounds();
+                    final javax.swing.JTextArea target=ta[k];
+                    javax.swing.JButton b=new javax.swing.JButton("●");
+                    b.setForeground(new java.awt.Color(200,0,0));
+                    b.setFont(new java.awt.Font("Tahoma",1,11));
+                    b.setMargin(new java.awt.Insets(0,0,0,0));
+                    b.setFocusable(false);
+                    b.setToolTipText("Klik untuk dikte suara (voice to text) ke kotak ini");
+                    b.addActionListener(new java.awt.event.ActionListener(){
+                        public void actionPerformed(java.awt.event.ActionEvent e){ dikte(target); }
+                    });
+                    mic[k]=b;
+                    if(p!=null){ p.add(b); p.setComponentZOrder(b,0); }
+                }
+                for(int k=0;k<col.length;k++){
+                    final int idx=k;
+                    ta[k].addFocusListener(new java.awt.event.FocusAdapter(){
+                        @Override public void focusGained(java.awt.event.FocusEvent e){ buka(idx); }
+                        @Override public void focusLost(java.awt.event.FocusEvent e){
+                            java.awt.Component opp=e.getOppositeComponent(); boolean masih=false;
+                            for(javax.swing.JTextArea t:ta) if(t==opp){ masih=true; break; }
+                            if(!masih) reset();
+                        }
+                    });
+                }
+                tataTombol();
+            }
+            void buka(int fokus){
+                int gap=8, small=26, big=total-(col.length-1)*(small+gap); if(big<small) big=small;
+                int y=top;
+                for(int k=0;k<col.length;k++){ int h=(k==fokus)?big:small; col[k].setBounds(asli[k].x,y,asli[k].width,h); y+=h+gap; }
+                tataTombol(); refresh();
+            }
+            void reset(){ for(int k=0;k<col.length;k++) col[k].setBounds(asli[k]); tataTombol(); refresh(); }
+            void tataTombol(){ for(int k=0;k<col.length;k++){ java.awt.Rectangle r=col[k].getBounds(); mic[k].setBounds(r.x+r.width-22, r.y+2, 20, 18); } }
+            void refresh(){ java.awt.Container p=col[0].getParent(); if(p!=null){ p.revalidate(); p.repaint(); } }
+            void dikte(final javax.swing.text.JTextComponent target){
+                if(target!=null) target.requestFocusInWindow();
+                final String os=System.getProperty("os.name","").toLowerCase();
+                javax.swing.SwingUtilities.invokeLater(new Runnable(){ public void run(){
+                    try{
+                        if(os.contains("win")){
+                            java.awt.Robot r=new java.awt.Robot();
+                            r.keyPress(java.awt.event.KeyEvent.VK_WINDOWS);
+                            r.keyPress(java.awt.event.KeyEvent.VK_H);
+                            r.keyRelease(java.awt.event.KeyEvent.VK_H);
+                            r.keyRelease(java.awt.event.KeyEvent.VK_WINDOWS);
+                        } else if(os.contains("mac")){
+                            Runtime.getRuntime().exec(new String[]{"osascript","-e",
+                                "tell application \"System Events\" to key code 63","-e","delay 0.15","-e",
+                                "tell application \"System Events\" to key code 63"});
+                        } else {
+                            javax.swing.JOptionPane.showMessageDialog(null,"Aktifkan dikte suara dari sistem operasi Anda, lalu bicara. Teks akan masuk ke kotak yang dipilih.");
+                        }
+                    }catch(Exception ex){ System.out.println("Dikte: "+ex); }
+                }});
+            }
+        }
+        new AkordeonSoap(new javax.swing.JScrollPane[]{scrollPane1, scrollPane2},
+                         new javax.swing.JTextArea[]{TKeluhan, TPemeriksaan}, 70, 140);
+        new AkordeonSoap(new javax.swing.JScrollPane[]{scrollPane3, scrollPane6, scrollPane7, scrollPane8},
+                         new javax.swing.JTextArea[]{TPenilaian, TindakLanjut, TInstruksi, TEvaluasi}, 45, 270);
+
         this.setLocation(8,1);
         setSize(885,674);
         tabModeDr=new DefaultTableModel(null,new Object[]{
@@ -2150,22 +2234,22 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         jLabel7.setText("Suhu (°C) :");
         jLabel7.setName("jLabel7"); 
         panelGlass12.add(jLabel7);
-        jLabel7.setBounds(0, 160, 70, 23);
+        jLabel7.setBounds(0, 220, 70, 23);
 
         jLabel4.setText("Tensi (mmHg) :");
         jLabel4.setName("jLabel4"); 
         panelGlass12.add(jLabel4);
-        jLabel4.setBounds(130, 160, 90, 23);
+        jLabel4.setBounds(130, 220, 90, 23);
 
         jLabel16.setText("Berat (Kg) :");
         jLabel16.setName("jLabel16"); 
         panelGlass12.add(jLabel16);
-        jLabel16.setBounds(296, 160, 79, 23);
+        jLabel16.setBounds(296, 220, 79, 23);
 
         jLabel18.setText("Nadi (/menit) :");
         jLabel18.setName("jLabel18"); 
         panelGlass12.add(jLabel18);
-        jLabel18.setBounds(296, 190, 79, 23);
+        jLabel18.setBounds(296, 252, 79, 23);
 
         jLabel25.setText("L.P. (Cm) :");
         jLabel25.setName("jLabel25"); 
@@ -2175,12 +2259,12 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         jLabel17.setText("TB (Cm) :");
         jLabel17.setName("jLabel17"); 
         panelGlass12.add(jLabel17);
-        jLabel17.setBounds(0, 190, 70, 23);
+        jLabel17.setBounds(0, 252, 70, 23);
 
         jLabel9.setText("Objek :");
-        jLabel9.setName("jLabel9"); 
+        jLabel9.setName("jLabel9");
         panelGlass12.add(jLabel9);
-        jLabel9.setBounds(0, 115, 70, 23);
+        jLabel9.setBounds(0, 145, 70, 23);
 
         jLabel15.setText("Alergi :");
         jLabel15.setName("jLabel15"); 
@@ -2190,12 +2274,12 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         jLabel20.setText("RR (/menit) :");
         jLabel20.setName("jLabel20"); 
         panelGlass12.add(jLabel20);
-        jLabel20.setBounds(130, 190, 90, 23);
+        jLabel20.setBounds(130, 252, 90, 23);
 
         jLabel22.setText("GCS (E,V,M) :");
         jLabel22.setName("jLabel22"); 
         panelGlass12.add(jLabel22);
-        jLabel22.setBounds(120, 220, 70, 23);
+        jLabel22.setBounds(120, 284, 70, 23);
 
         scrollPane1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         scrollPane1.setName("scrollPane1"); 
@@ -2212,17 +2296,17 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         scrollPane1.setViewportView(TKeluhan);
 
         panelGlass12.add(scrollPane1);
-        scrollPane1.setBounds(73, 70, 360, 38);
+        scrollPane1.setBounds(73, 70, 360, 60);
 
         jLabel28.setText("Asesmen :");
         jLabel28.setName("jLabel28"); 
         panelGlass12.add(jLabel28);
-        jLabel28.setBounds(450, 40, 90, 23);
+        jLabel28.setBounds(450, 45, 90, 23);
 
         jLabel26.setText("Plan :");
         jLabel26.setName("jLabel26"); 
         panelGlass12.add(jLabel26);
-        jLabel26.setBounds(450, 85, 90, 23);
+        jLabel26.setBounds(450, 113, 90, 23);
 
         scrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         scrollPane2.setName("scrollPane2"); 
@@ -2239,7 +2323,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         scrollPane2.setViewportView(TPemeriksaan);
 
         panelGlass12.add(scrollPane2);
-        scrollPane2.setBounds(73, 115, 360, 38);
+        scrollPane2.setBounds(73, 145, 360, 60);
 
         TSuhu.setFocusTraversalPolicyProvider(true);
         TSuhu.setName("TSuhu"); 
@@ -2249,7 +2333,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
             }
         });
         panelGlass12.add(TSuhu);
-        TSuhu.setBounds(73, 160, 55, 23);
+        TSuhu.setBounds(73, 220, 55, 23);
 
         TTensi.setHighlighter(null);
         TTensi.setName("TTensi"); 
@@ -2259,7 +2343,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
             }
         });
         panelGlass12.add(TTensi);
-        TTensi.setBounds(223, 160, 74, 23);
+        TTensi.setBounds(223, 220, 74, 23);
 
         TTinggi.setFocusTraversalPolicyProvider(true);
         TTinggi.setName("TTinggi"); 
@@ -2269,7 +2353,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
             }
         });
         panelGlass12.add(TTinggi);
-        TTinggi.setBounds(73, 190, 55, 23);
+        TTinggi.setBounds(73, 252, 55, 23);
 
         TRespirasi.setHighlighter(null);
         TRespirasi.setName("TRespirasi"); 
@@ -2279,7 +2363,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
             }
         });
         panelGlass12.add(TRespirasi);
-        TRespirasi.setBounds(223, 190, 55, 23);
+        TRespirasi.setBounds(223, 252, 55, 23);
 
         TBerat.setHighlighter(null);
         TBerat.setName("TBerat"); 
@@ -2289,7 +2373,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
             }
         });
         panelGlass12.add(TBerat);
-        TBerat.setBounds(378, 160, 55, 23);
+        TBerat.setBounds(378, 220, 55, 23);
 
         TNadi.setFocusTraversalPolicyProvider(true);
         TNadi.setName("TNadi"); 
@@ -2299,7 +2383,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
             }
         });
         panelGlass12.add(TNadi);
-        TNadi.setBounds(378, 190, 55, 23);
+        TNadi.setBounds(378, 252, 55, 23);
 
         TGCS.setFocusTraversalPolicyProvider(true);
         TGCS.setName("TGCS"); 
@@ -2309,7 +2393,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
             }
         });
         panelGlass12.add(TGCS);
-        TGCS.setBounds(193, 220, 42, 23);
+        TGCS.setBounds(193, 284, 42, 23);
 
         TAlergi.setHighlighter(null);
         TAlergi.setName("TAlergi"); 
@@ -2336,7 +2420,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         scrollPane3.setViewportView(TPenilaian);
 
         panelGlass12.add(scrollPane3);
-        scrollPane3.setBounds(543, 40, 360, 38);
+        scrollPane3.setBounds(543, 45, 360, 58);
 
         scrollPane6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         scrollPane6.setName("scrollPane6"); 
@@ -2353,12 +2437,12 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         scrollPane6.setViewportView(TindakLanjut);
 
         panelGlass12.add(scrollPane6);
-        scrollPane6.setBounds(543, 85, 360, 47);
+        scrollPane6.setBounds(543, 113, 360, 58);
 
         jLabel29.setText("Kesadaran :");
         jLabel29.setName("jLabel29"); 
         panelGlass12.add(jLabel29);
-        jLabel29.setBounds(234, 220, 70, 23);
+        jLabel29.setBounds(234, 284, 70, 23);
 
         cmbKesadaran.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Compos Mentis", "Somnolence", "Sopor", "Coma","Apatis","Delirium","Meninggal"}));
         cmbKesadaran.setName("cmbKesadaran"); 
@@ -2369,7 +2453,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
             }
         });
         panelGlass12.add(cmbKesadaran);
-        cmbKesadaran.setBounds(307, 220, 126, 23);
+        cmbKesadaran.setBounds(307, 284, 126, 23);
 
         jLabel37.setText("Dilakukan :");
         jLabel37.setName("jLabel37"); 
@@ -2418,7 +2502,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         jLabel53.setText("Inst/Impl :");
         jLabel53.setName("jLabel53"); 
         panelGlass12.add(jLabel53);
-        jLabel53.setBounds(450, 139, 90, 23);
+        jLabel53.setBounds(450, 181, 90, 23);
 
         scrollPane7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         scrollPane7.setName("scrollPane7"); 
@@ -2435,12 +2519,12 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         scrollPane7.setViewportView(TInstruksi);
 
         panelGlass12.add(scrollPane7);
-        scrollPane7.setBounds(543, 139, 360, 50);
+        scrollPane7.setBounds(543, 181, 360, 58);
 
         jLabel54.setText("SpO2 (%) :");
         jLabel54.setName("jLabel54"); 
         panelGlass12.add(jLabel54);
-        jLabel54.setBounds(0, 220, 70, 23);
+        jLabel54.setBounds(0, 284, 70, 23);
 
         SpO2.setFocusTraversalPolicyProvider(true);
         SpO2.setName("SpO2"); 
@@ -2450,12 +2534,12 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
             }
         });
         panelGlass12.add(SpO2);
-        SpO2.setBounds(73, 220, 42, 23);
+        SpO2.setBounds(73, 284, 42, 23);
 
         jLabel56.setText("Evaluasi :");
         jLabel56.setName("jLabel56"); 
         panelGlass12.add(jLabel56);
-        jLabel56.setBounds(450, 196, 90, 23);
+        jLabel56.setBounds(450, 249, 90, 23);
 
         scrollPane8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         scrollPane8.setName("scrollPane8"); 
@@ -2472,7 +2556,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         scrollPane8.setViewportView(TEvaluasi);
 
         panelGlass12.add(scrollPane8);
-        scrollPane8.setBounds(543, 196, 360, 44);
+        scrollPane8.setBounds(543, 249, 360, 66);
 
         LingkarPerut.setHighlighter(null);
         LingkarPerut.setName("LingkarPerut"); 
