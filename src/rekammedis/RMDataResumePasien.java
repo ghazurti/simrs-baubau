@@ -2455,35 +2455,20 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
     private void isiOtomatis(String norwt) {
         StringBuilder keluhan=new StringBuilder(),jalannya=new StringBuilder(),penunjang=new StringBuilder(),
                 lab=new StringBuilder(),obat=new StringBuilder();
-        String ttv="";
         int jmllab=0;
+        // Jalannya penyakit = riwayat kunjungan (sama dengan "5 Riwayat Terakhir" di Riwayat Perawatan)
         riwayatKunjungan(norwt,jalannya);
-        // Utamakan SOAP isian dokter; isian perawat dipakai hanya jika dokter belum mengisi
+        // Keluhan utama dari SOAP; utamakan isian dokter, isian perawat hanya jika dokter belum mengisi
         try (PreparedStatement ps2=koneksi.prepareStatement(
-                "select keluhan,pemeriksaan,penilaian,instruksi,tensi,nadi,respirasi,suhu_tubuh,spo2,kesadaran "+
-                "from pemeriksaan_ralan where no_rawat=? and (nip in (select kd_dokter from dokter) or not exists("+
+                "select keluhan from pemeriksaan_ralan where no_rawat=? and (nip in (select kd_dokter from dokter) or not exists("+
                 "select 1 from pemeriksaan_ralan x inner join dokter on dokter.kd_dokter=x.nip where x.no_rawat=?)) "+
                 "order by tgl_perawatan,jam_rawat")) {
             ps2.setString(1,norwt);
             ps2.setString(2,norwt);
             try (ResultSet rs2=ps2.executeQuery()) {
-                StringBuilder fisik=new StringBuilder(),penilaian=new StringBuilder(),instruksi=new StringBuilder();
                 while(rs2.next()){
                     tambahUnik(keluhan,rs2.getString("keluhan"));
-                    tambahUnik(fisik,rs2.getString("pemeriksaan"));
-                    tambahUnik(penilaian,rs2.getString("penilaian"));
-                    tambahUnik(instruksi,rs2.getString("instruksi"));
-                    String t=gabungTTV(rs2.getString("tensi"),rs2.getString("nadi"),rs2.getString("respirasi"),
-                            rs2.getString("suhu_tubuh"),rs2.getString("spo2"),rs2.getString("kesadaran"));
-                    if(!t.isEmpty()) ttv=t;
                 }
-                StringBuilder kini=new StringBuilder();
-                if(!ttv.isEmpty()) kini.append("TTV: ").append(ttv).append("\n");
-                if(fisik.length()>0) kini.append("Pemeriksaan Fisik: ").append(fisik).append("\n");
-                if(penilaian.length()>0) kini.append("Assessment: ").append(penilaian).append("\n");
-                if(instruksi.length()>0) kini.append("Instruksi: ").append(instruksi).append("\n");
-                if(kini.length()>0&&jalannya.length()>0) jalannya.append("\nKunjungan saat ini:\n");
-                jalannya.append(kini);
             }
         } catch (Exception e) {
             System.out.println("Notif Auto SOAP : "+e);
@@ -2575,42 +2560,26 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
         Obat2an.setCaretPosition(0);
     }
 
-    // 5 kunjungan sebelumnya (seperti "5 Riwayat Terakhir" di Riwayat Perawatan), urut dari yang terlama
+    // 5 riwayat kunjungan terakhir pasien s.d. kunjungan ini, seperti tab Riwayat Kunjungan di Riwayat Perawatan
     private void riwayatKunjungan(String norwt,StringBuilder sb) {
-        java.util.List<String> baris=new java.util.ArrayList<>();
         try (PreparedStatement ps2=koneksi.prepareStatement(
-                "select r.stts,date_format(r.tgl_registrasi,'%d-%m-%Y') as tgl,if(r.status_lanjut='Ranap','Rawat Inap',poliklinik.nm_poli) as poli,dokter.nm_dokter,"+
-                "(select concat(dp.kd_penyakit,' ',penyakit.nm_penyakit) from diagnosa_pasien dp inner join penyakit on penyakit.kd_penyakit=dp.kd_penyakit "+
-                " where dp.no_rawat=r.no_rawat order by dp.prioritas limit 1) as dx,"+
-                "(select pr.keluhan from pemeriksaan_ralan pr where pr.no_rawat=r.no_rawat and pr.keluhan<>'' "+
-                " order by pr.nip in (select kd_dokter from dokter) desc,pr.tgl_perawatan desc,pr.jam_rawat desc limit 1) as s,"+
-                "(select pr.penilaian from pemeriksaan_ralan pr where pr.no_rawat=r.no_rawat and pr.penilaian<>'' "+
-                " order by pr.nip in (select kd_dokter from dokter) desc,pr.tgl_perawatan desc,pr.jam_rawat desc limit 1) as a "+
-                "from reg_periksa r inner join reg_periksa ini on ini.no_rawat=? "+
-                "inner join poliklinik on poliklinik.kd_poli=r.kd_poli inner join dokter on dokter.kd_dokter=r.kd_dokter "+
-                "where r.no_rkm_medis=ini.no_rkm_medis and r.no_rawat<>ini.no_rawat and r.stts<>'Batal' "+
-                "and concat(r.tgl_registrasi,' ',r.jam_reg)<concat(ini.tgl_registrasi,' ',ini.jam_reg) "+
-                "order by r.tgl_registrasi desc,r.jam_reg desc limit 5")) {
+                "select r.no_rawat,date_format(r.tgl_registrasi,'%d-%m-%Y') as tgl,r.jam_reg,dokter.nm_dokter,"+
+                "poliklinik.nm_poli,penjab.png_jawab from reg_periksa r inner join reg_periksa ini on ini.no_rawat=? "+
+                "inner join dokter on dokter.kd_dokter=r.kd_dokter inner join poliklinik on poliklinik.kd_poli=r.kd_poli "+
+                "inner join penjab on penjab.kd_pj=r.kd_pj where r.stts<>'Batal' and r.no_rkm_medis=ini.no_rkm_medis "+
+                "and r.tgl_registrasi<=ini.tgl_registrasi order by r.tgl_registrasi desc,r.jam_reg desc limit 5")) {
             ps2.setString(1,norwt);
             try (ResultSet rs2=ps2.executeQuery()) {
+                int no=0;
                 while(rs2.next()){
-                    StringBuilder b=new StringBuilder("- ").append(rs2.getString("tgl")).append(" ").append(rs2.getString("poli"))
-                            .append(" (").append(rs2.getString("nm_dokter")).append(")");
-                    String isi="";
-                    if(rs2.getString("s")!=null) isi+="S: "+rs2.getString("s").trim().replaceAll("\\s+"," ")+"; ";
-                    if(rs2.getString("a")!=null) isi+="A: "+rs2.getString("a").trim().replaceAll("\\s+"," ")+"; ";
-                    if(rs2.getString("dx")!=null) isi+="Dx: "+rs2.getString("dx")+"; ";
-                    if(isi.isEmpty()&&"Belum".equals(rs2.getString("stts"))) continue;
-                    if(!isi.isEmpty()) b.append(": ").append(isi.substring(0,isi.length()-2));
-                    baris.add(0,b.toString());
+                    no++;
+                    sb.append(no).append(". ").append(rs2.getString("tgl")).append(" ").append(rs2.getString("jam_reg"))
+                      .append(" - ").append(rs2.getString("nm_poli")).append(" - ").append(rs2.getString("nm_dokter"))
+                      .append(" (").append(rs2.getString("png_jawab")).append(") No.Rawat ").append(rs2.getString("no_rawat")).append("\n");
                 }
             }
         } catch (Exception e) {
             System.out.println("Notif Auto Riwayat : "+e);
-        }
-        if(!baris.isEmpty()){
-            sb.append("Riwayat kunjungan sebelumnya:\n");
-            for(String b:baris) sb.append(b).append("\n");
         }
     }
 
@@ -2620,18 +2589,6 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
         if(teks.isEmpty()||teks.equals("-")||sb.indexOf(teks)>=0) return;
         if(sb.length()>0) sb.append("\n");
         sb.append(teks);
-    }
-
-    private String gabungTTV(String td,String nadi,String rr,String suhu,String spo2,String kesadaran) {
-        StringBuilder sb=new StringBuilder();
-        if(td!=null&&!td.trim().isEmpty()) sb.append("TD ").append(td.trim()).append(" mmHg, ");
-        if(nadi!=null&&!nadi.trim().isEmpty()) sb.append("N ").append(nadi.trim()).append(" x/mnt, ");
-        if(rr!=null&&!rr.trim().isEmpty()) sb.append("RR ").append(rr.trim()).append(" x/mnt, ");
-        if(suhu!=null&&!suhu.trim().isEmpty()) sb.append("S ").append(suhu.trim()).append(" °C, ");
-        if(spo2!=null&&!spo2.trim().isEmpty()) sb.append("SpO2 ").append(spo2.trim()).append("%, ");
-        if(sb.length()==0) return "";
-        if(kesadaran!=null&&!kesadaran.trim().isEmpty()) sb.append(kesadaran.trim()).append(", ");
-        return sb.substring(0,sb.length()-2);
     }
 
     private void tambahObat(StringBuilder sb,String nama,double jml,String satuan,String aturan) {
