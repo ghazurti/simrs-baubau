@@ -1132,7 +1132,10 @@ public final class RMSkriningKekerasanPadaPerempuan extends javax.swing.JDialog 
     private void TNoRwKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TNoRwKeyPressed
         if(evt.getKeyCode()==KeyEvent.VK_PAGE_DOWN){
             isRawat();
-        }else{            
+        }else{
+            if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+                isRawat();
+            }
             Valid.pindah(evt,TCari,Tanggal);
         }
 }//GEN-LAST:event_TNoRwKeyPressed
