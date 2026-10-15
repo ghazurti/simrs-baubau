@@ -7,7 +7,7 @@
  header("Cache-Control: no-store, no-cache, must-revalidate"); 
  header("Cache-Control: post-check=0, pre-check=0", false);
  header("Pragma: no-cache"); // HTTP/1.0
- date_default_timezone_set("Asia/Bangkok");
+ date_default_timezone_set("Asia/Makassar");
  $tanggal= mktime(date("m"),date("d"),date("Y"));
  $jam=date("H:i");
 ?>
@@ -15,11 +15,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link href="css/default.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="conf/validator.js"></script>
-    <meta http-equiv="refresh" content="20"/>
     <title>Informasi Ketersediaan Kamar</title>
     <script src="Scripts/AC_RunActiveContent.js" type="text/javascript"></script>
     <script src="Scripts/AC_ActiveX.js" type="text/javascript"></script>
 	<style type="text/css">
+		html, body {
+			height: 100%;
+			overflow: hidden;
+		}
 		body {
 			margin: 0;
 			font-family: Tahoma, Arial, sans-serif;
@@ -27,9 +30,13 @@
 			color: #20304a;
 		}
 		.wrapper {
-			max-width: 1600px;
+			max-width: 98%;
+			height: 100vh;
 			margin: 0 auto;
-			padding: 18px 20px 24px;
+			padding: 15px 20px;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
 		}
 		.header-card {
 			background: #ffffff;
@@ -38,6 +45,7 @@
 			box-shadow: 0 10px 30px rgba(35, 56, 99, 0.08);
 			padding: 16px 18px;
 			margin-bottom: 16px;
+			flex-shrink: 0;
 		}
 		.header-grid {
 			display: table;
@@ -50,13 +58,13 @@
 		.header-logo { width: 100px; }
 		.header-right { width: 180px; text-align: right; }
 		.title-main {
-			font-size: 30px;
+			font-size: 36px;
 			font-weight: 800;
 			color: #7a1fa2;
 			line-height: 1.1;
 		}
 		.title-sub {
-			font-size: 16px;
+			font-size: 18px;
 			color: #5b6b84;
 			margin-top: 6px;
 		}
@@ -67,7 +75,7 @@
 			border-radius: 999px;
 			background: #fff3c4;
 			color: #8a6d00;
-			font-size: 15px;
+			font-size: 16px;
 			font-weight: 800;
 		}
 		.table-card {
@@ -75,30 +83,34 @@
 			border: 1px solid #d8e1f2;
 			border-radius: 18px;
 			box-shadow: 0 10px 30px rgba(35, 56, 99, 0.08);
-			overflow: hidden;
+			overflow-y: auto;
+			flex-grow: 1;
 		}
 		.room-table {
 			width: 100%;
 			border-collapse: collapse;
 		}
 		.room-table thead th {
+			position: sticky;
+			top: 0;
+			z-index: 10;
 			background: linear-gradient(90deg, #7a1fa2 0%, #b23dbd 100%);
 			color: #fff;
-			padding: 14px 12px;
-			font-size: 18px;
+			padding: 16px 14px;
+			font-size: 20px;
 			letter-spacing: .4px;
 		}
 		.room-table tbody td {
-			padding: 14px 12px;
+			padding: 16px 14px;
 			border-bottom: 1px solid #e8eef8;
-			font-size: 18px;
+			font-size: 20px;
 		}
 		.room-table tbody tr:nth-child(even) { background: #f7faff; }
 		.room-table tbody tr:hover { background: #eef6ff; }
 		.room-name { font-weight: 800; color: #5f1786; }
-		.num-total { color: #d32f2f; font-size: 24px; font-weight: 800; }
-		.num-filled { color: #c79200; font-size: 24px; font-weight: 800; }
-		.num-empty { color: #1b8f4b; font-size: 24px; font-weight: 800; }
+		.num-total { color: #d32f2f; font-size: 32px; font-weight: 800; }
+		.num-filled { color: #c79200; font-size: 32px; font-weight: 800; }
+		.num-empty { color: #1b8f4b; font-size: 32px; font-weight: 800; }
 		.tarif-cell { padding: 10px 14px !important; }
 		.tarif-row {
 			display: flex;
@@ -110,18 +122,18 @@
 		.tarif-row + .tarif-row { border-top: 1px dashed #e1e8f5; }
 		.kelas-tag {
 			display: inline-block;
-			padding: 4px 10px;
+			padding: 5px 12px;
 			border-radius: 999px;
 			background: #f1e8f8;
 			color: #5f1786;
-			font-size: 14px;
+			font-size: 16px;
 			font-weight: 700;
 			white-space: nowrap;
 		}
 		.harga {
 			color: #1b3a73;
 			font-weight: 800;
-			font-size: 16px;
+			font-size: 18px;
 			text-align: right;
 		}
 		.harga-na { color: #98a2b3; font-style: italic; }
@@ -131,14 +143,50 @@
 			overflow: hidden;
 			box-shadow: 0 8px 22px rgba(35, 56, 99, 0.08);
 		}
-		.table-card { margin-bottom: 0; }
-
-			.title-main { font-size: 24px; }
-			.title-sub { font-size: 14px; }
-			.title-meta { font-size: 13px; }
-			.room-table thead th { font-size: 16px; padding: 12px 10px; }
-			.room-table tbody td { font-size: 16px; padding: 12px 10px; }
-			.num-total, .num-filled, .num-empty { font-size: 16px; }
+		@media screen and (max-width: 1440px) {
+			.wrapper { padding: 16px; }
+			.header-card { padding: 14px 16px; margin-bottom: 14px; }
+			.header-logo img { width: 85px; height: 85px; }
+			.header-right img { width: 155px; height: 110px; }
+			.title-main { font-size: 32px; }
+			.title-sub { font-size: 16px; }
+			.title-meta { font-size: 15px; padding: 6px 10px; margin-top: 4px; }
+			.room-table thead th { font-size: 18px; padding: 12px 10px; }
+			.room-table tbody td { font-size: 18px; padding: 12px 10px; }
+			.num-total, .num-filled, .num-empty { font-size: 28px; }
+			.kelas-tag { font-size: 14px; padding: 4px 10px; }
+			.harga { font-size: 16px; }
+			.tarif-row { padding: 4px 0; }
+		.zoom-controls {
+			position: fixed;
+			bottom: 20px;
+			right: 20px;
+			background: #ffffff;
+			border: 1px solid #d8e1f2;
+			border-radius: 8px;
+			box-shadow: 0 4px 12px rgba(35, 56, 99, 0.15);
+			padding: 5px;
+			display: flex;
+			gap: 5px;
+			z-index: 1000;
+			opacity: 0.2;
+			transition: opacity 0.3s;
+		}
+		.zoom-controls:hover {
+			opacity: 1;
+		}
+		.zoom-controls button {
+			background: #f1e8f8;
+			border: 1px solid #c9b1d9;
+			color: #5f1786;
+			border-radius: 4px;
+			padding: 8px 14px;
+			font-size: 16px;
+			font-weight: bold;
+			cursor: pointer;
+		}
+		.zoom-controls button:hover {
+			background: #e1cdec;
 		}
 	</style>
 </head>
@@ -168,7 +216,7 @@
 					<div class='title-meta'>".date("d-M-Y", $tanggal)." &nbsp; ". $jam."</div>
 				</div>
 				<div class='header-right'>
-					<img width='180' height='130' style='border-radius:14px;object-fit:cover;' src='header-kanan.jpg'/>
+					<img style='width: 130px; height: 130px; object-fit: contain;' src='header-kanan.jpg'/>
 				</div>
 			</div>
 		</div>";
@@ -221,4 +269,72 @@
 	</table>
 	</div>
 </div>
+
+<div class="zoom-controls">
+    <button onclick="changeZoom(-0.1)">-</button>
+    <button onclick="resetZoom()">Reset Zoom</button>
+    <button onclick="changeZoom(0.1)">+</button>
+</div>
+
+<script>
+    let currentZoomSetting = localStorage.getItem('bed3_zoom') || '1';
+    let currentZoom = parseFloat(currentZoomSetting) || 1;
+
+    function applyZoom() {
+        document.body.style.zoom = currentZoom;
+    }
+
+    function changeZoom(delta) {
+        currentZoom += delta;
+        if(currentZoom < 0.3) currentZoom = 0.3;
+        if(currentZoom > 3.0) currentZoom = 3.0;
+        currentZoomSetting = currentZoom.toString();
+        localStorage.setItem('bed3_zoom', currentZoomSetting);
+        applyZoom();
+    }
+
+    function resetZoom() {
+        currentZoom = 1;
+        currentZoomSetting = '1';
+        localStorage.setItem('bed3_zoom', currentZoomSetting);
+        applyZoom();
+        window.scrollTo(0,0);
+    }
+
+    applyZoom();
+
+    // Auto Scroll Logic
+    function startAutoScroll() {
+        let speed = 1.5; // pixel scroll
+        let interval = 40; // ms delay
+        
+        let tableCard = document.querySelector('.table-card');
+        
+        if (tableCard.scrollHeight > tableCard.clientHeight) {
+            let scrollInterval = setInterval(function() {
+                tableCard.scrollBy(0, speed);
+                
+                // If we've reached the bottom
+                if (Math.ceil(tableCard.clientHeight + tableCard.scrollTop) >= tableCard.scrollHeight) {
+                    clearInterval(scrollInterval);
+                    
+                    // Tunggu 5 detik di bawah, lalu refresh halaman
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 5000);
+                }
+            }, interval);
+        } else {
+            // Jika konten muat di 1 layar, tidak perlu scroll. Langsung refresh per 20 detik saja.
+            setTimeout(function() {
+                window.location.reload();
+            }, 20000);
+        }
+    }
+
+    // Mulai auto scroll setelah 4 detik halaman dimuat (agar pembaca bisa baca header dulu)
+    window.addEventListener('load', function() {
+        setTimeout(startAutoScroll, 4000);
+    });
+</script>
 </body>
