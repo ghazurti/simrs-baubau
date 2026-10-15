@@ -19852,6 +19852,7 @@ public class DlgKamarInap extends javax.swing.JDialog {
     private javax.swing.JMenu MnUtamaDPJP;
     private javax.swing.JMenuItem MnPenilaianAwalKeperawatanKebidanan;
     private javax.swing.JMenuItem MnPenilaianAwalKeperawatanRanap;
+    private javax.swing.JMenuItem MnAsesmenInvasifNonBedah;
     private javax.swing.JMenuItem MnPenilaianAwalMedisHemodialisa;
     private javax.swing.JMenuItem MnPenilaianAwalMedisKandungan;
     private javax.swing.JMenuItem MnPenilaianAwalMedisRanap;
@@ -21092,6 +21093,18 @@ public class DlgKamarInap extends javax.swing.JDialog {
         MnPenilaianAwalKeperawatanRanapBayiAnak.setName("MnPenilaianAwalKeperawatanRanapBayiAnak"); 
         MnPenilaianAwalKeperawatanRanapBayiAnak.setPreferredSize(new java.awt.Dimension(240, 26));
         MnPenilaianAwalKeperawatanRanapBayiAnak.addActionListener(this::MnPenilaianAwalKeperawatanRanapBayiAnakActionPerformed);
+
+        MnAsesmenInvasifNonBedah = new javax.swing.JMenuItem();
+        MnAsesmenInvasifNonBedah.setBackground(new java.awt.Color(255, 255, 254));
+        MnAsesmenInvasifNonBedah.setFont(new java.awt.Font("Tahoma", 0, 11));
+        MnAsesmenInvasifNonBedah.setForeground(new java.awt.Color(50, 50, 50));
+        MnAsesmenInvasifNonBedah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png")));
+        MnAsesmenInvasifNonBedah.setText("Asesmen Invasif Non Bedah");
+        MnAsesmenInvasifNonBedah.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        MnAsesmenInvasifNonBedah.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        MnAsesmenInvasifNonBedah.setName("MnAsesmenInvasifNonBedah"); 
+        MnAsesmenInvasifNonBedah.setPreferredSize(new java.awt.Dimension(240, 26));
+        MnAsesmenInvasifNonBedah.addActionListener(this::MnAsesmenInvasifNonBedahActionPerformed);
         
         MnPenilaianPasienImunitasRendah = new javax.swing.JMenuItem();
         MnPenilaianPasienImunitasRendah.setBackground(new java.awt.Color(255, 255, 254));
@@ -21650,6 +21663,7 @@ public class DlgKamarInap extends javax.swing.JDialog {
         MnPenilaianAwal.add(MnPenilaianAwalKeperawatanKebidanan);
         MnPenilaianAwal.add(MnPenilaianAwalKeperawatanRanapNeonatus);
         MnPenilaianAwal.add(MnPenilaianAwalKeperawatanRanapBayiAnak);
+        MnPenilaianAwal.add(MnAsesmenInvasifNonBedah);
         MnPenilaianAwal.add(MnPenilaianAwalMedisRanap);
         MnPenilaianAwal.add(MnPenilaianBayiBaruLahir);
         MnPenilaianAwal.add(MnPenilaianAwalMedisNeonatus);
@@ -21739,4 +21753,26 @@ public class DlgKamarInap extends javax.swing.JDialog {
         MnSuratPersetujuan.add(MnSerahTerimaBarangAnggotaTubuh);
         MnSuratPersetujuan.add(MnPersetujuanBimbinganRohani);
     }
+
+    private void MnAsesmenInvasifNonBedahActionPerformed(java.awt.event.ActionEvent evt) {                                                      
+       if(tabMode.getRowCount()==0){
+            javax.swing.JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+            TCari.requestFocus();
+        }else{
+            if(tbKamIn.getSelectedRow()>-1){
+                this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+                rekammedis.RMAsesmenInvasifNonBedah form=new rekammedis.RMAsesmenInvasifNonBedah(null,false);
+                form.isCek();
+                form.emptTeks();
+                form.setNoRm(tbKamIn.getValueAt(tbKamIn.getSelectedRow(),0).toString(), new java.util.Date());
+                form.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
+                form.setLocationRelativeTo(internalFrame1);
+                form.setVisible(true);
+                this.setCursor(java.awt.Cursor.getDefaultCursor());
+            }else{
+                javax.swing.JOptionPane.showMessageDialog(null,"Silahkan pilih data pada tabel...!!!!");
+            }
+        }
+    }
+
 }
