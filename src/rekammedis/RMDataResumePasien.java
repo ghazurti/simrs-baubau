@@ -2446,60 +2446,181 @@ public final class RMDataResumePasien extends javax.swing.JDialog {
             }
         }
 
-        // Auto-isi keluhan, pemeriksaan penunjang, jalannya penyakit dari pemeriksaan_ralan
-        try {
-            koneksi=koneksiDB.condb();
-            ps=koneksi.prepareStatement(
-                "select group_concat(distinct keluhan order by tgl_perawatan,jam_rawat separator '\n') as keluhan,"+
-                "group_concat(distinct pemeriksaan order by tgl_perawatan,jam_rawat separator '\n') as pemeriksaan,"+
-                "group_concat(distinct penilaian order by tgl_perawatan,jam_rawat separator '\n') as penilaian "+
-                "from pemeriksaan_ralan where no_rawat=?");
-            try {
-                ps.setString(1,norwt);
-                rs=ps.executeQuery();
-                if(rs.next()){
-                    if(Keluhan.getText().isEmpty() && rs.getString("keluhan")!=null)
-                        Keluhan.setText(rs.getString("keluhan"));
-                    if(PemeriksaanPenunjang.getText().isEmpty() && rs.getString("pemeriksaan")!=null)
-                        PemeriksaanPenunjang.setText(rs.getString("pemeriksaan"));
-                    if(JalannyaPenyakit.getText().isEmpty() && rs.getString("penilaian")!=null)
-                        JalannyaPenyakit.setText(rs.getString("penilaian"));
-                }
-            } catch (Exception e) {
-                System.out.println("Notif : "+e);
-            } finally {
-                if(rs!=null) rs.close();
-                if(ps!=null) ps.close();
-            }
-        } catch (Exception e) {
-            System.out.println("Notif : "+e);
-        }
-
-        // Auto-isi obat pulang dari resep_pulang
-        if(Obat2an.getText().isEmpty()){
-            try {
-                koneksi=koneksiDB.condb();
-                ps=koneksi.prepareStatement(
-                    "select group_concat(concat(databarang.nama_brng,' ',resep_pulang.jml_barang,' ',resep_pulang.dosis) separator ', ') as obat "+
-                    "from resep_pulang inner join databarang on databarang.kode_brng=resep_pulang.kode_brng "+
-                    "where resep_pulang.no_rawat=?");
-                try {
-                    ps.setString(1,norwt);
-                    rs=ps.executeQuery();
-                    if(rs.next() && rs.getString("obat")!=null)
-                        Obat2an.setText(rs.getString("obat"));
-                } catch (Exception e) {
-                    System.out.println("Notif : "+e);
-                } finally {
-                    if(rs!=null) rs.close();
-                    if(ps!=null) ps.close();
-                }
-            } catch (Exception e) {
-                System.out.println("Notif : "+e);
-            }
-        }
+        isiOtomatis(norwt);
 
         runBackground(() ->tampil());
+    }
+
+    // Auto-isi resume dari SOAP, radiologi, laborat dan obat kunjungan ini. Hanya mengisi kotak yang masih kosong.
+    private void isiOtomatis(String norwt) {
+        StringBuilder keluhan=new StringBuilder(),jalannya=new StringBuilder(),penunjang=new StringBuilder(),
+                lab=new StringBuilder(),obat=new StringBuilder();
+        String ttv="";
+        int jmllab=0;
+        try (PreparedStatement ps2=koneksi.prepareStatement(
+                "select keluhan,pemeriksaan,penilaian,instruksi,tensi,nadi,respirasi,suhu_tubuh,spo2,kesadaran "+
+                "from pemeriksaan_ralan where no_rawat=? order by tgl_perawatan,jam_rawat")) {
+            ps2.setString(1,norwt);
+            try (ResultSet rs2=ps2.executeQuery()) {
+                StringBuilder fisik=new StringBuilder(),penilaian=new StringBuilder(),instruksi=new StringBuilder();
+                while(rs2.next()){
+                    tambahUnik(keluhan,rs2.getString("keluhan"));
+                    tambahUnik(fisik,rs2.getString("pemeriksaan"));
+                    tambahUnik(penilaian,rs2.getString("penilaian"));
+                    tambahUnik(instruksi,rs2.getString("instruksi"));
+                    String t=gabungTTV(rs2.getString("tensi"),rs2.getString("nadi"),rs2.getString("respirasi"),
+                            rs2.getString("suhu_tubuh"),rs2.getString("spo2"),rs2.getString("kesadaran"));
+                    if(!t.isEmpty()) ttv=t;
+                }
+                if(!ttv.isEmpty()) jalannya.append("TTV: ").append(ttv).append("\n");
+                if(fisik.length()>0) jalannya.append("Pemeriksaan Fisik: ").append(fisik).append("\n");
+                if(penilaian.length()>0) jalannya.append("Assessment: ").append(penilaian).append("\n");
+                if(instruksi.length()>0) jalannya.append("Instruksi: ").append(instruksi).append("\n");
+            }
+        } catch (Exception e) {
+            System.out.println("Notif Auto SOAP : "+e);
+        }
+
+        try (PreparedStatement ps2=koneksi.prepareStatement(
+                "select group_concat(distinct jns_perawatan_radiologi.nm_perawatan separator ', ') as nama,hasil_radiologi.hasil "+
+                "from periksa_radiologi inner join jns_perawatan_radiologi on jns_perawatan_radiologi.kd_jenis_prw=periksa_radiologi.kd_jenis_prw "+
+                "inner join hasil_radiologi on hasil_radiologi.no_rawat=periksa_radiologi.no_rawat and hasil_radiologi.tgl_periksa=periksa_radiologi.tgl_periksa "+
+                "and hasil_radiologi.jam=periksa_radiologi.jam where periksa_radiologi.no_rawat=? "+
+                "group by periksa_radiologi.tgl_periksa,periksa_radiologi.jam,hasil_radiologi.hasil order by periksa_radiologi.tgl_periksa,periksa_radiologi.jam")) {
+            ps2.setString(1,norwt);
+            try (ResultSet rs2=ps2.executeQuery()) {
+                while(rs2.next()){
+                    if(rs2.getString("hasil")!=null&&!rs2.getString("hasil").trim().isEmpty()){
+                        penunjang.append(rs2.getString("nama")).append(": ").append(rs2.getString("hasil").trim()).append("\n");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Notif Auto Radiologi : "+e);
+        }
+
+        try (PreparedStatement ps2=koneksi.prepareStatement(
+                "select template_laboratorium.Pemeriksaan,detail_periksa_lab.nilai,template_laboratorium.satuan,detail_periksa_lab.nilai_rujukan "+
+                "from detail_periksa_lab inner join template_laboratorium on template_laboratorium.id_template=detail_periksa_lab.id_template "+
+                "where detail_periksa_lab.no_rawat=? order by detail_periksa_lab.tgl_periksa,detail_periksa_lab.jam,template_laboratorium.urut")) {
+            ps2.setString(1,norwt);
+            try (ResultSet rs2=ps2.executeQuery()) {
+                while(rs2.next()){
+                    jmllab++;
+                    String nilai=rs2.getString("nilai")==null?"":rs2.getString("nilai").trim();
+                    String flag=flagLab(nilai,rs2.getString("nilai_rujukan"));
+                    if(!flag.isEmpty()){
+                        if(lab.length()>0) lab.append(", ");
+                        lab.append(rs2.getString("Pemeriksaan").trim()).append(" ").append(nilai);
+                        if(rs2.getString("satuan")!=null&&!rs2.getString("satuan").trim().isEmpty()) lab.append(" ").append(rs2.getString("satuan").trim());
+                        lab.append(" (").append(flag).append(")");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Notif Auto Lab : "+e);
+        }
+        if(lab.length()==0&&jmllab>0) lab.append("Hasil laboratorium dalam batas normal");
+
+        try (PreparedStatement ps2=koneksi.prepareStatement(
+                "select databarang.nama_brng,sum(detail_pemberian_obat.jml) as jml,databarang.kode_sat,"+
+                "(select aturan_pakai.aturan from aturan_pakai where aturan_pakai.no_rawat=detail_pemberian_obat.no_rawat "+
+                "and aturan_pakai.kode_brng=detail_pemberian_obat.kode_brng limit 1) as aturan "+
+                "from detail_pemberian_obat inner join databarang on databarang.kode_brng=detail_pemberian_obat.kode_brng "+
+                "where detail_pemberian_obat.no_rawat=? group by detail_pemberian_obat.kode_brng order by databarang.nama_brng")) {
+            ps2.setString(1,norwt);
+            try (ResultSet rs2=ps2.executeQuery()) {
+                while(rs2.next()){
+                    tambahObat(obat,rs2.getString("nama_brng"),rs2.getDouble("jml"),rs2.getString("kode_sat"),rs2.getString("aturan"));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Notif Auto Obat : "+e);
+        }
+        if(obat.length()==0){
+            // Belum diserahkan farmasi: ambil dari resep dokter
+            try (PreparedStatement ps2=koneksi.prepareStatement(
+                    "select databarang.nama_brng,sum(resep_dokter.jml) as jml,databarang.kode_sat,resep_dokter.aturan_pakai as aturan "+
+                    "from resep_obat inner join resep_dokter on resep_dokter.no_resep=resep_obat.no_resep "+
+                    "inner join databarang on databarang.kode_brng=resep_dokter.kode_brng "+
+                    "where resep_obat.no_rawat=? group by resep_dokter.kode_brng,resep_dokter.aturan_pakai order by databarang.nama_brng")) {
+                ps2.setString(1,norwt);
+                try (ResultSet rs2=ps2.executeQuery()) {
+                    while(rs2.next()){
+                        tambahObat(obat,rs2.getString("nama_brng"),rs2.getDouble("jml"),rs2.getString("kode_sat"),rs2.getString("aturan"));
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Notif Auto Resep : "+e);
+            }
+        }
+
+        if(Keluhan.getText().trim().isEmpty()) Keluhan.setText(keluhan.toString());
+        if(JalannyaPenyakit.getText().trim().isEmpty()) JalannyaPenyakit.setText(jalannya.toString().trim());
+        if(PemeriksaanPenunjang.getText().trim().isEmpty()) PemeriksaanPenunjang.setText(penunjang.toString().trim());
+        if(HasilLaborat.getText().trim().isEmpty()) HasilLaborat.setText(lab.toString());
+        if(Obat2an.getText().trim().isEmpty()) Obat2an.setText(obat.toString().trim());
+        Keluhan.setCaretPosition(0);
+        JalannyaPenyakit.setCaretPosition(0);
+        PemeriksaanPenunjang.setCaretPosition(0);
+        HasilLaborat.setCaretPosition(0);
+        Obat2an.setCaretPosition(0);
+    }
+
+    private void tambahUnik(StringBuilder sb,String teks) {
+        if(teks==null) return;
+        teks=teks.trim();
+        if(teks.isEmpty()||teks.equals("-")||sb.indexOf(teks)>=0) return;
+        if(sb.length()>0) sb.append("\n");
+        sb.append(teks);
+    }
+
+    private String gabungTTV(String td,String nadi,String rr,String suhu,String spo2,String kesadaran) {
+        StringBuilder sb=new StringBuilder();
+        if(td!=null&&!td.trim().isEmpty()) sb.append("TD ").append(td.trim()).append(" mmHg, ");
+        if(nadi!=null&&!nadi.trim().isEmpty()) sb.append("N ").append(nadi.trim()).append(" x/mnt, ");
+        if(rr!=null&&!rr.trim().isEmpty()) sb.append("RR ").append(rr.trim()).append(" x/mnt, ");
+        if(suhu!=null&&!suhu.trim().isEmpty()) sb.append("S ").append(suhu.trim()).append(" °C, ");
+        if(spo2!=null&&!spo2.trim().isEmpty()) sb.append("SpO2 ").append(spo2.trim()).append("%, ");
+        if(sb.length()==0) return "";
+        if(kesadaran!=null&&!kesadaran.trim().isEmpty()) sb.append(kesadaran.trim()).append(", ");
+        return sb.substring(0,sb.length()-2);
+    }
+
+    private void tambahObat(StringBuilder sb,String nama,double jml,String satuan,String aturan) {
+        sb.append("- ").append(nama.trim()).append(" ");
+        sb.append(jml==Math.floor(jml)?String.valueOf((long)jml):String.valueOf(jml));
+        if(satuan!=null&&!satuan.trim().isEmpty()) sb.append(" ").append(satuan.trim());
+        if(aturan!=null&&!aturan.trim().isEmpty()) sb.append(" (").append(aturan.trim()).append(")");
+        sb.append("\n");
+    }
+
+    // Tandai hasil lab di luar rujukan: "a - b", "< x", "> x". Hasil teks positif/reaktif ikut ditandai.
+    private String flagLab(String nilai,String rujukan) {
+        if(nilai==null||nilai.isEmpty()) return "";
+        String low=nilai.toLowerCase();
+        if((low.startsWith("positif")||low.startsWith("reaktif")||low.equals("+")||low.startsWith("pos"))) return "+";
+        if(rujukan==null) return "";
+        try {
+            double v=Double.parseDouble(nilai.replace(",",".").replaceAll("[^0-9.\\-]",""));
+            String r=rujukan.trim().replace(",",".");
+            if(r.startsWith("<")){
+                double max=Double.parseDouble(r.replaceAll("[^0-9.]",""));
+                return v>(r.startsWith("<=")?max:max-0.0000001)?"H":"";
+            }else if(r.startsWith(">")){
+                double min=Double.parseDouble(r.replaceAll("[^0-9.]",""));
+                return v<(r.startsWith(">=")?min:min+0.0000001)?"L":"";
+            }else{
+                String[] p=r.split("\\s*-\\s*");
+                if(p.length==2){
+                    double min=Double.parseDouble(p[0].replaceAll("[^0-9.]",""));
+                    double max=Double.parseDouble(p[1].replaceAll("[^0-9.]",""));
+                    if(v>max) return "H";
+                    if(v<min) return "L";
+                }
+            }
+        } catch (Exception e) {}
+        return "";
     }
 
     private void isForm(){
