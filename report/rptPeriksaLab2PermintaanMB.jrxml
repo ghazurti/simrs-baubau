@@ -352,16 +352,21 @@
 	</title>
 	<detail>
 		<band height="15" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Opaque" x="0" y="0" width="493" height="15" forecolor="#FFD5D5" backcolor="#FFD5D5" stretchType="RelativeToBandHeight" uuid="aaaa0100-0000-0000-0000-0000000000c1">
+					<printWhenExpression><![CDATA[(($F{temp5}.toLowerCase().startsWith("hh") || $F{temp5}.toLowerCase().startsWith("ll")) ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
+				<graphicElement><pen lineWidth="0.0" lineColor="#FFD5D5"/></graphicElement>
+			</rectangle>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="135" y="1" width="235" height="13" forecolor="#FF0000" uuid="b309f033-3930-4fe0-b61e-49ed67a3682a">
-					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("t") ? 
-  Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+					<printWhenExpression><![CDATA[(($F{temp5}.toLowerCase().startsWith("hh") || $F{temp5}.toLowerCase().startsWith("ll")) ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Tahoma" size="10" isBold="true"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{temp2}.replaceAll("`","'")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{temp2}.replaceAll("`","'")+"  KRITIS"]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="4" y="1" width="130" height="13" uuid="2c756f8b-bb6f-4dcd-97c5-b28776eef0ce"/>
@@ -373,7 +378,7 @@
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToBandHeight" x="135" y="1" width="235" height="13" uuid="bdf2777a-e8ff-4806-9130-b161bca0dca2">
-					<printWhenExpression><![CDATA[($F{temp5}!="" ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+					<printWhenExpression><![CDATA[((!($F{temp5}.toLowerCase().startsWith("l") || $F{temp5}.toLowerCase().startsWith("h") || $F{temp5}.toLowerCase().startsWith("t"))) ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Tahoma" size="10"/>
@@ -390,9 +395,8 @@
 				<textFieldExpression><![CDATA[$F{temp4}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="135" y="1" width="235" height="13" forecolor="#0000FF" uuid="70491a76-a349-4c4a-bd76-a627bcea4e01">
-					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("l") ? 
-  Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+				<reportElement stretchType="RelativeToBandHeight" x="135" y="1" width="235" height="13" forecolor="#185FA5" uuid="70491a76-a349-4c4a-bd76-a627bcea4e01">
+					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("l") && !$F{temp5}.toLowerCase().startsWith("ll") ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Tahoma" size="10"/>
@@ -401,9 +405,8 @@
 				<textFieldExpression><![CDATA[$F{temp2}.replaceAll("`","'")]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToBandHeight" x="135" y="1" width="235" height="13" forecolor="#FF0000" uuid="aad1de5d-1f32-4559-aecd-e4ca37b56e4a">
-					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("h") ? 
-  Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+				<reportElement stretchType="RelativeToBandHeight" x="135" y="1" width="235" height="13" forecolor="#BA7517" uuid="aad1de5d-1f32-4559-aecd-e4ca37b56e4a">
+					<printWhenExpression><![CDATA[((($F{temp5}.toLowerCase().startsWith("h") && !$F{temp5}.toLowerCase().startsWith("hh")) || $F{temp5}.toLowerCase().startsWith("t")) ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Tahoma" size="10"/>
@@ -418,8 +421,8 @@
 				</graphicElement>
 			</line>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="449" y="1" width="71" height="13" forecolor="#0000FF" uuid="aaaa0001-0000-0000-0000-000000000009">
-					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("l") ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="449" y="1" width="71" height="13" forecolor="#185FA5" uuid="aaaa0001-0000-0000-0000-000000000009">
+					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("l") && !$F{temp5}.toLowerCase().startsWith("ll") ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Tahoma" size="10" isBold="true"/>
@@ -428,8 +431,8 @@
 				<textFieldExpression><![CDATA[$F{temp5}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="449" y="1" width="71" height="13" forecolor="#FF0000" uuid="aaaa0002-0000-0000-0000-000000000009">
-					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("h") ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="449" y="1" width="71" height="13" forecolor="#BA7517" uuid="aaaa0002-0000-0000-0000-000000000009">
+					<printWhenExpression><![CDATA[((($F{temp5}.toLowerCase().startsWith("h") && !$F{temp5}.toLowerCase().startsWith("hh")) || $F{temp5}.toLowerCase().startsWith("t")) ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Tahoma" size="10"/>
@@ -439,7 +442,7 @@
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="449" y="1" width="71" height="13" forecolor="#FF0000" uuid="aaaa0003-0000-0000-0000-000000000009">
-					<printWhenExpression><![CDATA[($F{temp5}.toLowerCase().startsWith("t") ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
+					<printWhenExpression><![CDATA[(($F{temp5}.toLowerCase().startsWith("hh") || $F{temp5}.toLowerCase().startsWith("ll")) ? Boolean.TRUE:Boolean.FALSE)]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Tahoma" size="10" isBold="true"/>

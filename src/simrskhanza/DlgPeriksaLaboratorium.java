@@ -19,6 +19,7 @@ import kepegawaian.DlgCariDokter;
 import kepegawaian.DlgCariPetugas;
 import keuangan.DlgJnsPerawatanLab;
 import fungsi.WarnaTable;
+import fungsi.WarnaTableKritisLab;
 import fungsi.batasInput;
 import fungsi.koneksiDB;
 import fungsi.sekuel;
@@ -58,6 +59,9 @@ import keuangan.Jurnal;
  */
 public final class DlgPeriksaLaboratorium extends javax.swing.JDialog {
     private final DefaultTableModel tabMode,tabMode2;
+    private final Map<String,Double> kritisBawah=new HashMap<>();
+    private final Map<String,Double> kritisAtas=new HashMap<>();
+    private final Map<String,String> kritisTeks=new HashMap<>();
     private sekuel Sequel=new sekuel();
     private Connection koneksisysmex;
     private Connection koneksielims;
@@ -148,8 +152,9 @@ public final class DlgPeriksaLaboratorium extends javax.swing.JDialog {
             }
         }
         
-        tbPemeriksaan.setDefaultRenderer(Object.class, new WarnaTable());
-        
+        muatNilaiKritis();
+        tbPemeriksaan.setDefaultRenderer(Object.class, new WarnaTableKritisLab(kritisBawah,kritisAtas,kritisTeks,2,6,4));
+
         Object[] row2={"P","Kode Periksa","Nama Pemeriksaan","Tarif","bagian_rs","bhp","tarif_perujuk","tarif_tindakan_dokter","tarif_tindakan_petugas","K.S.O.","Menejemen"};
         tabMode2=new DefaultTableModel(null,row2){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){
@@ -207,6 +212,36 @@ public final class DlgPeriksaLaboratorium extends javax.swing.JDialog {
             aktifkanparsial=koneksiDB.AKTIFKANBILLINGPARSIAL();
         } catch (Exception ex) {            
             aktifkanparsial="no";
+        }
+    }
+
+    /** Muat batas nilai kritis lab dari set_nilai_kritis_lab (sekali saat form dibuka). */
+    private void muatNilaiKritis(){
+        kritisBawah.clear(); kritisAtas.clear(); kritisTeks.clear();
+        try {
+            koneksi=koneksiDB.condb();
+            pstampil=koneksi.prepareStatement("select id_template,batas_bawah,batas_atas,teks_kritis from set_nilai_kritis_lab");
+            try {
+                rstampil=pstampil.executeQuery();
+                while(rstampil.next()){
+                    String id=rstampil.getString("id_template");
+                    if(id==null){ continue; }
+                    id=id.trim();
+                    Object bb=rstampil.getObject("batas_bawah");
+                    Object ba=rstampil.getObject("batas_atas");
+                    String tk=rstampil.getString("teks_kritis");
+                    if(bb!=null){ kritisBawah.put(id,rstampil.getDouble("batas_bawah")); }
+                    if(ba!=null){ kritisAtas.put(id,rstampil.getDouble("batas_atas")); }
+                    if(tk!=null && !tk.trim().isEmpty()){ kritisTeks.put(id,tk.trim()); }
+                }
+            } catch(Exception e){
+                System.out.println("Notif nilai kritis : "+e);
+            } finally {
+                if(rstampil!=null){ rstampil.close(); }
+                if(pstampil!=null){ pstampil.close(); }
+            }
+        } catch(Exception e){
+            System.out.println("Error nilai kritis : "+e);
         }
     }
 

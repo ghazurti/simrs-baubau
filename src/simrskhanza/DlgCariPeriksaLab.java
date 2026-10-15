@@ -24,6 +24,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
@@ -62,24 +64,91 @@ public class DlgCariPeriksaLab extends javax.swing.JDialog {
     private double ttljmdokter=0,ttljmpetugas=0,ttlkso=0,ttlpendapatan=0,ttlbhp=0,ttljasasarana=0,ttljmperujuk=0,ttlmenejemen=0;
     private String diagnosa="",saran="",kesan="",status="";
 
-    private String hitungFlag(String nilai, String nilaiRujukan) {
-        if (nilai == null || nilaiRujukan == null) return "";
+    // Batas kritis di-load dari set_nilai_kritis_lab, di-key per NAMA pemeriksaan.
+    private final Map<String,double[]> kritisNama = new HashMap<>();   // {bawah, atas}
+    private final Map<String,String> kritisTeksNama = new HashMap<>();
+    private static final Pattern ANGKA = Pattern.compile("\\d+(?:[.,]\\d+)?");
+
+    /** Load batas kritis (join ke template_laboratorium supaya bisa key per nama). */
+    private void muatNilaiKritis(){
+        kritisNama.clear(); kritisTeksNama.clear();
         try {
-            double v = Double.parseDouble(nilai.trim().replace(",", "."));
-            String[] parts = nilaiRujukan.split("-");
-            if (parts.length == 2) {
-                double min = Double.parseDouble(parts[0].trim().replace(",", "."));
-                double max = Double.parseDouble(parts[1].trim().replace(",", "."));
-                if (v > max) return "T";
-                if (v < min) return "L";
-            }
+            koneksi=koneksiDB.condb();
+            java.sql.PreparedStatement ps=koneksi.prepareStatement(
+                "select t.Pemeriksaan, k.batas_bawah, k.batas_atas, k.teks_kritis "+
+                "from set_nilai_kritis_lab k inner join template_laboratorium t on t.id_template=k.id_template");
+            try {
+                java.sql.ResultSet rs=ps.executeQuery();
+                while(rs.next()){
+                    String nm=rs.getString("Pemeriksaan");
+                    if(nm==null){ continue; }
+                    String key=nm.trim().toLowerCase().replaceAll("\\s+"," ");
+                    Object bb=rs.getObject("batas_bawah"), ba=rs.getObject("batas_atas");
+                    double vb=bb==null?Double.NaN:rs.getDouble("batas_bawah");
+                    double va=ba==null?Double.NaN:rs.getDouble("batas_atas");
+                    kritisNama.put(key, new double[]{vb,va});
+                    String tk=rs.getString("teks_kritis");
+                    if(tk!=null && !tk.trim().isEmpty()){ kritisTeksNama.put(key,tk.trim()); }
+                }
+                rs.close();
+            } finally { ps.close(); }
+        } catch(Exception e){
+            System.out.println("Notif nilai kritis : "+e);
+        }
+    }
+
+    /** Parse rentang rujukan -> [bawah,atas]; NaN bila tak ada. "4 - 12", "<= 50", ">= 5". */
+    private static double[] parseRentang(String s){
+        double bawah=Double.NaN, atas=Double.NaN;
+        if(s==null){ return new double[]{bawah,atas}; }
+        String t=s.trim().replace(",", ".");
+        Matcher m=ANGKA.matcher(t);
+        double a=Double.NaN,b=Double.NaN; int n=0;
+        while(m.find()){
+            double v; try{ v=Double.parseDouble(m.group()); }catch(Exception e){ continue; }
+            if(n==0){ a=v; } else if(n==1){ b=v; } n++;
+        }
+        if(n>=2){ bawah=Math.min(a,b); atas=Math.max(a,b); }
+        else if(n==1){
+            boolean hi=t.contains("≤")||t.contains("<");
+            boolean lo=t.contains("≥")||t.contains(">");
+            if(hi&&!lo){ atas=a; } else if(lo&&!hi){ bawah=a; }
+        }
+        return new double[]{bawah,atas};
+    }
+
+    /**
+     * Flag 2 tingkat: "HH"/"LL" = kritis (dari set_nilai_kritis_lab),
+     * "H"/"L" = di luar nilai rujukan tapi belum kritis. "" = normal.
+     */
+    private String hitungFlag(String pemeriksaan, String nilai, String nilaiRujukan) {
+        if (nilai == null) return "";
+        String key = pemeriksaan==null ? "" : pemeriksaan.trim().toLowerCase().replaceAll("\\s+"," ");
+        Double v=null;
+        try {
+            String num=nilai.trim().replace(",", ".");
+            if(num.matches("-?\\d+(?:\\.\\d+)?")){ v=Double.valueOf(num); }  // hanya bilangan bersih
         } catch (Exception ignored) {}
+        // 1) KRITIS
+        double[] krit = kritisNama.get(key);
+        if(v!=null && krit!=null){
+            if(!Double.isNaN(krit[1]) && v>=krit[1]) return "HH";
+            if(!Double.isNaN(krit[0]) && v<=krit[0]) return "LL";
+        }
+        String tk = kritisTeksNama.get(key);
+        if(tk!=null && !tk.isEmpty() && nilai.toLowerCase().contains(tk.toLowerCase())) return "HH";
+        // 2) DI LUAR RUJUKAN (belum kritis)
+        if(v!=null){
+            double[] r = parseRentang(nilaiRujukan);
+            if(!Double.isNaN(r[1]) && v>r[1]) return "H";
+            if(!Double.isNaN(r[0]) && v<r[0]) return "L";
+        }
         return "";
     }
 
-    private String ketWithFlag(String nilai, String nilaiRujukan, String keterangan) {
+    private String ketWithFlag(String pemeriksaan, String nilai, String nilaiRujukan, String keterangan) {
         if (keterangan == null) keterangan = "";
-        String flag = hitungFlag(nilai, nilaiRujukan);
+        String flag = hitungFlag(pemeriksaan, nilai, nilaiRujukan);
         if (flag.isEmpty()) {
             String ketLower = keterangan.toLowerCase().trim();
             if (ketLower.startsWith("h ") || ketLower.startsWith("l ") || ketLower.startsWith("t ") || 
@@ -144,17 +213,18 @@ public class DlgCariPeriksaLab extends javax.swing.JDialog {
                 if (!isSelected) {
                     c.setBackground(row % 2 == 1 ? new java.awt.Color(255,244,244) : java.awt.Color.WHITE);
                 }
-                if (column == 6) {
+                if (column == 3 || column == 6) {
                     Object ketObj = table.getValueAt(row, 6);
-                    String ket = ketObj != null ? ketObj.toString() : "";
-                    if (ket.startsWith("T ") || ket.equals("T")) {
-                        c.setForeground(java.awt.Color.RED);
+                    String ket = (ketObj != null ? ketObj.toString() : "").trim().toUpperCase();
+                    if (ket.startsWith("HH") || ket.startsWith("LL") || ket.startsWith("!!")) {
+                        c.setForeground(new java.awt.Color(180, 0, 0));       // KRITIS = merah
+                        c.setFont(c.getFont().deriveFont(java.awt.Font.BOLD));
+                    } else if (ket.startsWith("H ") || ket.equals("H") || ket.startsWith("T ") || ket.equals("T")) {
+                        c.setForeground(new java.awt.Color(186, 117, 23));    // tinggi luar rujukan = oranye
                         c.setFont(c.getFont().deriveFont(java.awt.Font.BOLD));
                     } else if (ket.startsWith("L ") || ket.equals("L")) {
-                        c.setForeground(new java.awt.Color(0, 0, 180));
+                        c.setForeground(new java.awt.Color(24, 95, 165));     // rendah luar rujukan = biru
                         c.setFont(c.getFont().deriveFont(java.awt.Font.BOLD));
-                    } else if (ket.startsWith("H ") || ket.equals("H")) {
-                        c.setForeground(java.awt.Color.RED);
                     }
                 }
                 return c;
@@ -205,6 +275,7 @@ public class DlgCariPeriksaLab extends javax.swing.JDialog {
             }
         }
         tbDokter2.setDefaultRenderer(Object.class, new WarnaTable());
+        muatNilaiKritis();
         NoRawat.setDocument(new batasInput((byte)17).getKata(NoRawat));
         kdmem.setDocument(new batasInput((byte)8).getKata(kdmem));
         kdptg.setDocument(new batasInput((byte)25).getKata(kdptg));
@@ -1847,7 +1918,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -2137,7 +2208,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -2296,7 +2367,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -2457,7 +2528,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -2618,7 +2689,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -2779,7 +2850,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -2943,7 +3014,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -3107,7 +3178,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -3293,7 +3364,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -3478,7 +3549,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -3664,7 +3735,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -3931,7 +4002,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -4092,7 +4163,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -4254,7 +4325,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -4416,7 +4487,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -4577,7 +4648,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -4738,7 +4809,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -4903,7 +4974,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -5068,7 +5139,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -5255,7 +5326,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -5441,7 +5512,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -5628,7 +5699,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -5860,7 +5931,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -6046,7 +6117,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     rs3=ps3.executeQuery();
                                     while(rs3.next()){
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
-                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
+                                                +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
                                     }
                                 } catch (Exception e) {
@@ -6411,7 +6482,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                 while(rs3.next()){
                                     item=item+rs3.getDouble("biaya_item");
                                     ttl=ttl+rs3.getDouble("biaya_item");
-                                    String flagTLH = hitungFlag(rs3.getString("nilai"), rs3.getString("nilai_rujukan"));
+                                    String flagTLH = hitungFlag(rs3.getString("Pemeriksaan"), rs3.getString("nilai"), rs3.getString("nilai_rujukan"));
                                     String ketDisplay = flagTLH.isEmpty() ? rs3.getString("keterangan") : flagTLH+" "+rs3.getString("keterangan");
                                     tabMode.addRow(new Object[]{"","","  "+rs3.getString("Pemeriksaan")+" "+Valid.SetAngka(rs3.getDouble("biaya_item")),rs3.getString("nilai").replaceAll("'","`"),
                                                                 rs3.getString("satuan"),rs3.getString("nilai_rujukan"),ketDisplay});
