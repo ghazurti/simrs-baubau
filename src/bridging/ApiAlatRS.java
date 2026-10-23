@@ -78,6 +78,8 @@ public class ApiAlatRS {
      * Username dan password diambil dari koneksiDB (encrypted AES).
      */
     public String lastLoginError = "";
+    /** data[0] balasan login (token + info user), dipakai embed viewer PACS */
+    public JsonNode loginData;
 
     public String Login() {
         lastLoginError = "";
@@ -95,7 +97,8 @@ public class ApiAlatRS {
             System.out.println("alat_rs LOGIN RESP : " + body);
             root = mapper.readTree(body);
             if (root.path("data").isArray() && root.path("data").size() > 0) {
-                token = root.path("data").get(0).path("token").asText();
+                loginData = root.path("data").get(0);
+                token = loginData.path("token").asText();
             } else {
                 lastLoginError = "Response tanpa token: " + body;
             }

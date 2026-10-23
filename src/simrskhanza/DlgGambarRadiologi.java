@@ -36,12 +36,12 @@ public class DlgGambarRadiologi extends javax.swing.JDialog {
         lblPasien.setBorder(javax.swing.BorderFactory.createEmptyBorder(6,8,6,8));
         frame.add(lblPasien,BorderLayout.NORTH);
 
-        tabMode=new DefaultTableModel(null,new Object[]{"Tanggal","Jam","No.Rawat","Pemeriksaan","Accession","Hasil Bacaan","Dokter Perujuk"}){
+        tabMode=new DefaultTableModel(null,new Object[]{"Tanggal","Jam","No.Rawat","Pemeriksaan","Accession","Hasil Bacaan","Dokter Perujuk","ID RIS"}){
             @Override public boolean isCellEditable(int r,int c){return false;}
         };
         tbGambar.setModel(tabMode);
         tbGambar.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        int[] lebar={80,60,130,320,150,90,200};
+        int[] lebar={80,60,130,320,150,90,200,60};
         for(int i=0;i<lebar.length;i++){
             tbGambar.getColumnModel().getColumn(i).setPreferredWidth(lebar[i]);
         }
@@ -101,7 +101,7 @@ public class DlgGambarRadiologi extends javax.swing.JDialog {
                         if(it.accession.isEmpty()) continue;
                         tabMode.addRow(new Object[]{
                             rs.getString("tgl_permintaan"),rs.getString("jam_permintaan"),rs.getString("no_rawat"),
-                            it.namaPemeriksaan,it.accession,rs.getBoolean("ada_hasil")?"Sudah":"Belum",rs.getString("dokter")
+                            it.namaPemeriksaan,it.accession,rs.getBoolean("ada_hasil")?"Sudah":"Belum",rs.getString("dokter"),it.worklistId
                         });
                     }
                 }
@@ -126,9 +126,15 @@ public class DlgGambarRadiologi extends javax.swing.JDialog {
         }
         try{
             setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-            String url=koneksiDB.URLALATRS()+":"+koneksiDB.PORTALATRS()+"/viewer?accession="+
-                    java.net.URLEncoder.encode(tbGambar.getValueAt(r,4).toString(),"UTF-8");
-            java.awt.Desktop.getDesktop().browse(new java.net.URI(url));
+            String acc=tbGambar.getValueAt(r,4).toString();
+            String idRis=tbGambar.getValueAt(r,7).toString();
+            try{
+                // viewer-v3 memakai ID worklist RIS (mis. /viewer-v3/904), cadangan accession
+                bridging.PacsEmbedViewer.buka(idRis.isEmpty()?acc:idRis,acc+" - "+tbGambar.getValueAt(r,3).toString());
+            }catch(Exception e){
+                System.out.println("Embed viewer PACS gagal, pakai viewer lama : "+e);
+                java.awt.Desktop.getDesktop().browse(new java.net.URI(bridging.PacsEmbedViewer.urlViewerLama(idRis.isEmpty()?acc:idRis)));
+            }
         }catch(Exception e){
             JOptionPane.showMessageDialog(this,"Gagal buka browser: "+e.getMessage());
         }finally{

@@ -1989,9 +1989,11 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         java.util.List<bridging.AlatRSWorklist.Item> items=itemRISUntukPeriksa(noRawat, TglDicari.getText(), JamDicari.getText());
         java.util.List<String> opsiList=new java.util.ArrayList<>();
         java.util.List<String> accList=new java.util.ArrayList<>();
+        java.util.List<String> idList=new java.util.ArrayList<>();
         for(bridging.AlatRSWorklist.Item it:items){
             if(it.accession.isEmpty()||accList.contains(it.accession)) continue;
             accList.add(it.accession);
+            idList.add(it.worklistId);
             opsiList.add(it.accession+(it.namaPemeriksaan.isEmpty()?"":"  -  "+it.namaPemeriksaan));
         }
         if(accList.isEmpty()){
@@ -2011,10 +2013,16 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
             accToOpen = accList.get(opsiList.indexOf(pil.toString()));
         }
         try{
-            // Pola URL viewer RIS — sesuaikan dengan info vendor kalau beda.
-            String base = koneksiDB.URLALATRS()+":"+koneksiDB.PORTALATRS();
-            String url = base + "/viewer?accession=" + java.net.URLEncoder.encode(accToOpen.trim(),"UTF-8");
-            java.awt.Desktop.getDesktop().browse(new java.net.URI(url));
+            // viewer-v3 di iframe + login otomatis (postMessage); cadangan viewer lama
+            // viewer-v3 memakai ID worklist RIS (mis. /viewer-v3/904), cadangan accession
+            int idx = accList.indexOf(accToOpen);
+            String idViewer = idList.get(idx).isEmpty()?accToOpen:idList.get(idx);
+            try{
+                bridging.PacsEmbedViewer.buka(idViewer, opsiList.get(idx));
+            }catch(Exception e){
+                System.out.println("Embed viewer PACS gagal, pakai viewer lama : "+e);
+                java.awt.Desktop.getDesktop().browse(new java.net.URI(bridging.PacsEmbedViewer.urlViewerLama(idViewer)));
+            }
         }catch(Exception e){
             JOptionPane.showMessageDialog(this,"Gagal buka browser: "+e.getMessage());
         }
