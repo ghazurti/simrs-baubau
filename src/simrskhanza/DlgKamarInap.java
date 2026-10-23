@@ -254,6 +254,7 @@ public class DlgKamarInap extends javax.swing.JDialog {
     public DlgKamarInap(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        tambahMenuUbahTanggal();
         initKamarInap();
         tabMode=new DefaultTableModel(null,new Object[]{
             "No.Rawat","Nomer RM","Nama Pasien","Alamat Pasien","Penanggung Jawab","Hubungan P.J.","Jenis Bayar","Kamar","Tarif Kamar",
@@ -20730,6 +20731,104 @@ public class DlgKamarInap extends javax.swing.JDialog {
         } 
    }
     
+    /** Menu "Update Tanggal Masuk" & "Update Tanggal Pulang" di popup tabel, hak akses ikut Kamar Inap */
+    private void tambahMenuUbahTanggal(){
+        javax.swing.JMenuItem mnMasuk=new javax.swing.JMenuItem("Update Tanggal Masuk");
+        javax.swing.JMenuItem mnPulang=new javax.swing.JMenuItem("Update Tanggal Pulang");
+        for(javax.swing.JMenuItem mn:new javax.swing.JMenuItem[]{mnMasuk,mnPulang}){
+            mn.setBackground(new java.awt.Color(255,255,254));
+            mn.setFont(new java.awt.Font("Tahoma",0,11));
+            mn.setForeground(new java.awt.Color(50,50,50));
+            mn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png")));
+            mn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+            mn.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+            mn.setPreferredSize(new java.awt.Dimension(200,26));
+            mn.setEnabled(akses.getkamar_inap());
+        }
+        mnMasuk.addActionListener(e->ubahTanggalKamar(true));
+        mnPulang.addActionListener(e->ubahTanggalKamar(false));
+        int idx=jPopupMenu1.getComponentIndex(MnUpdateHari);
+        jPopupMenu1.insert(mnMasuk,idx+1);
+        jPopupMenu1.insert(mnPulang,idx+2);
+    }
+
+    /** ubah tgl/jam masuk atau keluar baris kamar_inap terpilih, lalu hitung ulang lama & ttl_biaya */
+    private void ubahTanggalKamar(boolean masuk){
+        int r=tbKamIn.getSelectedRow();
+        if(tabMode.getRowCount()==0){
+            JOptionPane.showMessageDialog(null,"Maaf, table masih kosong...!!!!");
+            return;
+        }
+        if(r==-1||tbKamIn.getValueAt(r,0).toString().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Silahkan pilih data kamar inap pasien terlebih dahulu...!!!");
+            return;
+        }
+        String noRw=tbKamIn.getValueAt(r,0).toString(),kdKmr=tbKamIn.getValueAt(r,19).toString(),
+               tglMasuk=tbKamIn.getValueAt(r,11).toString(),jamMasuk=tbKamIn.getValueAt(r,12).toString(),
+               tglKeluar=tbKamIn.getValueAt(r,13).toString(),jamKeluar=tbKamIn.getValueAt(r,14).toString();
+        boolean sudahPulang=!(tglKeluar.equals("")||tglKeluar.equals("0000-00-00"));
+        if(!masuk&&!sudahPulang){
+            JOptionPane.showMessageDialog(null,"Pasien belum pulang dari kamar ini, tanggal pulang belum bisa diubah...!!!");
+            return;
+        }
+        if(tbKamIn.getValueAt(r,20).toString().equals("Sudah Bayar")){
+            JOptionPane.showMessageDialog(null,"Billing pasien sudah dibayar, tanggal tidak bisa diubah...!!!");
+            return;
+        }
+        String tglLama=masuk?tglMasuk:tglKeluar,jamLama=masuk?jamMasuk:jamKeluar;
+        widget.Tanggal tgl=new widget.Tanggal();
+        tgl.setDisplayFormat("dd-MM-yyyy");
+        javax.swing.JSpinner jam=new javax.swing.JSpinner(new javax.swing.SpinnerDateModel());
+        jam.setEditor(new javax.swing.JSpinner.DateEditor(jam,"HH:mm:ss"));
+        try {
+            java.util.Date lama=new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(tglLama+" "+jamLama);
+            tgl.setDate(lama);
+            jam.setValue(lama);
+        } catch (Exception e) {
+            System.out.println("Notif : "+e);
+        }
+        javax.swing.JPanel pn=new javax.swing.JPanel(new java.awt.GridLayout(0,2,6,6));
+        pn.add(new javax.swing.JLabel("Pasien :"));
+        pn.add(new javax.swing.JLabel(tbKamIn.getValueAt(r,2).toString()));
+        pn.add(new javax.swing.JLabel("Kamar :"));
+        pn.add(new javax.swing.JLabel(tbKamIn.getValueAt(r,7).toString()));
+        pn.add(new javax.swing.JLabel((masuk?"Tgl.Masuk":"Tgl.Pulang")+" Lama :"));
+        pn.add(new javax.swing.JLabel(tglLama+" "+jamLama));
+        pn.add(new javax.swing.JLabel((masuk?"Tgl.Masuk":"Tgl.Pulang")+" Baru :"));
+        pn.add(tgl);
+        pn.add(new javax.swing.JLabel("Jam :"));
+        pn.add(jam);
+        if(JOptionPane.showConfirmDialog(rootPane,pn,masuk?"Update Tanggal Masuk":"Update Tanggal Pulang",
+                JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE)!=JOptionPane.OK_OPTION){
+            return;
+        }
+        String tglBaru=Valid.SetTgl(tgl.getSelectedItem()+"");
+        String jamBaru=new java.text.SimpleDateFormat("HH:mm:ss").format((java.util.Date)jam.getValue());
+        String waktuMasuk=masuk?tglBaru+" "+jamBaru:tglMasuk+" "+jamMasuk;
+        String waktuKeluar=masuk?(sudahPulang?tglKeluar+" "+jamKeluar:""):tglBaru+" "+jamBaru;
+        if(!waktuKeluar.equals("")&&waktuKeluar.compareTo(waktuMasuk)<0){
+            JOptionPane.showMessageDialog(null,"Tanggal pulang tidak boleh sebelum tanggal masuk...!!!");
+            return;
+        }
+        if(masuk&&!sudahPulang&&waktuMasuk.compareTo(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()))>0){
+            JOptionPane.showMessageDialog(null,"Tanggal masuk tidak boleh melebihi waktu sekarang...!!!");
+            return;
+        }
+        String kunci="no_rawat='"+noRw+"' and kd_kamar='"+kdKmr+"' and tgl_masuk='"+(masuk?tglBaru:tglMasuk)+"' and jam_masuk='"+(masuk?jamBaru:jamMasuk)+"'";
+        boolean ok=Sequel.mengedittf("kamar_inap","no_rawat='"+noRw+"' and kd_kamar='"+kdKmr+"' and tgl_masuk='"+tglMasuk+"' and jam_masuk='"+jamMasuk+"'",
+                masuk?"tgl_masuk='"+tglBaru+"',jam_masuk='"+jamBaru+"'":"tgl_keluar='"+tglBaru+"',jam_keluar='"+jamBaru+"'");
+        if(ok){
+            // hitung ulang lama & biaya: sampai tgl keluar, atau sampai sekarang kalau belum pulang
+            String awal="concat(tgl_masuk,' ',jam_masuk)";
+            String akhir="if(tgl_keluar='0000-00-00',NOW(),concat(tgl_keluar,' ',jam_keluar))";
+            String hari="if(to_days("+akhir+")-to_days("+awal+")=0,if(time_to_sec("+akhir+")-time_to_sec("+awal+")>(3600*"+pengaturankamarinap.getJamMinimalKamar()+"),1,0),to_days("+akhir+")-to_days("+awal+"))"+
+                    (pengaturankamarinap.getHitungHariAwal().equals("Yes")?"+1":"");
+            Sequel.mengedit("kamar_inap",kunci,"lama="+hari+",ttl_biaya=("+hari+")*trf_kamar");
+            JOptionPane.showMessageDialog(null,(masuk?"Tanggal masuk":"Tanggal pulang")+" berhasil diubah menjadi "+tglBaru+" "+jamBaru);
+            tampil();
+        }
+    }
+
     private void updateHari(){
         if((R1.isSelected()==true)&&(akses.getstatus()==false)){
             for(i=0;i<tbKamIn.getRowCount();i++){
