@@ -256,7 +256,7 @@ public class DlgUser extends javax.swing.JDialog {
         "bpjs_riwayat_pelayanan_obat","skrining_gizi_kehamilan","bpjs_rekap_peserta_prb_apotek","serah_terima_anggota_tubuh_barang","pcra_icra_jenis_aktivitas_proyek","pcra_icra_lokasi_kelompok_risiko_area",
         "pcra_icra_kelas_risiko_pencegahan","pcra_icra_tindakan_pengendalian","pcra_icra_identifkasi_risiko_infeksi","pcra_icra_identifkasi_risiko_keselamatan","pcra_icra_identifkasi_risiko_kebakaran","pcra_icra_identifkasi_risiko_utilitas",
         "bpjs_daftar_resep_apotek","daftar_permintaan_resep_iterasi_bpjs","pcra_icra_pengkajian_risiko_prakonstruksi","pcra_icra_persyaratan_harus_dipenuhi","satu_sehat_kirim_questionresponse_telaah_farmasi","satu_sehat_kirim_allergy_intolerance",
-        "konsultasi_perawat","jawaban_konsultasi_perawat","bridging_smart_klaim_bpjs","mapping_prosedur_smart_klaim_bpjs","mapping_penyakit_smart_klaim_bpjs","permintaan_binrohtal",
+        "konsultasi_perawat","jawaban_konsultasi_perawat","bridging_smart_klaim_bpjs","mapping_prosedur_smart_klaim_bpjs","mapping_penyakit_smart_klaim_bpjs","permintaan_binrohtal","rencana_kebutuhan_obat","setting_rencana_kebutuhan_obat",
         "penilaian_awal_medis_ralan_penyakit_mulut","odontogram","surat_permintaan_perlindungan_dari_kekerasan","surat_permohonan_privasi","surat_permintaan_second_opinion","surat_keterangan_berobat",
         "surat_penolakan_resusitasi","catatan_observasi_ruang_ok","hasil_pemeriksaan_usg_abdomen","intervensi_nyeri_farmakologi","restriksi_obat_bpjs"
     };
@@ -438,7 +438,7 @@ public class DlgUser extends javax.swing.JDialog {
                 "[M]Pengkajian Pasien Terminal","[P]Persetujuan Rawat Inap","[M]Monitoring Reaksi Tranfusi","[M]Pengkajian Korban Kekerasan","[M]Pengkajian Lanjutan Risiko Jatuh Lansia",
                 "[M]Pengkajian Pasien Penyakit Menular","[M]Skrining Manajer Pelayanan Pasien","[M]Edukasi Pasien & Keluarga Rawat Jalan","[M]Pemantauan EWS Pasien Dewasa",
                 "[M]Pengkajian Tambahan Bunuh Diri","[L]Antrean Per Tanggal Mobile JKN","[M]Pengkajian Tambahan Perilaku Kekerasan","[M]Pengkajian Tambahan Melarikan Diri",
-                "[P]Persetujuan Penundaan Pelayanan","[J]Sisa Diet Pasien","[M]Pengkajian Awal Medis Ralan Bedah Mulut","[M]Pengkajian Pasien Keracunan","[M]Pemantauan MEOWS Pasien Obstetri","[M]Odontogram",
+                "[P]Persetujuan Penundaan Pelayanan","[J]Sisa Diet Pasien","[M]Pengkajian Awal Medis Ralan Bedah Mulut","[M]Pengkajian Pasien Keracunan","[M]Pemantauan MEOWS Pasien Obstetri",
                 "[M]Catatan ADIME Gizi","[K]Pengajuan Biaya","[M]Pengkajian Awal Keperawatan Ralan Geriatri","[M]Master Masalah Keperawatan Geriatri","[M]Master Rencana Keperawatan Geriatri",
                 "[M]Check List Kriteria Masuk HCU","[M]Check List Kriteria Keluar HCU","[M]Pengkajian Risiko Dekubitus","[P]Master Menolak Anjuran Medis","[P]Penolakan Anjuran Medis",
                 "[J]Laporan Tahunan Penolakan Anjuran Medis","[M]Master Template Laporan Operasi","[M]Dokumentasi Tindakan ESWL","[M]Check List Kriteria Masuk ICU",
@@ -489,7 +489,8 @@ public class DlgUser extends javax.swing.JDialog {
                 "[R]Jenis Aktivitas Proyek PCRA","[R]Lokasi & Kelompok Risiko Area PCRA","[R]Kelas Risiko/Kelas Pencegahan PCRA","[R]Tindakan Pengendalian PCRA","[R]Identifikasi Risiko Infeksi PCRA",
                 "[R]Identifikasi Risiko Keselamatan PCRA","[R]Identifikasi Risiko Kebakaran PCRA","[R]Identifikasi Risiko Utilitas PCRA","[L]Daftar Resep Apotek BPJS","[L]Permintaan Resep Iterasi Apotek BPJS",
                 "[R]Pengkajian Risiko Pra Konstruksi/PCRA","[R]Persyaratan Harus Dipenuhi PCRA","[L]Kirim Q.R. Telaah Farmasi Satu Sehat","[L]Kirim Allergy Intolerance Satu Sehat","[M]Konsultasi Perawat",
-                "[M]Jawaban Konsultasi Perawat","[L]Kirim FHIR Smart Klaim BPJS","[L]Mapping Prosedur Smart Klaim BPJS","[L]Mapping Penyakit Smart Klaim BPJS","[P]Persetujuan Bimbingan Rohani & Mental"
+                "[M]Jawaban Konsultasi Perawat","[L]Kirim FHIR Smart Klaim BPJS","[L]Mapping Prosedur Smart Klaim BPJS","[L]Mapping Penyakit Smart Klaim BPJS","[P]Persetujuan Bimbingan Rohani & Mental",
+                "[D]Rencana Kebutuhan Obat & BMHP","[D]Setting Rencana Kebutuhan Obat & BMHP"
         };
         
         tabMode=new DefaultTableModel(null,row){
@@ -823,7 +824,7 @@ public class DlgUser extends javax.swing.JDialog {
         tbUser.setPreferredScrollableViewportSize(new Dimension(500,500));
         tbUser.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 1197;i++) {
+        for (i = 0; i < 1199;i++) {
             TableColumn column = tbUser.getColumnModel().getColumn(i);
             switch (i) {
                 case 0:
@@ -5539,7 +5540,9 @@ public class DlgUser extends javax.swing.JDialog {
                     "bridging_smart_klaim_bpjs='"+tbUser.getValueAt(i,1193).toString()+"',"+
                     "mapping_prosedur_smart_klaim_bpjs='"+tbUser.getValueAt(i,1194).toString()+"',"+
                     "mapping_penyakit_smart_klaim_bpjs='"+tbUser.getValueAt(i,1195).toString()+"',"+
-                    "permintaan_binrohtal='"+tbUser.getValueAt(i,1196).toString()+"'")==true){
+                    "permintaan_binrohtal='"+tbUser.getValueAt(i,1196).toString()+"',"+
+                    "rencana_kebutuhan_obat='"+tbUser.getValueAt(i,1197).toString()+"',"+
+                    "setting_rencana_kebutuhan_obat='"+tbUser.getValueAt(i,1198).toString()+"'")==true){
                     emptTeks();
                 }
             }         
@@ -7020,7 +7023,9 @@ private void BtnPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         "bridging_smart_klaim_bpjs='"+tbUser.getValueAt(barisdicopy,1193).toString()+"',"+
                                         "mapping_prosedur_smart_klaim_bpjs='"+tbUser.getValueAt(barisdicopy,1194).toString()+"',"+
                                         "mapping_penyakit_smart_klaim_bpjs='"+tbUser.getValueAt(barisdicopy,1195).toString()+"',"+
-                                        "permintaan_binrohtal='"+tbUser.getValueAt(barisdicopy,1196).toString()+"'");
+                                        "permintaan_binrohtal='"+tbUser.getValueAt(barisdicopy,1196).toString()+"',"+
+                                        "rencana_kebutuhan_obat='"+tbUser.getValueAt(barisdicopy,1197).toString()+"',"+
+                                        "setting_rencana_kebutuhan_obat='"+tbUser.getValueAt(barisdicopy,1198).toString()+"'");
                                 }
                                 userdicopy="";
                                 copyhakakses="";
@@ -7358,7 +7363,7 @@ private void BtnPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                             "user.pcra_icra_identifkasi_risiko_kebakaran,user.pcra_icra_identifkasi_risiko_utilitas,user.bpjs_daftar_resep_apotek,user.daftar_permintaan_resep_iterasi_bpjs,"+
                             "user.pcra_icra_pengkajian_risiko_prakonstruksi,user.pcra_icra_persyaratan_harus_dipenuhi,user.satu_sehat_kirim_questionresponse_telaah_farmasi,"+
                             "user.satu_sehat_kirim_allergy_intolerance,user.konsultasi_perawat,user.jawaban_konsultasi_perawat,user.bridging_smart_klaim_bpjs,user.mapping_prosedur_smart_klaim_bpjs,"+
-                            "user.mapping_penyakit_smart_klaim_bpjs,user.permintaan_binrohtal from user order by AES_DECRYPT(user.id_user,'nur')");
+                            "user.mapping_penyakit_smart_klaim_bpjs,user.permintaan_binrohtal,user.rencana_kebutuhan_obat,user.setting_rencana_kebutuhan_obat from user order by AES_DECRYPT(user.id_user,'nur')");
                         try {
                             rs=ps.executeQuery();
                             i=0;
@@ -8569,7 +8574,7 @@ private void BtnPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                            rs.getBoolean("bridging_smart_klaim_bpjs"),
                                            rs.getBoolean("mapping_prosedur_smart_klaim_bpjs"),
                                            rs.getBoolean("mapping_penyakit_smart_klaim_bpjs"),
-                                           rs.getBoolean("permintaan_binrohtal")
+                                           rs.getBoolean("permintaan_binrohtal"),rs.getBoolean("rencana_kebutuhan_obat"),rs.getBoolean("setting_rencana_kebutuhan_obat")
                                         });
                                     }   
                                 } catch (Exception e) {
@@ -9768,7 +9773,7 @@ private void BtnPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                        rs.getBoolean("bridging_smart_klaim_bpjs"),
                                        rs.getBoolean("mapping_prosedur_smart_klaim_bpjs"),
                                        rs.getBoolean("mapping_penyakit_smart_klaim_bpjs"),
-                                       rs.getBoolean("permintaan_binrohtal")
+                                       rs.getBoolean("permintaan_binrohtal"),rs.getBoolean("rencana_kebutuhan_obat"),rs.getBoolean("setting_rencana_kebutuhan_obat")
                                     });
                                 }                                             
                              }

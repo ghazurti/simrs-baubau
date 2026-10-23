@@ -181,6 +181,8 @@ import inventory.DlgCariPengambilanUTD;
 import inventory.DlgCariPenjualan;
 import inventory.DlgDaruratStok;
 import inventory.DlgWarningStokObat;
+import inventory.DlgRencanaKebutuhanObat;
+import inventory.DlgSettingRencanaKebutuhanObat;
 import inventory.DlgObatFornas;
 import inventory.DlgIndustriFarmasi;
 import inventory.DlgInputStok;
@@ -10967,6 +10969,28 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         aplikasi.setVisible(true);
         this.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnDaruratStokActionPerformed
+
+    private void btnRencanaKebutuhanObatActionPerformed(java.awt.event.ActionEvent evt) {
+        isTutup();
+        DlgHome.dispose();
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        DlgRencanaKebutuhanObat dlg = new DlgRencanaKebutuhanObat(this, false);
+        dlg.setSize(PanelUtama.getWidth(), PanelUtama.getHeight());
+        dlg.setLocationRelativeTo(PanelUtama);
+        dlg.setVisible(true);
+        this.setCursor(Cursor.getDefaultCursor());
+    }
+
+    private void btnSettingRencanaKebutuhanObatActionPerformed(java.awt.event.ActionEvent evt) {
+        isTutup();
+        DlgHome.dispose();
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        DlgSettingRencanaKebutuhanObat dlg = new DlgSettingRencanaKebutuhanObat(this, false);
+        dlg.setSize(PanelUtama.getWidth(), PanelUtama.getHeight());
+        dlg.setLocationRelativeTo(PanelUtama);
+        dlg.setVisible(true);
+        this.setCursor(Cursor.getDefaultCursor());
+    }
 
     private void btnWarningStokObatActionPerformed(java.awt.event.ActionEvent evt) {
         isTutup();
@@ -23766,6 +23790,7 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
     private widget.ButtonBig btnDaftarPermintaanResep;
     private widget.ButtonBig btnDaruratStok;
     private widget.ButtonBig btnWarningStokObat;
+    private widget.ButtonBig btnRencanaKebutuhanObat,btnSettingRencanaKebutuhanObat;
     private widget.ButtonBig btnObatFornas;
     private widget.ButtonBig btnDataBatch;
     private widget.ButtonBig btnDataHAIs;
@@ -25298,6 +25323,16 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
 
             if(akses.getdarurat_stok()==true){
                 Panelmenu.add(btnWarningStokObat);
+                jmlmenu++;
+            }
+
+            if(akses.getrencana_kebutuhan_obat()==true){
+                Panelmenu.add(btnRencanaKebutuhanObat);
+                jmlmenu++;
+            }
+
+            if(akses.getsetting_rencana_kebutuhan_obat()==true){
+                Panelmenu.add(btnSettingRencanaKebutuhanObat);
                 jmlmenu++;
             }
 
@@ -31334,6 +31369,16 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
 
         if(akses.getdarurat_stok()==true){
             Panelmenu.add(btnWarningStokObat);
+            jmlmenu++;
+        }
+
+        if(akses.getrencana_kebutuhan_obat()==true){
+            Panelmenu.add(btnRencanaKebutuhanObat);
+            jmlmenu++;
+        }
+
+        if(akses.getsetting_rencana_kebutuhan_obat()==true){
+            Panelmenu.add(btnSettingRencanaKebutuhanObat);
             jmlmenu++;
         }
 
@@ -37665,6 +37710,20 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         if(akses.getdarurat_stok()==true){
             if(btnWarningStokObat.getText().toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())){
                 Panelmenu.add(btnWarningStokObat);
+                jmlmenu++;
+            }
+        }
+
+        if(akses.getrencana_kebutuhan_obat()==true){
+            if(btnRencanaKebutuhanObat.getText().toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())){
+                Panelmenu.add(btnRencanaKebutuhanObat);
+                jmlmenu++;
+            }
+        }
+
+        if(akses.getsetting_rencana_kebutuhan_obat()==true){
+            if(btnSettingRencanaKebutuhanObat.getText().toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())){
+                Panelmenu.add(btnSettingRencanaKebutuhanObat);
                 jmlmenu++;
             }
         }
@@ -50600,6 +50659,22 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         btnWarningStokObat.setName("btnWarningStokObat");
         btnWarningStokObat.setPreferredSize(new java.awt.Dimension(200, 90));
         btnWarningStokObat.addActionListener(this::btnWarningStokObatActionPerformed);
+
+        btnRencanaKebutuhanObat = new widget.ButtonBig();
+        btnRencanaKebutuhanObat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/1360486898_project-plan.png")));
+        btnRencanaKebutuhanObat.setText("Rencana Kebutuhan Obat & BMHP");
+        btnRencanaKebutuhanObat.setIconTextGap(0);
+        btnRencanaKebutuhanObat.setName("btnRencanaKebutuhanObat");
+        btnRencanaKebutuhanObat.setPreferredSize(new java.awt.Dimension(200, 90));
+        btnRencanaKebutuhanObat.addActionListener(this::btnRencanaKebutuhanObatActionPerformed);
+
+        btnSettingRencanaKebutuhanObat = new widget.ButtonBig();
+        btnSettingRencanaKebutuhanObat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/12565790_control_stock_inventory_checklist_logistic_icon.png")));
+        btnSettingRencanaKebutuhanObat.setText("Setting Rencana Kebutuhan Obat");
+        btnSettingRencanaKebutuhanObat.setIconTextGap(0);
+        btnSettingRencanaKebutuhanObat.setName("btnSettingRencanaKebutuhanObat");
+        btnSettingRencanaKebutuhanObat.setPreferredSize(new java.awt.Dimension(200, 90));
+        btnSettingRencanaKebutuhanObat.addActionListener(this::btnSettingRencanaKebutuhanObatActionPerformed);
 
         btnObatFornas = new widget.ButtonBig();
         btnObatFornas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/if_package_utilities_3557.png")));
