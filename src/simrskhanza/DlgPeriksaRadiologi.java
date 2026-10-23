@@ -913,49 +913,31 @@ public final class DlgPeriksaRadiologi extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null,"Maaf, silahkan pilih pasien/permintaan terlebih dulu...");
             return;
         }
-        // Cari noorder terbaru dari permintaan_radiologi
-        String order = "";
-        try(java.sql.Connection kon=koneksiDB.condb();
-            java.sql.PreparedStatement psq=kon.prepareStatement(
-                "select noorder from permintaan_radiologi where no_rawat=? order by tgl_permintaan desc, jam_permintaan desc limit 1")){
-            psq.setString(1, noRawat);
-            try(java.sql.ResultSet rsq=psq.executeQuery()){
-                if(rsq.next()){ order = rsq.getString("noorder"); }
-            }
-        }catch(Exception e){
-            System.out.println("Cari noorder gagal: "+e);
-        }
-        if(order==null || order.equals("")){
+        // Permintaan yang sedang diinput (noorder) kalau dibuka dari permintaan;
+        // kalau tidak, permintaan No.Rawat ini yang belum punya baris pemeriksaan.
+        java.util.List<String> orders = noorder.equals("")
+                ? bridging.AlatRSWorklist.orderUntukPeriksa(noRawat, "", "")
+                : java.util.Collections.singletonList(noorder);
+        if(orders.isEmpty()){
             JOptionPane.showMessageDialog(null,"Tidak ada permintaan radiologi (noorder) untuk No.Rawat "+noRawat+".");
             return;
         }
-        // Ambil worklist_id dari bridging_alatrs_log
-        String worklistId = "";
-        try(java.sql.Connection kon=koneksiDB.condb();
-            java.sql.PreparedStatement psq=kon.prepareStatement(
-                "select ifnull(worklist_id_alatrs,'') as wid from bridging_alatrs_log where noorder=?")){
-            psq.setString(1, order);
-            try(java.sql.ResultSet rsq=psq.executeQuery()){
-                if(rsq.next()){ worklistId = rsq.getString("wid"); }
-            }
-        }catch(Exception e){
-            System.out.println("Cek bridging_alatrs_log gagal: "+e);
-        }
-        if(worklistId==null || worklistId.equals("")){
+        final java.util.List<bridging.AlatRSWorklist.Item> items = bridging.AlatRSWorklist.untukOrder(orders);
+        if(bridging.AlatRSWorklist.worklistCsv(items).equals("")){
             JOptionPane.showMessageDialog(null,
-                "Permintaan "+order+" belum pernah dikirim ke RIS alat_rs.\n"+
+                "Permintaan "+String.join(",", orders)+" belum pernah dikirim ke RIS alat_rs.\n"+
                 "Silakan kirim dulu lewat menu Data Permintaan Radiologi.");
             return;
         }
 
-        final String worklistIdFinal = worklistId;   // bisa berisi >1 worklist (dipisah koma)
-        final String orderFinal = order;
+        final String orderFinal = String.join(",", orders);
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         new Thread(() -> {
             ApiAlatRS api = new ApiAlatRS();
             api.Login();
             // Gabungan: tarik semua worklist (kalau order berisi >1 pemeriksaan).
-            final ApiAlatRS.HasilBacaan hb = api.AmbilHasilBacaanGabungan(worklistIdFinal);
+            final ApiAlatRS.HasilBacaan hb = api.AmbilHasilBacaanGabungan(bridging.AlatRSWorklist.judulPerWorklist(items));
+            bridging.AlatRSWorklist.tandaiHasil(hb.rincian);
             javax.swing.SwingUtilities.invokeLater(() -> {
                 this.setCursor(Cursor.getDefaultCursor());
                 if(!hb.ok){

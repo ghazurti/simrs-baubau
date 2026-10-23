@@ -640,6 +640,7 @@ public class ApiAlatRS {
     public static class HasilBacaan {
         public boolean ada;          // true kalau ada teks hasil (kesimpulan/temuan)
         public boolean ok;           // true kalau call sukses (walau hasil belum ada)
+        public boolean lengkap;      // true kalau SEMUA pemeriksaan (worklist) sudah ada hasil
         public String kesimpulan = "";
         public String temuan = "";
         public String saran = "";             // hasil_saran (anjuran radiolog)
@@ -650,6 +651,8 @@ public class ApiAlatRS {
         public String namaPemeriksaan = "";   // nama pemeriksaan (untuk judul kalau >1 worklist)
         public String pesan = "";
         public String responseRaw = "";
+        public String worklistId = "";        // worklist RIS asal hasil ini
+        public java.util.List<HasilBacaan> rincian = new java.util.ArrayList<>(); // per worklist (hasil gabungan)
     }
 
     /**
@@ -658,6 +661,7 @@ public class ApiAlatRS {
      */
     public HasilBacaan AmbilHasilBacaan(String worklistId) {
         HasilBacaan hb = new HasilBacaan();
+        hb.worklistId = worklistId == null ? "" : worklistId;
         if (worklistId == null || worklistId.isEmpty()) {
             hb.pesan = "worklist_id kosong (permintaan belum pernah dikirim ke RIS?).";
             return hb;
@@ -719,15 +723,26 @@ public class ApiAlatRS {
      *   - status  = ringkasan "n dari m pemeriksaan sudah ada hasil"
      */
     public HasilBacaan AmbilHasilBacaanGabungan(String worklistIdsCsv) {
+        java.util.LinkedHashMap<String, String> judul = new java.util.LinkedHashMap<>();
+        if (worklistIdsCsv != null) {
+            for (String id : worklistIdsCsv.split(",")) { if (id != null && !id.trim().isEmpty()) judul.put(id.trim(), ""); }
+        }
+        return AmbilHasilBacaanGabungan(judul);
+    }
+
+    /**
+     * Sama dengan versi CSV, tapi judul tiap pemeriksaan diambil dari Khanza
+     * (worklist id -> nama pemeriksaan). Judul kosong -> pakai nama dari RIS.
+     */
+    public HasilBacaan AmbilHasilBacaanGabungan(java.util.LinkedHashMap<String, String> worklistJudul) {
         HasilBacaan gab = new HasilBacaan();
-        if (worklistIdsCsv == null || worklistIdsCsv.trim().isEmpty()) {
+        if (worklistJudul == null || worklistJudul.isEmpty()) {
             gab.pesan = "worklist_id kosong (permintaan belum pernah dikirim ke RIS?).";
             return gab;
         }
-        String[] ids = worklistIdsCsv.split(",");
         // buang duplikat & kosong, jaga urutan
         java.util.LinkedHashSet<String> unik = new java.util.LinkedHashSet<>();
-        for (String id : ids) { if (id != null && !id.trim().isEmpty()) unik.add(id.trim()); }
+        for (String id : worklistJudul.keySet()) { if (id != null && !id.trim().isEmpty()) unik.add(id.trim()); }
         if (unik.isEmpty()) {
             gab.pesan = "worklist_id kosong.";
             return gab;
@@ -735,6 +750,11 @@ public class ApiAlatRS {
         // Kalau cuma 1 worklist, tidak perlu judul — perilaku sama seperti dulu.
         if (unik.size() == 1) {
             HasilBacaan hb = AmbilHasilBacaan(unik.iterator().next());
+            hb.lengkap = hb.ada;
+            HasilBacaan salinan = new HasilBacaan();
+            salinan.ok = hb.ok; salinan.ada = hb.ada; salinan.status = hb.status;
+            salinan.issuedAt = hb.issuedAt; salinan.worklistId = hb.worklistId;
+            hb.rincian.add(salinan);
             hb.temuan = gabungTemuanKesimpulan(hb);
             hb.kesimpulan = "";
             return hb;
@@ -744,9 +764,11 @@ public class ApiAlatRS {
         for (String id : unik) {
             idx++;
             HasilBacaan hb = AmbilHasilBacaan(id);
+            gab.rincian.add(hb);
             if (hb.ok) gab.ok = true;
-            String judul = hb.namaPemeriksaan.isEmpty()
-                    ? ("PEMERIKSAAN " + idx) : hb.namaPemeriksaan.toUpperCase();
+            String jdKhanza = worklistJudul.get(id);
+            String judul = (jdKhanza != null && !jdKhanza.trim().isEmpty()) ? jdKhanza.trim().toUpperCase()
+                    : (hb.namaPemeriksaan.isEmpty() ? ("PEMERIKSAAN " + idx) : hb.namaPemeriksaan.toUpperCase());
             sb.append("=== ").append(judul).append(" ===\n");
             if (hb.ada) {
                 adaCount++;
@@ -758,6 +780,7 @@ public class ApiAlatRS {
         }
         gab.temuan = sb.toString().trim();
         gab.ada = adaCount > 0;
+        gab.lengkap = adaCount == total;
         gab.status = adaCount + " dari " + total + " pemeriksaan sudah ada hasil";
         gab.pesan = gab.ada
                 ? ("Hasil ditemukan (" + gab.status + ").")
@@ -1022,16 +1045,34 @@ public class ApiAlatRS {
      * "US Abdomen", "MR Brain". DICOM: X-ray -> DX (digital radiography,
      * default RS), USG -> US, dst. RS bisa sesuaikan master modality RIS.
      */
-    private String deriveModality(String loincDisplay, String namaPemeriksaan) {
-        String s = ((loincDisplay == null ? "" : loincDisplay) + " "
-                 + (namaPemeriksaan == null ? "" : namaPemeriksaan)).toUpperCase().trim();
-        if (s.startsWith("CT") || s.contains(" CT ") || s.contains("CT ")) return "CT";
-        if (s.startsWith("MR") || s.contains("MRI")) return "MR";
-        if (s.startsWith("US") || s.contains("USG") || s.contains("ULTRASOUND")) return "US";
-        if (s.contains("ANGIO") || s.startsWith("XA")) return "XA";
-        if (s.contains("FLUORO") || s.startsWith("RF")) return "RF";
-        if (s.contains("MAMMO") || s.startsWith("MG")) return "MG";
-        if (s.contains("PET") || s.contains("SCINTIG") || s.startsWith("NM")) return "NM";
+    /**
+     * Kode modality DICOM untuk pemeriksaan. Utama dari awalan LOINC display yang
+     * formatnya baku ("CT Chest", "US Urinary tract", "XR Knee", "RF Sinus tract ...",
+     * "US.doppler ..."). Dulu ditebak dari potongan teks "CT " di mana saja, sehingga
+     * kata "TRACT " terbaca CT (USG Urologi, Fistulografi, Follow Through jadi CT).
+     * Cadangan kalau LOINC kosong / awalan tak dikenal: kata utuh di nama pemeriksaan.
+     */
+    static String deriveModality(String loincDisplay, String namaPemeriksaan) {
+        String d = loincDisplay == null ? "" : loincDisplay.trim().toUpperCase();
+        String awal = d.split("[ .^]", 2)[0];
+        switch (awal) {
+            case "CT": return "CT";
+            case "MR": return "MR";
+            case "US": return "US";
+            case "XR": case "DX": case "CR": return "DX";
+            case "RF": return "RF";
+            case "MG": return "MG";
+            case "NM": case "PT": return "NM";
+            case "XA": return "XA";
+            default: break;
+        }
+        String n = " " + (namaPemeriksaan == null ? "" : namaPemeriksaan.toUpperCase()).replaceAll("[^A-Z0-9]+", " ") + " ";
+        if (n.contains(" CT ") || n.contains(" MSCT ")) return "CT";
+        if (n.contains(" MRI ") || n.contains(" MR ")) return "MR";
+        if (n.contains(" USG ") || n.contains(" US ") || n.contains("ULTRASONO") || n.contains(" DOPPLER ")) return "US";
+        if (n.contains("ANGIO")) return "XA";
+        if (n.contains("FLUORO") || n.contains(" RF ")) return "RF";
+        if (n.contains("MAMMO") || n.contains("MAMOGRA") || n.contains(" MG ")) return "MG";
         // Default: X-ray konvensional/digital -> DX
         return "DX";
     }

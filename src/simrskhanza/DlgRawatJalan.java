@@ -255,6 +255,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
     public DlgRawatJalan(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        tambahTombolGambarRadiologi();
         initRawatJalan();
 
         // Perbesar font kotak SOAP tab Pemeriksaan agar mudah dibaca dokter
@@ -271,7 +272,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
         // tidak saling menutupi. Tombol mic mengikuti posisi kotak. Kembali normal saat fokus keluar kolom.
         class AkordeonSoap {
             final javax.swing.JScrollPane[] col; final javax.swing.JTextArea[] ta;
-            final int top, total; final java.awt.Rectangle[] asli; final javax.swing.JButton[] mic;
+            final int top, total; final java.awt.Rectangle[] asli; final javax.swing.JButton[] mic; int aktif=-1;
             AkordeonSoap(javax.swing.JScrollPane[] col, javax.swing.JTextArea[] ta, int top, int total){
                 this.col=col; this.ta=ta; this.top=top; this.total=total;
                 this.asli=new java.awt.Rectangle[col.length];
@@ -285,6 +286,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
                     b.setFont(new java.awt.Font("Tahoma",1,11));
                     b.setMargin(new java.awt.Insets(0,0,0,0));
                     b.setFocusable(false);
+                    b.putClientProperty("micSoap",Boolean.TRUE);
                     b.setToolTipText("Klik untuk dikte suara (voice to text) ke kotak ini");
                     b.addActionListener(new java.awt.event.ActionListener(){
                         public void actionPerformed(java.awt.event.ActionEvent e){ dikte(target); }
@@ -304,14 +306,21 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
                     });
                 }
                 tataTombol();
+                relayoutSoap.add(this::tata);
+            }
+            // koordinat desain (layar 1210px) dikali skala layar saat ini
+            void pasang(int k,int x,int y,int w,int h){
+                col[k].setBounds((int)Math.round(x*skalaX),(int)Math.round(y*skalaY),(int)Math.round(w*skalaX),(int)Math.round(h*skalaY));
             }
             void buka(int fokus){
+                aktif=fokus;
                 int gap=8, small=26, big=total-(col.length-1)*(small+gap); if(big<small) big=small;
                 int y=top;
-                for(int k=0;k<col.length;k++){ int h=(k==fokus)?big:small; col[k].setBounds(asli[k].x,y,asli[k].width,h); y+=h+gap; }
+                for(int k=0;k<col.length;k++){ int h=(k==fokus)?big:small; pasang(k,asli[k].x,y,asli[k].width,h); y+=h+gap; }
                 tataTombol(); refresh();
             }
-            void reset(){ for(int k=0;k<col.length;k++) col[k].setBounds(asli[k]); tataTombol(); refresh(); }
+            void reset(){ aktif=-1; for(int k=0;k<col.length;k++) pasang(k,asli[k].x,asli[k].y,asli[k].width,asli[k].height); tataTombol(); refresh(); }
+            void tata(){ if(aktif>=0) buka(aktif); else reset(); }
             void tataTombol(){ for(int k=0;k<col.length;k++){ java.awt.Rectangle r=col[k].getBounds(); mic[k].setBounds(r.x+r.width-22, r.y+2, 20, 18); } }
             void refresh(){ java.awt.Container p=col[0].getParent(); if(p!=null){ p.revalidate(); p.repaint(); } }
             void dikte(final javax.swing.text.JTextComponent target){
@@ -340,6 +349,7 @@ public final class DlgRawatJalan extends javax.swing.JDialog {
                          new javax.swing.JTextArea[]{TKeluhan, TPemeriksaan}, 70, 140);
         new AkordeonSoap(new javax.swing.JScrollPane[]{scrollPane3, scrollPane6, scrollPane7, scrollPane8},
                          new javax.swing.JTextArea[]{TPenilaian, TindakLanjut, TInstruksi, TEvaluasi}, 45, 270);
+        aturSkalaPanelSoap();
 
         this.setLocation(8,1);
         setSize(885,674);
@@ -8106,6 +8116,83 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
         }
     }//GEN-LAST:event_BtnRiwayatActionPerformed
 
+    // ===== tab Pemeriksaan responsif: desain 1210x335, diskalakan ke lebar layar =====
+    private double skalaX=1,skalaY=1;
+    private final java.util.List<Runnable> relayoutSoap=new java.util.ArrayList<>();
+    private final java.util.Map<java.awt.Component,java.awt.Rectangle> desainSoap=new java.util.LinkedHashMap<>();
+    private static final double LEBAR_DESAIN_SOAP=1210,TINGGI_DESAIN_SOAP=335;
+
+    private void aturSkalaPanelSoap(){
+        for(java.awt.Component c:panelGlass12.getComponents()){
+            if(!(c instanceof javax.swing.JComponent)||((javax.swing.JComponent)c).getClientProperty("micSoap")==null){
+                desainSoap.put(c,c.getBounds());
+            }
+        }
+        panelGlass12.addComponentListener(new java.awt.event.ComponentAdapter(){
+            @Override public void componentResized(java.awt.event.ComponentEvent e){ skalakanPanelSoap(); }
+        });
+    }
+
+    private void skalakanPanelSoap(){
+        int w=panelGlass12.getWidth();
+        if(w<=0) return;
+        // layar kecil boleh menyempit sampai 80% supaya panel aksi tidak terpotong
+        double sx=Math.max(0.8,w/LEBAR_DESAIN_SOAP);
+        // tinggi ikut naik lebih pelan, maks 1.35x dan maks setengah tinggi form; tidak pernah dikecilkan
+        double sy=Math.max(1,Math.min(1+(sx-1)*0.7,1.35));
+        int tinggiForm=internalFrame1.getHeight();
+        if(tinggiForm>0) sy=Math.max(1,Math.min(sy,(tinggiForm*0.5)/TINGGI_DESAIN_SOAP));
+        if(Math.abs(sx-skalaX)<0.005&&Math.abs(sy-skalaY)<0.005) return;
+        skalaX=sx;
+        skalaY=sy;
+        for(java.util.Map.Entry<java.awt.Component,java.awt.Rectangle> d:desainSoap.entrySet()){
+            java.awt.Rectangle r=d.getValue();
+            d.getKey().setBounds((int)Math.round(r.x*sx),(int)Math.round(r.y*sy),(int)Math.round(r.width*sx),(int)Math.round(r.height*sy));
+        }
+        for(Runnable r:relayoutSoap) r.run();
+        if(PanelInput.getPreferredSize().height>20){
+            PanelInput.setPreferredSize(new Dimension(WIDTH,(int)Math.round(TINGGI_DESAIN_SOAP*sy)));
+            PanelInput.revalidate();
+        }
+        panelGlass12.repaint();
+    }
+
+    /** tombol "Gambar Radiologi (PACS)" di bawah panel Aksi Cepat Dokter */
+    private void tambahTombolGambarRadiologi(){
+        javax.swing.JButton btn=new javax.swing.JButton("Gambar Radiologi (PACS)");
+        btn.setFont(new java.awt.Font("Tahoma",1,11));
+        btn.setBackground(new java.awt.Color(200,90,30));
+        btn.setForeground(java.awt.Color.WHITE);
+        btn.setOpaque(true);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setToolTipText("Lihat gambar CT/rontgen/USG pasien di PACS (semua kunjungan)");
+        btn.setPreferredSize(new java.awt.Dimension(100,30));
+        btn.addActionListener(e->{
+            if(TPasien.getText().trim().equals("")||TNoRw.getText().trim().equals("")){
+                JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+                TCari.requestFocus();
+                return;
+            }
+            DlgGambarRadiologi dlg=new DlgGambarRadiologi(null,false);
+            dlg.setPasien(TNoRM.getText(),TPasien.getText());
+            if(dlg.jumlahGambar()==0){
+                JOptionPane.showMessageDialog(null,"Belum ada gambar radiologi pasien ini yang terkirim ke PACS...!!!");
+                dlg.dispose();
+                return;
+            }
+            dlg.setLocationRelativeTo(internalFrame1);
+            dlg.setVisible(true);
+        });
+        javax.swing.JPanel pn=new javax.swing.JPanel(new java.awt.BorderLayout());
+        pn.setBackground(new java.awt.Color(235,240,252));
+        pn.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,5,5,5));
+        pn.add(btn,java.awt.BorderLayout.CENTER);
+        PanelAksiDokter.add(pn,java.awt.BorderLayout.SOUTH);
+        // tinggi 330 terpotong di bawah; samakan dengan batas bawah kotak SOAP (y 315)
+        PanelAksiDokter.setBounds(912,5,290,308);
+    }
+
     private void BtnAksiRiwayatPenunjangActionPerformed(java.awt.event.ActionEvent evt) {
         if(TPasien.getText().trim().equals("")||TNoRw.getText().trim().equals("")){
             JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
@@ -11522,7 +11609,7 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
     private void isForm(){
         if(ChkInput.isSelected()==true){
             ChkInput.setVisible(false);
-            PanelInput.setPreferredSize(new Dimension(WIDTH,335));
+            PanelInput.setPreferredSize(new Dimension(WIDTH,(int)Math.round(335*skalaY)));
             panelGlass12.setVisible(true);
             ChkInput.setVisible(true);
         }else if(ChkInput.isSelected()==false){

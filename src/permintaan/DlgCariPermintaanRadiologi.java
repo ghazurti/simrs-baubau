@@ -2452,6 +2452,8 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
                         hdr[7], jamNow, encId, aeTitleFinal); // aeTitleFinal = pilihan user (kosong = auto)
                 if(h.ok){
                     ok++;
+                    // 1 baris per pemeriksaan: noorder + kd_jenis_prw <-> accession RIS
+                    bridging.AlatRSWorklist.simpan(noorder, kd, h.accessionNumber, h.worklistId, h.aeTitle);
                     if(h.worklistId!=null && !h.worklistId.isEmpty()) daftarWorklist.add(h.worklistId);
                     if(h.accessionNumber!=null && !h.accessionNumber.isEmpty()) daftarAccession.add(h.accessionNumber);
                     patientIdTerakhir=h.patientIdAlatRS;
@@ -2543,23 +2545,10 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
      * Hasil disimpan ke hasil_radiologi + update tgl/jam hasil di permintaan_radiologi.
      */
     private void ambilHasilAlatRS(String noorder, String norawat){
-        // 1. Ambil worklist_id dari log kirim.
-        final String[] wl = new String[]{ "", "" }; // 0=worklist_id 1=accession
-        try{
-            koneksi=koneksiDB.condb();
-            ps=koneksi.prepareStatement(
-                "select ifnull(worklist_id_alatrs,'') as wid, ifnull(accession_number,'') as acc "+
-                "from bridging_alatrs_log where noorder=?");
-            ps.setString(1, noorder);
-            rs=ps.executeQuery();
-            if(rs.next()){
-                wl[0]=nz(rs.getString("wid"));
-                wl[1]=nz(rs.getString("acc"));
-            }
-        }catch(Exception e){
-            System.out.println("Cek bridging_alatrs_log (ambil hasil) gagal: "+e);
-        }
-        if(wl[0].equals("")){
+        // 1. Pemeriksaan yang terkirim untuk permintaan ini (1 baris per accession).
+        final java.util.List<bridging.AlatRSWorklist.Item> items=
+                bridging.AlatRSWorklist.untukOrder(java.util.Collections.singletonList(noorder));
+        if(bridging.AlatRSWorklist.worklistCsv(items).equals("")){
             JOptionPane.showMessageDialog(null,
                 "Permintaan "+noorder+" belum pernah dikirim ke RIS (worklist_id tidak ada).\n"+
                 "Kirim dulu via \"Kirim Permintaan ke RIS (alat_rs)\".");
@@ -2570,9 +2559,9 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
         new Thread(() -> {
             ApiAlatRS api=new ApiAlatRS();
             api.Login();
-            // Gabungan: wl[0] bisa berisi >1 worklist (dipisah koma) kalau order
-            // punya lebih dari satu pemeriksaan. Hasil digabung per pemeriksaan.
-            final ApiAlatRS.HasilBacaan hb=api.AmbilHasilBacaanGabungan(wl[0]);
+            // Gabungan: order bisa punya >1 pemeriksaan; judul pakai nama pemeriksaan Khanza.
+            final ApiAlatRS.HasilBacaan hb=api.AmbilHasilBacaanGabungan(bridging.AlatRSWorklist.judulPerWorklist(items));
+            bridging.AlatRSWorklist.tandaiHasil(hb.rincian);
 
             String pesan;
             if(!hb.ok){
@@ -2603,9 +2592,11 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
     }
 
     /**
-     * Simpan/replace teks hasil bacaan ke hasil_radiologi untuk no_rawat, dan
-     * update tgl_hasil/jam_hasil di permintaan_radiologi. Idempotent: hapus dulu
-     * hasil lama no_rawat ini biar tidak menumpuk saat tarik ulang.
+     * Simpan/replace teks hasil bacaan permintaan ini ke hasil_radiologi.
+     * Kalau permintaan sudah punya tgl/jam hasil (baris pemeriksaan), hasil ditulis ke
+     * baris itu; kalau belum, dibuat dengan waktu sekarang dan dicatat di permintaan.
+     * Hanya hasil milik permintaan ini yang diganti — dulu semua hasil No.Rawat dihapus,
+     * sehingga pasien dengan 2 permintaan kehilangan hasil permintaan lainnya.
      */
     private boolean simpanHasilRadiologi(String noorder, String norawat, String teksHasil){
         java.text.SimpleDateFormat fTgl=new java.text.SimpleDateFormat("yyyy-MM-dd");
@@ -2614,11 +2605,18 @@ private void tbRadiologiRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRS
         String tgl=fTgl.format(now), jam=fJam.format(now);
         try{
             koneksi=koneksiDB.condb();
+            try(PreparedStatement psh=koneksi.prepareStatement(
+                    "select tgl_hasil,jam_hasil from permintaan_radiologi where noorder=? and tgl_hasil<>'0000-00-00'")){
+                psh.setString(1, noorder);
+                try(ResultSet rsh=psh.executeQuery()){
+                    if(rsh.next()){ tgl=rsh.getString(1); jam=rsh.getString(2); }
+                }
+            }
             koneksi.setAutoCommit(false);
             try{
                 // hasil_radiologi(no_rawat, tgl_periksa, jam, hasil) — PK (no_rawat,tgl_periksa,jam)
-                ps=koneksi.prepareStatement("delete from hasil_radiologi where no_rawat=?");
-                ps.setString(1, norawat); ps.executeUpdate(); ps.close();
+                ps=koneksi.prepareStatement("delete from hasil_radiologi where no_rawat=? and tgl_periksa=? and jam=?");
+                ps.setString(1, norawat); ps.setString(2, tgl); ps.setString(3, jam); ps.executeUpdate(); ps.close();
 
                 ps=koneksi.prepareStatement(
                     "insert into hasil_radiologi (no_rawat, tgl_periksa, jam, hasil) values (?,?,?,?)");
