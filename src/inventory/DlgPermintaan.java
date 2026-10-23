@@ -64,7 +64,7 @@ public class DlgPermintaan extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        Object[] judul={"Jml","Kode Barang","Nama Barang","Satuan","Jenis Obat","Kategori","Golongan","Keterangan","Stok Asal","Stok Tujuan","Penjualan","Ke Pasien","Obat Pulang"};
+        Object[] judul={"Jml","Kode Barang","Nama Barang","Satuan","Jenis Obat","Kategori","Golongan","Keterangan","Stok Asal","Stok Tujuan","Penjualan","Ke Pasien","Obat Pulang","Total"};
         tabMode=new DefaultTableModel(null,judul){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){
                 boolean a = false;
@@ -79,7 +79,7 @@ public class DlgPermintaan extends javax.swing.JDialog {
         tbDokter.setPreferredScrollableViewportSize(new Dimension(800,800));
         tbDokter.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 13; i++) {
+        for (i = 0; i < 14; i++) {
             TableColumn column = tbDokter.getColumnModel().getColumn(i);
             if(i==0){
                 column.setPreferredWidth(42);
@@ -106,6 +106,8 @@ public class DlgPermintaan extends javax.swing.JDialog {
             }else if(i==11){
                 column.setPreferredWidth(75);
             }else if(i==12){
+                column.setPreferredWidth(75);
+            }else if(i==13){
                 column.setPreferredWidth(75);
             }
         }
@@ -246,7 +248,7 @@ public class DlgPermintaan extends javax.swing.JDialog {
         internalFrame1.add(scrollPane1, java.awt.BorderLayout.CENTER);
 
         panelisi1.setName("panelisi1"); // NOI18N
-        panelisi1.setPreferredSize(new java.awt.Dimension(100, 56));
+        panelisi1.setPreferredSize(new java.awt.Dimension(100, 92));
         panelisi1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 9));
 
         BtnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/save-16x16.png"))); // NOI18N
@@ -379,6 +381,38 @@ public class DlgPermintaan extends javax.swing.JDialog {
         DTPPeriode2.setPreferredSize(new java.awt.Dimension(105, 23));
         DTPPeriode2.setToolTipText("Periode akhir untuk Penjualan & Ke Pasien");
         panelisi1.add(DTPPeriode2);
+
+        widget.Label lblJenis = new widget.Label();
+        lblJenis.setText("Jenis Obat :");
+        lblJenis.setPreferredSize(new java.awt.Dimension(70, 23));
+        panelisi1.add(lblJenis);
+
+        cmbJenis = new widget.ComboBox();
+        cmbJenis.setPreferredSize(new java.awt.Dimension(170, 23));
+        cmbJenis.setToolTipText("Filter jenis obat");
+        cmbJenis.addItem("Semua");
+        try (java.sql.PreparedStatement psj=koneksiDB.condb().prepareStatement("select jenis.nama from jenis order by jenis.nama");
+             java.sql.ResultSet rsj=psj.executeQuery()) {
+            while(rsj.next()) cmbJenis.addItem(rsj.getString(1));
+        } catch (Exception e) {
+            System.out.println("Notifikasi : "+e);
+        }
+        cmbJenis.addActionListener(evt -> runBackground(() -> tampil2()));
+        panelisi1.add(cmbJenis);
+
+        widget.Label lblTotal = new widget.Label();
+        lblTotal.setText("Total :");
+        lblTotal.setPreferredSize(new java.awt.Dimension(40, 23));
+        panelisi1.add(lblTotal);
+
+        cmbTotal = new widget.ComboBox();
+        cmbTotal.setPreferredSize(new java.awt.Dimension(150, 23));
+        cmbTotal.setToolTipText("Filter Total (Penjualan + Ke Pasien + Obat Pulang - Stok Asal), aktif bila Penjualan & Ke Pasien dicentang");
+        cmbTotal.addItem("Semua");
+        cmbTotal.addItem("> 0 (Perlu Minta)");
+        cmbTotal.addItem("<= 0 (Stok Cukup)");
+        cmbTotal.addActionListener(evt -> runBackground(() -> tampil2()));
+        panelisi1.add(cmbTotal);
 
         BtnKeluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/exit.png"))); // NOI18N
         BtnKeluar.setMnemonic('K');
@@ -960,6 +994,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
     private widget.Button BtnTambah;
     private javax.swing.JCheckBox chkPenjualan;
     private widget.Tanggal DTPPeriode1, DTPPeriode2;
+    private widget.ComboBox cmbJenis, cmbTotal;
     private widget.TextBox NoPermintaan;
     private javax.swing.JPopupMenu Popup;
     private widget.TextBox TCari;
@@ -1100,6 +1135,37 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         return formatQty(hasil);
     }
 
+    /** Total = Penjualan + Ke Pasien + Obat Pulang - Stok Asal. Kosong kalau checkbox Penjualan & Ke Pasien off. */
+    private String getTotal(String stokAsal, String penjualan, String kePasien, String obatPulang){
+        if(chkPenjualan==null || !chkPenjualan.isSelected()) return "";
+        if(penjualan.equals("")&&kePasien.equals("")&&obatPulang.equals("")) return "";
+        double total=angka(penjualan)+angka(kePasien)+angka(obatPulang)-angka(stokAsal);
+        return formatQty(String.valueOf(total));
+    }
+
+    private void isiTotal(int baris){
+        tabMode.setValueAt(getTotal(tabMode.getValueAt(baris,8).toString(),tabMode.getValueAt(baris,10).toString(),
+            tabMode.getValueAt(baris,11).toString(),tabMode.getValueAt(baris,12).toString()),baris,13);
+    }
+
+    /** filter Jenis Obat di bawah layar */
+    private boolean lolosJenis(String jenisObat){
+        if(cmbJenis==null||cmbJenis.getSelectedItem()==null||cmbJenis.getSelectedIndex()<=0) return true;
+        return cmbJenis.getSelectedItem().toString().equals(jenisObat);
+    }
+
+    /** filter Total; hanya berlaku bila Penjualan & Ke Pasien dicentang (Total terisi) */
+    private boolean lolosTotal(String total){
+        if(cmbTotal==null||cmbTotal.getSelectedIndex()<=0) return true;
+        if(chkPenjualan==null||!chkPenjualan.isSelected()||total.equals("")) return true;
+        double t=angka(total);
+        return cmbTotal.getSelectedIndex()==1?t>0:t<=0;
+    }
+
+    private double angka(String s){
+        try { return Double.parseDouble(s.trim().replace(",","")); } catch (Exception e) { return 0; }
+    }
+
     private void tampil2() {
         try{
             String kdAsal = kdgudangasal.getText().trim();
@@ -1137,9 +1203,11 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
             }
             Valid.tabelKosong(tabMode);
             for(i=0;i<jml;i++){
+                String stokAsal=getStok(kodebarang[i],kdAsal),penj=getPenjualan(kodebarang[i],kdAsal),
+                       pasien=getKePasien(kodebarang[i],kdAsal),pulang=getObatPulang(kodebarang[i],kdAsal);
                 tabMode.addRow(new Object[]{jumlah[i],kodebarang[i],namabarang[i],satuan[i],jenis[i],kategori[i],golongan[i],keterangan[i],
-                    getStok(kodebarang[i],kdAsal), getStok(kodebarang[i],kdTujuan),
-                    getPenjualan(kodebarang[i],kdAsal), getKePasien(kodebarang[i],kdAsal), getObatPulang(kodebarang[i],kdAsal)});
+                    stokAsal, getStok(kodebarang[i],kdTujuan),
+                    penj, pasien, pulang, getTotal(stokAsal,penj,pasien,pulang)});
             }
 
             kodebarang=null;
@@ -1158,21 +1226,27 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                 if(TCari.getText().trim().equals("")){
                     for(JsonNode list:response){
                         String kd = list.path("KodeBarang").asText();
+                        if(!lolosJenis(list.path("JenisObat").asText())) continue;
                         tabMode.addRow(new Object[]{
                             "",kd,list.path("NamaBarang").asText(),list.path("Satuan").asText(),list.path("JenisObat").asText(),list.path("Kategori").asText(),list.path("Golongan").asText(),"",
                             getStok(kd,kdAsal), getStok(kd,kdTujuan),
-                            getPenjualan(kd,kdAsal), getKePasien(kd,kdAsal), getObatPulang(kd,kdAsal)
+                            getPenjualan(kd,kdAsal), getKePasien(kd,kdAsal), getObatPulang(kd,kdAsal), ""
                         });
+                        isiTotal(tabMode.getRowCount()-1);
+                        if(!lolosTotal(tabMode.getValueAt(tabMode.getRowCount()-1,13).toString())) tabMode.removeRow(tabMode.getRowCount()-1);
                     }
                 }else{
                     for(JsonNode list:response){
                         if(list.path("KodeBarang").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("NamaBarang").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("JenisObat").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("Kategori").asText().toLowerCase().contains(TCari.getText().toLowerCase())||list.path("Golongan").asText().toLowerCase().contains(TCari.getText().toLowerCase())){
                             String kd = list.path("KodeBarang").asText();
+                            if(!lolosJenis(list.path("JenisObat").asText())) continue;
                             tabMode.addRow(new Object[]{
                                 "",kd,list.path("NamaBarang").asText(),list.path("Satuan").asText(),list.path("JenisObat").asText(),list.path("Kategori").asText(),list.path("Golongan").asText(),"",
                                 getStok(kd,kdAsal), getStok(kd,kdTujuan),
-                                getPenjualan(kd,kdAsal), getKePasien(kd,kdAsal), getObatPulang(kd,kdAsal)
+                                getPenjualan(kd,kdAsal), getKePasien(kd,kdAsal), getObatPulang(kd,kdAsal), ""
                             });
+                            isiTotal(tabMode.getRowCount()-1);
+                            if(!lolosTotal(tabMode.getValueAt(tabMode.getRowCount()-1,13).toString())) tabMode.removeRow(tabMode.getRowCount()-1);
                         }
                     }
                 }
