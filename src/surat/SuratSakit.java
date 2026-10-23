@@ -58,6 +58,7 @@ public final class SuratSakit extends javax.swing.JDialog {
         initComponents();
         this.setLocation(8,1);
         setSize(628,674);
+        jPopupMenu1.add(SuratBaubau.menu("Cetak Surat Keterangan Istirahat (RSUD Baubau)",this::cetakIstirahatBaubau),0);
         
         tabMode=new DefaultTableModel(null,new Object[]{
             "No.Surat Sakit","No.Rawat","No.R.M.","Nama Pasien","Dari Tanggal","Sampai Tanggal","Lama Sakit"
@@ -889,6 +890,23 @@ public final class SuratSakit extends javax.swing.JDialog {
     private void TanggalAwalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TanggalAwalKeyPressed
         Valid.pindah(evt,NoSurat,TanggalAkhir);
     }//GEN-LAST:event_TanggalAwalKeyPressed
+
+    private void cetakIstirahatBaubau(){
+        if(TPasien.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu pasien...!!!");
+            return;
+        }
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        String awal=Valid.SetTgl(TanggalAwal.getSelectedItem()+""),akhir=Valid.SetTgl(TanggalAkhir.getSelectedItem()+"");
+        Map<String, Object> param=SuratBaubau.identitas(TNoRw.getText());
+        SuratBaubau.put(param,"nomor",SuratBaubau.nomor(NoSurat.getText(),awal));
+        SuratBaubau.put(param,"lama",SuratBaubau.angkaTerbilang(LamaSakit.getText()));
+        SuratBaubau.put(param,"tglawal",SuratBaubau.tglIndo(awal));
+        SuratBaubau.put(param,"tglakhir",SuratBaubau.tglIndo(akhir));
+        SuratBaubau.put(param,"tglsurat",SuratBaubau.tglIndo(awal));
+        SuratBaubau.cetak("rptSuratIstirahatBaubau.jasper","Surat Keterangan Istirahat",param);
+        this.setCursor(Cursor.getDefaultCursor());
+    }
 
     private void MnCetakSuratSakitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnCetakSuratSakitActionPerformed
        if(TPasien.getText().trim().equals("")){

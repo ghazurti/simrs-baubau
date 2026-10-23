@@ -73,6 +73,7 @@ public class DlgIKBBayi extends javax.swing.JDialog {
     public DlgIKBBayi(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        Popup.add(surat.SuratBaubau.menu("Surat Keterangan Kelahiran (RSUD Baubau)",this::cetakKelahiranBaubau));
 
         tabMode=new DefaultTableModel(null,new Object[]{
             "No.RM","Nama Anak/Bayi","J.K","Tgl.Lahir","Jam Lahir",
@@ -3125,6 +3126,97 @@ private void MnKartuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST
         }
         this.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_MnInformasiBayiActionPerformed
+
+    private void cetakKelahiranBaubau(){
+        if(NoRm.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu data bayi...!!!");
+            return;
+        }
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        Map<String, Object> param = new HashMap<>();
+        try (java.sql.PreparedStatement ps=koneksiDB.condb().prepareStatement(
+                "select pasien.nm_pasien,pasien.jk,pasien.tgl_lahir,time_format(pasien_bayi.jam_lahir,'%H.%i') as jam,pasien.nm_ibu,"+
+                "pasien_bayi.umur_ibu,pasien_bayi.nama_ayah,pasien_bayi.umur_ayah,pasien_bayi.berat_badan,pasien_bayi.panjang_badan,"+
+                "pasien_bayi.anakke,pasien_bayi.proses_lahir,pasien_bayi.penolong,pasien_bayi.no_skl,pasien.pekerjaanpj,"+
+                "ifnull(pegawai.nama,'') as nmpenolong,ifnull(pegawai.jbtn,'') as jbtn,"+
+                "ifnull((select spesialis.nm_sps from dokter inner join spesialis on dokter.kd_sps=spesialis.kd_sps where dokter.kd_dokter=pasien_bayi.penolong),'') as sps,"+
+                "(select count(*) from dokter where dokter.kd_dokter=pasien_bayi.penolong) as isdokter,"+
+                "(select count(*) from pasien_bayi b2 inner join pasien p2 on b2.no_rkm_medis=p2.no_rkm_medis "+
+                "  where p2.nm_ibu=pasien.nm_ibu and p2.tgl_lahir=pasien.tgl_lahir and p2.alamat=pasien.alamat) as kembar,"+
+                "concat_ws(', ',nullif(trim(pasien.alamat),'-'),nullif(kelurahan.nm_kel,'-'),nullif(kecamatan.nm_kec,'-'),nullif(kabupaten.nm_kab,'-')) as alamat "+
+                "from pasien inner join pasien_bayi on pasien.no_rkm_medis=pasien_bayi.no_rkm_medis "+
+                "left join pegawai on pasien_bayi.penolong=pegawai.nik "+
+                "left join kelurahan on pasien.kd_kel=kelurahan.kd_kel left join kecamatan on pasien.kd_kec=kecamatan.kd_kec "+
+                "left join kabupaten on pasien.kd_kab=kabupaten.kd_kab where pasien.no_rkm_medis=?")) {
+            ps.setString(1,NoRm.getText());
+            try (java.sql.ResultSet rs=ps.executeQuery()) {
+                if(!rs.next()){
+                    this.setCursor(Cursor.getDefaultCursor());
+                    JOptionPane.showMessageDialog(null,"Data kelahiran bayi tidak ditemukan...!!!");
+                    return;
+                }
+                String tgl=rs.getString("tgl_lahir");
+                java.util.List<String> jenis=new java.util.ArrayList<>();
+                jenis.add(rs.getString("jk").equals("L")?"laki-laki":"perempuan");
+                String[] jumlah={"tunggal","kembar dua","tiga","empat"};
+                jenis.add(jumlah[Math.max(1,Math.min(4,rs.getInt("kembar")))-1]);
+                
+                String jabatan=(rs.getString("jbtn")+" "+rs.getString("sps")+" "+rs.getString("nmpenolong")).toLowerCase();
+                String penolong;
+                if(rs.getInt("isdokter")>0){
+                    penolong=(jabatan.contains("spesialis")||jabatan.contains("sp."))?"Dokter Spesialis":"Dokter";
+                }else if(jabatan.contains("perawat")){
+                    penolong="Perawat";
+                }else if(jabatan.contains("pembantu bidan")){
+                    penolong="Pembantu Bidan";
+                }else{
+                    penolong="Bidan";
+                }
+                java.util.List<String> berlaku=java.util.Collections.singletonList(penolong);
+                
+                surat.SuratBaubau.put(param,"nomor",surat.SuratBaubau.nomor(rs.getString("no_skl"),tgl));
+                surat.SuratBaubau.put(param,"hari",surat.SuratBaubau.hariIndo(tgl));
+                surat.SuratBaubau.put(param,"tanggal",surat.SuratBaubau.tglIndo(tgl));
+                surat.SuratBaubau.put(param,"jam",rs.getString("jam"));
+                param.put("jenis",surat.SuratBaubau.coret(new String[]{"laki-laki","perempuan","tunggal","kembar dua","tiga","empat"},jenis));
+                int anak=0;
+                try {
+                    anak=Integer.parseInt(rs.getString("anakke").trim());
+                } catch (Exception e) {
+                    anak=0;
+                }
+                surat.SuratBaubau.put(param,"anakke",anak>0?surat.SuratBaubau.romawi(anak)+" ( "+surat.SuratBaubau.terbilang(anak)+" )":rs.getString("anakke"));
+                surat.SuratBaubau.put(param,"bb",rs.getString("berat_badan"));
+                surat.SuratBaubau.put(param,"pb",rs.getString("panjang_badan"));
+                String nama=rs.getString("nm_pasien").trim();
+                surat.SuratBaubau.put(param,"namabayi",nama.toUpperCase().matches("^(BAYI|BY)[ .].*")?"":nama);
+                surat.SuratBaubau.put(param,"ibu",rs.getString("nm_ibu"));
+                surat.SuratBaubau.put(param,"umuribu",umurTahun(rs.getString("umur_ibu")));
+                surat.SuratBaubau.put(param,"ayah",rs.getString("nama_ayah"));
+                surat.SuratBaubau.put(param,"umurayah",umurTahun(rs.getString("umur_ayah")));
+                String kerja=rs.getString("pekerjaanpj");
+                surat.SuratBaubau.put(param,"pekerjaan",kerja==null||kerja.trim().equals("-")?"":kerja);
+                surat.SuratBaubau.put(param,"alamat",rs.getString("alamat"));
+                param.put("penolong_opsi",surat.SuratBaubau.coret(new String[]{"Dokter Spesialis","Dokter","Bidan","Pembantu Bidan","Perawat"},berlaku));
+                surat.SuratBaubau.put(param,"proses",rs.getString("proses_lahir"));
+                surat.SuratBaubau.put(param,"tglsurat",surat.SuratBaubau.tglIndo(surat.SuratBaubau.hariIni()));
+                surat.SuratBaubau.put(param,"kabid",surat.SuratBaubau.KABID_PELAYANAN);
+                surat.SuratBaubau.put(param,"kabidnip",surat.SuratBaubau.KABID_PELAYANAN_NIP);
+                param.put("jabatan_opsi",surat.SuratBaubau.coret(new String[]{"Dokter Spesialis","Dokter","Bidan"},berlaku,"/"));
+                surat.SuratBaubau.put(param,"penolong",rs.getString("nmpenolong"));
+                surat.SuratBaubau.put(param,"nip",surat.SuratBaubau.nip(rs.getString("penolong")));
+            }
+        } catch (Exception e) {
+            System.out.println("Notif Kelahiran Baubau : "+e);
+        }
+        surat.SuratBaubau.cetak("rptSuratKelahiranBaubau.jasper","Surat Keterangan Kelahiran",param);
+        this.setCursor(Cursor.getDefaultCursor());
+    }
+
+    private String umurTahun(String umur){
+        String u=umur==null?"":umur.trim();
+        return u.matches("[0-9]+")?u+" Tahun":u;
+    }
 
     private void MnSKLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnSKLActionPerformed
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));

@@ -58,6 +58,7 @@ public final class SuratKeteranganRawatInap extends javax.swing.JDialog {
         initComponents();
         this.setLocation(8,1);
         setSize(628,674);
+        jPopupMenu1.add(SuratBaubau.menu("Cetak Surat Keterangan Opname/Perawatan (RSUD Baubau)",this::cetakOpnameBaubau),0);
         
         tabMode=new DefaultTableModel(null,new Object[]{
             "No.Surat","No.Rawat","No.R.M.","Nama Pasien","Dari Tanggal","Sampai Tanggal"
@@ -888,6 +889,70 @@ public final class SuratKeteranganRawatInap extends javax.swing.JDialog {
     private widget.panelisi panelGlass9;
     private widget.Table tbObat;
     // End of variables declaration//GEN-END:variables
+
+    private void cetakOpnameBaubau(){
+        if(TPasien.getText().trim().equals("")||NoSurat.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu data surat...!!!");
+            return;
+        }
+        String awal=Valid.SetTgl(TanggalAwal.getSelectedItem()+""),akhir=Valid.SetTgl(TanggalAkhir.getSelectedItem()+"");
+        
+        // isian istirahat setelah rawat, disimpan agar terisi lagi saat cetak ulang
+        String lamaLama=Sequel.cariIsi("select lama from surat_keterangan_rawat_inap_istirahat where no_surat=?",NoSurat.getText());
+        String mulaiLama=Sequel.cariIsi("select tgl_awal from surat_keterangan_rawat_inap_istirahat where no_surat=?",NoSurat.getText());
+        widget.TextBox lama=new widget.TextBox();
+        lama.setText(lamaLama);
+        widget.Tanggal mulai=new widget.Tanggal();
+        mulai.setDisplayFormat("dd-MM-yyyy");
+        if(mulaiLama.equals("")){
+            mulai.setDate(java.sql.Date.valueOf(java.time.LocalDate.parse(akhir).plusDays(1)));
+        }else{
+            Valid.SetTgl(mulai,mulaiLama);
+        }
+        javax.swing.JPanel panel=new javax.swing.JPanel(new java.awt.GridLayout(0,2,6,6));
+        panel.add(new javax.swing.JLabel("Lama istirahat (hari) :"));
+        panel.add(lama);
+        panel.add(new javax.swing.JLabel("Mulai tanggal :"));
+        panel.add(mulai);
+        panel.add(new javax.swing.JLabel(""));
+        panel.add(new javax.swing.JLabel("Kosongkan lama bila tanpa istirahat"));
+        if(JOptionPane.showConfirmDialog(null,panel,"Istirahat Setelah Perawatan",JOptionPane.OK_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE)!=JOptionPane.OK_OPTION){
+            return;
+        }
+        int hari=0;
+        try {
+            hari=Integer.parseInt(lama.getText().trim());
+        } catch (Exception e) {
+            hari=0;
+        }
+        
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        Map<String, Object> param=SuratBaubau.identitas(TNoRw.getText());
+        String istirahat="";
+        if(hari>0){
+            String m=Valid.SetTgl(mulai.getSelectedItem()+"");
+            String s=java.time.LocalDate.parse(m).plusDays(hari-1).toString();
+            Sequel.queryu2("replace into surat_keterangan_rawat_inap_istirahat values(?,?,?,?)",4,new String[]{NoSurat.getText(),String.valueOf(hari),m,s});
+            istirahat=" dan diberikan <style isBold=\"true\" isItalic=\"true\">Istirahat</style> selama "+SuratBaubau.esc(SuratBaubau.angkaTerbilang(String.valueOf(hari)))+
+                      " hari sejak tanggal "+SuratBaubau.tglIndo(m)+" s/d "+SuratBaubau.tglIndo(s);
+        }else{
+            Sequel.queryu2("delete from surat_keterangan_rawat_inap_istirahat where no_surat=?",1,new String[]{NoSurat.getText()});
+        }
+        // dokter penanggung jawab rawat inap bila ada
+        String kddpjp=Sequel.cariIsi("select dpjp_ranap.kd_dokter from dpjp_ranap where dpjp_ranap.no_rawat=? limit 1",TNoRw.getText());
+        if(!kddpjp.equals("")){
+            SuratBaubau.put(param,"dokter",Sequel.cariIsi("select dokter.nm_dokter from dokter where dokter.kd_dokter=?",kddpjp));
+            SuratBaubau.put(param,"nip",SuratBaubau.nip(kddpjp));
+        }
+        SuratBaubau.put(param,"nomor",SuratBaubau.nomor(NoSurat.getText(),awal));
+        SuratBaubau.put(param,"lamarawat",SuratBaubau.angkaTerbilang(String.valueOf(SuratBaubau.lamaHari(awal,akhir))));
+        SuratBaubau.put(param,"tglawal",SuratBaubau.tglIndo(awal));
+        SuratBaubau.put(param,"tglakhir",SuratBaubau.tglIndo(akhir));
+        SuratBaubau.put(param,"tglsurat",SuratBaubau.tglIndo(akhir));
+        param.put("istirahat",istirahat);
+        SuratBaubau.cetak("rptSuratOpnameBaubau.jasper","Surat Keterangan Opname/Perawatan",param);
+        this.setCursor(Cursor.getDefaultCursor());
+    }
 
     private void tampil() {
         Valid.tabelKosong(tabMode);

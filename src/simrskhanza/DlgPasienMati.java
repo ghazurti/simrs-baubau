@@ -1025,25 +1025,56 @@ private void MnCetakSuratMatiActionPerformed(java.awt.event.ActionEvent evt) {//
             // Simpan nomor surat ke DB untuk print ulang berikutnya
             Sequel.mengedit("pasien_mati","no_rkm_medis='"+TNoRM.getText()+"'","no_suket='"+nomorSurat+"'");
             Map<String, Object> param = new HashMap<>();
-            param.put("namars", akses.getnamars());
-            param.put("alamatrs", akses.getalamatrs());
-            param.put("kotars", akses.getkabupatenrs());
-            param.put("propinsirs", akses.getpropinsirs());
-            param.put("kontakrs", akses.getkontakrs());
-            param.put("emailrs", akses.getemailrs());
-            param.put("logo", Sequel.cariGambar("select setting.logo from setting"));
-            try { param.put("logo2", new FileInputStream(new File("report/logo_rsud.jpg"))); } catch(Exception ex){ param.put("logo2", null); }
-            param.put("nomor_surat", nomorSurat);
-            Valid.MyReportqry("rptSuratKeteranganKematian.jasper","report","::[ Surat Keterangan Kematian ]::",
-                "select date_format(pasien_mati.tanggal,'%d-%m-%Y') as tanggal, "+
-                "ELT(DAYOFWEEK(pasien_mati.tanggal),'Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu') as hari, "+
-                "time_format(pasien_mati.jam,'%H:%i') as jam, "+
-                "pasien_mati.no_rkm_medis, pasien.nm_pasien, pasien.jk, pasien.umur, "+
-                "pasien.agama, pasien.alamat, pasien.pekerjaan, pasien.no_peserta, "+
-                "pasien_mati.keterangan, pasien_mati.temp_meninggal, pasien_mati.icd1, dokter.nm_dokter "+
-                "from pasien_mati inner join pasien on pasien_mati.no_rkm_medis=pasien.no_rkm_medis "+
-                "inner join dokter on pasien_mati.kd_dokter=dokter.kd_dokter "+
-                "where pasien_mati.no_rkm_medis='"+TNoRM.getText()+"' ", param);
+            try (PreparedStatement psmati=koneksi.prepareStatement(
+                    "select pasien_mati.tanggal,time_format(pasien_mati.jam,'%H.%i') as jam,pasien_mati.temp_meninggal,pasien_mati.kd_dokter,"+
+                    "pasien.nm_pasien,pasien.jk,timestampdiff(YEAR,pasien.tgl_lahir,pasien_mati.tanggal) as umur,pasien.agama,pasien.pekerjaan,pasien.no_peserta,"+
+                    "concat_ws(', ',nullif(trim(pasien.alamat),'-'),nullif(kelurahan.nm_kel,'-'),nullif(kecamatan.nm_kec,'-'),nullif(kabupaten.nm_kab,'-')) as alamat,"+
+                    "concat_ws(' ',pasien_mati.icd1,penyakit.nm_penyakit) as diagnosa,ifnull(dokter.nm_dokter,'') as nm_dokter,"+
+                    "(select bangsal.nm_bangsal from kamar_inap inner join reg_periksa on kamar_inap.no_rawat=reg_periksa.no_rawat "+
+                    "  inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
+                    "  where reg_periksa.no_rkm_medis=pasien_mati.no_rkm_medis and kamar_inap.tgl_masuk<=pasien_mati.tanggal "+
+                    "  and (kamar_inap.tgl_keluar='0000-00-00' or kamar_inap.tgl_keluar>=pasien_mati.tanggal) "+
+                    "  order by kamar_inap.tgl_masuk desc,kamar_inap.jam_masuk desc limit 1) as ruang,"+
+                    "(select poliklinik.nm_poli from reg_periksa inner join poliklinik on reg_periksa.kd_poli=poliklinik.kd_poli "+
+                    "  where reg_periksa.no_rkm_medis=pasien_mati.no_rkm_medis and reg_periksa.tgl_registrasi<=pasien_mati.tanggal "+
+                    "  order by reg_periksa.tgl_registrasi desc,reg_periksa.jam_reg desc limit 1) as poli "+
+                    "from pasien_mati inner join pasien on pasien_mati.no_rkm_medis=pasien.no_rkm_medis "+
+                    "left join dokter on pasien_mati.kd_dokter=dokter.kd_dokter left join penyakit on pasien_mati.icd1=penyakit.kd_penyakit "+
+                    "left join kelurahan on pasien.kd_kel=kelurahan.kd_kel left join kecamatan on pasien.kd_kec=kecamatan.kd_kec "+
+                    "left join kabupaten on pasien.kd_kab=kabupaten.kd_kab where pasien_mati.no_rkm_medis=?")) {
+                psmati.setString(1,TNoRM.getText());
+                try (ResultSet rsmati=psmati.executeQuery()) {
+                    if(rsmati.next()){
+                        String tgl=rsmati.getString("tanggal");
+                        String tempat=rsmati.getString("ruang");
+                        if(tempat==null||tempat.equals("")){
+                            tempat=rsmati.getString("poli");
+                        }
+                        if(tempat==null||tempat.equals("")){
+                            tempat=rsmati.getString("temp_meninggal");
+                        }
+                        surat.SuratBaubau.put(param,"nomor",nomorSurat);
+                        surat.SuratBaubau.put(param,"nama",rsmati.getString("nm_pasien"));
+                        surat.SuratBaubau.put(param,"jk",surat.SuratBaubau.jk(rsmati.getString("jk")));
+                        surat.SuratBaubau.put(param,"umur",rsmati.getString("umur")+" Tahun");
+                        surat.SuratBaubau.put(param,"agama",rsmati.getString("agama"));
+                        surat.SuratBaubau.put(param,"alamat",rsmati.getString("alamat"));
+                        surat.SuratBaubau.put(param,"pekerjaan",rsmati.getString("pekerjaan"));
+                        surat.SuratBaubau.put(param,"bpjs",rsmati.getString("no_peserta"));
+                        surat.SuratBaubau.put(param,"hari",surat.SuratBaubau.hariIndo(tgl));
+                        surat.SuratBaubau.put(param,"tanggal",surat.SuratBaubau.tglIndo(tgl));
+                        surat.SuratBaubau.put(param,"jam",rsmati.getString("jam"));
+                        surat.SuratBaubau.put(param,"tempat",tempat);
+                        surat.SuratBaubau.put(param,"diagnosa",rsmati.getString("diagnosa"));
+                        surat.SuratBaubau.put(param,"tglsurat",surat.SuratBaubau.tglIndo(surat.SuratBaubau.hariIni()));
+                        surat.SuratBaubau.put(param,"dokter",rsmati.getString("nm_dokter"));
+                        surat.SuratBaubau.put(param,"nip",surat.SuratBaubau.nip(rsmati.getString("kd_dokter")));
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Notif Surat Kematian : "+e);
+            }
+            surat.SuratBaubau.cetak("rptSuratKeteranganKematian.jasper","Surat Keterangan Kematian",param);
         }
     }//GEN-LAST:event_MnSuratKeteranganKematianActionPerformed
 
