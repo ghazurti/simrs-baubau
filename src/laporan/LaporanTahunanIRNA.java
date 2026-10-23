@@ -293,6 +293,23 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
                "where DATE_FORMAT(kamar_inap.tgl_masuk, '%Y-%m')='{BULAN}' " + filterExtra;
     }
 
+    /**
+     * SQL dasar: total HARI rawat per bulan (sum kamar_inap.lama).
+     * 1 pasien bisa menyumbang hari di >1 baris kamar_inap kalau pindah
+     * kamar — itu benar karena total hari pelayanan memang harus dijumlah.
+     */
+    private String sqlBulananHariRawat(String filterExtra) {
+        return "select ifnull(sum(kamar_inap.lama),0) " +
+               "from kamar_inap " +
+               "inner join reg_periksa on reg_periksa.no_rawat=kamar_inap.no_rawat " +
+               "inner join pasien     on pasien.no_rkm_medis=reg_periksa.no_rkm_medis " +
+               "inner join kamar      on kamar.kd_kamar=kamar_inap.kd_kamar " +
+               "inner join bangsal    on bangsal.kd_bangsal=kamar.kd_bangsal " +
+               "left join dokter      on dokter.kd_dokter=reg_periksa.kd_dokter " +
+               "left join penjab      on penjab.kd_pj=reg_periksa.kd_pj " +
+               "where DATE_FORMAT(kamar_inap.tgl_masuk, '%Y-%m')='{BULAN}' " + filterExtra;
+    }
+
     // ================================================================
     // TAB 1 - Pasien Per Bangsal
     // ================================================================
@@ -352,7 +369,7 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
     }
 
     // ================================================================
-    // TAB 3 - Pasien Per DPJP (dokter penanggung jawab reg_periksa)
+    // TAB 3 - Pasien Per DPJP (dokter resume pasien ranap)
     // ================================================================
     private void prosesCari3() {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -360,11 +377,13 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
             htmlContent = new StringBuilder(htmlHeader("Dokter Penanggung Jawab"));
             java.util.List<int[]> semua = new java.util.ArrayList<>();
             i = 1;
+            // DPJP diambil dari resume_pasien_ranap (1 dokter per no_rawat),
+            // bukan reg_periksa.kd_dokter yang umumnya dokter jaga IGD
             ps = koneksi.prepareStatement(
-                "select distinct reg_periksa.kd_dokter, dokter.nm_dokter " +
+                "select distinct resume_pasien_ranap.kd_dokter, dokter.nm_dokter " +
                 "from kamar_inap " +
-                "inner join reg_periksa on reg_periksa.no_rawat=kamar_inap.no_rawat " +
-                "inner join dokter on dokter.kd_dokter=reg_periksa.kd_dokter " +
+                "inner join resume_pasien_ranap on resume_pasien_ranap.no_rawat=kamar_inap.no_rawat " +
+                "inner join dokter on dokter.kd_dokter=resume_pasien_ranap.kd_dokter " +
                 "where year(kamar_inap.tgl_masuk)=? " +
                 "order by dokter.nm_dokter");
             try {
@@ -372,12 +391,21 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
                 rs = ps.executeQuery();
                 while (rs.next()) {
                     int[] bulan = hitungBulanan(sqlBulananRanap(
-                        "and reg_periksa.kd_dokter='" + esc(rs.getString("kd_dokter")) + "'"));
+                        "and exists(select 1 from resume_pasien_ranap where resume_pasien_ranap.no_rawat=kamar_inap.no_rawat " +
+                        "and resume_pasien_ranap.kd_dokter='" + esc(rs.getString("kd_dokter")) + "')"));
                     htmlContent.append(htmlRow(String.valueOf(i), esc(rs.getString("nm_dokter")), bulan, true));
                     semua.add(bulan);
                     i++;
                 }
             } finally { closeRs(); }
+            int[] tanpaResume = hitungBulanan(sqlBulananRanap(
+                "and not exists(select 1 from resume_pasien_ranap where resume_pasien_ranap.no_rawat=kamar_inap.no_rawat)"));
+            int jmlTanpaResume = 0;
+            for (int m : tanpaResume) jmlTanpaResume += m;
+            if (jmlTanpaResume > 0) {
+                htmlContent.append(htmlRow(String.valueOf(i), "Belum Ada Resume", tanpaResume, true));
+                semua.add(tanpaResume);
+            }
             if (!semua.isEmpty()) htmlContent.append(htmlRowTotal(semua.toArray(new int[0][])));
             tampilkanKe(LoadHTML2, htmlContent.toString());
         } catch (Exception e) {
@@ -530,6 +558,10 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
                     int[] ttl = hitungBulanan(sqlBulananRanap(
                         "and bangsal.kd_bangsal='" + kd + "'"));
                     htmlContent.append(htmlRow(String.valueOf(i), esc(rs.getString("nm_bangsal")), ttl, true));
+                    // Total HARI RAWAT per bangsal (ikut highlighted)
+                    int[] ttlHari = hitungBulanan(sqlBulananHariRawat(
+                        "and bangsal.kd_bangsal='" + kd + "'"));
+                    htmlContent.append(htmlRow("", "&nbsp;&nbsp;&nbsp;&nbsp;└ Total Hari Rawat", ttlHari, true));
                     // Ambil penjab yang dipakai di bangsal ini, lalu breakdown per Kelas.
                     // Daftar kelas diambil DINAMIS dari kamar_inap → cover Kelas 1/2/3/Utama/VIP/VVIP
                     // + kelas custom lain + baris NULL/kosong (label "Non Kelas").
@@ -550,6 +582,11 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
                                     "and bangsal.kd_bangsal='" + kd +
                                     "' and reg_periksa.kd_pj='" + kdPj + "'"));
                                 htmlContent.append(htmlRow("", esc(rsp.getString("png_jawab")), bp, false));
+                                // Total HARI RAWAT per penjab
+                                int[] bpHari = hitungBulanan(sqlBulananHariRawat(
+                                    "and bangsal.kd_bangsal='" + kd +
+                                    "' and reg_periksa.kd_pj='" + kdPj + "'"));
+                                htmlContent.append(htmlRow("", "&nbsp;&nbsp;&nbsp;&nbsp;└ Total Hari Rawat", bpHari, false));
                                 // Level 3: ambil daftar kelas yang benar-benar dipakai di bangsal+penjab ini
                                 try (PreparedStatement psk = koneksi.prepareStatement(
                                         "select distinct ifnull(nullif(kamar.kelas,''),'Non Kelas') as kls " +
@@ -579,6 +616,12 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
                                             for (int m : bpk) totalKls += m;
                                             if (totalKls == 0) continue;
                                             htmlContent.append(htmlRow("", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + esc(kls), bpk, false));
+                                            // Total HARI RAWAT per kelas
+                                            int[] bpkHari = hitungBulanan(sqlBulananHariRawat(
+                                                "and bangsal.kd_bangsal='" + kd +
+                                                "' and reg_periksa.kd_pj='" + kdPj + "'" +
+                                                filterKls));
+                                            htmlContent.append(htmlRow("", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└ Total Hari Rawat", bpkHari, false));
                                         }
                                     }
                                 }
