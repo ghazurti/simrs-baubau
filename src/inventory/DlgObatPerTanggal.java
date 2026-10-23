@@ -54,7 +54,8 @@ public class DlgObatPerTanggal extends javax.swing.JDialog {
     private final validasi Valid=new validasi();
     private PreparedStatement ps;
     private ResultSet rs;
-    private String lokasi="";
+    private String lokasi="",kdDepo="";
+    private widget.TextBox nmDepo;
     private final List<LocalDate> daftarTanggal=new ArrayList<>();
     private static final int MAKSHARI=31;
     private int i=0;
@@ -67,6 +68,7 @@ public class DlgObatPerTanggal extends javax.swing.JDialog {
     public DlgObatPerTanggal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        tambahFilterDepo();
 
         this.setLocation(8,1);
         setSize(628,674);
@@ -383,7 +385,6 @@ public class DlgObatPerTanggal extends javax.swing.JDialog {
 }//GEN-LAST:event_TCariKeyPressed
 
     private void BtnCariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCariActionPerformed
-        lokasi="";
         runBackground(() ->tampil());
 }//GEN-LAST:event_BtnCariActionPerformed
 
@@ -400,7 +401,7 @@ public class DlgObatPerTanggal extends javax.swing.JDialog {
         nmgolongan.setText("");
         nmjns.setText("");
         nmkategori.setText("");
-        lokasi="";
+        pilihDepo("","");
         runBackground(() ->tampil());
 }//GEN-LAST:event_BtnAllActionPerformed
 
@@ -410,7 +411,7 @@ public class DlgObatPerTanggal extends javax.swing.JDialog {
             nmgolongan.setText("");
             nmjns.setText("");
             nmkategori.setText("");
-            lokasi="";
+            pilihDepo("","");
             runBackground(() ->tampil());
         }else{
             Valid.pindah(evt, BtnCari,BtnKeluar);
@@ -664,8 +665,9 @@ public class DlgObatPerTanggal extends javax.swing.JDialog {
             @Override
             public void windowClosed(WindowEvent e) {
                 if (bangsal.getTable().getSelectedRow() != -1) {
-                    lokasi=bangsal.getTable().getValueAt(bangsal.getTable().getSelectedRow(),1).toString();
-                    runBackground(() ->tampil(bangsal.getTable().getValueAt(bangsal.getTable().getSelectedRow(),0).toString()));
+                    pilihDepo(bangsal.getTable().getValueAt(bangsal.getTable().getSelectedRow(),0).toString(),
+                              bangsal.getTable().getValueAt(bangsal.getTable().getSelectedRow(),1).toString());
+                    runBackground(() ->tampil());
                 }
             }
 
@@ -739,8 +741,33 @@ public class DlgObatPerTanggal extends javax.swing.JDialog {
     private widget.Table tbJadwal;
     // End of variables declaration//GEN-END:variables
 
+    /** Filter Depo terlihat di baris atas; dulu hanya ada di klik kanan tabel dan hilang saat Cari / ganti tanggal */
+    private void tambahFilterDepo(){
+        widget.Label lbl=new widget.Label();
+        lbl.setText("Depo :");
+        panelBiasa1.add(lbl);
+        lbl.setBounds(900, 11, 45, 23);
+        nmDepo=new widget.TextBox();
+        nmDepo.setEditable(false);
+        nmDepo.setText("Semua Depo");
+        panelBiasa1.add(nmDepo);
+        nmDepo.setBounds(948, 11, 170, 23);
+        widget.Button btn=new widget.Button();
+        btn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/190.png")));
+        btn.setToolTipText("Pilih depo; Semua (tombol bawah) mengembalikan ke Semua Depo");
+        btn.addActionListener(e->ppLokasiBtnPrintActionPerformed(null));
+        panelBiasa1.add(btn);
+        btn.setBounds(1121, 11, 28, 23);
+    }
+
+    private void pilihDepo(String kd,String nama){
+        kdDepo=kd==null?"":kd;
+        lokasi=kdDepo.equals("")?"":nama;
+        if(nmDepo!=null) nmDepo.setText(kdDepo.equals("")?"Semua Depo":nama);
+    }
+
     private void tampil() {
-        tampil("");
+        tampil(kdDepo);
     }
 
     private void tampil(String kdbangsal) {
