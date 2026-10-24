@@ -490,7 +490,8 @@ public class DlgUser extends javax.swing.JDialog {
                 "[R]Identifikasi Risiko Keselamatan PCRA","[R]Identifikasi Risiko Kebakaran PCRA","[R]Identifikasi Risiko Utilitas PCRA","[L]Daftar Resep Apotek BPJS","[L]Permintaan Resep Iterasi Apotek BPJS",
                 "[R]Pengkajian Risiko Pra Konstruksi/PCRA","[R]Persyaratan Harus Dipenuhi PCRA","[L]Kirim Q.R. Telaah Farmasi Satu Sehat","[L]Kirim Allergy Intolerance Satu Sehat","[M]Konsultasi Perawat",
                 "[M]Jawaban Konsultasi Perawat","[L]Kirim FHIR Smart Klaim BPJS","[L]Mapping Prosedur Smart Klaim BPJS","[L]Mapping Penyakit Smart Klaim BPJS","[P]Persetujuan Bimbingan Rohani & Mental",
-                "[D]Rencana Kebutuhan Obat & BMHP","[D]Setting Rencana Kebutuhan Obat & BMHP"
+                "[D]Rencana Kebutuhan Obat & BMHP","[D]Setting Rencana Kebutuhan Obat & BMHP","[L]Mapping Tindakan Ralan KPTL Satu Sehat","[L]Mapping Tindakan Ranap KPTL Satu Sehat","[L]Mapping Tindakan Radiologi KPTL Satu Sehat",
+                "[L]Mapping Tindakan Laborat KPTL Satu Sehat","[L]Mapping Tindakan Operasi KPTL Satu Sehat","[L]Mapping Tarif Kamar KPTL Satu Sehat"
         };
         
         tabMode=new DefaultTableModel(null,row){
@@ -824,7 +825,7 @@ public class DlgUser extends javax.swing.JDialog {
         tbUser.setPreferredScrollableViewportSize(new Dimension(500,500));
         tbUser.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 1199;i++) {
+        for (i = 0; i < 1205;i++) {
             TableColumn column = tbUser.getColumnModel().getColumn(i);
             switch (i) {
                 case 0:
@@ -3869,6 +3870,24 @@ public class DlgUser extends javax.swing.JDialog {
                 case 1196:
                     column.setPreferredWidth(214);
                     break;
+                case 1199:
+                    column.setPreferredWidth(221);
+                    break;
+                case 1200:
+                    column.setPreferredWidth(224);
+                    break;
+                case 1201:
+                    column.setPreferredWidth(239);
+                    break;
+                case 1202:
+                    column.setPreferredWidth(231);
+                    break;
+                case 1203:
+                    column.setPreferredWidth(231);
+                    break;
+                case 1204:
+                    column.setPreferredWidth(204);
+                    break;
                 default:
                     column.setPreferredWidth(133);
                     break;
@@ -5542,7 +5561,13 @@ public class DlgUser extends javax.swing.JDialog {
                     "mapping_penyakit_smart_klaim_bpjs='"+tbUser.getValueAt(i,1195).toString()+"',"+
                     "permintaan_binrohtal='"+tbUser.getValueAt(i,1196).toString()+"',"+
                     "rencana_kebutuhan_obat='"+tbUser.getValueAt(i,1197).toString()+"',"+
-                    "setting_rencana_kebutuhan_obat='"+tbUser.getValueAt(i,1198).toString()+"'")==true){
+                    "setting_rencana_kebutuhan_obat='"+tbUser.getValueAt(i,1198).toString()+"',"+
+                    "satu_sehat_mapping_kptl_tindakan_ralan='"+tbUser.getValueAt(i,1199).toString()+"',"+
+                    "satu_sehat_mapping_kptl_tindakan_ranap='"+tbUser.getValueAt(i,1200).toString()+"',"+
+                    "satu_sehat_mapping_kptl_tindakan_radiologi='"+tbUser.getValueAt(i,1201).toString()+"',"+
+                    "satu_sehat_mapping_kptl_tindakan_laborat='"+tbUser.getValueAt(i,1202).toString()+"',"+
+                    "satu_sehat_mapping_kptl_tindakan_operasi='"+tbUser.getValueAt(i,1203).toString()+"',"+
+                    "satu_sehat_mapping_kptl_tarif_kamar='"+tbUser.getValueAt(i,1204).toString()+"'")==true){
                     emptTeks();
                 }
             }         
@@ -7025,7 +7050,13 @@ private void BtnPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         "mapping_penyakit_smart_klaim_bpjs='"+tbUser.getValueAt(barisdicopy,1195).toString()+"',"+
                                         "permintaan_binrohtal='"+tbUser.getValueAt(barisdicopy,1196).toString()+"',"+
                                         "rencana_kebutuhan_obat='"+tbUser.getValueAt(barisdicopy,1197).toString()+"',"+
-                                        "setting_rencana_kebutuhan_obat='"+tbUser.getValueAt(barisdicopy,1198).toString()+"'");
+                                        "setting_rencana_kebutuhan_obat='"+tbUser.getValueAt(barisdicopy,1198).toString()+"',"+
+                                        "satu_sehat_mapping_kptl_tindakan_ralan='"+tbUser.getValueAt(barisdicopy,1199).toString()+"',"+
+                                        "satu_sehat_mapping_kptl_tindakan_ranap='"+tbUser.getValueAt(barisdicopy,1200).toString()+"',"+
+                                        "satu_sehat_mapping_kptl_tindakan_radiologi='"+tbUser.getValueAt(barisdicopy,1201).toString()+"',"+
+                                        "satu_sehat_mapping_kptl_tindakan_laborat='"+tbUser.getValueAt(barisdicopy,1202).toString()+"',"+
+                                        "satu_sehat_mapping_kptl_tindakan_operasi='"+tbUser.getValueAt(barisdicopy,1203).toString()+"',"+
+                                        "satu_sehat_mapping_kptl_tarif_kamar='"+tbUser.getValueAt(barisdicopy,1204).toString()+"'");
                                 }
                                 userdicopy="";
                                 copyhakakses="";
@@ -7363,7 +7394,8 @@ private void BtnPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                             "user.pcra_icra_identifkasi_risiko_kebakaran,user.pcra_icra_identifkasi_risiko_utilitas,user.bpjs_daftar_resep_apotek,user.daftar_permintaan_resep_iterasi_bpjs,"+
                             "user.pcra_icra_pengkajian_risiko_prakonstruksi,user.pcra_icra_persyaratan_harus_dipenuhi,user.satu_sehat_kirim_questionresponse_telaah_farmasi,"+
                             "user.satu_sehat_kirim_allergy_intolerance,user.konsultasi_perawat,user.jawaban_konsultasi_perawat,user.bridging_smart_klaim_bpjs,user.mapping_prosedur_smart_klaim_bpjs,"+
-                            "user.mapping_penyakit_smart_klaim_bpjs,user.permintaan_binrohtal,user.rencana_kebutuhan_obat,user.setting_rencana_kebutuhan_obat from user order by AES_DECRYPT(user.id_user,'nur')");
+                            "user.mapping_penyakit_smart_klaim_bpjs,user.permintaan_binrohtal,user.rencana_kebutuhan_obat,user.setting_rencana_kebutuhan_obat,"+
+                            "user.satu_sehat_mapping_kptl_tindakan_ralan,user.satu_sehat_mapping_kptl_tindakan_ranap,user.satu_sehat_mapping_kptl_tindakan_radiologi,user.satu_sehat_mapping_kptl_tindakan_laborat,user.satu_sehat_mapping_kptl_tindakan_operasi,user.satu_sehat_mapping_kptl_tarif_kamar from user order by AES_DECRYPT(user.id_user,'nur')");
                         try {
                             rs=ps.executeQuery();
                             i=0;
@@ -8574,7 +8606,7 @@ private void BtnPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                            rs.getBoolean("bridging_smart_klaim_bpjs"),
                                            rs.getBoolean("mapping_prosedur_smart_klaim_bpjs"),
                                            rs.getBoolean("mapping_penyakit_smart_klaim_bpjs"),
-                                           rs.getBoolean("permintaan_binrohtal"),rs.getBoolean("rencana_kebutuhan_obat"),rs.getBoolean("setting_rencana_kebutuhan_obat")
+                                           rs.getBoolean("permintaan_binrohtal"),rs.getBoolean("rencana_kebutuhan_obat"),rs.getBoolean("setting_rencana_kebutuhan_obat"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_ralan"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_ranap"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_radiologi"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_laborat"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_operasi"),rs.getBoolean("satu_sehat_mapping_kptl_tarif_kamar")
                                         });
                                     }   
                                 } catch (Exception e) {
@@ -9773,7 +9805,7 @@ private void BtnPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                        rs.getBoolean("bridging_smart_klaim_bpjs"),
                                        rs.getBoolean("mapping_prosedur_smart_klaim_bpjs"),
                                        rs.getBoolean("mapping_penyakit_smart_klaim_bpjs"),
-                                       rs.getBoolean("permintaan_binrohtal"),rs.getBoolean("rencana_kebutuhan_obat"),rs.getBoolean("setting_rencana_kebutuhan_obat")
+                                       rs.getBoolean("permintaan_binrohtal"),rs.getBoolean("rencana_kebutuhan_obat"),rs.getBoolean("setting_rencana_kebutuhan_obat"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_ralan"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_ranap"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_radiologi"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_laborat"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_operasi"),rs.getBoolean("satu_sehat_mapping_kptl_tarif_kamar")
                                     });
                                 }                                             
                              }

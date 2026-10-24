@@ -261,7 +261,8 @@ public final class akses {
             daftar_permintaan_resep_iterasi_bpjs=false,pcra_icra_pengkajian_risiko_prakonstruksi=false,pcra_icra_persyaratan_harus_dipenuhi=false,satu_sehat_kirim_questionresponse_telaah_farmasi=false,
             satu_sehat_kirim_allergy_intolerance=false,konsultasi_perawat=false,jawaban_konsultasi_perawat=false,bridging_smart_klaim_bpjs=false,mapping_prosedur_smart_klaim_bpjs=false,
             mapping_penyakit_smart_klaim_bpjs=false,permintaan_binrohtal=false,restriksi_obat_bpjs=false,
-            rencana_kebutuhan_obat=false,setting_rencana_kebutuhan_obat=false;
+            rencana_kebutuhan_obat=false,setting_rencana_kebutuhan_obat=false,
+            satu_sehat_mapping_kptl_tindakan_ralan=false,satu_sehat_mapping_kptl_tindakan_ranap=false,satu_sehat_mapping_kptl_tindakan_radiologi=false,satu_sehat_mapping_kptl_tindakan_laborat=false,satu_sehat_mapping_kptl_tindakan_operasi=false,satu_sehat_mapping_kptl_tarif_kamar=false;
     
     public static void setData(String user, String pass) {
         try {        
@@ -1485,6 +1486,12 @@ public final class akses {
                         akses.restriksi_obat_bpjs=true;
                         akses.rencana_kebutuhan_obat=true;
                         akses.setting_rencana_kebutuhan_obat=true;
+                        akses.satu_sehat_mapping_kptl_tindakan_ralan=true;
+                        akses.satu_sehat_mapping_kptl_tindakan_ranap=true;
+                        akses.satu_sehat_mapping_kptl_tindakan_radiologi=true;
+                        akses.satu_sehat_mapping_kptl_tindakan_laborat=true;
+                        akses.satu_sehat_mapping_kptl_tindakan_operasi=true;
+                        akses.satu_sehat_mapping_kptl_tarif_kamar=true;
                     }else if(rs2.getRow()>=1){   
                         rs2.beforeFirst();
                         rs2.next();
@@ -2692,6 +2699,12 @@ public final class akses {
                         try{akses.restriksi_obat_bpjs=rs2.getBoolean("restriksi_obat_bpjs");}catch(Exception e){akses.restriksi_obat_bpjs=false;}
                         try{akses.rencana_kebutuhan_obat=rs2.getBoolean("rencana_kebutuhan_obat");}catch(Exception e){akses.rencana_kebutuhan_obat=false;}
                         try{akses.setting_rencana_kebutuhan_obat=rs2.getBoolean("setting_rencana_kebutuhan_obat");}catch(Exception e){akses.setting_rencana_kebutuhan_obat=false;}
+                        try{akses.satu_sehat_mapping_kptl_tindakan_ralan=rs2.getBoolean("satu_sehat_mapping_kptl_tindakan_ralan");}catch(Exception e){akses.satu_sehat_mapping_kptl_tindakan_ralan=false;}
+                        try{akses.satu_sehat_mapping_kptl_tindakan_ranap=rs2.getBoolean("satu_sehat_mapping_kptl_tindakan_ranap");}catch(Exception e){akses.satu_sehat_mapping_kptl_tindakan_ranap=false;}
+                        try{akses.satu_sehat_mapping_kptl_tindakan_radiologi=rs2.getBoolean("satu_sehat_mapping_kptl_tindakan_radiologi");}catch(Exception e){akses.satu_sehat_mapping_kptl_tindakan_radiologi=false;}
+                        try{akses.satu_sehat_mapping_kptl_tindakan_laborat=rs2.getBoolean("satu_sehat_mapping_kptl_tindakan_laborat");}catch(Exception e){akses.satu_sehat_mapping_kptl_tindakan_laborat=false;}
+                        try{akses.satu_sehat_mapping_kptl_tindakan_operasi=rs2.getBoolean("satu_sehat_mapping_kptl_tindakan_operasi");}catch(Exception e){akses.satu_sehat_mapping_kptl_tindakan_operasi=false;}
+                        try{akses.satu_sehat_mapping_kptl_tarif_kamar=rs2.getBoolean("satu_sehat_mapping_kptl_tarif_kamar");}catch(Exception e){akses.satu_sehat_mapping_kptl_tarif_kamar=false;}
                         }else if((rs.getRow()==0)&&(rs2.getRow()==0)){
                         setLogOut();
                     }
@@ -3920,6 +3933,12 @@ public final class akses {
         akses.restriksi_obat_bpjs=false;
         akses.rencana_kebutuhan_obat=false;
         akses.setting_rencana_kebutuhan_obat=false;
+        akses.satu_sehat_mapping_kptl_tindakan_ralan=false;
+        akses.satu_sehat_mapping_kptl_tindakan_ranap=false;
+        akses.satu_sehat_mapping_kptl_tindakan_radiologi=false;
+        akses.satu_sehat_mapping_kptl_tindakan_laborat=false;
+        akses.satu_sehat_mapping_kptl_tindakan_operasi=false;
+        akses.satu_sehat_mapping_kptl_tarif_kamar=false;
     }
     
     public static int getjml1() {return akses.jml1;}    
@@ -5166,4 +5185,10 @@ public final class akses {
     public static boolean getrestriksi_obat_bpjs(){return akses.restriksi_obat_bpjs;}
     public static boolean getrencana_kebutuhan_obat(){return akses.rencana_kebutuhan_obat;}
     public static boolean getsetting_rencana_kebutuhan_obat(){return akses.setting_rencana_kebutuhan_obat;}
+    public static boolean getsatu_sehat_mapping_kptl_tindakan_ralan(){return akses.satu_sehat_mapping_kptl_tindakan_ralan;}
+    public static boolean getsatu_sehat_mapping_kptl_tindakan_ranap(){return akses.satu_sehat_mapping_kptl_tindakan_ranap;}
+    public static boolean getsatu_sehat_mapping_kptl_tindakan_radiologi(){return akses.satu_sehat_mapping_kptl_tindakan_radiologi;}
+    public static boolean getsatu_sehat_mapping_kptl_tindakan_laborat(){return akses.satu_sehat_mapping_kptl_tindakan_laborat;}
+    public static boolean getsatu_sehat_mapping_kptl_tindakan_operasi(){return akses.satu_sehat_mapping_kptl_tindakan_operasi;}
+    public static boolean getsatu_sehat_mapping_kptl_tarif_kamar(){return akses.satu_sehat_mapping_kptl_tarif_kamar;}
 }   
