@@ -1480,8 +1480,8 @@
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                      <JTabbedPaneConstraints tabName="Telaah Resep &amp; Obat">
-                        <Property name="tabTitle" type="java.lang.String" value="Telaah Resep &amp; Obat"/>
+                      <JTabbedPaneConstraints tabName="Pengkajian Resep &amp; Obat">
+                        <Property name="tabTitle" type="java.lang.String" value="Pengkajian Resep &amp; Obat"/>
                       </JTabbedPaneConstraints>
                     </Constraint>
                   </Constraints>
@@ -1515,7 +1515,7 @@
                               <Image iconType="3" name="/picture/plus_16.png"/>
                             </Property>
                             <Property name="mnemonic" type="int" value="85"/>
-                            <Property name="text" type="java.lang.String" value="Telaah"/>
+                            <Property name="text" type="java.lang.String" value="Pengkajian"/>
                             <Property name="toolTipText" type="java.lang.String" value="Alt+U"/>
                             <Property name="name" type="java.lang.String" value="BtnTelaah" noResource="true"/>
                             <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">

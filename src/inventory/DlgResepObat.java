@@ -1097,7 +1097,7 @@ public final class DlgResepObat extends javax.swing.JDialog {
 
         BtnTelaah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/plus_16.png"))); // NOI18N
         BtnTelaah.setMnemonic('U');
-        BtnTelaah.setText("Telaah");
+        BtnTelaah.setText("Pengkajian");
         BtnTelaah.setToolTipText("Alt+U");
         BtnTelaah.setName("BtnTelaah"); // NOI18N
         BtnTelaah.setPreferredSize(new java.awt.Dimension(100, 30));
@@ -1134,7 +1134,7 @@ public final class DlgResepObat extends javax.swing.JDialog {
 
         FormTelaah.add(Scroll5, java.awt.BorderLayout.CENTER);
 
-        TabData.addTab("Telaah Resep & Obat", FormTelaah);
+        TabData.addTab("Pengkajian Resep & Obat", FormTelaah);
 
         FormPhoto.setBackground(new java.awt.Color(255, 255, 255));
         FormPhoto.setBorder(null);
@@ -2803,7 +2803,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                             "<html>"+
                                 "<table width='100%' border='0' align='center' cellpadding='3px' cellspacing='0' class='tbl_form'>"+
                                     "<tr class='isi'>"+
-                                        "<td valign='middle' align='center' colspan='3'>TELAAH RESEP</td>"+
+                                        "<td valign='middle' align='center' colspan='3'>PENGKAJIAN RESEP</td>"+
                                     "</tr>"+
                                     "<tr class='isi'>"+
                                         "<td valign='middle' bgcolor='#FFFAFA' align='center' width='5%'>No</td>"+
@@ -2883,7 +2883,7 @@ private void ChkInputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                                         "<td valign='middle' align='left' colspan='2'>Keterangan : "+rs.getString("resep_ket_kontra_indikasi_obat")+"</td>"+
                                     "</tr>"+
                                     "<tr class='isi'>"+
-                                        "<td valign='middle' align='center' colspan='3'><br>TELAAH OBAT ( VERIFIKASI OBAT )</td>"+
+                                        "<td valign='middle' align='center' colspan='3'><br>PENGKAJIAN OBAT ( VERIFIKASI OBAT )</td>"+
                                     "</tr>"+
                                     "<tr class='isi'>"+
                                         "<td valign='middle' bgcolor='#FFFAFA' align='center' width='5%'>No</td>"+

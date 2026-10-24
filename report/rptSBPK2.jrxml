@@ -999,18 +999,18 @@ on reg_periksa.kd_dokter=dokter.kd_dokter and reg_periksa.no_rkm_medis=pasien.no
 				<text><![CDATA[Tidak]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="213" y="477" width="64" height="18"/>
-				<textElement lineSpacing="Single">
+				<reportElement x="214" y="472" width="61" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="8"/>
 				</textElement>
-				<text><![CDATA[Paraf Telaah Resep]]></text>
+				<text><![CDATA[Paraf Pengkajian Resep]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="479" y="481" width="64" height="18"/>
-				<textElement textAlignment="Center" lineSpacing="Single">
+				<reportElement x="478" y="471" width="70" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 					<font fontName="Tahoma" size="8"/>
 				</textElement>
-				<text><![CDATA[Paraf Telaah Obat]]></text>
+				<text><![CDATA[Paraf Pengkajian Obat]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="25" y="478" width="23" height="20"/>
@@ -1328,18 +1328,18 @@ on reg_periksa.kd_dokter=dokter.kd_dokter and reg_periksa.no_rkm_medis=pasien.no
 				<text><![CDATA[DIISI OLEH FARMASI]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="456" width="100" height="18"/>
+				<reportElement x="25" y="456" width="160" height="18"/>
 				<textElement lineSpacing="Single">
 					<font fontName="Tahoma"/>
 				</textElement>
-				<text><![CDATA[I. Telaah Resep]]></text>
+				<text><![CDATA[I. Pengkajian Resep]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="295" y="457" width="100" height="18"/>
+				<reportElement x="295" y="457" width="160" height="18"/>
 				<textElement lineSpacing="Single">
 					<font fontName="Tahoma"/>
 				</textElement>
-				<text><![CDATA[II. Telaah Obat]]></text>
+				<text><![CDATA[II. Pengkajian Obat]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement x="23" y="709" width="527" height="87"/>

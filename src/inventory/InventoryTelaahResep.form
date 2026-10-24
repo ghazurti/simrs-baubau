@@ -32,7 +32,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="::[ Data Telaah Resep &amp; Obat ]::">
+            <TitledBorder title="::[ Data Pengkajian Resep &amp; Obat ]::">
               <Border PropertyName="innerBorder" info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder>
                   <Color PropertyName="color" blue="eb" green="f5" red="f0" type="rgb"/>
@@ -395,8 +395,8 @@
               </Properties>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-                  <JTabbedPaneConstraints tabName="Telaah Resep &amp; Obat">
-                    <Property name="tabTitle" type="java.lang.String" value="Telaah Resep &amp; Obat"/>
+                  <JTabbedPaneConstraints tabName="Pengkajian Resep &amp; Obat">
+                    <Property name="tabTitle" type="java.lang.String" value="Pengkajian Resep &amp; Obat"/>
                   </JTabbedPaneConstraints>
                 </Constraint>
               </Constraints>
@@ -825,7 +825,7 @@
                             </Component>
                             <Component class="widget.Label" name="jLabel28">
                               <Properties>
-                                <Property name="text" type="java.lang.String" value="Telaah Obat :"/>
+                                <Property name="text" type="java.lang.String" value="Pengkajian Obat :"/>
                                 <Property name="name" type="java.lang.String" value="jLabel28" noResource="true"/>
                               </Properties>
                               <Constraints>
@@ -1142,7 +1142,7 @@
                             </Component>
                             <Component class="widget.Label" name="jLabel36">
                               <Properties>
-                                <Property name="text" type="java.lang.String" value="Telaah Resep :"/>
+                                <Property name="text" type="java.lang.String" value="Pengkajian Resep :"/>
                                 <Property name="name" type="java.lang.String" value="jLabel36" noResource="true"/>
                               </Properties>
                               <Constraints>

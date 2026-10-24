@@ -47958,7 +47958,7 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         
         btnTelaahResep = new widget.ButtonBig();
         btnTelaahResep.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/5868989_coronavirus_drug_medic_medical_medicine_icon.png"))); 
-        btnTelaahResep.setText("Telaah Resep & Obat");
+        btnTelaahResep.setText("Pengkajian Resep & Obat");
         btnTelaahResep.setIconTextGap(0);
         btnTelaahResep.setName("btnTelaahResep");
         btnTelaahResep.setPreferredSize(new java.awt.Dimension(200, 90));
@@ -51280,7 +51280,7 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         
         btnKirimQRTelaahFarmasiSatuSehat = new widget.ButtonBig();
         btnKirimQRTelaahFarmasiSatuSehat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/satusehat.png")));
-        btnKirimQRTelaahFarmasiSatuSehat.setText("Kirim Q.R. Telaah Farmasi Satu Sehat");
+        btnKirimQRTelaahFarmasiSatuSehat.setText("Kirim Q.R. Pengkajian Farmasi Satu Sehat");
         btnKirimQRTelaahFarmasiSatuSehat.setIconTextGap(0);
         btnKirimQRTelaahFarmasiSatuSehat.setName("btnKirimQRTelaahFarmasiSatuSehat"); 
         btnKirimQRTelaahFarmasiSatuSehat.setPreferredSize(new java.awt.Dimension(200, 90));

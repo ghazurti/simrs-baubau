@@ -2107,8 +2107,8 @@ public class DlgUpdateUser extends javax.swing.JDialog {
             tabMode.addRow(new Object[]{false,"[D]Stok Akhir Farmasi Per Tanggal",stok_akhir_farmasi_pertanggal});
         }
 
-        if("[D]Telaah Resep & Obat".toLowerCase().contains(TCari.getText().toLowerCase())){
-            tabMode.addRow(new Object[]{false,"[D]Telaah Resep & Obat",telaah_resep});
+        if("[D]Pengkajian Resep & Obat".toLowerCase().contains(TCari.getText().toLowerCase())){
+            tabMode.addRow(new Object[]{false,"[D]Pengkajian Resep & Obat",telaah_resep});
         }
 
         if("[D]Permintaan Resep Pulang".toLowerCase().contains(TCari.getText().toLowerCase())){
@@ -4133,8 +4133,8 @@ public class DlgUpdateUser extends javax.swing.JDialog {
             tabMode.addRow(new Object[]{false,"[L]Permintaan Resep Iterasi Apotek BPJS",daftar_permintaan_resep_iterasi_bpjs});
         }
         
-        if("[L]Kirim Q.R. Telaah Farmasi Satu Sehat".toLowerCase().contains(TCari.getText().toLowerCase())){
-            tabMode.addRow(new Object[]{false,"[L]Kirim Q.R. Telaah Farmasi Satu Sehat",satu_sehat_kirim_questionresponse_telaah_farmasi});
+        if("[L]Kirim Q.R. Pengkajian Farmasi Satu Sehat".toLowerCase().contains(TCari.getText().toLowerCase())){
+            tabMode.addRow(new Object[]{false,"[L]Kirim Q.R. Pengkajian Farmasi Satu Sehat",satu_sehat_kirim_questionresponse_telaah_farmasi});
         }
         
         if("[L]Kirim Allergy Intolerance Satu Sehat".toLowerCase().contains(TCari.getText().toLowerCase())){
@@ -6928,7 +6928,7 @@ public class DlgUpdateUser extends javax.swing.JDialog {
                 Sequel.mengedit("user","id_user=AES_ENCRYPT('"+TKd.getText()+"','nur')","stok_akhir_farmasi_pertanggal='"+tbUser.getValueAt(i,2).toString()+"'");
             }
             
-            if("[D]Telaah Resep & Obat".equals(tbUser.getValueAt(i,1).toString())){
+            if("[D]Pengkajian Resep & Obat".equals(tbUser.getValueAt(i,1).toString())){
                 Sequel.mengedit("user","id_user=AES_ENCRYPT('"+TKd.getText()+"','nur')","telaah_resep='"+tbUser.getValueAt(i,2).toString()+"'");
             }
 
@@ -8956,7 +8956,7 @@ public class DlgUpdateUser extends javax.swing.JDialog {
                 Sequel.mengedit("user","id_user=AES_ENCRYPT('"+TKd.getText()+"','nur')","daftar_permintaan_resep_iterasi_bpjs='"+tbUser.getValueAt(i,2).toString()+"'");
             }
             
-            if("[L]Kirim Q.R. Telaah Farmasi Satu Sehat".equals(tbUser.getValueAt(i,1).toString())){
+            if("[L]Kirim Q.R. Pengkajian Farmasi Satu Sehat".equals(tbUser.getValueAt(i,1).toString())){
                 Sequel.mengedit("user","id_user=AES_ENCRYPT('"+TKd.getText()+"','nur')","satu_sehat_kirim_questionresponse_telaah_farmasi='"+tbUser.getValueAt(i,2).toString()+"'");
             }
             

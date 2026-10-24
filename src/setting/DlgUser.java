@@ -406,7 +406,7 @@ public class DlgUser extends javax.swing.JDialog {
                 "[O]Perbaikan Inventaris Per Tahun","[O]Perbaikan Inventaris Per Pelaksana & Status","[M]Pengkajian MCU","[K]Peminjam Piutang","[K]Piutang Peminjaman Uang",
                 "[K]Asuransi/Askes/Jenis Bayar","[C]Audit Kepatuhan APD","[L]Task ID Mobile JKN","[K]Bayar Piutang Peminjaman Uang","[I]Pembayaran Per Akun Bayar 4",
                 "[D]Stok Akhir Farmasi Per Tanggal","[M]Riwayat Kamar Pasien","[M]Uji Fungsi/Prosedur KFR","[M]Hapus Berkas Digital Perawatan","[K]Kategori Pengeluaran Harian",
-                "[K]Kategori Pemasukan Lain-lain","[I]Pembayaran Per Akun Bayar 5","[U]Ruang Operasi","[D]Telaah Resep & Obat","[I]Jasa Tindakan Pasien","[D]Permintaan Resep Pulang",
+                "[K]Kategori Pemasukan Lain-lain","[I]Pembayaran Per Akun Bayar 5","[U]Ruang Operasi","[D]Pengkajian Resep & Obat","[I]Jasa Tindakan Pasien","[D]Permintaan Resep Pulang",
                 "[I]Rekap JM Dokter","[J]Status Data RM","[A]Ubah Petugas Lab PK","[A]Ubah Petugas Lab PA","[A]Ubah Petugas Radiologi","[A]Gabung Nomor Rawat","[M]Gabungkan Data RM",
                 "[D]Ringkasan Biaya Obat Pasien Per Tanggal","[M]Master Masalah Keperawatan IGD","[M]Pengkajian Awal Keperawatan IGD","[L]Referensi DPHO Apotek BPJS",
                 "[L]Referensi Poli Apotek BPJS","[K]Bayar JM Dokter","[L]Referensi Faskes Apotek BPJS","[L]Referensi Spesialistik Apotek BPJS","[K]Pembayaran BRIVA",
@@ -488,7 +488,7 @@ public class DlgUser extends javax.swing.JDialog {
                 "[M]Skrining CURB-65","[L]Potensi PRB di VClaim","[L]Riwayat Pelayanan Obat Apotek BPJS","[M]Skrining Gizi Kehamilan","[L]Rekap Peserta PRB Apotek BPJS","[P]Serah Terima Anggota Tubuh/Barang",
                 "[R]Jenis Aktivitas Proyek PCRA","[R]Lokasi & Kelompok Risiko Area PCRA","[R]Kelas Risiko/Kelas Pencegahan PCRA","[R]Tindakan Pengendalian PCRA","[R]Identifikasi Risiko Infeksi PCRA",
                 "[R]Identifikasi Risiko Keselamatan PCRA","[R]Identifikasi Risiko Kebakaran PCRA","[R]Identifikasi Risiko Utilitas PCRA","[L]Daftar Resep Apotek BPJS","[L]Permintaan Resep Iterasi Apotek BPJS",
-                "[R]Pengkajian Risiko Pra Konstruksi/PCRA","[R]Persyaratan Harus Dipenuhi PCRA","[L]Kirim Q.R. Telaah Farmasi Satu Sehat","[L]Kirim Allergy Intolerance Satu Sehat","[M]Konsultasi Perawat",
+                "[R]Pengkajian Risiko Pra Konstruksi/PCRA","[R]Persyaratan Harus Dipenuhi PCRA","[L]Kirim Q.R. Pengkajian Farmasi Satu Sehat","[L]Kirim Allergy Intolerance Satu Sehat","[M]Konsultasi Perawat",
                 "[M]Jawaban Konsultasi Perawat","[L]Kirim FHIR Smart Klaim BPJS","[L]Mapping Prosedur Smart Klaim BPJS","[L]Mapping Penyakit Smart Klaim BPJS","[P]Persetujuan Bimbingan Rohani & Mental",
                 "[D]Rencana Kebutuhan Obat & BMHP","[D]Setting Rencana Kebutuhan Obat & BMHP","[L]Mapping Tindakan Ralan KPTL Satu Sehat","[L]Mapping Tindakan Ranap KPTL Satu Sehat","[L]Mapping Tindakan Radiologi KPTL Satu Sehat",
                 "[L]Mapping Tindakan Laborat KPTL Satu Sehat","[L]Mapping Tindakan Operasi KPTL Satu Sehat","[L]Mapping Tarif Kamar KPTL Satu Sehat","[L]Kirim Composition Satu Sehat"
