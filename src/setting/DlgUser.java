@@ -491,7 +491,7 @@ public class DlgUser extends javax.swing.JDialog {
                 "[R]Pengkajian Risiko Pra Konstruksi/PCRA","[R]Persyaratan Harus Dipenuhi PCRA","[L]Kirim Q.R. Telaah Farmasi Satu Sehat","[L]Kirim Allergy Intolerance Satu Sehat","[M]Konsultasi Perawat",
                 "[M]Jawaban Konsultasi Perawat","[L]Kirim FHIR Smart Klaim BPJS","[L]Mapping Prosedur Smart Klaim BPJS","[L]Mapping Penyakit Smart Klaim BPJS","[P]Persetujuan Bimbingan Rohani & Mental",
                 "[D]Rencana Kebutuhan Obat & BMHP","[D]Setting Rencana Kebutuhan Obat & BMHP","[L]Mapping Tindakan Ralan KPTL Satu Sehat","[L]Mapping Tindakan Ranap KPTL Satu Sehat","[L]Mapping Tindakan Radiologi KPTL Satu Sehat",
-                "[L]Mapping Tindakan Laborat KPTL Satu Sehat","[L]Mapping Tindakan Operasi KPTL Satu Sehat","[L]Mapping Tarif Kamar KPTL Satu Sehat"
+                "[L]Mapping Tindakan Laborat KPTL Satu Sehat","[L]Mapping Tindakan Operasi KPTL Satu Sehat","[L]Mapping Tarif Kamar KPTL Satu Sehat","[L]Kirim Composition Satu Sehat"
         };
         
         tabMode=new DefaultTableModel(null,row){
@@ -825,7 +825,7 @@ public class DlgUser extends javax.swing.JDialog {
         tbUser.setPreferredScrollableViewportSize(new Dimension(500,500));
         tbUser.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 1205;i++) {
+        for (i = 0; i < 1206;i++) {
             TableColumn column = tbUser.getColumnModel().getColumn(i);
             switch (i) {
                 case 0:
@@ -3888,6 +3888,9 @@ public class DlgUser extends javax.swing.JDialog {
                 case 1204:
                     column.setPreferredWidth(204);
                     break;
+                case 1205:
+                    column.setPreferredWidth(181);
+                    break;
                 default:
                     column.setPreferredWidth(133);
                     break;
@@ -5567,7 +5570,8 @@ public class DlgUser extends javax.swing.JDialog {
                     "satu_sehat_mapping_kptl_tindakan_radiologi='"+tbUser.getValueAt(i,1201).toString()+"',"+
                     "satu_sehat_mapping_kptl_tindakan_laborat='"+tbUser.getValueAt(i,1202).toString()+"',"+
                     "satu_sehat_mapping_kptl_tindakan_operasi='"+tbUser.getValueAt(i,1203).toString()+"',"+
-                    "satu_sehat_mapping_kptl_tarif_kamar='"+tbUser.getValueAt(i,1204).toString()+"'")==true){
+                    "satu_sehat_mapping_kptl_tarif_kamar='"+tbUser.getValueAt(i,1204).toString()+"',"+
+                    "satu_sehat_kirim_composition='"+tbUser.getValueAt(i,1205).toString()+"'")==true){
                     emptTeks();
                 }
             }         
@@ -7056,7 +7060,8 @@ private void BtnPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         "satu_sehat_mapping_kptl_tindakan_radiologi='"+tbUser.getValueAt(barisdicopy,1201).toString()+"',"+
                                         "satu_sehat_mapping_kptl_tindakan_laborat='"+tbUser.getValueAt(barisdicopy,1202).toString()+"',"+
                                         "satu_sehat_mapping_kptl_tindakan_operasi='"+tbUser.getValueAt(barisdicopy,1203).toString()+"',"+
-                                        "satu_sehat_mapping_kptl_tarif_kamar='"+tbUser.getValueAt(barisdicopy,1204).toString()+"'");
+                                        "satu_sehat_mapping_kptl_tarif_kamar='"+tbUser.getValueAt(barisdicopy,1204).toString()+"',"+
+                                        "satu_sehat_kirim_composition='"+tbUser.getValueAt(barisdicopy,1205).toString()+"'");
                                 }
                                 userdicopy="";
                                 copyhakakses="";
@@ -7395,7 +7400,7 @@ private void BtnPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                             "user.pcra_icra_pengkajian_risiko_prakonstruksi,user.pcra_icra_persyaratan_harus_dipenuhi,user.satu_sehat_kirim_questionresponse_telaah_farmasi,"+
                             "user.satu_sehat_kirim_allergy_intolerance,user.konsultasi_perawat,user.jawaban_konsultasi_perawat,user.bridging_smart_klaim_bpjs,user.mapping_prosedur_smart_klaim_bpjs,"+
                             "user.mapping_penyakit_smart_klaim_bpjs,user.permintaan_binrohtal,user.rencana_kebutuhan_obat,user.setting_rencana_kebutuhan_obat,"+
-                            "user.satu_sehat_mapping_kptl_tindakan_ralan,user.satu_sehat_mapping_kptl_tindakan_ranap,user.satu_sehat_mapping_kptl_tindakan_radiologi,user.satu_sehat_mapping_kptl_tindakan_laborat,user.satu_sehat_mapping_kptl_tindakan_operasi,user.satu_sehat_mapping_kptl_tarif_kamar from user order by AES_DECRYPT(user.id_user,'nur')");
+                            "user.satu_sehat_mapping_kptl_tindakan_ralan,user.satu_sehat_mapping_kptl_tindakan_ranap,user.satu_sehat_mapping_kptl_tindakan_radiologi,user.satu_sehat_mapping_kptl_tindakan_laborat,user.satu_sehat_mapping_kptl_tindakan_operasi,user.satu_sehat_mapping_kptl_tarif_kamar,user.satu_sehat_kirim_composition from user order by AES_DECRYPT(user.id_user,'nur')");
                         try {
                             rs=ps.executeQuery();
                             i=0;
@@ -8606,7 +8611,7 @@ private void BtnPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                            rs.getBoolean("bridging_smart_klaim_bpjs"),
                                            rs.getBoolean("mapping_prosedur_smart_klaim_bpjs"),
                                            rs.getBoolean("mapping_penyakit_smart_klaim_bpjs"),
-                                           rs.getBoolean("permintaan_binrohtal"),rs.getBoolean("rencana_kebutuhan_obat"),rs.getBoolean("setting_rencana_kebutuhan_obat"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_ralan"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_ranap"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_radiologi"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_laborat"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_operasi"),rs.getBoolean("satu_sehat_mapping_kptl_tarif_kamar")
+                                           rs.getBoolean("permintaan_binrohtal"),rs.getBoolean("rencana_kebutuhan_obat"),rs.getBoolean("setting_rencana_kebutuhan_obat"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_ralan"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_ranap"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_radiologi"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_laborat"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_operasi"),rs.getBoolean("satu_sehat_mapping_kptl_tarif_kamar"),rs.getBoolean("satu_sehat_kirim_composition")
                                         });
                                     }   
                                 } catch (Exception e) {
@@ -9805,7 +9810,7 @@ private void BtnPrintKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                        rs.getBoolean("bridging_smart_klaim_bpjs"),
                                        rs.getBoolean("mapping_prosedur_smart_klaim_bpjs"),
                                        rs.getBoolean("mapping_penyakit_smart_klaim_bpjs"),
-                                       rs.getBoolean("permintaan_binrohtal"),rs.getBoolean("rencana_kebutuhan_obat"),rs.getBoolean("setting_rencana_kebutuhan_obat"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_ralan"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_ranap"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_radiologi"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_laborat"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_operasi"),rs.getBoolean("satu_sehat_mapping_kptl_tarif_kamar")
+                                       rs.getBoolean("permintaan_binrohtal"),rs.getBoolean("rencana_kebutuhan_obat"),rs.getBoolean("setting_rencana_kebutuhan_obat"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_ralan"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_ranap"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_radiologi"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_laborat"),rs.getBoolean("satu_sehat_mapping_kptl_tindakan_operasi"),rs.getBoolean("satu_sehat_mapping_kptl_tarif_kamar"),rs.getBoolean("satu_sehat_kirim_composition")
                                     });
                                 }                                             
                              }
