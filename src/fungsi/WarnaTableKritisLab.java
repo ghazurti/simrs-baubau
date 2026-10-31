@@ -16,7 +16,8 @@ import javax.swing.table.DefaultTableCellRenderer;
  * <ul>
  *   <li>nilai &gt;= batas_atas   -&gt; KRITIS TINGGI, tanda "HH"</li>
  *   <li>nilai &lt;= batas_bawah  -&gt; KRITIS RENDAH, tanda "LL"</li>
- *   <li>hasil teks mengandung teks_kritis (Reaktif/Positif/+3/...) -&gt; tanda "!"</li>
+ *   <li>hasil teks mengandung teks_kritis (Reaktif/Positif/+3/...) -&gt; tanda "!",
+ *       kecuali didahului kata ingkar ("NON REAKTIF" bukan kritis)</li>
  * </ul>
  *
  * <p>Di luar nilai rujukan tapi BELUM kritis (rentang dibaca dari kolom
@@ -36,8 +37,31 @@ public class WarnaTableKritisLab extends DefaultTableCellRenderer {
     private final int colHasil;
     private final int colIdTemplate;
     private final int colRujukan;
+    /** Catatan "sudah dilaporkan" dari eLIMS per id_template (opsional, boleh null). */
+    private Map<String,String> catatanLapor;
 
     private static final Pattern ANGKA = Pattern.compile("\\d+(?:[.,]\\d+)?");
+
+    /** Kata ingkar tepat sebelum teks kritis ("NON REAKTIF", "tidak reaktif", "not ..."). */
+    private static final Pattern NEGASI = Pattern.compile("(?:^|[^\\p{L}])(?:non|tidak|tdk|not|no)$");
+
+    /**
+     * Hasil teks mengandung teks_kritis (mis. "reaktif"), KECUALI didahului kata ingkar
+     * non/tidak/tdk/not/no. Sebelumnya cukup "contains", sehingga "NON REAKTIF" ikut kritis.
+     * Dipakai juga oleh DlgCariPeriksaLab; aturan sama dengan E-Dokter.
+     */
+    public static boolean teksKritis(String hasil, String teks){
+        if(hasil==null || teks==null){ return false; }
+        String h=hasil.toLowerCase(), tk=teks.trim().toLowerCase();
+        if(tk.isEmpty()){ return false; }
+        int i=h.indexOf(tk);
+        while(i>=0){
+            String depan=h.substring(0,i).replaceAll("[\\s\\-_.:]+$","");
+            if(!NEGASI.matcher(depan).find()){ return true; }
+            i=h.indexOf(tk,i+tk.length());
+        }
+        return false;
+    }
 
     public WarnaTableKritisLab(Map<String,Double> batasBawah, Map<String,Double> batasAtas,
                                Map<String,String> teksKritis, int colHasil, int colIdTemplate, int colRujukan){
@@ -47,6 +71,10 @@ public class WarnaTableKritisLab extends DefaultTableCellRenderer {
         this.colHasil=colHasil;
         this.colIdTemplate=colIdTemplate;
         this.colRujukan=colRujukan;
+    }
+
+    public void setCatatanLapor(Map<String,String> catatanLapor){
+        this.catatanLapor=catatanLapor;
     }
 
     /** Ambil angka dari teks hasil (buang satuan/simbol, koma -&gt; titik). */
@@ -127,7 +155,7 @@ public class WarnaTableKritisLab extends DefaultTableCellRenderer {
                 }
                 if(!kritis && teksKritis!=null){
                     String tk = teksKritis.get(id);
-                    if(tk!=null && !tk.isEmpty() && hasil.toLowerCase().contains(tk.toLowerCase())){
+                    if(teksKritis(hasil,tk)){
                         kritis=true; tanda="!";
                     }
                 }
@@ -158,6 +186,17 @@ public class WarnaTableKritisLab extends DefaultTableCellRenderer {
                     setFont(getFont().deriveFont(Font.BOLD));
                     if(column==colHasil){ setText(hasil + "  " + tanda); }
                     setToolTipText("Di luar nilai rujukan" + jenis);
+                }
+
+                // --- 3) sudah dilaporkan (catatan eLIMS): tanda centang + tooltip catatan ---
+                String lapor = catatanLapor==null ? null : catatanLapor.get(id);
+                if(lapor!=null && !lapor.isEmpty()){
+                    if(!kritis && !luarRujukan){
+                        c.setForeground(new Color(0,120,60));
+                        setFont(getFont().deriveFont(Font.BOLD));
+                    }
+                    if(column==colHasil){ setText((tanda.isEmpty() ? hasil : hasil + "  " + tanda) + "  ✔"); }
+                    setToolTipText("SUDAH DILAPORKAN - " + lapor);
                 }
             }
         } catch(Exception e){

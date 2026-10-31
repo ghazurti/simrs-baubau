@@ -631,25 +631,33 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="134" y="0" width="1" height="14" uuid="8a2bf533-e5db-40a2-8c08-4716a39d4771"/>
+				<reportElement stretchType="RelativeToBandHeight" x="134" y="0" width="1" height="14" uuid="8a2bf533-e5db-40a2-8c08-4716a39d4771">
+					<printWhenExpression><![CDATA[(($F{temp15}==null || $F{temp15}.trim().isEmpty()) ? Boolean.TRUE : Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="216" y="0" width="1" height="14" uuid="243cc355-294a-4537-a48f-b30fa5731647"/>
+				<reportElement stretchType="RelativeToBandHeight" x="216" y="0" width="1" height="14" uuid="243cc355-294a-4537-a48f-b30fa5731647">
+					<printWhenExpression><![CDATA[(($F{temp15}==null || $F{temp15}.trim().isEmpty()) ? Boolean.TRUE : Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="292" y="0" width="1" height="14" uuid="0a1d452f-ad7f-40ac-9c9e-e807de800399"/>
+				<reportElement stretchType="RelativeToBandHeight" x="292" y="0" width="1" height="14" uuid="0a1d452f-ad7f-40ac-9c9e-e807de800399">
+					<printWhenExpression><![CDATA[(($F{temp15}==null || $F{temp15}.trim().isEmpty()) ? Boolean.TRUE : Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="446" y="0" width="1" height="14" uuid="801d770b-1f40-45bd-b3f9-df4b341034ac"/>
+				<reportElement stretchType="RelativeToBandHeight" x="446" y="0" width="1" height="14" uuid="801d770b-1f40-45bd-b3f9-df4b341034ac">
+					<printWhenExpression><![CDATA[(($F{temp15}==null || $F{temp15}.trim().isEmpty()) ? Boolean.TRUE : Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
@@ -719,6 +727,16 @@
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{temp5}]]></textFieldExpression>
+			</textField>
+					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="3" y="1" width="517" height="13" forecolor="#006B3C" uuid="aaaa0100-0000-0000-0000-0000000000d1">
+					<printWhenExpression><![CDATA[(($F{temp15}==null || $F{temp15}.trim().isEmpty()) ? Boolean.FALSE : Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="9" isItalic="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["» " + $F{temp15}.replaceAll("`","'")]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

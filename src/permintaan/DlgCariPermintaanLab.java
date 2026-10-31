@@ -2955,33 +2955,10 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                             ps.setString(1,NoPermintaan);
                             rs=ps.executeQuery();
                             if(rs.next()){
-                                koneksielims.prepareStatement(
-                                        "insert into permintaan_lab values('"+rs.getString("noorder")+"','"+rs.getString("no_rawat")+"','"+rs.getString("no_rkm_medis")+"',"+
-                                        "'"+rs.getString("nm_pasien")+"','"+rs.getString("email")+"','"+rs.getString("jk")+"','"+rs.getString("tmp_lahir")+"','"+rs.getString("tgl_lahir")+"',"+
-                                        "'"+rs.getString("alamat")+", "+rs.getString("nm_kel")+", "+rs.getString("nm_kec")+", "+rs.getString("nm_kab")+", "+rs.getString("nm_prop")+"',"+
-                                        "'"+rs.getString("tgl_permintaan")+"','"+rs.getString("jam_permintaan")+"','"+rs.getString("dokter_perujuk")+"','"+rs.getString("nm_dokter")+"',"+
-                                        "'"+rs.getString("status")+"','"+rs.getString("kd_poli")+"','"+rs.getString("nm_poli")+"','"+rs.getString("kd_pj")+"','"+rs.getString("png_jawab")+"',"+
-                                        "'"+rs.getString("informasi_tambahan")+"','"+rs.getString("diagnosa_klinis")+"','"+rs.getString("no_ktp")+"')").executeUpdate();
-                                koneksi=koneksiDB.condb();
-                                ps2=koneksi.prepareStatement("select permintaan_detail_permintaan_lab.noorder,permintaan_detail_permintaan_lab.kd_jenis_prw,permintaan_detail_permintaan_lab.id_template from permintaan_detail_permintaan_lab where permintaan_detail_permintaan_lab.noorder=?");
-                                try {
-                                    ps2.setString(1,NoPermintaan);
-                                    rs2=ps2.executeQuery();
-                                    while(rs2.next()){
-                                        koneksielims.prepareStatement("insert into detail_permintaan_lab values('"+rs2.getString("noorder")+"','"+rs2.getString("kd_jenis_prw")+"','"+rs2.getString("id_template")+"')").executeUpdate();
-                                    }
-                                } catch (Exception e) {
-                                    System.out.println("Notif : "+e);
-                                } finally{
-                                    if(rs2!=null){
-                                        rs2.close();
-                                    }
-                                    if(ps2!=null){
-                                        ps2.close();
-                                    }
-                                }
+                                JOptionPane.showMessageDialog(null,"Proses kirim berhasil, "+kirimPermintaanELIMS(rs,rs.getString("kd_poli"),rs.getString("nm_poli"))+" item pemeriksaan..!!");
+                            }else{
+                                JOptionPane.showMessageDialog(null,"Data permintaan/pasien tidak lengkap, tidak ada yang dikirim..!!");
                             }
-                            JOptionPane.showMessageDialog(null,"Proses kirim berhasil..!!");
                         } catch (Exception e) {
                             JOptionPane.showMessageDialog(null,"Proses kirim gagal..!!"+e);
                             System.out.println("Notif : "+e);
@@ -3033,34 +3010,10 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                             ps.setString(1,NoPermintaan);
                             rs=ps.executeQuery();
                             if(rs.next()){
-                                koneksielims.prepareStatement(
-                                        "insert into permintaan_lab values('"+rs.getString("noorder")+"','"+rs.getString("no_rawat")+"','"+rs.getString("no_rkm_medis")+"',"+
-                                        "'"+rs.getString("nm_pasien")+"','"+rs.getString("email")+"','"+rs.getString("jk")+"','"+rs.getString("tmp_lahir")+"','"+rs.getString("tgl_lahir")+"',"+
-                                        "'"+rs.getString("alamat")+", "+rs.getString("nm_kel")+", "+rs.getString("nm_kec")+", "+rs.getString("nm_kab")+", "+rs.getString("nm_prop")+"',"+
-                                        "'"+rs.getString("tgl_permintaan")+"','"+rs.getString("jam_permintaan")+"','"+rs.getString("dokter_perujuk")+"','"+rs.getString("nm_dokter")+"',"+
-                                        "'"+rs.getString("status")+"','"+rs.getString("kd_kamar")+"','"+rs.getString("nm_bangsal")+"','"+rs.getString("kd_pj")+"','"+rs.getString("png_jawab")+"',"+
-                                        "'"+rs.getString("informasi_tambahan")+"','"+rs.getString("diagnosa_klinis")+"','"+rs.getString("no_ktp")+"')").executeUpdate();
-                                
-                                koneksi=koneksiDB.condb();
-                                ps2=koneksi.prepareStatement("select permintaan_detail_permintaan_lab.noorder,permintaan_detail_permintaan_lab.kd_jenis_prw,permintaan_detail_permintaan_lab.id_template from permintaan_detail_permintaan_lab where permintaan_detail_permintaan_lab.noorder=?");
-                                try {
-                                    ps2.setString(1,NoPermintaan);
-                                    rs2=ps2.executeQuery();
-                                    while(rs2.next()){
-                                        koneksielims.prepareStatement("insert into detail_permintaan_lab values('"+rs2.getString("noorder")+"','"+rs2.getString("kd_jenis_prw")+"','"+rs2.getString("id_template")+"')").executeUpdate();
-                                    }
-                                } catch (Exception e) {
-                                    System.out.println("Notif : "+e);
-                                } finally{
-                                    if(rs2!=null){
-                                        rs2.close();
-                                    }
-                                    if(ps2!=null){
-                                        ps2.close();
-                                    }
-                                }
+                                JOptionPane.showMessageDialog(null,"Proses kirim berhasil, "+kirimPermintaanELIMS(rs,rs.getString("kd_kamar"),rs.getString("nm_bangsal"))+" item pemeriksaan..!!");
+                            }else{
+                                JOptionPane.showMessageDialog(null,"Data permintaan/pasien tidak lengkap, tidak ada yang dikirim..!!");
                             }
-                            JOptionPane.showMessageDialog(null,"Proses kirim berhasil..!!");
                         } catch (Exception e) {
                             JOptionPane.showMessageDialog(null,"Proses kirim gagal..!!"+e);
                             System.out.println("Notif : "+e);
@@ -4447,6 +4400,67 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
         }
     }
     
+    /**
+     * Tulis 1 permintaan ke DB bridging ELIMS (sik_bridging_lab). Nama kolom ditulis eksplisit
+     * (tabel ELIMS punya no_ktp tambahan, sesuai skema produksi) dan nilai lewat parameter agar nama/alamat
+     * bertanda petik tidak menggagalkan query. Kirim ulang menimpa permintaan & item lama.
+     */
+    private int kirimPermintaanELIMS(ResultSet rs,String kodeRuang,String namaRuang) throws Exception {
+        String noorder=rs.getString("noorder");
+        try (PreparedStatement pse=koneksielims.prepareStatement(
+                "replace into permintaan_lab (noorder,no_rawat,no_rkm_medis,nm_pasien,email,jk,tmp_lahir,tgl_lahir,alamat,"+
+                "tgl_permintaan,jam_permintaan,kode_dokter_perujuk,dokter_perujuk,status,kode_ruang,nama_ruang,kode_carabayar,"+
+                "nama_carabayar,informasi_tambahan,diagnosa_klinis,no_ktp) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
+            pse.setString(1,noorder);
+            pse.setString(2,rs.getString("no_rawat"));
+            pse.setString(3,rs.getString("no_rkm_medis"));
+            pse.setString(4,potongELIMS(rs.getString("nm_pasien"),40));
+            pse.setString(5,potongELIMS(rs.getString("email"),50));
+            pse.setString(6,rs.getString("jk"));
+            pse.setString(7,potongELIMS(rs.getString("tmp_lahir"),15));
+            pse.setString(8,rs.getString("tgl_lahir"));
+            pse.setString(9,potongELIMS(rs.getString("alamat")+", "+rs.getString("nm_kel")+", "+rs.getString("nm_kec")+", "+rs.getString("nm_kab")+", "+rs.getString("nm_prop"),200));
+            pse.setString(10,rs.getString("tgl_permintaan"));
+            pse.setString(11,rs.getString("jam_permintaan"));
+            pse.setString(12,rs.getString("dokter_perujuk"));
+            pse.setString(13,potongELIMS(rs.getString("nm_dokter"),50));
+            pse.setString(14,rs.getString("status"));
+            pse.setString(15,potongELIMS(kodeRuang,20));
+            pse.setString(16,potongELIMS(namaRuang,50));
+            pse.setString(17,rs.getString("kd_pj"));
+            pse.setString(18,potongELIMS(rs.getString("png_jawab"),50));
+            pse.setString(19,potongELIMS(rs.getString("informasi_tambahan"),60));
+            pse.setString(20,potongELIMS(rs.getString("diagnosa_klinis"),80));
+            pse.setString(21,rs.getString("no_ktp"));
+            pse.executeUpdate();
+        }
+        try (PreparedStatement pse=koneksielims.prepareStatement("delete from detail_permintaan_lab where noorder=?")) {
+            pse.setString(1,noorder);
+            pse.executeUpdate();
+        }
+        int jumlah=0;
+        try (PreparedStatement psk=koneksiDB.condb().prepareStatement(
+                "select permintaan_detail_permintaan_lab.kd_jenis_prw,permintaan_detail_permintaan_lab.id_template from permintaan_detail_permintaan_lab where permintaan_detail_permintaan_lab.noorder=?");
+             PreparedStatement pse=koneksielims.prepareStatement("insert into detail_permintaan_lab (noorder,kd_jenis_prw,id_template) values (?,?,?)")) {
+            psk.setString(1,noorder);
+            try (ResultSet rsk=psk.executeQuery()) {
+                while(rsk.next()){
+                    pse.setString(1,noorder);
+                    pse.setString(2,rsk.getString("kd_jenis_prw"));
+                    pse.setInt(3,rsk.getInt("id_template"));
+                    pse.executeUpdate();
+                    jumlah++;
+                }
+            }
+        }
+        return jumlah;
+    }
+
+    private String potongELIMS(String s,int max){
+        if(s==null) return "";
+        return s.length()>max?s.substring(0,max):s;
+    }
+
     private void TeksKosong() {
         NoPermintaan="";
         NoRawat="";

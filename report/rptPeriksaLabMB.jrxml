@@ -516,19 +516,25 @@
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="134" y="0" width="1" height="14" uuid="46931c51-7841-47ca-a0ac-3f5a861842da"/>
+				<reportElement stretchType="RelativeToBandHeight" x="134" y="0" width="1" height="14" uuid="46931c51-7841-47ca-a0ac-3f5a861842da">
+					<printWhenExpression><![CDATA[(($F{temp15}==null || $F{temp15}.trim().isEmpty()) ? Boolean.TRUE : Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="329" y="0" width="1" height="14" uuid="5384c862-47ed-40f5-9493-c51980a7842c"/>
+				<reportElement stretchType="RelativeToBandHeight" x="329" y="0" width="1" height="14" uuid="5384c862-47ed-40f5-9493-c51980a7842c">
+					<printWhenExpression><![CDATA[(($F{temp15}==null || $F{temp15}.trim().isEmpty()) ? Boolean.TRUE : Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement stretchType="RelativeToBandHeight" x="446" y="0" width="1" height="14" uuid="729d8feb-6289-4de5-8519-565b8ff6df48"/>
+				<reportElement stretchType="RelativeToBandHeight" x="446" y="0" width="1" height="14" uuid="729d8feb-6289-4de5-8519-565b8ff6df48">
+					<printWhenExpression><![CDATA[(($F{temp15}==null || $F{temp15}.trim().isEmpty()) ? Boolean.TRUE : Boolean.FALSE)]]></printWhenExpression>
+				</reportElement>
 				<graphicElement>
 					<pen lineWidth="0.5"/>
 				</graphicElement>
@@ -598,6 +604,16 @@
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{temp5}]]></textFieldExpression>
+			</textField>
+					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="3" y="1" width="517" height="13" forecolor="#006B3C" uuid="aaaa0100-0000-0000-0000-0000000000d1">
+					<printWhenExpression><![CDATA[(($F{temp15}==null || $F{temp15}.trim().isEmpty()) ? Boolean.FALSE : Boolean.TRUE)]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="9" isItalic="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA["» " + $F{temp15}.replaceAll("`","'")]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

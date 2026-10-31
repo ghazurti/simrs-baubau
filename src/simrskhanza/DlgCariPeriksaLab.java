@@ -136,7 +136,7 @@ public class DlgCariPeriksaLab extends javax.swing.JDialog {
             if(!Double.isNaN(krit[0]) && v<=krit[0]) return "LL";
         }
         String tk = kritisTeksNama.get(key);
-        if(tk!=null && !tk.isEmpty() && nilai.toLowerCase().contains(tk.toLowerCase())) return "HH";
+        if(fungsi.WarnaTableKritisLab.teksKritis(nilai,tk)) return "HH"; // "NON REAKTIF" bukan kritis
         // 2) DI LUAR RUJUKAN (belum kritis)
         if(v!=null){
             double[] r = parseRentang(nilaiRujukan);
@@ -144,6 +144,64 @@ public class DlgCariPeriksaLab extends javax.swing.JDialog {
             if(!Double.isNaN(r[0]) && v<r[0]) return "L";
         }
         return "";
+    }
+
+    /** Catatan "sudah dilaporkan" (eLIMS) per kd_jenis_prw|Pemeriksaan untuk 1 kali periksa. */
+    private final java.util.Map<String,String> catatanKritis = new java.util.HashMap<>();
+    private static final String TANDA_LAPOR = "      ✔ ";
+
+    /** Muat catatan_kritis_lab; bila tabel belum dibuat, daftar tetap tampil tanpa catatan. */
+    private void muatCatatanKritis(String noRawat, String tgl, String jam) {
+        catatanKritis.clear();
+        try (PreparedStatement psc = koneksiDB.condb().prepareStatement(
+                "select catatan_kritis_lab.kd_jenis_prw,template_laboratorium.Pemeriksaan,catatan_kritis_lab.catatan from catatan_kritis_lab "+
+                "inner join template_laboratorium on catatan_kritis_lab.id_template=template_laboratorium.id_template "+
+                "where catatan_kritis_lab.no_rawat=? and catatan_kritis_lab.tgl_periksa=? and catatan_kritis_lab.jam=?")) {
+            psc.setString(1, noRawat);
+            psc.setString(2, tgl);
+            psc.setString(3, jam);
+            try (ResultSet rsc = psc.executeQuery()) {
+                while (rsc.next()) {
+                    catatanKritis.put(rsc.getString(1)+"|"+rsc.getString(2), rsc.getString(3));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Notif catatan kritis : "+e);
+        }
+    }
+
+    /**
+     * Cetak: tulis baris catatan "sudah dilaporkan" ke temporary_lab tepat di bawah item (kolom temp15 varchar(1000);
+     * temp16 cuma varchar(100),
+     * ditampilkan selebar tabel oleh rptPeriksaLab*). Kembalikan nomor urut berikutnya.
+     */
+    private int cetakCatatanKritis(int urut, String noRawat, String kdJenisPrw, String tgl, String jam, String pemeriksaan) {
+        String catatan = "";
+        try (PreparedStatement psc = koneksiDB.condb().prepareStatement(
+                "select catatan_kritis_lab.catatan from catatan_kritis_lab inner join template_laboratorium on catatan_kritis_lab.id_template=template_laboratorium.id_template "+
+                "where catatan_kritis_lab.no_rawat=? and catatan_kritis_lab.kd_jenis_prw=? and catatan_kritis_lab.tgl_periksa=? and catatan_kritis_lab.jam=? and template_laboratorium.Pemeriksaan=? limit 1")) {
+            psc.setString(1, noRawat);
+            psc.setString(2, kdJenisPrw);
+            psc.setString(3, tgl);
+            psc.setString(4, jam);
+            psc.setString(5, pemeriksaan);
+            try (ResultSet rsc = psc.executeQuery()) {
+                if (rsc.next()) {
+                    catatan = rsc.getString(1);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Notif catatan kritis : "+e);
+        }
+        if (catatan == null || catatan.trim().isEmpty()) {
+            return urut;
+        }
+        StringBuilder isi = new StringBuilder("'"+urut+"'");
+        for (int k = 1; k <= 37; k++) {
+            isi.append(",'").append(k == 15 ? catatan.replaceAll("'","`") : "").append("'");
+        }
+        Sequel.menyimpan("temporary_lab", isi.toString(), "Data User");
+        return urut + 1;
     }
 
     private String ketWithFlag(String pemeriksaan, String nilai, String nilaiRujukan, String keterangan) {
@@ -213,6 +271,13 @@ public class DlgCariPeriksaLab extends javax.swing.JDialog {
                 if (!isSelected) {
                     c.setBackground(row % 2 == 1 ? new java.awt.Color(255,244,244) : java.awt.Color.WHITE);
                 }
+                if (column == 2 && value != null && value.toString().startsWith(TANDA_LAPOR)) {
+                    c.setForeground(new java.awt.Color(0, 120, 60));          // sudah dilaporkan = hijau
+                    c.setFont(c.getFont().deriveFont(java.awt.Font.ITALIC));
+                    setToolTipText(value.toString().trim());
+                    return c;
+                }
+                setToolTipText(null);
                 if (column == 3 || column == 6) {
                     Object ketObj = table.getValueAt(row, 6);
                     String ket = (ketObj != null ? ketObj.toString() : "").trim().toUpperCase();
@@ -1920,6 +1985,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -2210,6 +2276,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -2369,6 +2436,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -2530,6 +2598,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -2691,6 +2760,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -2852,6 +2922,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -3016,6 +3087,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -3180,6 +3252,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -3366,6 +3439,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -3551,6 +3625,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -3737,6 +3812,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -4004,6 +4080,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -4165,6 +4242,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -4327,6 +4405,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -4489,6 +4568,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -4650,6 +4730,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -4811,6 +4892,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -4976,6 +5058,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -5141,6 +5224,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -5328,6 +5412,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -5514,6 +5599,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -5701,6 +5787,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -5933,6 +6020,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -6119,6 +6207,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                         Sequel.menyimpan("temporary_lab","'"+i+"','  "+rs3.getString("Pemeriksaan")+"','"+rs3.getString("nilai").replaceAll("'","`")+"','"+rs3.getString("satuan")
                                                 +"','"+rs3.getString("nilai_rujukan")+"','"+ketWithFlag(rs3.getString("Pemeriksaan"),rs3.getString("nilai"),rs3.getString("nilai_rujukan"),rs3.getString("keterangan"))+"','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','',''","Data User"); 
                                         i++;
+                                        i=cetakCatatanKritis(i,rs.getString("no_rawat"),rs3.getString("kd_jenis_prw"),Valid.SetTgl(rs.getString("tgl_periksa")),rs.getString("jam"),rs3.getString("Pemeriksaan"));
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Notif ps3 : "+e);
@@ -6453,6 +6542,7 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                                 rs.getString("nama"),rs.getString("tgl_periksa"),rs.getString("jam"),
                                                 Sequel.cariIsi("select dokter.nm_dokter from dokter where dokter.kd_dokter=?",rs.getString("dokter_perujuk")),rs.getString("nm_dokter")});
                     tabMode.addRow(new Object[]{"","Cara Bayar : "+rs.getString("png_jawab"),"Pemeriksaan","Hasil","Satuan","Nilai Rujukan","Keterangan"});
+                    muatCatatanKritis(rs.getString("no_rawat"),rs.getString("tgl_periksa"),rs.getString("jam"));
                     koneksi=koneksiDB.condb();
                     ps2=koneksi.prepareStatement(
                         "select jns_perawatan_lab.kd_jenis_prw,jns_perawatan_lab.nm_perawatan,periksa_lab.biaya from periksa_lab inner join jns_perawatan_lab "+
@@ -6486,6 +6576,10 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                                     String ketDisplay = flagTLH.isEmpty() ? rs3.getString("keterangan") : flagTLH+" "+rs3.getString("keterangan");
                                     tabMode.addRow(new Object[]{"","","  "+rs3.getString("Pemeriksaan")+" "+Valid.SetAngka(rs3.getDouble("biaya_item")),rs3.getString("nilai").replaceAll("'","`"),
                                                                 rs3.getString("satuan"),rs3.getString("nilai_rujukan"),ketDisplay});
+                                    String lapor=catatanKritis.get(rs3.getString("kd_jenis_prw")+"|"+rs3.getString("Pemeriksaan"));
+                                    if(lapor!=null){
+                                        tabMode.addRow(new Object[]{"","",TANDA_LAPOR+lapor,"","","",""});
+                                    }
                                 }
                            } catch (Exception e) {
                                System.out.println("Notif ps3 : "+e);

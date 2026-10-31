@@ -62,6 +62,7 @@ public final class DlgPeriksaLaboratorium extends javax.swing.JDialog {
     private final Map<String,Double> kritisBawah=new HashMap<>();
     private final Map<String,Double> kritisAtas=new HashMap<>();
     private final Map<String,String> kritisTeks=new HashMap<>();
+    private final Map<String,String> catatanKritis=new HashMap<>();
     private sekuel Sequel=new sekuel();
     private Connection koneksisysmex;
     private Connection koneksielims;
@@ -153,7 +154,9 @@ public final class DlgPeriksaLaboratorium extends javax.swing.JDialog {
         }
         
         muatNilaiKritis();
-        tbPemeriksaan.setDefaultRenderer(Object.class, new WarnaTableKritisLab(kritisBawah,kritisAtas,kritisTeks,2,6,4));
+        WarnaTableKritisLab warnaKritis=new WarnaTableKritisLab(kritisBawah,kritisAtas,kritisTeks,2,6,4);
+        warnaKritis.setCatatanLapor(catatanKritis);
+        tbPemeriksaan.setDefaultRenderer(Object.class, warnaKritis);
 
         Object[] row2={"P","Kode Periksa","Nama Pemeriksaan","Tarif","bagian_rs","bhp","tarif_perujuk","tarif_tindakan_dokter","tarif_tindakan_petugas","K.S.O.","Menejemen"};
         tabMode2=new DefaultTableModel(null,row2){
@@ -891,6 +894,12 @@ public final class DlgPeriksaLaboratorium extends javax.swing.JDialog {
             Valid.textKosong(Pemeriksaan,"Data Pemeriksaan");
         }else if(jml==0){
             Valid.textKosong(Pemeriksaan,"Data Pemeriksaan");
+        }else if((!noorder.equals(""))&&Sequel.cariInteger(
+                "select count(periksa_lab.no_rawat) from permintaan_lab inner join permintaan_pemeriksaan_lab on permintaan_pemeriksaan_lab.noorder=permintaan_lab.noorder "+
+                "inner join periksa_lab on periksa_lab.no_rawat=permintaan_lab.no_rawat and periksa_lab.kd_jenis_prw=permintaan_pemeriksaan_lab.kd_jenis_prw "+
+                "and periksa_lab.tgl_periksa=permintaan_lab.tgl_hasil and periksa_lab.jam=permintaan_lab.jam_hasil where permintaan_lab.noorder=?",noorder)>0){
+            // cegah 1 permintaan tersimpan 2x (dialog dibuka ulang / dobel di 2 komputer); kalau hasil lama sudah dihapus, boleh simpan lagi
+            JOptionPane.showMessageDialog(rootPane,"Hasil untuk No.Permintaan "+noorder+" sudah pernah disimpan.\nHapus dulu hasil lama di Data Periksa Lab jika ingin input ulang..!!");
         }else{
             jmlparsial=0;
             if(aktifkanparsial.equals("yes")){
@@ -2000,7 +2009,8 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         try {
             koneksielims=koneksiDBELIMS.condb();
             Valid.tabelKosong(tabMode);
-            
+            catatanKritis.clear();
+
             for(i2=0;i2<tbTarif.getRowCount();i2++){ 
                 if(tbTarif.getValueAt(i2,0).toString().equals("true")){
                     tabMode.addRow(new Object[]{true,tbTarif.getValueAt(i2,2).toString(),"","","","","",0,0,0,0,0,0,0,0,""});
@@ -2022,12 +2032,20 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                         pstampil.setString(3,order);
                         rstampil=pstampil.executeQuery();
                         while(rstampil.next()){
-                            pstindakan=koneksielims.prepareStatement("select detail_hasil_lab.noorder,detail_hasil_lab.kd_jenis_prw,detail_hasil_lab.id_template,detail_hasil_lab.nilai,detail_hasil_lab.nilai_rujukan,detail_hasil_lab.keterangan from detail_hasil_lab where detail_hasil_lab.noorder=? and detail_hasil_lab.id_template=?");
+                            pstindakan=koneksielims.prepareStatement("select detail_hasil_lab.noorder,detail_hasil_lab.kd_jenis_prw,detail_hasil_lab.id_template,detail_hasil_lab.nilai,detail_hasil_lab.nilai_rujukan,detail_hasil_lab.keterangan,detail_hasil_lab.catatan from detail_hasil_lab where detail_hasil_lab.noorder=? and detail_hasil_lab.id_template=?");
                             try {
                                 pstindakan.setString(1,order);
                                 pstindakan.setString(2,rstampil.getString("id_template"));
                                 rstindakan=pstindakan.executeQuery();
                                 if(rstindakan.next()){
+                                    // catatan pelaporan nilai kritis dari PROLIMS ("<br>" dibuang)
+                                    String catatan=rstindakan.getString("catatan");
+                                    if(catatan!=null){
+                                        catatan=catatan.replaceAll("(?i)<br\\s*/?>"," ").replaceAll("\\s+"," ").trim();
+                                        if(!catatan.isEmpty()){
+                                            catatanKritis.put(rstampil.getString("id_template"),catatan.length()>800?catatan.substring(0,800):catatan);
+                                        }
+                                    }
                                     tabMode.addRow(new Object[]{
                                         true,"   "+rstampil.getString("Pemeriksaan"),rstindakan.getString("nilai"),rstampil.getString("satuan"),
                                         rstindakan.getString("nilai_rujukan"),rstindakan.getString("keterangan"),rstampil.getString("id_template"),
@@ -2507,6 +2525,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             tbTarif.setValueAt(false,i,0);
         }
         Valid.tabelKosong(tabMode);
+        catatanKritis.clear();
         runBackground(() -> tampiltarif());
     }
     
@@ -3139,6 +3158,7 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                                     tbPemeriksaan.getValueAt(i,8).toString(),tbPemeriksaan.getValueAt(i,9).toString(),tbPemeriksaan.getValueAt(i,10).toString(),tbPemeriksaan.getValueAt(i,11).toString(),
                                     tbPemeriksaan.getValueAt(i,12).toString(),tbPemeriksaan.getValueAt(i,13).toString(),tbPemeriksaan.getValueAt(i,14).toString(),tbPemeriksaan.getValueAt(i,7).toString()
                                 })==true){
+                                simpanCatatanKritis(tbPemeriksaan.getValueAt(i,15).toString(),tbPemeriksaan.getValueAt(i,6).toString());
                                 if(!noorder.equals("")){
                                     if(Sequel.cariIsi("select permintaan_detail_permintaan_lab.stts_bayar from permintaan_detail_permintaan_lab where permintaan_detail_permintaan_lab.noorder='"+noorder+"' and permintaan_detail_permintaan_lab.kd_jenis_prw='"+tbPemeriksaan.getValueAt(i,15).toString()+"' and permintaan_detail_permintaan_lab.id_template='"+tbPemeriksaan.getValueAt(i,6).toString()+"'").equals("Belum")){
                                         ttlbhp=ttlbhp+Double.parseDouble(tbPemeriksaan.getValueAt(i,9).toString());
@@ -3336,6 +3356,30 @@ private void BtnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             System.out.println(e);
         }    
         ChkJln.setSelected(true);
+    }
+
+    /**
+     * Salin catatan "sudah dilaporkan" dari eLIMS ke catatan_kritis_lab, ikut transaksi simpan hasil.
+     * Sengaja tidak menggagalkan simpan hasil bila tabel belum dibuat / insert gagal.
+     */
+    private void simpanCatatanKritis(String kdJenisPrw,String idTemplate){
+        String catatan=catatanKritis.get(idTemplate);
+        if(catatan==null||catatan.isEmpty()){
+            return;
+        }
+        try (PreparedStatement psc=koneksiDB.condb().prepareStatement(
+                "insert into catatan_kritis_lab (no_rawat,kd_jenis_prw,tgl_periksa,jam,id_template,catatan) values (?,?,?,?,?,?) "+
+                "on duplicate key update catatan=values(catatan)")) {
+            psc.setString(1,TNoRw.getText());
+            psc.setString(2,kdJenisPrw);
+            psc.setString(3,Valid.SetTgl(Tanggal.getSelectedItem()+""));
+            psc.setString(4,CmbJam.getSelectedItem()+":"+CmbMenit.getSelectedItem()+":"+CmbDetik.getSelectedItem());
+            psc.setString(5,idTemplate);
+            psc.setString(6,catatan);
+            psc.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("Notif catatan kritis : "+e);
+        }
     }
 
     private void runBackground(Runnable task) {
