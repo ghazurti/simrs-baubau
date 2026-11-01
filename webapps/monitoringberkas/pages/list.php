@@ -4,6 +4,32 @@
     }
 ?>
 
+<?php
+    // alasan berkas "Tidak Ada" (tabel tambahan; dibuat otomatis bila belum ada)
+    if(!function_exists('alasanTidakAda')){
+        // dijalankan lewat koneksi sendiri + try/catch: kalau gagal, halaman Mutasi Berkas tetap tampil
+        function queryAlasan($sql){
+            try{
+                $k=bukakoneksi();
+                $r=@mysqli_query($k,$sql);
+                $hasil=($r instanceof mysqli_result)?mysqli_fetch_row($r):$r;
+                mysqli_close($k);
+                return $hasil;
+            }catch(Throwable $e){
+                return false;
+            }
+        }
+        function siapkanTabelAlasan(){
+            queryAlasan("create table if not exists mutasi_berkas_tidakada (no_rawat varchar(17) not null,alasan varchar(150) not null,waktu datetime not null,primary key (no_rawat)) engine=InnoDB default charset=latin1");
+        }
+        function alasanTidakAda($no_rawat,$status){
+            if($status!="Tidak Ada") return "";
+            $a=queryAlasan("select alasan from mutasi_berkas_tidakada where no_rawat='".$no_rawat."'");
+            return (is_array($a)&&$a[0]!="")?"<br><b>Alasan :</b> ".htmlspecialchars($a[0]):"";
+        }
+        siapkanTabelAlasan();
+    }
+?>
 <div id="post">
     <div class="entry">   
 	<form name="frm_aturadmin" onsubmit="return validasiIsi();" method="post" action="" enctype=multipart/form-data>
@@ -100,7 +126,7 @@
                                                         <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=CetakBerkasRM&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Cetak RM]</a>
                                                         <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kirim&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kirim]</a><br>
                                                         <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                        <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>                                                
+                                                        <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>                                                
                                                     </td>                                
                                                  </tr>";
                                             if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -111,7 +137,7 @@
                                                                     <td bgcolor='#FFFFA9' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                     <td bgcolor='#FFFFA9' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                     <td bgcolor='#FFFFA9' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                    <td bgcolor='#FFFFA9' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                    <td bgcolor='#FFFFA9' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                     <td bgcolor='#FFFFA9' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                 </tr>
                                                             </table>
@@ -142,7 +168,7 @@
                                                         <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=CetakBerkasRM&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Cetak RM]</a>
                                                         <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kirim&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kirim]</a><br>
                                                         <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                        <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                        <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                     </td>  
                                                 </tr>";
                                             if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -153,7 +179,7 @@
                                                                     <td bgcolor='#FFFFA9' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                     <td bgcolor='#FFFFA9' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                     <td bgcolor='#FFFFA9' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                    <td bgcolor='#FFFFA9' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                    <td bgcolor='#FFFFA9' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                     <td bgcolor='#FFFFA9' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                 </tr>
                                                             </table>
@@ -184,7 +210,7 @@
                                                         <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=CetakBerkasRM&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Cetak RM]</a>
                                                         <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kirim&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kirim]</a><br>
                                                         <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                        <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                        <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                     </td>                                
                                                  </tr>";
                                             if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -195,7 +221,7 @@
                                                                     <td bgcolor='#FFFFA9' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                     <td bgcolor='#FFFFA9' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                     <td bgcolor='#FFFFA9' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                    <td bgcolor='#FFFFA9' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                    <td bgcolor='#FFFFA9' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                     <td bgcolor='#FFFFA9' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                 </tr>
                                                             </table>
@@ -233,7 +259,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                         </td>  
                                                     </tr>";  
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -244,7 +270,7 @@
                                                                         <td bgcolor='#74DF00' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#74DF00' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#74DF00' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#74DF00' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#74DF00' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#74DF00' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -275,7 +301,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                         </td>  
                                                     </tr>";  
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -286,7 +312,7 @@
                                                                         <td bgcolor='#74DF00' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#74DF00' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#74DF00' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#74DF00' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#74DF00' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#74DF00' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -317,7 +343,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                         </td>  
                                                     </tr>"; 
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -328,7 +354,7 @@
                                                                         <td bgcolor='#74DF00' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#74DF00' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#74DF00' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#74DF00' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#74DF00' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#74DF00' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -364,7 +390,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                        </td>  
                                                    </tr>";
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -375,7 +401,7 @@
                                                                         <td bgcolor='#8888FF' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#8888FF' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#8888FF' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#8888FF' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#8888FF' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#8888FF' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -406,7 +432,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                        </td>   
                                                    </tr>"; 
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -417,7 +443,7 @@
                                                                         <td bgcolor='#8888FF' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#8888FF' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#8888FF' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#8888FF' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#8888FF' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#8888FF' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -448,7 +474,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                        </td>  
                                                    </tr>";
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -459,7 +485,7 @@
                                                                         <td bgcolor='#8888FF' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#8888FF' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#8888FF' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#8888FF' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#8888FF' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#8888FF' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -496,7 +522,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                        </td>  
                                                    </tr>";
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -507,7 +533,7 @@
                                                                         <td bgcolor='#FFFFFF' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#FFFFFF' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#FFFFFF' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#FFFFFF' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#FFFFFF' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#FFFFFF' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -538,7 +564,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                        </td>  
                                                    </tr>";
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -549,7 +575,7 @@
                                                                         <td bgcolor='#FFFFFF' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#FFFFFF' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#FFFFFF' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#FFFFFF' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#FFFFFF' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#FFFFFF' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -580,7 +606,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                        </td>   
                                                    </tr>";
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -591,7 +617,7 @@
                                                                         <td bgcolor='#FFFFFF' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#FFFFFF' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#FFFFFF' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#FFFFFF' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#FFFFFF' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#FFFFFF' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -627,7 +653,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                        </td>  
                                                    </tr>";
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -638,7 +664,7 @@
                                                                         <td bgcolor='#FF0040' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#FF0040' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#FF0040' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#FF0040' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#FF0040' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#FF0040' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -669,7 +695,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                        </td>  
                                                    </tr>";
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -680,7 +706,7 @@
                                                                         <td bgcolor='#FF0040' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#FF0040' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#FF0040' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#FF0040' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#FF0040' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#FF0040' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -711,7 +737,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                        </td>  
                                                    </tr>";
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -722,7 +748,7 @@
                                                                         <td bgcolor='#FF0040' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#FF0040' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#FF0040' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#FF0040' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#FF0040' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#FF0040' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -758,7 +784,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                        </td>  
                                                    </tr>";
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -769,7 +795,7 @@
                                                                         <td bgcolor='#FF66DD' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#FF66DD' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#FF66DD' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#FF66DD' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#FF66DD' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#FF66DD' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -800,7 +826,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                        </td>  
                                                    </tr>";
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -811,7 +837,7 @@
                                                                         <td bgcolor='#FF66DD' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#FF66DD' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#FF66DD' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#FF66DD' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#FF66DD' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#FF66DD' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -842,7 +868,7 @@
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Kembali&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Kembali]</a>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=Permintaan&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Permintaan]</a><br>
                                                             <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=MasukRanap&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Masuk Ranap]</a>
-                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"].">[Tidak Ada]</a>
+                                                            <a href=?act=List&keyword=".str_replace(" ","_",$keyword)."&dokter=".str_replace(" ","_",$dokter)."&poli=".str_replace(" ","_",$poli)."&statusdata=".str_replace(" ","_",$statusdata)."&tahunawal=$tahunawal&bulanawal=$bulanawal&tanggalawal=$tanggalawal&tahunakhir=$tahunakhir&bulanakhir=$bulanakhir&tanggalakhir=$tanggalakhir&action=TidakAda&no_rawat=".$baris["no_rawat"]."&no_rm=".$baris["no_rkm_medis"]." onclick='return pilihAlasan(this)'>[Tidak Ada]</a>
                                                        </td>  
                                                    </tr>";
                                                 if($baris2 = mysqli_fetch_array(bukaquery("select * from mutasi_berkas where no_rawat='".$baris["no_rawat"]."'"))) {
@@ -853,7 +879,7 @@
                                                                         <td bgcolor='#FF66DD' width='20%'>Ke Poli : ".$baris2["dikirim"]."</td>
                                                                         <td bgcolor='#FF66DD' width='20%'>Diterima Poli : ".$baris2["diterima"]."</td>
                                                                         <td bgcolor='#FF66DD' width='20%'>Kembali RM : ".$baris2["kembali"]."</td>
-                                                                        <td bgcolor='#FF66DD' width='20%'>Tidak Ada : ".$baris2["tidakada"]."</td>
+                                                                        <td bgcolor='#FF66DD' width='20%'>Tidak Ada : ".$baris2["tidakada"].alasanTidakAda($baris2["no_rawat"],$baris2["status"])."</td>
                                                                         <td bgcolor='#FF66DD' width='20%'>Ke Ranap : ".$baris2["ranap"]."</td>
                                                                     </tr>
                                                                 </table>
@@ -918,7 +944,10 @@
                             InsertData2(" mutasi_berkas"," '$no_rawat','Tidak Ada',now(),'0000-00-00 00:00:00','0000-00-00 00:00:00',now(),'0000-00-00 00:00:00' ");
                         }else{
                             Ubah2(" mutasi_berkas "," status='Tidak Ada',tidakada=now() WHERE no_rawat='$no_rawat' ");                  
-                        }                
+                        }
+                        $alasan = validTeks4(trim(isset($_GET['alasan'])?$_GET['alasan']:""),150);
+                        if($alasan==""){ $alasan="Tidak disebutkan"; }
+                        queryAlasan("replace into mutasi_berkas_tidakada values('$no_rawat','".$alasan."',now())");
                     }else if ($action=="MasukRanap") {
                         if(getOne("select count(no_rawat) from mutasi_berkas where no_rawat='".$no_rawat."'")==0){
                             InsertData2(" mutasi_berkas"," '$no_rawat','Masuk Ranap',now(),'0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',now() ");

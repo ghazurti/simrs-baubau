@@ -24,9 +24,10 @@
 	<parameter name="kontakrs" class="java.lang.String"/>
 	<parameter name="emailrs" class="java.lang.String"/>
 	<parameter name="logo" class="java.io.InputStream"/>
+	<parameter name="filter" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select mutasi_berkas.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,mutasi_berkas.status,reg_periksa.tgl_registrasi,reg_periksa.jam_reg, 
-   mutasi_berkas.dikirim,mutasi_berkas.diterima,mutasi_berkas.kembali,mutasi_berkas.tidakada,mutasi_berkas.ranap,reg_periksa.status_lanjut 
+   mutasi_berkas.dikirim,mutasi_berkas.diterima,mutasi_berkas.kembali,mutasi_berkas.tidakada,mutasi_berkas.ranap,reg_periksa.status_lanjut,ifnull((select mutasi_berkas_tidakada.alasan from mutasi_berkas_tidakada where mutasi_berkas_tidakada.no_rawat=mutasi_berkas.no_rawat),'') as alasan 
    from mutasi_berkas inner join reg_periksa inner join pasien on mutasi_berkas.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis]]>
 	</queryString>
 	<field name="no_rawat" class="java.lang.String">
@@ -78,6 +79,7 @@
 		<property name="com.jaspersoft.studio.field.label" value="ranap"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="mutasi_berkas"/>
 	</field>
+	<field name="alasan" class="java.lang.String"/>
 	<field name="status_lanjut" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.label" value="status_lanjut"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="reg_periksa"/>
@@ -88,13 +90,20 @@
 	<title>
 		<band height="84" splitType="Stretch">
 			<staticText>
-				<reportElement x="189" y="52" width="486" height="23" uuid="da339cb4-a699-4b6b-a563-43c2a763e5e3"/>
+				<reportElement x="189" y="52" width="486" height="18" uuid="da339cb4-a699-4b6b-a563-43c2a763e5e3"/>
 				<textElement textAlignment="Center">
 					<font fontName="Tahoma" size="11" isBold="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<text><![CDATA[Data Rekap Mutasi Berkas]]></text>
 			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="50" y="70" width="702" height="12" uuid="3b7e2a91-5c4d-4f8e-9a1b-2c6d8e0f4a33"/>
+				<textElement textAlignment="Center">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{filter}]]></textFieldExpression>
+			</textField>
 			<textField>
 				<reportElement x="50" y="25" width="702" height="14" uuid="e54df92d-14ec-4104-87cd-e813f199bf58">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -157,12 +166,12 @@
 	<columnHeader>
 		<band height="18" splitType="Stretch">
 			<staticText>
-				<reportElement mode="Opaque" x="370" y="0" width="80" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="8c59f5d9-f0f5-43b6-8b67-0aca3174c849"/>
+				<reportElement mode="Opaque" x="356" y="0" width="66" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="8c59f5d9-f0f5-43b6-8b67-0aca3174c849"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Tahoma" size="8" isBold="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Jam Dikirim ke Poli]]></text>
+				<text><![CDATA[Dikirim ke Poli]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="0" y="0" width="80" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="77703e06-5ab3-4b48-83da-184152e32366"/>
@@ -197,7 +206,7 @@
 				<text><![CDATA[Status RM Terakhir]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="290" y="0" width="80" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="8c6b4768-06d1-4432-8e11-4e97a41ea24a">
+				<reportElement mode="Opaque" x="290" y="0" width="66" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="8c6b4768-06d1-4432-8e11-4e97a41ea24a">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -207,15 +216,23 @@
 				<text><![CDATA[Jam Registrasi]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="610" y="0" width="80" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="e386571f-67f6-45b4-a4e2-c585d943d65c"/>
+				<reportElement mode="Opaque" x="554" y="0" width="66" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="e386571f-67f6-45b4-a4e2-c585d943d65c"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Tahoma" size="8" isBold="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Jam RM Hilang]]></text>
+				<text><![CDATA[RM Tidak Ada]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="690" y="0" width="80" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="da7feb4c-36f4-4a63-8f1d-583970bb2207">
+				<reportElement mode="Opaque" x="620" y="0" width="84" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="5d1c8a1e-7b3f-4c2a-9e61-0a4b7c9d2e11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8" isBold="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Alasan Tidak Ada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="704" y="0" width="66" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="da7feb4c-36f4-4a63-8f1d-583970bb2207">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
@@ -235,20 +252,20 @@
 				<text><![CDATA[Status]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="530" y="0" width="80" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="38d81bd6-7955-4e12-a250-723a742c6b1f"/>
+				<reportElement mode="Opaque" x="488" y="0" width="66" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="38d81bd6-7955-4e12-a250-723a742c6b1f"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Tahoma" size="8" isBold="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Jam Kembali RM]]></text>
+				<text><![CDATA[Kembali RM]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Opaque" x="450" y="0" width="80" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="aa8a39bf-1e5b-4016-8de5-17c281776062"/>
+				<reportElement mode="Opaque" x="422" y="0" width="66" height="16" forecolor="#000000" backcolor="#F0F0DC" uuid="aa8a39bf-1e5b-4016-8de5-17c281776062"/>
 				<textElement verticalAlignment="Middle">
 					<font fontName="Tahoma" size="8" isBold="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Jam Diterima Poli]]></text>
+				<text><![CDATA[Diterima Poli]]></text>
 			</staticText>
 			<line>
 				<reportElement x="0" y="0" width="802" height="1" uuid="c231771d-0571-4f0d-8226-9dc0fa1e8bec"/>
@@ -299,7 +316,7 @@
 				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="290" y="0" width="80" height="10" uuid="fd881b5d-1295-4f5d-9ed2-f01a17f5b6a9">
+				<reportElement x="290" y="0" width="66" height="10" uuid="fd881b5d-1295-4f5d-9ed2-f01a17f5b6a9">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement>
@@ -308,16 +325,24 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tgl_registrasi}+" "+$F{jam_reg}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="yyyy-dd-MM HH:mm:ss" isBlankWhenNull="true">
-				<reportElement x="610" y="0" width="80" height="10" uuid="a5daee38-2483-4953-aadd-8a37f62006e9"/>
+			<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd HH:mm:ss" isBlankWhenNull="true">
+				<reportElement x="554" y="0" width="66" height="10" uuid="a5daee38-2483-4953-aadd-8a37f62006e9"/>
 				<textElement>
 					<font fontName="Tahoma" size="8"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tidakada}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="yyyy-dd-MM HH:mm:ss" isBlankWhenNull="true">
-				<reportElement x="690" y="0" width="80" height="10" uuid="4f39aeb4-8e39-4413-8416-38c6d5b6b85d">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="620" y="0" width="84" height="10" uuid="8e2f4b7a-1c9d-4e3b-a5f2-6d0c1b8a9f22"/>
+				<textElement>
+					<font fontName="Tahoma" size="8"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{alasan}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd HH:mm:ss" isBlankWhenNull="true">
+				<reportElement x="704" y="0" width="66" height="10" uuid="4f39aeb4-8e39-4413-8416-38c6d5b6b85d">
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
 				<textElement>
@@ -336,24 +361,24 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{status_lanjut}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="yyyy-dd-MM HH:mm:ss" isBlankWhenNull="true">
-				<reportElement x="530" y="0" width="80" height="10" uuid="fb5b5928-9777-4813-aa72-574f5922ac95"/>
+			<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd HH:mm:ss" isBlankWhenNull="true">
+				<reportElement x="488" y="0" width="66" height="10" uuid="fb5b5928-9777-4813-aa72-574f5922ac95"/>
 				<textElement>
 					<font fontName="Tahoma" size="8"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{kembali}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="yyyy-dd-MM HH:mm:ss" isBlankWhenNull="true">
-				<reportElement x="450" y="0" width="80" height="10" uuid="f8b2fd5a-d99a-4361-b407-a1fa6f848e43"/>
+			<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd HH:mm:ss" isBlankWhenNull="true">
+				<reportElement x="422" y="0" width="66" height="10" uuid="f8b2fd5a-d99a-4361-b407-a1fa6f848e43"/>
 				<textElement>
 					<font fontName="Tahoma" size="8"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{diterima}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="yyyy-dd-MM HH:mm:ss" isBlankWhenNull="true">
-				<reportElement x="370" y="0" width="80" height="10" uuid="51ec8ddf-012c-4576-9d0a-826917d0999b"/>
+			<textField isStretchWithOverflow="true" pattern="yyyy-MM-dd HH:mm:ss" isBlankWhenNull="true">
+				<reportElement x="356" y="0" width="66" height="10" uuid="51ec8ddf-012c-4576-9d0a-826917d0999b"/>
 				<textElement>
 					<font fontName="Tahoma" size="8"/>
 					<paragraph lineSpacing="Single"/>

@@ -59,7 +59,7 @@ public final class DlgRekapMutasiBerkas extends javax.swing.JDialog {
         setSize(885,674);
 
         tabMode=new DefaultTableModel(null,new Object[]{
-            "No.Rawat","No.RM","Nama Pasien","Status RM Terakhir","Jam Registrasi","Jam Dikirim ke Poli","Jam Diterima Poli","Jam Kembali RM","Jam RM Hilang","RM Ke Ranap","Status Pasien"
+            "No.Rawat","No.RM","Nama Pasien","Status RM Terakhir","Jam Registrasi","Jam Dikirim ke Poli","Jam Diterima Poli","Jam Kembali RM","Jam RM Hilang","Alasan RM Tidak Ada","RM Ke Ranap","Status Pasien"
             }){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){return false;}
         };
@@ -68,7 +68,7 @@ public final class DlgRekapMutasiBerkas extends javax.swing.JDialog {
         tbBangsal.setPreferredScrollableViewportSize(new Dimension(500,500));
         tbBangsal.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 11; i++) {
+        for (i = 0; i < 12; i++) {
             TableColumn column = tbBangsal.getColumnModel().getColumn(i);
             if(i==0){
                 column.setPreferredWidth(105);
@@ -89,14 +89,122 @@ public final class DlgRekapMutasiBerkas extends javax.swing.JDialog {
             }else if(i==8){
                 column.setPreferredWidth(120);
             }else if(i==9){
-                column.setPreferredWidth(120);
+                column.setPreferredWidth(220);
             }else if(i==10){
+                column.setPreferredWidth(120);
+            }else if(i==11){
                 column.setPreferredWidth(75);
             }
         }
         tbBangsal.setDefaultRenderer(Object.class, new WarnaTable());
 
         TCari.setDocument(new batasInput((byte)100).getKata(TCari));
+        siapkanTabelAlasan();
+        tambahFilter();
+    }
+
+    private widget.ComboBox cmbStatus,cmbAlasan,cmbRawat;
+    private static final String[] ALASAN_BAKU={
+        "Berkas dipinjam unit lain","Berkas masih di ruang rawat inap","Berkas belum kembali dari poli",
+        "Berkas tidak ditemukan di rak","Pasien baru, berkas belum dibuat"
+    };
+
+    /** baris filter di atas tombol: Status Berkas, Alasan (Tidak Ada), Jenis Rawat; berlaku untuk tabel & cetak */
+    private void tambahFilter(){
+        widget.panelisi panelFilter=new widget.panelisi();
+        panelFilter.setPreferredSize(new Dimension(55,40));
+        panelFilter.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT,5,7));
+        cmbStatus=comboFilter(panelFilter,"Status Berkas :",95,new String[]{"Semua","Sudah Dikirim","Sudah Diterima","Sudah Kembali","Tidak Ada","Masuk Ranap"},120);
+        String[] alasan=new String[ALASAN_BAKU.length+3];
+        alasan[0]="Semua";
+        System.arraycopy(ALASAN_BAKU,0,alasan,1,ALASAN_BAKU.length);
+        alasan[ALASAN_BAKU.length+1]="Lainnya";
+        alasan[ALASAN_BAKU.length+2]="Tanpa Alasan";
+        cmbAlasan=comboFilter(panelFilter,"Alasan :",55,alasan,230);
+        cmbRawat=comboFilter(panelFilter,"Jenis Rawat :",80,new String[]{"Semua","Ralan","Ranap"},100);
+        // memilih alasan berarti melihat berkas Tidak Ada; ganti filter langsung memperbarui tabel (cetak = isi tabel)
+        cmbAlasan.addActionListener(e->{
+            if(cmbAlasan.getSelectedIndex()>0&&!"Tidak Ada".equals(cmbStatus.getSelectedItem())) cmbStatus.setSelectedItem("Tidak Ada");
+            else tampil();
+        });
+        cmbStatus.addActionListener(e->tampil());
+        cmbRawat.addActionListener(e->tampil());
+        java.awt.Container induk=panelGlass5.getParent();
+        induk.remove(panelGlass5);
+        javax.swing.JPanel bawah=new javax.swing.JPanel(new java.awt.BorderLayout());
+        bawah.setOpaque(false);
+        bawah.add(panelFilter,java.awt.BorderLayout.NORTH);
+        bawah.add(panelGlass5,java.awt.BorderLayout.CENTER);
+        induk.add(bawah,java.awt.BorderLayout.PAGE_END);
+    }
+
+    private widget.ComboBox comboFilter(java.awt.Container panel,String judul,int lebarJudul,String[] isi,int lebar){
+        widget.Label l=new widget.Label();
+        l.setText(judul);
+        l.setPreferredSize(new Dimension(lebarJudul,23));
+        panel.add(l);
+        widget.ComboBox c=new widget.ComboBox();
+        c.setModel(new javax.swing.DefaultComboBoxModel<>(isi));
+        c.setPreferredSize(new Dimension(lebar,23));
+        panel.add(c);
+        return c;
+    }
+
+    private String teks(String s){ return s.replace("\\","").replace("'","''"); }
+
+    /** query rekap (tabel & cetak sama persis) */
+    private String sqlRekap(){
+        String cari="%"+teks(TCari.getText().trim())+"%";
+        StringBuilder w=new StringBuilder();
+        w.append("reg_periksa.tgl_registrasi between '").append(Valid.SetTgl(Tgl1.getSelectedItem()+"")).append("' and '").append(Valid.SetTgl(Tgl2.getSelectedItem()+"")).append("' ");
+        w.append("and (mutasi_berkas.no_rawat like '").append(cari).append("' or reg_periksa.no_rkm_medis like '").append(cari)
+         .append("' or pasien.nm_pasien like '").append(cari).append("' or mutasi_berkas.status like '").append(cari)
+         .append("' or reg_periksa.status_lanjut like '").append(cari).append("') ");
+        if(cmbStatus!=null&&cmbStatus.getSelectedIndex()>0){
+            w.append("and mutasi_berkas.status='").append(teks(cmbStatus.getSelectedItem().toString())).append("' ");
+        }
+        if(cmbRawat!=null&&cmbRawat.getSelectedIndex()>0){
+            w.append("and reg_periksa.status_lanjut='").append(teks(cmbRawat.getSelectedItem().toString())).append("' ");
+        }
+        if(cmbAlasan!=null&&cmbAlasan.getSelectedIndex()>0){
+            String a=cmbAlasan.getSelectedItem().toString();
+            String kolom="ifnull((select mutasi_berkas_tidakada.alasan from mutasi_berkas_tidakada where mutasi_berkas_tidakada.no_rawat=mutasi_berkas.no_rawat),'')";
+            if(a.equals("Tanpa Alasan")){
+                w.append("and ").append(kolom).append("='' ");
+            }else if(a.equals("Lainnya")){
+                w.append("and ").append(kolom).append("<>'' ");
+                for(String b:ALASAN_BAKU) w.append("and ").append(kolom).append(" not like '").append(teks(b)).append("%' ");
+            }else{
+                w.append("and ").append(kolom).append(" like '").append(teks(a)).append("%' ");
+            }
+        }
+        return "select mutasi_berkas.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,mutasi_berkas.status,reg_periksa.tgl_registrasi,reg_periksa.jam_reg, "+
+            "mutasi_berkas.dikirim,mutasi_berkas.diterima,mutasi_berkas.kembali,mutasi_berkas.tidakada,mutasi_berkas.ranap,reg_periksa.status_lanjut, "+ALASAN+
+            "from mutasi_berkas inner join reg_periksa inner join pasien on mutasi_berkas.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
+            "where "+w+"order by reg_periksa.tgl_registrasi desc ";
+    }
+
+    /** keterangan filter yang dicetak di bawah judul laporan */
+    private String keteranganFilter(){
+        String k="Periode "+Tgl1.getSelectedItem()+" s.d. "+Tgl2.getSelectedItem();
+        if(cmbStatus.getSelectedIndex()>0) k+="  |  Status : "+cmbStatus.getSelectedItem();
+        if(cmbAlasan.getSelectedIndex()>0) k+="  |  Alasan : "+cmbAlasan.getSelectedItem();
+        if(cmbRawat.getSelectedIndex()>0) k+="  |  "+cmbRawat.getSelectedItem();
+        if(!TCari.getText().trim().isEmpty()) k+="  |  Kata kunci : "+TCari.getText().trim();
+        return k;
+    }
+
+    /** alasan berkas "Tidak Ada" diisi di halaman Mutasi Berkas (webapps/monitoringberkas) */
+    private static final String ALASAN="ifnull((select mutasi_berkas_tidakada.alasan from mutasi_berkas_tidakada "+
+            "where mutasi_berkas_tidakada.no_rawat=mutasi_berkas.no_rawat),'') as alasan ";
+
+    private void siapkanTabelAlasan(){
+        try (java.sql.Statement st=koneksiDB.condb().createStatement()) {
+            st.executeUpdate("create table if not exists mutasi_berkas_tidakada (no_rawat varchar(17) not null,alasan varchar(150) not null,"+
+                    "waktu datetime not null,primary key (no_rawat)) engine=InnoDB default charset=latin1");
+        } catch (Exception e) {
+            System.out.println("Notif tabel alasan mutasi berkas : "+e);
+        }
     }    
 
     /** This method is called from within the constructor to
@@ -290,14 +398,8 @@ public final class DlgRekapMutasiBerkas extends javax.swing.JDialog {
              param.put("kontakrs",akses.getkontakrs());
              param.put("emailrs",akses.getemailrs());   
              param.put("logo",Sequel.cariGambar("select setting.logo from setting")); 
-             Valid.MyReportqry("rptRekapMutasiBerkas.jasper","report","::[ Laporan Rekap Mutasi Berkas ]::","select mutasi_berkas.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,mutasi_berkas.status,reg_periksa.tgl_registrasi,reg_periksa.jam_reg, "+
-                "mutasi_berkas.dikirim,mutasi_berkas.diterima,mutasi_berkas.kembali,mutasi_berkas.tidakada,mutasi_berkas.ranap,reg_periksa.status_lanjut "+
-                "from mutasi_berkas inner join reg_periksa inner join pasien on mutasi_berkas.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis where "+
-                "reg_periksa.tgl_registrasi between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and mutasi_berkas.no_rawat like '%"+TCari.getText().trim()+"%' or "+
-                "reg_periksa.tgl_registrasi between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and reg_periksa.no_rkm_medis like '%"+TCari.getText().trim()+"%' or "+
-                "reg_periksa.tgl_registrasi between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and pasien.nm_pasien like '%"+TCari.getText().trim()+"%' or "+
-                "reg_periksa.tgl_registrasi between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and mutasi_berkas.status like '%"+TCari.getText().trim()+"%' or "+
-                "reg_periksa.tgl_registrasi between '"+Valid.SetTgl(Tgl1.getSelectedItem()+"")+"' and '"+Valid.SetTgl(Tgl2.getSelectedItem()+"")+"' and reg_periksa.status_lanjut like '%"+TCari.getText().trim()+"%' order by reg_periksa.tgl_registrasi desc ",param);
+             param.put("filter",keteranganFilter());
+             Valid.MyReportqry("rptRekapMutasiBerkas.jasper","report","::[ Laporan Rekap Mutasi Berkas ]::",sqlRekap(),param);
         }
         this.setCursor(Cursor.getDefaultCursor());
 }//GEN-LAST:event_BtnPrintActionPerformed
@@ -427,39 +529,15 @@ private void BtnCariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR)); 
             Valid.tabelKosong(tabMode);   
             koneksi=koneksiDB.condb();
-            ps=koneksi.prepareStatement(
-                "select mutasi_berkas.no_rawat,reg_periksa.no_rkm_medis,pasien.nm_pasien,mutasi_berkas.status,reg_periksa.tgl_registrasi,reg_periksa.jam_reg, "+
-                "mutasi_berkas.dikirim,mutasi_berkas.diterima,mutasi_berkas.kembali,mutasi_berkas.tidakada,mutasi_berkas.ranap,reg_periksa.status_lanjut "+
-                "from mutasi_berkas inner join reg_periksa inner join pasien on mutasi_berkas.no_rawat=reg_periksa.no_rawat and reg_periksa.no_rkm_medis=pasien.no_rkm_medis where "+
-                "reg_periksa.tgl_registrasi between ? and ? and mutasi_berkas.no_rawat like ? or "+
-                "reg_periksa.tgl_registrasi between ? and ? and reg_periksa.no_rkm_medis like ? or "+
-                "reg_periksa.tgl_registrasi between ? and ? and pasien.nm_pasien like ? or "+
-                "reg_periksa.tgl_registrasi between ? and ? and mutasi_berkas.status like ? or "+
-                "reg_periksa.tgl_registrasi between ? and ? and reg_periksa.status_lanjut like ? order by reg_periksa.tgl_registrasi desc ");
+            ps=koneksi.prepareStatement(sqlRekap());
             try {
-                ps.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+""));
-                ps.setString(2,Valid.SetTgl(Tgl2.getSelectedItem()+""));
-                ps.setString(3,"%"+TCari.getText().trim()+"%");
-                ps.setString(4,Valid.SetTgl(Tgl1.getSelectedItem()+""));
-                ps.setString(5,Valid.SetTgl(Tgl2.getSelectedItem()+""));
-                ps.setString(6,"%"+TCari.getText().trim()+"%");
-                ps.setString(7,Valid.SetTgl(Tgl1.getSelectedItem()+""));
-                ps.setString(8,Valid.SetTgl(Tgl2.getSelectedItem()+""));
-                ps.setString(9,"%"+TCari.getText().trim()+"%");
-                ps.setString(10,Valid.SetTgl(Tgl1.getSelectedItem()+""));
-                ps.setString(11,Valid.SetTgl(Tgl2.getSelectedItem()+""));
-                ps.setString(12,"%"+TCari.getText().trim()+"%");
-                ps.setString(13,Valid.SetTgl(Tgl1.getSelectedItem()+""));
-                ps.setString(14,Valid.SetTgl(Tgl2.getSelectedItem()+""));
-                ps.setString(15,"%"+TCari.getText().trim()+"%");
-                rs=ps.executeQuery();
                 rs=ps.executeQuery();
                 while(rs.next()){
                     tabMode.addRow(new Object[]{
                         rs.getString("no_rawat"),rs.getString("no_rkm_medis"),rs.getString("nm_pasien"),rs.getString("status"),
                         rs.getString("tgl_registrasi")+" "+rs.getString("jam_reg"),
                         rs.getString("dikirim"),rs.getString("diterima"),rs.getString("kembali"),rs.getString("tidakada"),
-                        rs.getString("ranap"),rs.getString("status_lanjut")
+                        rs.getString("alasan"),rs.getString("ranap"),rs.getString("status_lanjut")
                     });
                 }        
                 LCount.setText(""+tabMode.getRowCount());
