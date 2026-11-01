@@ -64,7 +64,7 @@ public class DlgPermintaan extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
-        Object[] judul={"Jml","Kode Barang","Nama Barang","Satuan","Jenis Obat","Kategori","Golongan","Keterangan","Stok Asal","Stok Tujuan","Penjualan","Ke Pasien","Obat Pulang","Total"};
+        Object[] judul={"Jml","Kode Barang","Nama Barang","Satuan","Jenis Obat","Kategori","Golongan","Keterangan","Stok Asal","Stok Tujuan","Penjualan","Ke Pasien","Obat Pulang","Stok Keluar","Total"};
         tabMode=new DefaultTableModel(null,judul){
               @Override public boolean isCellEditable(int rowIndex, int colIndex){
                 boolean a = false;
@@ -79,7 +79,7 @@ public class DlgPermintaan extends javax.swing.JDialog {
         tbDokter.setPreferredScrollableViewportSize(new Dimension(800,800));
         tbDokter.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 14; i++) {
+        for (i = 0; i < 15; i++) {
             TableColumn column = tbDokter.getColumnModel().getColumn(i);
             if(i==0){
                 column.setPreferredWidth(42);
@@ -108,6 +108,8 @@ public class DlgPermintaan extends javax.swing.JDialog {
             }else if(i==12){
                 column.setPreferredWidth(75);
             }else if(i==13){
+                column.setPreferredWidth(75);
+            }else if(i==14){
                 column.setPreferredWidth(75);
             }
         }
@@ -407,7 +409,7 @@ public class DlgPermintaan extends javax.swing.JDialog {
 
         cmbTotal = new widget.ComboBox();
         cmbTotal.setPreferredSize(new java.awt.Dimension(150, 23));
-        cmbTotal.setToolTipText("Filter Total (Penjualan + Ke Pasien + Obat Pulang - Stok Asal), aktif bila Penjualan & Ke Pasien dicentang");
+        cmbTotal.setToolTipText("Filter Total (Penjualan + Ke Pasien + Obat Pulang + Stok Keluar - Stok Asal), aktif bila Penjualan & Ke Pasien dicentang");
         cmbTotal.addItem("Semua");
         cmbTotal.addItem("> 0 (Perlu Minta)");
         cmbTotal.addItem("<= 0 (Stok Cukup)");
@@ -1135,17 +1137,33 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
         return formatQty(hasil);
     }
 
-    /** Total = Penjualan + Ke Pasien + Obat Pulang - Stok Asal. Kosong kalau checkbox Penjualan & Ke Pasien off. */
-    private String getTotal(String stokAsal, String penjualan, String kePasien, String obatPulang){
+    /** Total obat X keluar lewat Stok Keluar Medis (pengeluaran_obat_bhp) di bangsal asal (kdgudangasal) dalam periode DTP. Kosong kalau checkbox off atau bangsal asal kosong. */
+    private String getStokKeluar(String kodeBrng, String kdBangsal){
         if(chkPenjualan==null || !chkPenjualan.isSelected()) return "";
-        if(penjualan.equals("")&&kePasien.equals("")&&obatPulang.equals("")) return "";
-        double total=angka(penjualan)+angka(kePasien)+angka(obatPulang)-angka(stokAsal);
+        if(kodeBrng==null||kodeBrng.trim().isEmpty()) return "";
+        if(kdBangsal==null||kdBangsal.trim().isEmpty()) return "";
+        String tglAwal  = Valid.SetTgl(DTPPeriode1.getSelectedItem()+"");
+        String tglAkhir = Valid.SetTgl(DTPPeriode2.getSelectedItem()+"");
+        String hasil = Sequel.cariIsi(
+            "select ifnull(round(sum(detail_pengeluaran_obat_bhp.jumlah),2),0) from detail_pengeluaran_obat_bhp "+
+            "inner join pengeluaran_obat_bhp on detail_pengeluaran_obat_bhp.no_keluar=pengeluaran_obat_bhp.no_keluar "+
+            "where detail_pengeluaran_obat_bhp.kode_brng='"+kodeBrng.replace("'","")+"' "+
+            "and pengeluaran_obat_bhp.kd_bangsal='"+kdBangsal.replace("'","")+"' "+
+            "and pengeluaran_obat_bhp.tanggal between '"+tglAwal+"' and '"+tglAkhir+"'");
+        return formatQty(hasil);
+    }
+
+    /** Total = Penjualan + Ke Pasien + Obat Pulang + Stok Keluar - Stok Asal. Kosong kalau checkbox Penjualan & Ke Pasien off. */
+    private String getTotal(String stokAsal, String penjualan, String kePasien, String obatPulang, String stokKeluar){
+        if(chkPenjualan==null || !chkPenjualan.isSelected()) return "";
+        if(penjualan.equals("")&&kePasien.equals("")&&obatPulang.equals("")&&stokKeluar.equals("")) return "";
+        double total=angka(penjualan)+angka(kePasien)+angka(obatPulang)+angka(stokKeluar)-angka(stokAsal);
         return formatQty(String.valueOf(total));
     }
 
     private void isiTotal(int baris){
         tabMode.setValueAt(getTotal(tabMode.getValueAt(baris,8).toString(),tabMode.getValueAt(baris,10).toString(),
-            tabMode.getValueAt(baris,11).toString(),tabMode.getValueAt(baris,12).toString()),baris,13);
+            tabMode.getValueAt(baris,11).toString(),tabMode.getValueAt(baris,12).toString(),tabMode.getValueAt(baris,13).toString()),baris,14);
     }
 
     /** filter Jenis Obat di bawah layar */
@@ -1204,10 +1222,11 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
             Valid.tabelKosong(tabMode);
             for(i=0;i<jml;i++){
                 String stokAsal=getStok(kodebarang[i],kdAsal),penj=getPenjualan(kodebarang[i],kdAsal),
-                       pasien=getKePasien(kodebarang[i],kdAsal),pulang=getObatPulang(kodebarang[i],kdAsal);
+                       pasien=getKePasien(kodebarang[i],kdAsal),pulang=getObatPulang(kodebarang[i],kdAsal),
+                       keluar=getStokKeluar(kodebarang[i],kdAsal);
                 tabMode.addRow(new Object[]{jumlah[i],kodebarang[i],namabarang[i],satuan[i],jenis[i],kategori[i],golongan[i],keterangan[i],
                     stokAsal, getStok(kodebarang[i],kdTujuan),
-                    penj, pasien, pulang, getTotal(stokAsal,penj,pasien,pulang)});
+                    penj, pasien, pulang, keluar, getTotal(stokAsal,penj,pasien,pulang,keluar)});
             }
 
             kodebarang=null;
@@ -1230,10 +1249,10 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                         tabMode.addRow(new Object[]{
                             "",kd,list.path("NamaBarang").asText(),list.path("Satuan").asText(),list.path("JenisObat").asText(),list.path("Kategori").asText(),list.path("Golongan").asText(),"",
                             getStok(kd,kdAsal), getStok(kd,kdTujuan),
-                            getPenjualan(kd,kdAsal), getKePasien(kd,kdAsal), getObatPulang(kd,kdAsal), ""
+                            getPenjualan(kd,kdAsal), getKePasien(kd,kdAsal), getObatPulang(kd,kdAsal), getStokKeluar(kd,kdAsal), ""
                         });
                         isiTotal(tabMode.getRowCount()-1);
-                        if(!lolosTotal(tabMode.getValueAt(tabMode.getRowCount()-1,13).toString())) tabMode.removeRow(tabMode.getRowCount()-1);
+                        if(!lolosTotal(tabMode.getValueAt(tabMode.getRowCount()-1,14).toString())) tabMode.removeRow(tabMode.getRowCount()-1);
                     }
                 }else{
                     for(JsonNode list:response){
@@ -1243,10 +1262,10 @@ private void tbDokterKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_
                             tabMode.addRow(new Object[]{
                                 "",kd,list.path("NamaBarang").asText(),list.path("Satuan").asText(),list.path("JenisObat").asText(),list.path("Kategori").asText(),list.path("Golongan").asText(),"",
                                 getStok(kd,kdAsal), getStok(kd,kdTujuan),
-                                getPenjualan(kd,kdAsal), getKePasien(kd,kdAsal), getObatPulang(kd,kdAsal), ""
+                                getPenjualan(kd,kdAsal), getKePasien(kd,kdAsal), getObatPulang(kd,kdAsal), getStokKeluar(kd,kdAsal), ""
                             });
                             isiTotal(tabMode.getRowCount()-1);
-                            if(!lolosTotal(tabMode.getValueAt(tabMode.getRowCount()-1,13).toString())) tabMode.removeRow(tabMode.getRowCount()-1);
+                            if(!lolosTotal(tabMode.getValueAt(tabMode.getRowCount()-1,14).toString())) tabMode.removeRow(tabMode.getRowCount()-1);
                         }
                     }
                 }
