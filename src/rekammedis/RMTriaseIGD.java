@@ -4050,7 +4050,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                   Valid.MyReportqry("rptLembarTriaseSkala1.jasper","report","::[ Triase Skala 1 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
                                   break;
                             case "PDF Triase Skala 1":
-                                  Valid.MyReportqrypdf("rptLembarTriaseSkala1.jasper","report","::[ Triase Skala 1 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
+                                  Valid.MyReportqrypdf("rptLembarTriaseSkala1PDF.jasper","report","::[ Triase Skala 1 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
                                   break;
                         } 
                     } catch (Exception e) {
@@ -4174,7 +4174,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                   Valid.MyReportqry("rptLembarTriaseSkala2.jasper","report","::[ Triase Skala 2 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
                                   break;
                             case "PDF Triase Skala 2":
-                                  Valid.MyReportqrypdf("rptLembarTriaseSkala2.jasper","report","::[ Triase Skala 2 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
+                                  Valid.MyReportqrypdf("rptLembarTriaseSkala2PDF.jasper","report","::[ Triase Skala 2 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
                                   break;
                         }
                     } catch (Exception e) {
@@ -4297,7 +4297,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                   Valid.MyReportqry("rptLembarTriaseSkala3.jasper","report","::[ Triase Skala 3 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
                                   break;
                             case "PDF Triase Skala 3":
-                                  Valid.MyReportqrypdf("rptLembarTriaseSkala3.jasper","report","::[ Triase Skala 3 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
+                                  Valid.MyReportqrypdf("rptLembarTriaseSkala3PDF.jasper","report","::[ Triase Skala 3 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
                                   break;
                         }
                     } catch (Exception e) {
@@ -4420,7 +4420,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                   Valid.MyReportqry("rptLembarTriaseSkala4.jasper","report","::[ Triase Skala 4 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
                                   break;
                             case "PDF Triase Skala 4":
-                                  Valid.MyReportqrypdf("rptLembarTriaseSkala4.jasper","report","::[ Triase Skala 4 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
+                                  Valid.MyReportqrypdf("rptLembarTriaseSkala4PDF.jasper","report","::[ Triase Skala 4 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
                                   break;
                         }
                     } catch (Exception e) {
@@ -4543,7 +4543,7 @@ public final class RMTriaseIGD extends javax.swing.JDialog {
                                   Valid.MyReportqry("rptLembarTriaseSkala5.jasper","report","::[ Triase Skala 5 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
                                   break;
                             case "PDF Triase Skala 5":
-                                  Valid.MyReportqry("rptLembarTriaseSkala5.jasper","report","::[ Triase Skala 5 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
+                                  Valid.MyReportqrypdf("rptLembarTriaseSkala5PDF.jasper","report","::[ Triase Skala 5 ]::","select * from temporary where temporary.temp37='"+akses.getalamatip()+"' order by temporary.no",param);
                                   break;
                         }
                     } catch (Exception e) {
