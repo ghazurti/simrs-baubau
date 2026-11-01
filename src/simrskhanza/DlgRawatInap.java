@@ -267,6 +267,11 @@ public final class DlgRawatInap extends javax.swing.JDialog {
                 final String os=System.getProperty("os.name","").toLowerCase();
                 javax.swing.SwingUtilities.invokeLater(new Runnable(){ public void run(){
                     try{
+                        if(fungsi.DikteSuara.dipakai()){
+                            // Windows: Win+H tidak mendukung Bahasa Indonesia -> dikte lewat Chrome (id-ID)
+                            try{ fungsi.DikteSuara.mulai(target); return; }
+                            catch(Exception ex){ System.out.println("Dikte Chrome gagal, pakai Win+H : "+ex); }
+                        }
                         if(os.contains("win")){
                             java.awt.Robot r=new java.awt.Robot();
                             r.keyPress(java.awt.event.KeyEvent.VK_WINDOWS);
