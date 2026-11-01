@@ -1,0 +1,5 @@
+-cp
+dist/SIMRSKhanza.jar
+-d
+/tmp/khanza-build
+src/laporan/LaporanTahunanIRNA.java
