@@ -41,3 +41,8 @@ KhanzaUpdater/settingupdate/config.xml
 /APMSEPDuaPrinter/nbproject/private/
 APMSEPDuaPrinter/
 sik_dipakai.sql
+
+# dump database produksi (data pasien) & setelan lokal - jangan di-push
+sik_bridging_lab_*.sql
+sik_bridging_lab_*.sql.gz
+.claude/
