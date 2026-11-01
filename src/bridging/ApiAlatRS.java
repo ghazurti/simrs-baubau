@@ -696,9 +696,9 @@ public class ApiAlatRS {
             w = resp;
         }
         hb.ok = true;
-        hb.kesimpulan = firstNonEmpty(w, "hasil_kesimpulan", "kesimpulan", "conclusion");
-        hb.temuan     = firstNonEmpty(w, "hasil_temuan", "temuan", "findings", "hasil");
-        hb.saran      = firstNonEmpty(w, "hasil_saran", "saran", "recommendation");
+        hb.kesimpulan = teksLatin1(firstNonEmpty(w, "hasil_kesimpulan", "kesimpulan", "conclusion"));
+        hb.temuan     = teksLatin1(firstNonEmpty(w, "hasil_temuan", "temuan", "findings", "hasil"));
+        hb.saran      = teksLatin1(firstNonEmpty(w, "hasil_saran", "saran", "recommendation"));
         hb.status     = firstNonEmpty(w, "hasil_status", "status_hasil", "result_status");
         hb.issuedAt   = firstNonEmpty(w, "hasil_issued_at", "issued_at", "tgl_hasil");
         hb.radiologId = firstNonEmpty(w, "radiolog_id", "radiologist_id", "radiolog");
@@ -865,6 +865,45 @@ public class ApiAlatRS {
     }
 
     /** Ambil nilai text pertama yang tidak kosong dari beberapa nama field. */
+    /**
+     * Teks hasil bacaan RIS disesuaikan dengan kolom latin1 Khanza (hasil_radiologi.hasil).
+     * Radiolog sering menyalin dari Word/WhatsApp sehingga terbawa karakter tak terlihat
+     * (mis. U+2060 word joiner) -> MySQL menolak: "Incorrect string value", hasil tidak tersimpan.
+     * Karakter tak terlihat dibuang, tanda baca "cantik" diganti versi biasa, sisanya di luar latin1
+     * diganti huruf dasarnya bila ada (é tetap, ā -> a), selain itu dibuang.
+     */
+    static String teksLatin1(String s) {
+        if (s == null || s.isEmpty()) return s;
+        StringBuilder b = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '​': case '‌': case '‍': case '⁠': case '﻿': case '­':
+                case '‎': case '‏': case '‪': case '‫': case '‬': case '‭': case '‮':
+                    continue;                                           // tak terlihat
+                case ' ': case ' ': case ' ': case ' ': case ' ': b.append(' '); continue;
+                case '‘': case '’': case '‚': case '′': b.append('\''); continue;
+                case '“': case '”': case '„': case '″': b.append('"'); continue;
+                case '‐': case '‑': case '‒': case '–': case '—': case '―': case '−': b.append('-'); continue;
+                case '•': case '●': case '▪': case '‣': case '⁃': b.append('-'); continue;
+                case '…': b.append("..."); continue;
+                case '≤': b.append("<="); continue;
+                case '≥': b.append(">="); continue;
+                case '→': b.append("->"); continue;
+                case ' ': case ' ': b.append('\n'); continue;
+                default: break;
+            }
+            if (c <= 'ÿ') {
+                b.append(c);
+            } else {
+                String dasar = java.text.Normalizer.normalize(String.valueOf(c), java.text.Normalizer.Form.NFD)
+                        .replaceAll("\\p{M}", "");
+                if (!dasar.isEmpty() && dasar.charAt(0) <= 'ÿ') b.append(dasar.charAt(0));
+            }
+        }
+        return b.toString();
+    }
+
     private String firstNonEmpty(JsonNode node, String... fields) {
         if (node == null) return "";
         for (String f : fields) {

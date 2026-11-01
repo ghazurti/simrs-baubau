@@ -58,14 +58,17 @@ public final class AlatRSWorklist {
 
     /**
      * Permintaan milik 1 baris pemeriksaan (periksa_radiologi no_rawat+tgl+jam):
-     *  1. permintaan yang hasilnya dicatat di baris ini (tgl_hasil/jam_hasil = baris), ditambah
-     *  2. permintaan No.Rawat yang sama yang tidak punya baris pemeriksaan sendiri;
-     *  3. kalau tidak ada yang cocok sama sekali, semua permintaan No.Rawat itu.
+     *  1. permintaan yang hasilnya dicatat di baris ini (tgl_hasil/jam_hasil = baris) -> HANYA itu;
+     *  2. kalau tidak ada, permintaan No.Rawat yang sama tanpa baris pemeriksaan sendiri
+     *     yang tanggal permintaannya = tanggal pemeriksaan;
+     *  3. kalau tetap tidak ada, permintaan tanpa baris sendiri (tanggal berapa pun), lalu semua.
+     * Dulu poin 2 tidak dibatasi tanggal dan ikut ditambahkan walau sudah ada yang cocok -> pasien
+     * ranap (1 No.Rawat beberapa hari) mendapat hasil pemeriksaan hari lain di baris yang salah.
      */
     public static List<String> orderUntukPeriksa(String noRawat,String tglPeriksa,String jam){
-        LinkedHashSet<String> cocok=new LinkedHashSet<>(),lepas=new LinkedHashSet<>(),semua=new LinkedHashSet<>();
+        LinkedHashSet<String> cocok=new LinkedHashSet<>(),lepasHariSama=new LinkedHashSet<>(),lepas=new LinkedHashSet<>(),semua=new LinkedHashSet<>();
         try (PreparedStatement ps=koneksiDB.condb().prepareStatement(
-                "select p.noorder,p.tgl_hasil,p.jam_hasil,"+
+                "select p.noorder,p.tgl_hasil,p.jam_hasil,p.tgl_permintaan,"+
                 "exists(select 1 from periksa_radiologi pr where pr.no_rawat=p.no_rawat and pr.tgl_periksa=p.tgl_hasil and pr.jam=p.jam_hasil) as punya_baris "+
                 "from permintaan_radiologi p where p.no_rawat=? order by p.tgl_permintaan,p.jam_permintaan")) {
             ps.setString(1,noRawat);
@@ -77,15 +80,16 @@ public final class AlatRSWorklist {
                         cocok.add(no);
                     }else if(!rs.getBoolean("punya_baris")){
                         lepas.add(no);
+                        if(String.valueOf(rs.getString("tgl_permintaan")).equals(tglPeriksa)) lepasHariSama.add(no);
                     }
                 }
             }
         } catch (Exception e) {
             System.out.println("Cari permintaan radiologi gagal: "+e);
         }
-        LinkedHashSet<String> pakai=new LinkedHashSet<>(cocok);
-        pakai.addAll(lepas);
-        return new ArrayList<>(pakai.isEmpty()?semua:pakai);
+        if(!cocok.isEmpty()) return new ArrayList<>(cocok);
+        if(!lepasHariSama.isEmpty()) return new ArrayList<>(lepasHariSama);
+        return new ArrayList<>(lepas.isEmpty()?semua:lepas);
     }
 
     /** semua pemeriksaan terkirim untuk daftar permintaan, urut sesuai daftar */
