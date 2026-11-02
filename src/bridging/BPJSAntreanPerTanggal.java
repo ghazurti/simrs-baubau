@@ -65,7 +65,7 @@ public final class BPJSAntreanPerTanggal extends javax.swing.JDialog {
         setSize(628,674);
 
         tabMode=new DefaultTableModel(null,new Object[]{
-                "Kode Booking","Tanggal","Kode Poli","Kode Dokter","Jam Praktek","NIK","Noka","No. HP","RM","Jenis Kunjungan","No. Ref","Sumber Data","Peserta","No. Antrean","Estimasi Dilayani","Created Time","Status"
+                "Kode Booking","Tanggal","Kode Poli","Kode Dokter","Jam Praktek","NIK","Noka","No. HP","RM","Jenis Kunjungan","No. Ref","Sumber Data","Peserta","No. Antrean","Estimasi Dilayani","Created Time","Status","No. SEP"
             }){
              @Override public boolean isCellEditable(int rowIndex, int colIndex){return false;}
         };
@@ -74,7 +74,7 @@ public final class BPJSAntreanPerTanggal extends javax.swing.JDialog {
         tbJnsPerawatan.setPreferredScrollableViewportSize(new Dimension(500,500));
         tbJnsPerawatan.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        for (i = 0; i < 17; i++) {
+        for (i = 0; i < 18; i++) {
             TableColumn column = tbJnsPerawatan.getColumnModel().getColumn(i);
             if(i==0){
                 column.setPreferredWidth(110);
@@ -108,8 +108,10 @@ public final class BPJSAntreanPerTanggal extends javax.swing.JDialog {
                 column.setPreferredWidth(120);
             }else if(i==15){
                 column.setPreferredWidth(120);
-            }else if(i==15){
-                column.setPreferredWidth(90);
+            }else if(i==16){
+                column.setPreferredWidth(110);
+            }else if(i==17){
+                column.setPreferredWidth(150);
             }
         }
         tbJnsPerawatan.setDefaultRenderer(Object.class, new WarnaTable());
@@ -118,6 +120,78 @@ public final class BPJSAntreanPerTanggal extends javax.swing.JDialog {
             link=koneksiDB.URLAPIMOBILEJKN();
         } catch (Exception e) {
             System.out.println("E : "+e);
+        }
+        tambahBatalAntrean();
+    }
+
+    /** tombol + menu klik kanan "Batal Antrean" (hak akses: Batal Pendaftaran Mobile JKN) */
+    private void tambahBatalAntrean(){
+        widget.Button btnBatal=new widget.Button();
+        btnBatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/cancel.png")));
+        btnBatal.setText("Batal Antrean");
+        btnBatal.setToolTipText("Batalkan antrean yang dipilih ke BPJS dan di SIMRS");
+        btnBatal.setName("BtnBatalAntrean");
+        btnBatal.setPreferredSize(new Dimension(130,30));
+        btnBatal.addActionListener(e->batalAntrean());
+        panelGlass9.add(btnBatal,panelGlass9.getComponentZOrder(BtnKeluar1));
+
+        javax.swing.JMenuItem mnBatal=new javax.swing.JMenuItem("Batal Antrean");
+        mnBatal.setBackground(MnCekKodeBooking.getBackground());
+        mnBatal.setFont(MnCekKodeBooking.getFont());
+        mnBatal.setForeground(MnCekKodeBooking.getForeground());
+        mnBatal.setIcon(MnCekKodeBooking.getIcon());
+        mnBatal.setPreferredSize(MnCekKodeBooking.getPreferredSize());
+        mnBatal.addActionListener(e->batalAntrean());
+        jPopupMenu1.add(mnBatal);
+
+        boolean boleh=fungsi.akses.getbatal_pendaftaran_mobilejkn_bpjs();
+        btnBatal.setEnabled(boleh);
+        mnBatal.setEnabled(boleh);
+    }
+
+    private void batalAntrean(){
+        int r=tbJnsPerawatan.getSelectedRow();
+        if(r<0){
+            JOptionPane.showMessageDialog(null,"Maaf, silahkan pilih antrean yang mau dibatalkan...!!!!");
+            tbJnsPerawatan.requestFocus();
+            return;
+        }
+        String kodebooking=tbJnsPerawatan.getValueAt(r,0).toString();
+        String status=tbJnsPerawatan.getValueAt(r,16).toString();
+        if(status.toLowerCase().contains("batal")){
+            JOptionPane.showMessageDialog(null,"Antrean "+kodebooking+" sudah batal.");
+            return;
+        }
+        if(status.toLowerCase().contains("selesai")){
+            JOptionPane.showMessageDialog(null,"Antrean "+kodebooking+" sudah selesai dilayani, tidak bisa dibatalkan.");
+            return;
+        }
+        Object ket=JOptionPane.showInputDialog(this,
+                "Batalkan antrean ini?\n\nKode Booking : "+kodebooking+"\nNo. Antrean  : "+tbJnsPerawatan.getValueAt(r,13)+
+                "\nRM           : "+tbJnsPerawatan.getValueAt(r,8)+"\nSumber Data  : "+tbJnsPerawatan.getValueAt(r,11)+
+                "\n\nKeterangan pembatalan (dikirim ke BPJS):",
+                "Batal Antrean",JOptionPane.QUESTION_MESSAGE,null,null,"Terjadi Perubahan Jadwal dokter, silakan daftar kembali");
+        if(ket==null) return;
+        String keterangan=ket.toString().trim().isEmpty()?"Dibatalkan oleh petugas":ket.toString().trim();
+
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        MobileJKNBatal.Hasil h=MobileJKNBatal.batalBPJS(kodebooking,keterangan);
+        this.setCursor(Cursor.getDefaultCursor());
+        if(h.ok()){
+            boolean lokal=MobileJKNBatal.batalLokal(kodebooking,keterangan,"Sudah");
+            JOptionPane.showMessageDialog(null,"Antrean "+kodebooking+" berhasil dibatalkan di BPJS"+
+                    (lokal?" dan booking Mobile JKN di SIMRS ikut dibatalkan.":"."));
+            BtnCariActionPerformed(null);
+        }else if(JOptionPane.showConfirmDialog(null,
+                (h.code.isEmpty()?"Error koneksi ke BPJS: ":"Batal antrean di BPJS gagal: ")+h.message+
+                "\n\nTetap batalkan booking Mobile JKN di SIMRS supaya pasien bisa daftar ulang?\n"+
+                "(pembatalan ke BPJS akan dicoba lagi oleh service Mobile JKN)",
+                "Gagal",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+            if(MobileJKNBatal.batalLokal(kodebooking,keterangan,"Belum")){
+                JOptionPane.showMessageDialog(null,"Booking "+kodebooking+" dibatalkan di SIMRS.");
+            }else{
+                JOptionPane.showMessageDialog(null,"Kode booking "+kodebooking+" bukan booking Mobile JKN di SIMRS, tidak ada yang dibatalkan.");
+            }
         }
     }
 
@@ -550,6 +624,7 @@ public final class BPJSAntreanPerTanggal extends javax.swing.JDialog {
 
     private void tampil() {
         Valid.tabelKosong(tabMode);
+        java.util.Map<String,String> noSep=muatNoSep();
         try{
             koneksi=koneksiDB.condb();
             ps=koneksi.prepareStatement(
@@ -578,7 +653,8 @@ public final class BPJSAntreanPerTanggal extends javax.swing.JDialog {
                                 for(JsonNode list:response){
                                     tabMode.addRow(new Object[]{
                                         list.path("kodebooking").asText(),list.path("tanggal").asText(),list.path("kodepoli").asText(),
-                                        list.path("kodedokter").asText(),list.path("jampraktek").asText(),list.path("nik").asText(),list.path("nokapst").asText(),list.path("nohp").asText(),list.path("norekammedis").asText(),list.path("jeniskunjungan").asText(),list.path("nomorreferensi").asText(),list.path("sumberdata").asText(),list.path("ispeserta").asText().equals("true")?"Ya":"Tidak",list.path("noantrean").asText(),list.path("estimasidilayani").asText(),list.path("createdtime").asText(),list.path("status").asText()
+                                        list.path("kodedokter").asText(),list.path("jampraktek").asText(),list.path("nik").asText(),list.path("nokapst").asText(),list.path("nohp").asText(),list.path("norekammedis").asText(),list.path("jeniskunjungan").asText(),list.path("nomorreferensi").asText(),list.path("sumberdata").asText(),list.path("ispeserta").asText().equals("true")?"Ya":"Tidak",list.path("noantrean").asText(),list.path("estimasidilayani").asText(),list.path("createdtime").asText(),list.path("status").asText(),
+                                        noSep.getOrDefault(list.path("kodebooking").asText(),"")
                                     });
                                     if (list.path("status").asText().equals("Belum dilayani")) {
                                         tot_belum += 1;
@@ -651,6 +727,35 @@ public final class BPJSAntreanPerTanggal extends javax.swing.JDialog {
         NonJKNSelesai.setText(""+umum_selesai);
     }
     
+    /**
+     * kodebooking -> No.SEP. Antrean onsite (Bridging Antrean) memakai no_rawat sebagai kodebooking,
+     * antrean Mobile JKN dipetakan lewat referensi_mobilejkn_bpjs.nobooking -> no_rawat.
+     */
+    private java.util.Map<String,String> muatNoSep(){
+        java.util.Map<String,String> peta=new java.util.HashMap<>();
+        String tgl1=Valid.SetTgl(DTPCari1.getSelectedItem()+""),tgl2=Valid.SetTgl(DTPCari2.getSelectedItem()+"");
+        String[] sql={
+            "select reg_periksa.no_rawat,bridging_sep.no_sep from reg_periksa inner join bridging_sep on bridging_sep.no_rawat=reg_periksa.no_rawat "+
+            "where reg_periksa.tgl_registrasi between ? and ? order by bridging_sep.tglsep",
+            "select referensi_mobilejkn_bpjs.nobooking,bridging_sep.no_sep from referensi_mobilejkn_bpjs inner join bridging_sep on bridging_sep.no_rawat=referensi_mobilejkn_bpjs.no_rawat "+
+            "where referensi_mobilejkn_bpjs.tanggalperiksa between ? and ? order by bridging_sep.tglsep"
+        };
+        for(String q:sql){
+            try(PreparedStatement psSep=koneksiDB.condb().prepareStatement(q)){
+                psSep.setString(1,tgl1);
+                psSep.setString(2,tgl2);
+                try(ResultSet rsSep=psSep.executeQuery()){
+                    while(rsSep.next()){
+                        peta.put(rsSep.getString(1),rsSep.getString(2));
+                    }
+                }
+            }catch(Exception e){
+                System.out.println("Notif No.SEP : "+e);
+            }
+        }
+        return peta;
+    }
+
     private void runBackground(Runnable task) {
         if (ceksukses) return;
         ceksukses = true;

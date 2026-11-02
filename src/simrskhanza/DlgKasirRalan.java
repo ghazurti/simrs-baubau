@@ -8263,6 +8263,7 @@ private void MnDataPemberianObatActionPerformed(java.awt.event.ActionEvent evt) 
                 JOptionPane.showMessageDialog(null,"Maaf, Pasien sudah masuk Kamar Inap. Gunakan billing Ranap..!!!");
             }else {
                 Valid.editTable(tabModekasir,"reg_periksa","no_rawat",TNoRw,"stts='Batal',biaya_reg='0'");
+                bridging.MobileJKNBatal.batalBookingRegistrasi(TNoRw.getText());
                 if(tbKasirRalan.getSelectedRow()>-1){
                     tabModekasir.setValueAt("Batal",tbKasirRalan.getSelectedRow(),10);
                 }

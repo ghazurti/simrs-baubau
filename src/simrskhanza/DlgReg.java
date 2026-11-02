@@ -10542,6 +10542,7 @@ private void MnLaporanRekapKunjunganBulananPoliActionPerformed(java.awt.event.Ac
                     JOptionPane.showMessageDialog(rootPane,"Data billing sudah terverifikasi..!!");
                 }else{
                     Valid.editTable(tabMode,"reg_periksa","no_rawat",TNoRw,"stts='Batal',biaya_reg='0'");
+                    bridging.MobileJKNBatal.batalBookingRegistrasi(TNoRw.getText());
                     if(tbPetugas.getSelectedRow()>-1){
                         tabMode.setValueAt("Batal",tbPetugas.getSelectedRow(),19);
                     }
@@ -16773,43 +16774,44 @@ private void MnLaporanRekapKunjunganBulananPoliActionPerformed(java.awt.event.Ac
             return;
         }
         String norawat = tbPetugas.getValueAt(tbPetugas.getSelectedRow(), 2).toString();
-        String nobooking = Sequel.cariIsi("select nobooking from referensi_mobilejkn_bpjs where no_rawat=? and status='Belum'", norawat);
-        if (nobooking == null || nobooking.trim().equals("")) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Tidak ada booking Mobile JKN aktif yang bisa dibatalkan untuk pasien ini", "Info", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        if (Sequel.cariInteger("select count(*) from reg_periksa where no_rawat=? and stts not in ('Belum','Batal')", norawat) > 0) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Pasien sudah dilayani, antrean tidak bisa dibatalkan", "Info", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             return;
         }
-        int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(this, "Batalkan Antrean Mobile JKN untuk pasien ini?", "Konfirmasi Batal JKN", javax.swing.JOptionPane.YES_NO_OPTION);
-        if (konfirmasi != javax.swing.JOptionPane.YES_OPTION) return;
-        String keterangan = "Terjadi Perubahan Jadwal dokter, silakan daftar kembali";
-        try {
-            ApiMobileJKN apiMobileJKN = new ApiMobileJKN();
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.add("x-cons-id", koneksiDB.CONSIDAPIMOBILEJKN());
-            String utc = String.valueOf(apiMobileJKN.GetUTCdatetimeAsString());
-            headers.add("x-timestamp", utc);
-            headers.add("x-signature", apiMobileJKN.getHmac(utc));
-            headers.add("user_key", koneksiDB.USERKEYAPIMOBILEJKN());
-            String requestJson = "{\"kodebooking\":\"" + nobooking + "\",\"keterangan\":\"" + keterangan.replace("\"","\\\"") + "\"}";
-            HttpEntity<String> requestEntity = new HttpEntity<>(requestJson, headers);
-            String url = koneksiDB.URLAPIMOBILEJKN() + "/batalantrean";
-            System.out.println("[BatalJKN] URL: " + url);
-            System.out.println("[BatalJKN] JSON: " + requestJson);
-            JsonNode root = new ObjectMapper().readTree(
-                apiMobileJKN.getRest().exchange(url, HttpMethod.POST, requestEntity, String.class).getBody()
-            );
-            String code = root.path("metadata").path("code").asText();
-            String message = root.path("metadata").path("message").asText();
-            System.out.println("[BatalJKN] Response code=" + code + " message=" + message);
-            if (code.equals("200")) {
-                Sequel.mengedittf("referensi_mobilejkn_bpjs", "nobooking=?", "status='Batal',validasi=now()", 1, new String[]{nobooking});
-                javax.swing.JOptionPane.showMessageDialog(this, "Batal Antrean JKN berhasil", "Info", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, "Batal Antrean JKN gagal: " + message, "Gagal", javax.swing.JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception e) {
-            System.out.println("[BatalJKN] Error: " + e);
-            javax.swing.JOptionPane.showMessageDialog(this, "Error koneksi ke BPJS: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        // booking Mobile JKN aktif; kalau tidak ada, antrean onsite (Bridging Antrean) memakai no_rawat sebagai kode booking
+        String kodebooking = Sequel.cariIsi("select nobooking from referensi_mobilejkn_bpjs where no_rawat=? and status in ('Belum','Checkin') limit 1", norawat);
+        boolean mobilejkn = !kodebooking.trim().isEmpty();
+        if (!mobilejkn) kodebooking = norawat;
+
+        Object ket = javax.swing.JOptionPane.showInputDialog(this,
+                "Batalkan antrean " + (mobilejkn ? "Mobile JKN" : "onsite") + " pasien ini ke BPJS?\n\nKode Booking : " + kodebooking +
+                "\nNo. Rawat    : " + norawat + "\n\nKeterangan pembatalan (dikirim ke BPJS):",
+                "Batal Antrean JKN", javax.swing.JOptionPane.QUESTION_MESSAGE, null, null, "Terjadi Perubahan Jadwal dokter, silakan daftar kembali");
+        if (ket == null) return;
+        String keterangan = ket.toString().trim().isEmpty() ? "Dibatalkan oleh petugas" : ket.toString().trim();
+
+        this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+        bridging.MobileJKNBatal.Hasil h = bridging.MobileJKNBatal.batalBPJS(kodebooking, keterangan);
+        this.setCursor(java.awt.Cursor.getDefaultCursor());
+        if (h.ok()) {
+            batalLokalJKN(kodebooking, norawat, mobilejkn, keterangan, "Sudah");
+            javax.swing.JOptionPane.showMessageDialog(this, "Antrean " + kodebooking + " berhasil dibatalkan di BPJS" + (mobilejkn ? " dan booking Mobile JKN di SIMRS ikut dibatalkan." : "."), "Info", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } else if (javax.swing.JOptionPane.showConfirmDialog(this,
+                (h.code.isEmpty() ? "Error koneksi ke BPJS: " : "Batal antrean di BPJS gagal: ") + h.message +
+                (mobilejkn ? "\n\nTetap batalkan booking Mobile JKN di SIMRS supaya pasien bisa daftar ulang?" : ""), "Gagal",
+                mobilejkn ? javax.swing.JOptionPane.YES_NO_OPTION : javax.swing.JOptionPane.DEFAULT_OPTION) == javax.swing.JOptionPane.YES_OPTION && mobilejkn) {
+            batalLokalJKN(kodebooking, norawat, mobilejkn, keterangan, "Belum");
+            javax.swing.JOptionPane.showMessageDialog(this, "Booking " + kodebooking + " dibatalkan di SIMRS (belum terkirim ke BPJS).", "Info", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            return;
+        }
+        tampil();
+    }
+
+    /** booking Mobile JKN -> Batal + log batal (via MobileJKNBatal). Status registrasi tidak diubah. */
+    private void batalLokalJKN(String kodebooking, String norawat, boolean mobilejkn, String keterangan, String statusKirim) {
+        if (mobilejkn) {
+            bridging.MobileJKNBatal.batalLokal(kodebooking, keterangan, statusKirim);
         }
     }
 
