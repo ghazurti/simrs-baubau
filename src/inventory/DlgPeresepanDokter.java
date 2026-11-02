@@ -366,12 +366,14 @@ public final class DlgPeresepanDokter extends javax.swing.JDialog {
 
         // Load map restriksi obat (kode_brng -> tooltip html) untuk indikator merah di tabel resep
         try (java.sql.PreparedStatement ps = koneksi.prepareStatement(
-                "select kode_brng, restriksi_text, max_jml, max_iterasi, level_faskes from restriksi_obat "+
-                "where aktif='Y' and (restriksi_text is not null and restriksi_text<>'')")) {
+                "select kode_brng, ifnull(restriksi_text,'') restriksi_text, ifnull(keterangan,'') keterangan, max_jml, max_iterasi, level_faskes from restriksi_obat "+
+                "where aktif='Y' and (ifnull(restriksi_text,'')<>'' or ifnull(keterangan,'')<>'')")) {
             try (java.sql.ResultSet rs = ps.executeQuery()) {
                 while(rs.next()){
                     String k = rs.getString("kode_brng");
                     String t = rs.getString("restriksi_text");
+                    String ket = rs.getString("keterangan").trim();
+                    if(!ket.isEmpty()) t = t.trim().isEmpty() ? "Catatan: "+ket : t+"\nCatatan: "+ket;
                     double mx = rs.getDouble("max_jml");
                     int it = rs.getInt("max_iterasi");
                     int lvl = rs.getInt("level_faskes");
