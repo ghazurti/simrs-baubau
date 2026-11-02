@@ -68,6 +68,11 @@ public class DlgCariPermintaanRadiologi extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
 
+        // menu "Ambil Hasil dari RIS ..." disembunyikan (RSUD Kota Baubau)
+        BtnAmbilDataFUJI.setVisible(false);
+        BtnAmbilDataFUJI1.setVisible(false);
+        BtnAmbilDataAlatRS.setVisible(false);
+
         WindowAmbilSampel.setSize(530,80);
         tabMode=new DefaultTableModel(null,new Object[]{
             "No.Permintaan","No.Rawat","Pasien","Permintaan","Jam","Sampel","Jam","Hasil","Jam","Kode Dokter","Dokter Perujuk","Poli Registrasi","Informasi Tambahan","Diagnosis Klinis","Kode Bayar","Jenis Bayar"
