@@ -1057,12 +1057,29 @@ public class ApiAlatRS {
                 h.pesan = "Tidak ada respons dari alat_rs saat register worklist.";
                 return h;
             }
+            h.patientIdAlatRS = noRkmMedisKhanza; // sama dengan yang kita kirim
+            // RIS menolak membuat rm baru (500 "Validation error") bila NIK pasien sudah terdaftar
+            // di RIS dengan id lain (input manual di RIS / kiriman lama). Pakai id itu, tapi hanya
+            // bila nama atau tanggal lahir cocok supaya hasil tidak menempel ke pasien yang salah.
+            if (rw.path("data").path("accession_number").asText().isEmpty()
+                    && rw.path("message").asText().toLowerCase().contains("validation")) {
+                String idLain = cariRmLainByNik(nikPasien, noRkmMedisKhanza, namaPasien, tglLahirPasien);
+                if (!idLain.isEmpty()) {
+                    System.out.println("alat_rs WORKLIST: NIK " + nikPasien + " sudah ada di RIS sebagai rm " + idLain + ", kirim ulang");
+                    JsonNode rw2 = RegisterWorklistWithRm(
+                            idLain, namaPasien, nikPasien, jkPasien, tglLahirPasien, patientIHS,
+                            tmid, idPemeriksaan, aeTitle, tanggal, jamHHmmss, encounterId);
+                    if (rw2 != null) {
+                        rw = rw2;
+                        h.patientIdAlatRS = idLain;
+                    }
+                }
+            }
             h.responseRaw = rw.toString();
             JsonNode data = rw.path("data");
             h.accessionNumber = data.path("accession_number").asText();
             h.satuSehatStatus = data.path("satu_sehat_status").asText();
             h.worklistId = data.path("id").asText();
-            h.patientIdAlatRS = noRkmMedisKhanza; // sama dengan yang kita kirim
 
             if (!h.accessionNumber.isEmpty()) {
                 h.ok = true;
@@ -1080,6 +1097,45 @@ public class ApiAlatRS {
     }
 
     // ---------------- helpers ----------------
+
+    /**
+     * Cari rm di RIS dengan NIK sama tapi id berbeda dari no_rkm_medis Khanza.
+     * Dipakai hanya bila nama (tanpa beda huruf besar/spasi) atau tanggal lahir cocok. "" bila tidak ada.
+     */
+    private String cariRmLainByNik(String nik, String rmKhanza, String nama, String tglLahir) {
+        System.out.println("alat_rs WORKLIST ditolak (Validation error) -> cek data pasien di RIS: rm " + rmKhanza + ", NIK " + nik);
+        // diagnosa: apakah rm.id Khanza sudah ada di RIS (data lain?) dan siapa pemilik NIK ini
+        postJsonAuth("CARI_PASIEN_RM", baseUrl + "/api/rm/list",
+                "{\"halaman\":0,\"jumlah\":20,\"search\":\"" + escape(rmKhanza) + "\"}");
+        if (nama != null && !nama.trim().isEmpty()) {
+            postJsonAuth("CARI_PASIEN_NAMA", baseUrl + "/api/rm/list",
+                    "{\"halaman\":0,\"jumlah\":20,\"search\":\"" + escape(nama.trim()) + "\"}");
+        }
+        if (nik == null || nik.trim().length() < 16) {
+            System.out.println("alat_rs: NIK kosong/tidak 16 digit, tidak dicari");
+            return "";
+        }
+        JsonNode resp = postJsonAuth("CARI_PASIEN_NIK", baseUrl + "/api/rm/list",
+                "{\"halaman\":0,\"jumlah\":20,\"search\":\"" + escape(nik.trim()) + "\"}");
+        if (resp == null || !resp.path("data").isArray()) return "";
+        String namaKhanza = nama == null ? "" : nama.trim().replaceAll("\\s+", " ").toUpperCase();
+        for (JsonNode r : resp.path("data")) {
+            if (!nik.trim().equals(r.path("nik").asText().trim())) continue;
+            String id = r.path("id").asText();
+            if (id.isEmpty() || id.equals(rmKhanza)) {
+                System.out.println("alat_rs: NIK " + nik + " di RIS sudah milik rm " + id + " (sama dgn Khanza) - penyebab lain");
+                continue;
+            }
+            String namaRis = r.path("nama_pasien").asText().trim().replaceAll("\\s+", " ").toUpperCase();
+            String lahirRis = r.path("tanggal_lahir_pasien").asText();
+            boolean lahirCocok = tglLahir != null && !tglLahir.isEmpty() && lahirRis.startsWith(tglLahir);
+            if (namaRis.equals(namaKhanza) || lahirCocok) return id;
+            System.out.println("alat_rs: NIK " + nik + " di RIS milik rm " + id + " (" + namaRis + ", " + lahirRis
+                    + ") tidak cocok dengan pasien Khanza " + rmKhanza + " (" + namaKhanza + ") - tidak dipakai");
+        }
+        System.out.println("alat_rs: tidak ada rm lain di RIS dengan NIK " + nik);
+        return "";
+    }
 
     /**
      * Turunkan kode modality DICOM dari LOINC display / nama pemeriksaan.
