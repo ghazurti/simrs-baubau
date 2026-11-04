@@ -19,9 +19,9 @@ import javax.swing.text.html.StyleSheet;
 
 /**
  * Laporan Tahunan Instalasi Rawat Inap.
- * Dibangun mengikuti pola {@link LaporanTahunanIRJ} — 8 tab
+ * Dibangun mengikuti pola {@link LaporanTahunanIRJ} — 9 tab
  * (bangsal / kelas / DPJP / lama-baru / L-P / jenis pasien /
- * jenis pasien x bangsal / status pulang) dengan breakdown
+ * jenis pasien x bangsal / status pulang / DPJP x lama-baru x L-P) dengan breakdown
  * per bulan + triwulan + total tahunan.
  *
  * Sumber data: {@code kamar_inap} (satu pasien = satu episode
@@ -49,7 +49,7 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
 
         HTMLEditorKit kit = new HTMLEditorKit();
         widget.editorpane[] panes = {LoadHTML,LoadHTML1,LoadHTML2,LoadHTML3,
-                                      LoadHTML4,LoadHTML5,LoadHTML6,LoadHTML7};
+                                      LoadHTML4,LoadHTML5,LoadHTML6,LoadHTML7,LoadHTML8,LoadHTML9};
         for (widget.editorpane p : panes) {
             p.setEditable(true);
             p.setEditorKit(kit);
@@ -88,6 +88,8 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
         Scroll5 = new widget.ScrollPane(); LoadHTML5 = new widget.editorpane();
         Scroll6 = new widget.ScrollPane(); LoadHTML6 = new widget.editorpane();
         Scroll7 = new widget.ScrollPane(); LoadHTML7 = new widget.editorpane();
+        Scroll8 = new widget.ScrollPane(); LoadHTML8 = new widget.editorpane();
+        Scroll9 = new widget.ScrollPane(); LoadHTML9 = new widget.editorpane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -169,9 +171,10 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
 
         String[] judulTab = {"Pasien Per Bangsal","Pasien Per Kelas","Pasien Per DPJP",
                               "Pasien Lama & Baru","Pasien Laki-laki & Perempuan",
-                              "Jenis Pasien","Jenis Pasien Per Bangsal","Status Pulang"};
-        widget.ScrollPane[] scrolls = {Scroll,Scroll1,Scroll2,Scroll3,Scroll4,Scroll5,Scroll6,Scroll7};
-        widget.editorpane[] panes = {LoadHTML,LoadHTML1,LoadHTML2,LoadHTML3,LoadHTML4,LoadHTML5,LoadHTML6,LoadHTML7};
+                              "Jenis Pasien","Jenis Pasien Per Bangsal","Status Pulang",
+                              "DPJP Lama/Baru & L/P","Jenis Pasien Per DPJP"};
+        widget.ScrollPane[] scrolls = {Scroll,Scroll1,Scroll2,Scroll3,Scroll4,Scroll5,Scroll6,Scroll7,Scroll8,Scroll9};
+        widget.editorpane[] panes = {LoadHTML,LoadHTML1,LoadHTML2,LoadHTML3,LoadHTML4,LoadHTML5,LoadHTML6,LoadHTML7,LoadHTML8,LoadHTML9};
         for (int t=0; t<scrolls.length; t++) {
             scrolls[t].setBorder(null);
             scrolls[t].setOpaque(true);
@@ -672,6 +675,193 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
     }
 
     // ================================================================
+    // TAB 9 - Per DPJP dirinci Lama/Baru dan Laki-laki/Perempuan
+    // ================================================================
+    private void prosesCari9() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            htmlContent = new StringBuilder(htmlHeader("Dokter Penanggung Jawab / Kategori"));
+            // satu query setahun (bukan 12 x 5 query per dokter); DPJP dari resume_pasien_ranap seperti tab Per DPJP,
+            // kd '' = belum ada resume. Urutan isi per dokter: total, lama, baru, laki-laki, perempuan
+            java.util.Map<String,int[][]> data = new java.util.LinkedHashMap<>();
+            java.util.Map<String,String> nama = new java.util.HashMap<>();
+            ps = koneksi.prepareStatement(
+                "select ifnull(resume_pasien_ranap.kd_dokter,'') as kd, ifnull(dokter.nm_dokter,'') as nm, month(kamar_inap.tgl_masuk) as bln, " +
+                "count(distinct kamar_inap.no_rawat), " +
+                "count(distinct case when reg_periksa.stts_daftar='Lama' then kamar_inap.no_rawat end), " +
+                "count(distinct case when reg_periksa.stts_daftar='Baru' then kamar_inap.no_rawat end), " +
+                "count(distinct case when pasien.jk='L' then kamar_inap.no_rawat end), " +
+                "count(distinct case when pasien.jk='P' then kamar_inap.no_rawat end) " +
+                "from kamar_inap " +
+                "inner join reg_periksa on reg_periksa.no_rawat=kamar_inap.no_rawat " +
+                "inner join pasien on pasien.no_rkm_medis=reg_periksa.no_rkm_medis " +
+                "left join resume_pasien_ranap on resume_pasien_ranap.no_rawat=kamar_inap.no_rawat " +
+                "left join dokter on dokter.kd_dokter=resume_pasien_ranap.kd_dokter " +
+                "where year(kamar_inap.tgl_masuk)=? " +
+                "group by kd, nm, bln order by kd='', nm, kd, bln");
+            try {
+                ps.setString(1, ThnCari.getSelectedItem().toString());
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    String kd = rs.getString("kd");
+                    int[][] d = data.computeIfAbsent(kd, k -> new int[5][12]);
+                    nama.put(kd, rs.getString("nm"));
+                    int b = rs.getInt("bln") - 1;
+                    for (int k = 0; k < 5; k++) d[k][b] = rs.getInt(4 + k);
+                }
+            } finally { closeRs(); }
+
+            String[] sub = {"Lama","Baru","Laki-laki","Perempuan"};
+            java.util.List<int[]> semua = new java.util.ArrayList<>();
+            i = 1;
+            for (java.util.Map.Entry<String,int[][]> e : data.entrySet()) {
+                String label = e.getKey().isEmpty() ? "Belum Ada Resume" : esc(nama.get(e.getKey()));
+                int[][] d = e.getValue();
+                htmlContent.append(htmlRow(String.valueOf(i), label, d[0], true));
+                for (int k = 0; k < sub.length; k++) {
+                    htmlContent.append(htmlRow("", sub[k], d[k + 1], false));
+                }
+                semua.add(d[0]);
+                i++;
+            }
+            if (!semua.isEmpty()) htmlContent.append(htmlRowTotal(semua.toArray(new int[0][])));
+            tampilkanKe(LoadHTML8, htmlContent.toString());
+        } catch (Exception e) {
+            System.out.println("Notif LaporanTahunanIRNA.prosesCari9 : " + e);
+        }
+        setCursor(Cursor.getDefaultCursor());
+    }
+
+    // ================================================================
+    // TAB 10 - Jenis Pasien (penjab) Per DPJP
+    // ================================================================
+    private void prosesCari10() {
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        try {
+            htmlContent = new StringBuilder(htmlHeader("Dokter Penanggung Jawab / Jenis Pembayaran"));
+            String dari =
+                "from kamar_inap " +
+                "inner join reg_periksa on reg_periksa.no_rawat=kamar_inap.no_rawat " +
+                "left join penjab on penjab.kd_pj=reg_periksa.kd_pj " +
+                "left join resume_pasien_ranap on resume_pasien_ranap.no_rawat=kamar_inap.no_rawat " +
+                "left join dokter on dokter.kd_dokter=resume_pasien_ranap.kd_dokter " +
+                "where year(kamar_inap.tgl_masuk)=? ";
+            // total per dokter per bulan (distinct no_rawat) dan rincian per penjab; kd '' = belum ada resume
+            java.util.Map<String,int[]> totalDokter = new java.util.LinkedHashMap<>();
+            java.util.Map<String,int[]> hariDokter = new java.util.HashMap<>();
+            java.util.Map<String,String> nama = new java.util.HashMap<>();
+            ps = koneksi.prepareStatement(
+                "select ifnull(resume_pasien_ranap.kd_dokter,'') as kd, ifnull(dokter.nm_dokter,'') as nm, month(kamar_inap.tgl_masuk) as bln, " +
+                "count(distinct kamar_inap.no_rawat) as jml, ifnull(sum(kamar_inap.lama),0) as hari " + dari + "group by kd, nm, bln order by kd='', nm, kd, bln");
+            try {
+                ps.setString(1, ThnCari.getSelectedItem().toString());
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    nama.put(rs.getString("kd"), rs.getString("nm"));
+                    totalDokter.computeIfAbsent(rs.getString("kd"), k -> new int[12])[rs.getInt("bln") - 1] = rs.getInt("jml");
+                    hariDokter.computeIfAbsent(rs.getString("kd"), k -> new int[12])[rs.getInt("bln") - 1] = rs.getInt("hari");
+                }
+            } finally { closeRs(); }
+            java.util.Map<String,java.util.Map<String,int[]>> perPenjab = new java.util.HashMap<>();
+            java.util.Map<String,java.util.Map<String,int[]>> hariPenjab = new java.util.HashMap<>();
+            ps = koneksi.prepareStatement(
+                "select ifnull(resume_pasien_ranap.kd_dokter,'') as kd, ifnull(penjab.png_jawab,'-') as pj, month(kamar_inap.tgl_masuk) as bln, " +
+                "count(distinct kamar_inap.no_rawat) as jml, ifnull(sum(kamar_inap.lama),0) as hari " + dari + "group by kd, pj, bln");
+            try {
+                ps.setString(1, ThnCari.getSelectedItem().toString());
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    perPenjab.computeIfAbsent(rs.getString("kd"), k -> new java.util.TreeMap<>())
+                             .computeIfAbsent(rs.getString("pj"), k -> new int[12])[rs.getInt("bln") - 1] = rs.getInt("jml");
+                    hariPenjab.computeIfAbsent(rs.getString("kd"), k -> new java.util.TreeMap<>())
+                             .computeIfAbsent(rs.getString("pj"), k -> new int[12])[rs.getInt("bln") - 1] = rs.getInt("hari");
+                }
+            } finally { closeRs(); }
+
+            // rincian per kelas di bawah tiap jenis pembayaran (kunci "kd|pj"); pasien pindah kelas terhitung di tiap kelas
+            java.util.Map<String,java.util.Map<String,int[]>> perKelas = new java.util.HashMap<>();
+            java.util.Map<String,java.util.Map<String,int[]>> hariKelas = new java.util.HashMap<>();
+            ps = koneksi.prepareStatement(
+                "select ifnull(resume_pasien_ranap.kd_dokter,'') as kd, ifnull(penjab.png_jawab,'-') as pj, " +
+                "ifnull(nullif(kamar.kelas,''),'Non Kelas') as kls, month(kamar_inap.tgl_masuk) as bln, " +
+                "count(distinct kamar_inap.no_rawat) as jml, ifnull(sum(kamar_inap.lama),0) as hari " +
+                dari.replace("where ", "inner join kamar on kamar.kd_kamar=kamar_inap.kd_kamar where ") +
+                "group by kd, pj, kls, bln");
+            try {
+                ps.setString(1, ThnCari.getSelectedItem().toString());
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    String kunci = rs.getString("kd") + "|" + rs.getString("pj");
+                    perKelas.computeIfAbsent(kunci, k -> new java.util.TreeMap<>())
+                            .computeIfAbsent(rs.getString("kls"), k -> new int[12])[rs.getInt("bln") - 1] = rs.getInt("jml");
+                    hariKelas.computeIfAbsent(kunci, k -> new java.util.TreeMap<>())
+                            .computeIfAbsent(rs.getString("kls"), k -> new int[12])[rs.getInt("bln") - 1] = rs.getInt("hari");
+                }
+            } finally { closeRs(); }
+            String ind1 = "&nbsp;&nbsp;&nbsp;&nbsp;", ind2 = ind1 + ind1;
+
+            java.util.List<int[]> semua = new java.util.ArrayList<>();
+            i = 1;
+            for (java.util.Map.Entry<String,int[]> e : totalDokter.entrySet()) {
+                String kd = e.getKey();
+                htmlContent.append(htmlRow(String.valueOf(i), kd.isEmpty() ? "Belum Ada Resume" : esc(nama.get(kd)), e.getValue(), true));
+                htmlContent.append(htmlRow("", "&nbsp;&nbsp;&nbsp;&nbsp;└ Total Hari Rawat", hariDokter.get(kd), true));
+                for (java.util.Map.Entry<String,int[]> pj : perPenjab.getOrDefault(kd, new java.util.TreeMap<>()).entrySet()) {
+                    htmlContent.append(htmlRow("", esc(pj.getKey()), pj.getValue(), false));
+                    htmlContent.append(htmlRow("", "&nbsp;&nbsp;&nbsp;&nbsp;└ Total Hari Rawat", hariPenjab.get(kd).get(pj.getKey()), false));
+                    String kunci = kd + "|" + pj.getKey();
+                    for (java.util.Map.Entry<String,int[]> kl : perKelas.getOrDefault(kunci, new java.util.TreeMap<>()).entrySet()) {
+                        htmlContent.append(htmlRow("", ind2 + esc(kl.getKey()), kl.getValue(), false));
+                        htmlContent.append(htmlRow("", ind2 + ind1 + "└ Total Hari Rawat", hariKelas.get(kunci).get(kl.getKey()), false));
+                    }
+                }
+                semua.add(e.getValue());
+                i++;
+            }
+            if (!semua.isEmpty()) {
+                htmlContent.append(htmlRowTotal(semua.toArray(new int[0][])));
+                // rincian JUMLAH per jenis pembayaran (semua DPJP)
+                int[] hariSemua = new int[12];
+                for (int[] h : hariDokter.values()) for (int b = 0; b < 12; b++) hariSemua[b] += h[b];
+                htmlContent.append(htmlRow("", "&nbsp;&nbsp;&nbsp;&nbsp;└ Total Hari Rawat", hariSemua, true));
+                java.util.Map<String,int[]> totalPenjab = jumlahkan(perPenjab), totalHariPenjab = jumlahkan(hariPenjab);
+                for (java.util.Map.Entry<String,int[]> pj : totalPenjab.entrySet()) {
+                    htmlContent.append(htmlRow("", "JUMLAH " + esc(pj.getKey()), pj.getValue(), true));
+                    htmlContent.append(htmlRow("", "&nbsp;&nbsp;&nbsp;&nbsp;└ Total Hari Rawat", totalHariPenjab.get(pj.getKey()), true));
+                    java.util.Map<String,java.util.Map<String,int[]>> klsPj = new java.util.HashMap<>(), hariKlsPj = new java.util.HashMap<>();
+                    for (String kunci : perKelas.keySet()) {
+                        if (kunci.substring(kunci.indexOf('|') + 1).equals(pj.getKey())) {
+                            klsPj.put(kunci, perKelas.get(kunci));
+                            hariKlsPj.put(kunci, hariKelas.get(kunci));
+                        }
+                    }
+                    java.util.Map<String,int[]> jmlKls = jumlahkan(klsPj), jmlHariKls = jumlahkan(hariKlsPj);
+                    for (java.util.Map.Entry<String,int[]> kl : jmlKls.entrySet()) {
+                        htmlContent.append(htmlRow("", ind2 + esc(kl.getKey()), kl.getValue(), false));
+                        htmlContent.append(htmlRow("", ind2 + ind1 + "└ Total Hari Rawat", jmlHariKls.get(kl.getKey()), false));
+                    }
+                }
+            }
+            tampilkanKe(LoadHTML9, htmlContent.toString());
+        } catch (Exception e) {
+            System.out.println("Notif LaporanTahunanIRNA.prosesCari10 : " + e);
+        }
+        setCursor(Cursor.getDefaultCursor());
+    }
+
+    /** jumlahkan rincian (per jenis pembayaran / per kelas) dari beberapa kelompok */
+    private java.util.Map<String,int[]> jumlahkan(java.util.Map<String,java.util.Map<String,int[]>> perDokter) {
+        java.util.Map<String,int[]> hasil = new java.util.TreeMap<>();
+        for (java.util.Map<String,int[]> m : perDokter.values()) {
+            for (java.util.Map.Entry<String,int[]> pj : m.entrySet()) {
+                int[] t = hasil.computeIfAbsent(pj.getKey(), k -> new int[12]);
+                for (int b = 0; b < 12; b++) t[b] += pj.getValue()[b];
+            }
+        }
+        return hasil;
+    }
+
+    // ================================================================
     // ACTION HANDLERS
     // ================================================================
     private void btnCariActionPerformed() {
@@ -684,6 +874,8 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
             case 5: prosesCari6(); break;
             case 6: prosesCari7(); break;
             case 7: prosesCari8(); break;
+            case 8: prosesCari9(); break;
+            case 9: prosesCari10(); break;
         }
     }
 
@@ -706,7 +898,7 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
                 );
             }
 
-            widget.editorpane[] panes = {LoadHTML,LoadHTML1,LoadHTML2,LoadHTML3,LoadHTML4,LoadHTML5,LoadHTML6,LoadHTML7};
+            widget.editorpane[] panes = {LoadHTML,LoadHTML1,LoadHTML2,LoadHTML3,LoadHTML4,LoadHTML5,LoadHTML6,LoadHTML7,LoadHTML8,LoadHTML9};
             int idx = TabRawat.getSelectedIndex();
             if (idx < 0 || idx >= panes.length) return;
 
@@ -768,8 +960,8 @@ public class LaporanTahunanIRNA extends javax.swing.JDialog {
 
     // Variables
     private widget.Button BtnKeluar, BtnPrint, btnCari;
-    private widget.editorpane LoadHTML, LoadHTML1, LoadHTML2, LoadHTML3, LoadHTML4, LoadHTML5, LoadHTML6, LoadHTML7;
-    private widget.ScrollPane Scroll, Scroll1, Scroll2, Scroll3, Scroll4, Scroll5, Scroll6, Scroll7;
+    private widget.editorpane LoadHTML, LoadHTML1, LoadHTML2, LoadHTML3, LoadHTML4, LoadHTML5, LoadHTML6, LoadHTML7, LoadHTML8, LoadHTML9;
+    private widget.ScrollPane Scroll, Scroll1, Scroll2, Scroll3, Scroll4, Scroll5, Scroll6, Scroll7, Scroll8, Scroll9;
     private javax.swing.JTabbedPane TabRawat;
     private widget.ComboBox ThnCari;
     private widget.InternalFrame internalFrame1;
