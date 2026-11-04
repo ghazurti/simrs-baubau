@@ -4725,6 +4725,8 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                     " concat(coalesce((select ruang_ok.nm_ruang_ok from booking_operasi "+
                                     "                  inner join ruang_ok on booking_operasi.kd_ruang_ok=ruang_ok.kd_ruang_ok "+
                                     "                  where booking_operasi.no_rawat=resep_obat.no_rawat and booking_operasi.tanggal=resep_obat.tgl_peresepan "+
+                                    "                  and ((booking_operasi.status='Proses Operasi' and resep_obat.jam_peresepan>=booking_operasi.jam_mulai) "+
+                                    "                    or (booking_operasi.status='Selesai' and resep_obat.jam_peresepan between booking_operasi.jam_mulai and booking_operasi.jam_selesai)) "+
                                     "                  order by booking_operasi.jam_mulai desc limit 1), bangsal.nm_bangsal), "+
                                     "        case "+
                                     "          when exists(select 1 from jadwal_hemodialisa jh "+
@@ -4761,6 +4763,8 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                     " concat(coalesce((select ruang_ok.nm_ruang_ok from booking_operasi "+
                                     "                  inner join ruang_ok on booking_operasi.kd_ruang_ok=ruang_ok.kd_ruang_ok "+
                                     "                  where booking_operasi.no_rawat=resep_obat.no_rawat and booking_operasi.tanggal=resep_obat.tgl_peresepan "+
+                                    "                  and ((booking_operasi.status='Proses Operasi' and resep_obat.jam_peresepan>=booking_operasi.jam_mulai) "+
+                                    "                    or (booking_operasi.status='Selesai' and resep_obat.jam_peresepan between booking_operasi.jam_mulai and booking_operasi.jam_selesai)) "+
                                     "                  order by booking_operasi.jam_mulai desc limit 1), bangsal.nm_bangsal), "+
                                     "        case "+
                                     "          when exists(select 1 from jadwal_hemodialisa jh "+
@@ -4851,6 +4855,8 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                     " concat(coalesce((select ruang_ok.nm_ruang_ok from booking_operasi "+
                                     "                  inner join ruang_ok on booking_operasi.kd_ruang_ok=ruang_ok.kd_ruang_ok "+
                                     "                  where booking_operasi.no_rawat=resep_obat.no_rawat and booking_operasi.tanggal=resep_obat.tgl_peresepan "+
+                                    "                  and ((booking_operasi.status='Proses Operasi' and resep_obat.jam_peresepan>=booking_operasi.jam_mulai) "+
+                                    "                    or (booking_operasi.status='Selesai' and resep_obat.jam_peresepan between booking_operasi.jam_mulai and booking_operasi.jam_selesai)) "+
                                     "                  order by booking_operasi.jam_mulai desc limit 1), bangsal.nm_bangsal), "+
                                     "        case "+
                                     "          when exists(select 1 from jadwal_hemodialisa jh "+
@@ -4888,6 +4894,8 @@ private void KdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TKdKey
                                     " concat(coalesce((select ruang_ok.nm_ruang_ok from booking_operasi "+
                                     "                  inner join ruang_ok on booking_operasi.kd_ruang_ok=ruang_ok.kd_ruang_ok "+
                                     "                  where booking_operasi.no_rawat=resep_obat.no_rawat and booking_operasi.tanggal=resep_obat.tgl_peresepan "+
+                                    "                  and ((booking_operasi.status='Proses Operasi' and resep_obat.jam_peresepan>=booking_operasi.jam_mulai) "+
+                                    "                    or (booking_operasi.status='Selesai' and resep_obat.jam_peresepan between booking_operasi.jam_mulai and booking_operasi.jam_selesai)) "+
                                     "                  order by booking_operasi.jam_mulai desc limit 1), bangsal.nm_bangsal), "+
                                     "        case "+
                                     "          when exists(select 1 from jadwal_hemodialisa jh "+

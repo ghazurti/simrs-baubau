@@ -2367,11 +2367,15 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         try {
             String noRw = TNoRw.getText().trim();
             String tglBeri = Valid.SetTgl(DTPBeri.getSelectedItem()+"");
+            // hanya saat pasien sedang/selama di kamar operasi, bukan seharian di tanggal operasi
+            String jamBeri = cmbJam.getSelectedItem()+":"+cmbMnt.getSelectedItem()+":"+cmbDtk.getSelectedItem();
             if(!noRw.isEmpty() && !tglBeri.isEmpty()){
                 depoOK = Sequel.cariIsi(
                     "select sok.kd_depo from booking_operasi bo "+
                     "inner join set_depo_ruang_ok sok on bo.kd_ruang_ok=sok.kd_ruang_ok "+
-                    "where bo.no_rawat='"+noRw+"' and bo.tanggal='"+tglBeri+"' limit 1");
+                    "where bo.no_rawat='"+noRw+"' and bo.tanggal='"+tglBeri+"' "+
+                    "and ((bo.status='Proses Operasi' and '"+jamBeri+"'>=bo.jam_mulai) "+
+                    "  or (bo.status='Selesai' and '"+jamBeri+"' between bo.jam_mulai and bo.jam_selesai)) limit 1");
                 if(depoOK == null) depoOK = "";
             }
         } catch(Exception ignore) {} // tabel set_depo_ruang_ok mungkin belum ada di DB lama
