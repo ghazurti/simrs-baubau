@@ -203,6 +203,7 @@ public final class DlgRawatInap extends javax.swing.JDialog {
     public DlgRawatInap(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        tambahPanelAksiDokter();
         initRawatInap();
 
         // Perbesar font kotak SOAP tab Pemeriksaan agar mudah dibaca dokter
@@ -6905,6 +6906,103 @@ private void BtnEditKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_B
             resep.setVisible(true);
         }
     }//GEN-LAST:event_BtnDiagnosaActionPerformed
+
+    /** panel "Aksi Cepat Dokter" di kanan kotak SOAP tab Pemeriksaan (sama dengan Rawat Jalan) */
+    private void tambahPanelAksiDokter(){
+        javax.swing.JPanel panel=new javax.swing.JPanel(new java.awt.BorderLayout());
+        panel.setBackground(new java.awt.Color(25,65,140));
+        panel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(15,45,110),2));
+
+        javax.swing.JLabel header=new javax.swing.JLabel("AKSI CEPAT DOKTER");
+        header.setFont(new java.awt.Font("Tahoma",java.awt.Font.BOLD,11));
+        header.setForeground(java.awt.Color.WHITE);
+        header.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        header.setBorder(javax.swing.BorderFactory.createEmptyBorder(5,4,5,4));
+        panel.add(header,java.awt.BorderLayout.NORTH);
+
+        javax.swing.JPanel grid=new javax.swing.JPanel(new java.awt.GridLayout(5,2,4,4));
+        grid.setBackground(new java.awt.Color(235,240,252));
+        grid.setBorder(javax.swing.BorderFactory.createEmptyBorder(5,5,5,5));
+        panel.add(grid,java.awt.BorderLayout.CENTER);
+
+        java.awt.Color biru=new java.awt.Color(65,120,210),teal=new java.awt.Color(20,155,145),
+                oranye=new java.awt.Color(200,100,30),ungu=new java.awt.Color(120,60,185),hijau=new java.awt.Color(40,150,60);
+        grid.add(tombolAksi("Input Resep",biru,this::BtnResepObatActionPerformed));
+        grid.add(tombolAksi("Buat Resume",biru,this::BtnResumeActionPerformed));
+        grid.add(tombolAksi("Copy Resep",teal,this::BtnCopyResepActionPerformed));
+        grid.add(tombolAksi("Status SOAP",teal,this::Btn5SoapActionPerformed));
+        grid.add(tombolAksi("Order Lab",oranye,this::BtnPermintaanLabActionPerformed));
+        grid.add(tombolAksi("Riwayat SOAP",oranye,this::BtnRiwayatActionPerformed));
+        grid.add(tombolAksi("Order Rad",ungu,this::BtnPermintaanRadActionPerformed));
+        grid.add(tombolAksi("Riwayat Penunjang",ungu,e->{
+            if(!pasienDipilih()) return;
+            DlgCariPeriksaLab dlg=new DlgCariPeriksaLab(null,false);
+            dlg.setSize(internalFrame1.getWidth(),internalFrame1.getHeight());
+            dlg.setLocationRelativeTo(internalFrame1);
+            dlg.setNoRawat(TNoRw.getText());
+            dlg.setVisible(true);
+        }));
+        grid.add(tombolAksi("Input Diagnosa",hijau,e->bukaDiagnosa(0)));
+        grid.add(tombolAksi("Riwayat Diagnosa",hijau,e->bukaDiagnosa(1)));
+
+        javax.swing.JButton pacs=tombolAksi("Gambar Radiologi (PACS)",new java.awt.Color(200,90,30),e->{
+            if(!pasienDipilih()) return;
+            DlgGambarRadiologi dlg=new DlgGambarRadiologi(null,false);
+            dlg.setPasien(TNoRM.getText(),TPasien.getText());
+            if(dlg.jumlahGambar()==0){
+                JOptionPane.showMessageDialog(null,"Belum ada gambar radiologi pasien ini yang terkirim ke PACS...!!!");
+                dlg.dispose();
+                return;
+            }
+            dlg.setLocationRelativeTo(internalFrame1);
+            dlg.setVisible(true);
+        });
+        pacs.setToolTipText("Lihat gambar CT/rontgen/USG pasien di PACS (semua kunjungan)");
+        pacs.setPreferredSize(new java.awt.Dimension(100,30));
+        javax.swing.JPanel bawah=new javax.swing.JPanel(new java.awt.BorderLayout());
+        bawah.setBackground(new java.awt.Color(235,240,252));
+        bawah.setBorder(javax.swing.BorderFactory.createEmptyBorder(0,5,5,5));
+        bawah.add(pacs,java.awt.BorderLayout.CENTER);
+        panel.add(bawah,java.awt.BorderLayout.SOUTH);
+
+        panelGlass12.add(panel);
+        panel.setBounds(912,5,290,308);
+    }
+
+    private javax.swing.JButton tombolAksi(String teks,java.awt.Color warna,java.awt.event.ActionListener aksi){
+        javax.swing.JButton b=new javax.swing.JButton(teks);
+        b.setFont(new java.awt.Font("Tahoma",1,11));
+        b.setBackground(warna);
+        b.setForeground(java.awt.Color.WHITE);
+        b.setOpaque(true);
+        b.setBorderPainted(false);
+        b.setFocusPainted(false);
+        b.setToolTipText(teks);
+        b.addActionListener(aksi);
+        return b;
+    }
+
+    private boolean pasienDipilih(){
+        if(TPasien.getText().trim().equals("")||TNoRw.getText().trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Maaf, Silahkan anda pilih dulu dengan menklik data pada table...!!!");
+            TCari.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+    /** tab 0 = input diagnosa, 1 = riwayat diagnosa */
+    private void bukaDiagnosa(int tab){
+        if(!pasienDipilih()) return;
+        laporan.DlgDiagnosaPenyakit dlg=new laporan.DlgDiagnosaPenyakit(null,false);
+        dlg.setSize(internalFrame1.getWidth(),internalFrame1.getHeight());
+        dlg.setLocationRelativeTo(internalFrame1);
+        dlg.isCek();
+        dlg.setNoRm(TNoRw.getText(),DTPCari1.getDate(),DTPCari2.getDate(),"Ranap");
+        dlg.panelDiagnosa1.TabRawat.setSelectedIndex(tab);
+        if(tab==0) javax.swing.SwingUtilities.invokeLater(()->dlg.panelDiagnosa1.Diagnosa.requestFocus());
+        dlg.setVisible(true);
+    }
 
     private void BtnRiwayatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRiwayatActionPerformed
         if(TNoRw.getText().trim().equals("")){
