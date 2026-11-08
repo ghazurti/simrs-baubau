@@ -2395,7 +2395,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                     param.put("pengirim",DokterPerujuk);
                     param.put("tanggal",Valid.SetTgl3(Permintaan));
                     param.put("alamat",Sequel.cariIsi("select concat(pasien.alamat,', ',kelurahan.nm_kel,', ',kecamatan.nm_kec,', ',kabupaten.nm_kab) as alamat from pasien inner join kelurahan inner join kecamatan inner join kabupaten on pasien.kd_kel=kelurahan.kd_kel and pasien.kd_kec=kecamatan.kd_kec and pasien.kd_kab=kabupaten.kd_kab where no_rkm_medis=? ",norm));
-                    kamar=Sequel.cariIsi("select ifnull(kamar_inap.kd_kamar,'') from kamar_inap where kamar_inap.no_rawat=? order by kamar_inap.tgl_masuk desc,kamar_inap.jam_masuk desc limit 1",NoRawat);
+                    kamar=Sequel.cariIsi("select ifnull(kamar_inap.kd_kamar,'') from kamar_inap where kamar_inap.no_rawat=ifnull((select ranap_gabung.no_rawat from ranap_gabung where ranap_gabung.no_rawat2='"+NoRawat+"'),?) order by kamar_inap.tgl_masuk desc,kamar_inap.jam_masuk desc limit 1",NoRawat);
                     namakamar=kamar+", "+Sequel.cariIsi("select bangsal.nm_bangsal from bangsal inner join kamar on bangsal.kd_bangsal=kamar.kd_bangsal "+
                             " where kamar.kd_kamar=? ",kamar);            
                     kamar="Kamar";  
@@ -2761,7 +2761,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                             "from permintaan_lab inner join reg_periksa on permintaan_lab.no_rawat=reg_periksa.no_rawat "+
                             "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                             "inner join dokter on permintaan_lab.dokter_perujuk=dokter.kd_dokter "+
-                            "inner join kamar_inap on reg_periksa.no_rawat=kamar_inap.no_rawat "+
+                            "left join ranap_gabung rgb on rgb.no_rawat2=reg_periksa.no_rawat "+"inner join kamar_inap on kamar_inap.no_rawat=ifnull(rgb.no_rawat,reg_periksa.no_rawat) "+
                             "inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                             "inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
                             "inner join kelurahan on pasien.kd_kel=kelurahan.kd_kel "+
@@ -2997,7 +2997,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                             "from permintaan_lab inner join reg_periksa on permintaan_lab.no_rawat=reg_periksa.no_rawat "+
                             "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                             "inner join dokter on permintaan_lab.dokter_perujuk=dokter.kd_dokter "+
-                            "inner join kamar_inap on reg_periksa.no_rawat=kamar_inap.no_rawat "+
+                            "left join ranap_gabung rgb on rgb.no_rawat2=reg_periksa.no_rawat "+"inner join kamar_inap on kamar_inap.no_rawat=ifnull(rgb.no_rawat,reg_periksa.no_rawat) "+
                             "inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                             "inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
                             "inner join kelurahan on pasien.kd_kel=kelurahan.kd_kel "+
@@ -3411,7 +3411,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                             "from permintaan_lab inner join reg_periksa on permintaan_lab.no_rawat=reg_periksa.no_rawat "+
                             "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                             "inner join dokter on permintaan_lab.dokter_perujuk=dokter.kd_dokter "+
-                            "inner join kamar_inap on reg_periksa.no_rawat=kamar_inap.no_rawat "+
+                            "left join ranap_gabung rgb on rgb.no_rawat2=reg_periksa.no_rawat "+"inner join kamar_inap on kamar_inap.no_rawat=ifnull(rgb.no_rawat,reg_periksa.no_rawat) "+
                             "inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                             "inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
                             "inner join kelurahan on pasien.kd_kel=kelurahan.kd_kel "+
@@ -3679,7 +3679,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                             "from permintaan_lab inner join reg_periksa on permintaan_lab.no_rawat=reg_periksa.no_rawat "+
                             "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                             "inner join dokter on permintaan_lab.dokter_perujuk=dokter.kd_dokter "+
-                            "inner join kamar_inap on reg_periksa.no_rawat=kamar_inap.no_rawat "+
+                            "left join ranap_gabung rgb on rgb.no_rawat2=reg_periksa.no_rawat "+"inner join kamar_inap on kamar_inap.no_rawat=ifnull(rgb.no_rawat,reg_periksa.no_rawat) "+
                             "inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                             "inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
                             "inner join kelurahan on pasien.kd_kel=kelurahan.kd_kel "+
@@ -3904,7 +3904,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                             "from permintaan_lab inner join reg_periksa on permintaan_lab.no_rawat=reg_periksa.no_rawat "+
                             "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                             "inner join dokter on permintaan_lab.dokter_perujuk=dokter.kd_dokter "+
-                            "inner join kamar_inap on reg_periksa.no_rawat=kamar_inap.no_rawat "+
+                            "left join ranap_gabung rgb on rgb.no_rawat2=reg_periksa.no_rawat "+"inner join kamar_inap on kamar_inap.no_rawat=ifnull(rgb.no_rawat,reg_periksa.no_rawat) "+
                             "inner join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                             "inner join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
                             "inner join kelurahan on pasien.kd_kel=kelurahan.kd_kel "+
@@ -4535,7 +4535,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                     "from permintaan_lab inner join reg_periksa on permintaan_lab.no_rawat=reg_periksa.no_rawat "+
                     "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                     "inner join dokter on permintaan_lab.dokter_perujuk=dokter.kd_dokter "+
-                    "left join kamar_inap on reg_periksa.no_rawat=kamar_inap.no_rawat "+
+                    "left join ranap_gabung rgb on rgb.no_rawat2=reg_periksa.no_rawat "+"left join kamar_inap on kamar_inap.no_rawat=ifnull(rgb.no_rawat,reg_periksa.no_rawat) "+
                     "left join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                     "left join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
                     "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj "+
@@ -4555,7 +4555,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                     "from permintaan_lab inner join reg_periksa on permintaan_lab.no_rawat=reg_periksa.no_rawat "+
                     "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                     "inner join dokter on permintaan_lab.dokter_perujuk=dokter.kd_dokter "+
-                    "left join kamar_inap on reg_periksa.no_rawat=kamar_inap.no_rawat "+
+                    "left join ranap_gabung rgb on rgb.no_rawat2=reg_periksa.no_rawat "+"left join kamar_inap on kamar_inap.no_rawat=ifnull(rgb.no_rawat,reg_periksa.no_rawat) "+
                     "left join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                     "left join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
                     "inner join penjab on reg_periksa.kd_pj=penjab.kd_pj "+
@@ -4678,7 +4678,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                         "from permintaan_lab inner join reg_periksa on permintaan_lab.no_rawat=reg_periksa.no_rawat "+
                         "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                         "inner join permintaan_pemeriksaan_lab on permintaan_lab.noorder=permintaan_pemeriksaan_lab.noorder "+
-                        "left join kamar_inap on reg_periksa.no_rawat=kamar_inap.no_rawat "+
+                        "left join ranap_gabung rgb on rgb.no_rawat2=reg_periksa.no_rawat "+"left join kamar_inap on kamar_inap.no_rawat=ifnull(rgb.no_rawat,reg_periksa.no_rawat) "+
                         "left join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                         "left join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
                         "inner join jns_perawatan_lab on jns_perawatan_lab.kd_jenis_prw=permintaan_pemeriksaan_lab.kd_jenis_prw "+
@@ -4707,7 +4707,7 @@ private void tbLabRalanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
                         "from permintaan_lab inner join reg_periksa on permintaan_lab.no_rawat=reg_periksa.no_rawat "+
                         "inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis "+
                         "inner join permintaan_pemeriksaan_lab on permintaan_lab.noorder=permintaan_pemeriksaan_lab.noorder "+
-                        "left join kamar_inap on reg_periksa.no_rawat=kamar_inap.no_rawat "+
+                        "left join ranap_gabung rgb on rgb.no_rawat2=reg_periksa.no_rawat "+"left join kamar_inap on kamar_inap.no_rawat=ifnull(rgb.no_rawat,reg_periksa.no_rawat) "+
                         "left join kamar on kamar_inap.kd_kamar=kamar.kd_kamar "+
                         "left join bangsal on kamar.kd_bangsal=bangsal.kd_bangsal "+
                         "inner join jns_perawatan_lab on jns_perawatan_lab.kd_jenis_prw=permintaan_pemeriksaan_lab.kd_jenis_prw "+
