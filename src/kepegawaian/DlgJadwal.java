@@ -110,6 +110,114 @@ public class DlgJadwal extends javax.swing.JDialog {
         kddokter.setDocument(new batasInput((byte)20).getKata(kddokter));
         KdPoli.setDocument(new batasInput((byte)5).getKata(KdPoli));
         Kuota.setDocument(new batasInput((byte)4).getOnlyAngka(Kuota));
+
+        BtnHFIS=new widget.Button();
+        BtnHFIS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/refresh.png")));
+        BtnHFIS.setText("Ambil HFIS");
+        BtnHFIS.setToolTipText("Ambil jadwal praktek dokter dari HFIS BPJS (7 hari ke depan) lalu sinkron ke jadwal");
+        BtnHFIS.addActionListener(e->ambilHFIS());
+        panelGlass8.add(BtnHFIS);
+        BtnHFIS.setBounds(622,10,120,30);
+    }
+
+    private widget.Button BtnHFIS;
+
+    private void ambilHFIS(){
+        if(JOptionPane.showConfirmDialog(null,
+                "Ambil jadwal praktek dokter dari HFIS BPJS untuk 7 hari ke depan?\n"+
+                "Hasilnya ditampilkan dulu sebelum disimpan.","Ambil Jadwal HFIS",JOptionPane.YES_NO_OPTION)!=JOptionPane.YES_OPTION){
+            return;
+        }
+        final JadwalHFIS hfis=new JadwalHFIS(koneksi);
+        BtnHFIS.setEnabled(false);
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        new javax.swing.SwingWorker<java.util.List<JadwalHFIS.Baris>,String>(){
+            @Override protected java.util.List<JadwalHFIS.Baris> doInBackground() throws Exception {
+                return hfis.siapkan(t->publish(t));
+            }
+            @Override protected void process(java.util.List<String> l){
+                judulFrame("::[ Jadwal Praktek - "+l.get(l.size()-1)+" ]::");
+            }
+            @Override protected void done(){
+                judulFrame("::[ Jadwal Praktek ]::");
+                BtnHFIS.setEnabled(true);
+                setCursor(Cursor.getDefaultCursor());
+                try {
+                    tampilPratinjauHFIS(hfis,get());
+                } catch (Exception e) {
+                    System.out.println("Notif Jadwal HFIS : "+e);
+                    JOptionPane.showMessageDialog(null,"Gagal mengambil jadwal HFIS : "+e.getMessage());
+                }
+            }
+        }.execute();
+    }
+
+    private void judulFrame(String judul){
+        if(internalFrame1.getBorder() instanceof javax.swing.border.TitledBorder){
+            ((javax.swing.border.TitledBorder)internalFrame1.getBorder()).setTitle(judul);
+            internalFrame1.repaint();
+        }
+    }
+
+    private void tampilPratinjauHFIS(JadwalHFIS hfis,java.util.List<JadwalHFIS.Baris> data){
+        if(data.isEmpty()){
+            JOptionPane.showMessageDialog(null,"Tidak ada jadwal yang didapat dari HFIS."+
+                (hfis.galat.isEmpty()?"":"\n\nPesan BPJS:\n"+String.join("\n",hfis.galat.subList(0,Math.min(10,hfis.galat.size())))));
+            return;
+        }
+        Map<String,Integer> jml=new java.util.LinkedHashMap<>();
+        DefaultTableModel m=new DefaultTableModel(null,new String[]{"Status","Dokter","Dokter HFIS","Hari","Mulai","Selesai","Poli","Poli HFIS","Kuota","Keterangan"}){
+            @Override public boolean isCellEditable(int r,int c){return false;}
+        };
+        int libur=0;
+        for(JadwalHFIS.Baris b:data){
+            jml.merge(b.status,1,Integer::sum);
+            if(!b.tglLibur.isEmpty()) libur++;
+            m.addRow(new Object[]{b.status,b.kdDokter.equals("")?"":b.kdDokter+" "+b.nmDokter,b.kdDokterBpjs+" "+b.nmDokterBpjs,
+                b.hari,b.jamMulai,b.jamSelesai,b.kdPoli.equals("")?"":b.kdPoli+" "+b.nmPoli,b.kdPoliBpjs+" "+b.nmPoliBpjs,b.kuota,b.ket});
+        }
+        widget.Table t=new widget.Table();
+        t.setModel(m);
+        t.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        t.setDefaultRenderer(Object.class,new javax.swing.table.DefaultTableCellRenderer(){
+            @Override public java.awt.Component getTableCellRendererComponent(JTable tb,Object v,boolean sel,boolean fokus,int r,int c){
+                java.awt.Component k=super.getTableCellRendererComponent(tb,v,sel,fokus,r,c);
+                if(!sel){
+                    Object ket=tb.getValueAt(r,9);
+                    k.setBackground(ket!=null&&ket.toString().contains("LIBUR")?new java.awt.Color(255,236,200):java.awt.Color.WHITE);
+                    k.setForeground(java.awt.Color.BLACK);
+                }
+                return k;
+            }
+        });
+        int[] lebar={150,200,200,60,60,60,170,170,45,300};
+        for(int i=0;i<lebar.length;i++) t.getColumnModel().getColumn(i).setPreferredWidth(lebar[i]);
+        widget.ScrollPane sp=new widget.ScrollPane();
+        sp.setViewportView(t);
+        sp.setPreferredSize(new Dimension(Math.min(1150,Math.max(700,getWidth()-80)),Math.min(480,Math.max(300,getHeight()-220))));
+        StringBuilder ringkas=new StringBuilder("<html>");
+        for(Map.Entry<String,Integer> e:jml.entrySet()) ringkas.append("<b>").append(e.getKey()).append("</b> : ").append(e.getValue()).append(" &nbsp; ");
+        if(libur>0) ringkas.append("<br><font color='#b45309'><b>").append(libur).append(" jadwal LIBUR/cuti di HFIS</b> dalam 7 hari ke depan (lihat kolom Keterangan). Jadwal mingguannya tetap disimpan.</font>");
+        ringkas.append("<br>Baru/Ubah/Dihapus akan diterapkan. Dokter/poli belum dimapping & bentrok dilewati. Jadwal dokter/poli di luar HFIS tidak disentuh.");
+        if(!hfis.galat.isEmpty()) ringkas.append("<br><font color='red'>").append(hfis.galat.size()).append(" panggilan HFIS gagal (lihat log).</font>");
+        ringkas.append("</html>");
+        for(String g:hfis.galat) System.out.println("Jadwal HFIS : "+g);
+        javax.swing.JPanel p=new javax.swing.JPanel(new java.awt.BorderLayout(0,6));
+        p.add(new javax.swing.JLabel(ringkas.toString()),java.awt.BorderLayout.NORTH);
+        p.add(sp,java.awt.BorderLayout.CENTER);
+        int ubah=jml.getOrDefault(JadwalHFIS.ST_BARU,0)+jml.getOrDefault(JadwalHFIS.ST_UBAH,0)+jml.getOrDefault(JadwalHFIS.ST_HAPUS,0);
+        Object[] opsi=ubah>0?new Object[]{"Simpan ke Jadwal","Batal"}:new Object[]{"Tutup"};
+        int jawab=JOptionPane.showOptionDialog(null,p,"Pratinjau Jadwal HFIS",JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,null,opsi,opsi[0]);
+        if(ubah>0&&jawab==0){
+            try {
+                int n=hfis.simpan(data);
+                JOptionPane.showMessageDialog(null,"Jadwal HFIS tersimpan : "+n+" perubahan diterapkan.\nJadwal yang sudah sama dengan HFIS tidak disentuh.");
+                runBackground(() ->tampil());
+            } catch (Exception e) {
+                System.out.println("Notif Simpan Jadwal HFIS : "+e);
+                JOptionPane.showMessageDialog(null,"Gagal menyimpan, tidak ada data yang berubah : "+e.getMessage());
+            }
+        }
     }
 
     /** This method is called from within the constructor to
