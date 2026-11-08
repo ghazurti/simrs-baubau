@@ -190,7 +190,9 @@ public class RencanaKebutuhanObatHitung {
         int jmlParam;
         if(sumber.equals(SUMBER_RIWAYAT)){
             String konsumsi="'Pemberian Obat','Penjualan','Resep Pulang','Stok Pasien Ranap','Piutang'"+(ikutPengeluaranBhp?",'Stok Keluar'":"");
+            // Stok Keluar dari Permintaan Obat/BHP unit (keterangan "No.Permintaan ...") = pemakaian riil, selalu dihitung
             sql="select kode_brng,sum(case when posisi in ("+konsumsi+") then keluar-masuk "+
+                "when posisi='Stok Keluar' and keterangan like '%No.Permintaan%' then keluar-masuk "+
                 "when posisi in ('Retur Jual','Retur Pasien','Retur Piutang') then keluar-masuk else 0 end) as jml "+
                 "from riwayat_barang_medis where tanggal between ? and ? group by kode_brng";
             jmlParam=1;
@@ -203,11 +205,13 @@ public class RencanaKebutuhanObatHitung {
                 "  where returjual.tgl_retur between ? and ? group by detreturjual.kode_brng "+
                 "union all select kode_brng,sum(jml_barang) from resep_pulang where tanggal between ? and ? group by kode_brng "+
                 "union all select kode_brng,-sum(jml) from returpasien where tanggal between ? and ? group by kode_brng "+
-                (ikutPengeluaranBhp?"union all select detail_pengeluaran_obat_bhp.kode_brng,sum(detail_pengeluaran_obat_bhp.jumlah) from detail_pengeluaran_obat_bhp "+
+                "union all select detail_pengeluaran_obat_bhp.kode_brng,sum(detail_pengeluaran_obat_bhp.jumlah) from detail_pengeluaran_obat_bhp "+
                 "  inner join pengeluaran_obat_bhp on detail_pengeluaran_obat_bhp.no_keluar=pengeluaran_obat_bhp.no_keluar "+
-                "  where pengeluaran_obat_bhp.tanggal between ? and ? group by detail_pengeluaran_obat_bhp.kode_brng ":"")+
+                "  where pengeluaran_obat_bhp.tanggal between ? and ? "+
+                (ikutPengeluaranBhp?"":"and pengeluaran_obat_bhp.keterangan like 'No.Permintaan%' ")+
+                "group by detail_pengeluaran_obat_bhp.kode_brng "+
                 ") x group by kode_brng";
-            jmlParam=ikutPengeluaranBhp?6:5;
+            jmlParam=6;
         }
         Map<String,Double> hasil=new HashMap<>();
         try (PreparedStatement ps=koneksi.prepareStatement(sql)) {

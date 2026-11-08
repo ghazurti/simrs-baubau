@@ -171,8 +171,8 @@ public class DlgRencanaKebutuhanObat extends javax.swing.JDialog {
         b2.add(label("Lead Time :",65));b2.add(LeadTime);b2.add(new JLabel("hari"));
 
         ChkTampilSemua=cek("Tampilkan semua item");
-        ChkPengeluaran=cek("Ikut Pengeluaran Obat & BHP");
-        ChkPengeluaran.setToolTipText("Pengeluaran Obat & BHP (Stok Keluar) berisi juga ED, retur distributor, koreksi salah input");
+        ChkPengeluaran=cek("Ikut Stok Keluar Lainnya");
+        ChkPengeluaran.setToolTipText("Stok Keluar dari Permintaan Obat/BHP (No.Permintaan) selalu dihitung. Centang untuk ikut Stok Keluar lainnya (ED, retur distributor, koreksi salah input)");
         TCari=teks(200);
         CmbStatus=new widget.ComboBox();CmbStatus.addItem("Draft");CmbStatus.addItem("Final");CmbStatus.setPreferredSize(new Dimension(70,23));
         LInfo=new widget.Label();LInfo.setPreferredSize(new Dimension(330,23));
