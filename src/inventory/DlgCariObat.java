@@ -3493,25 +3493,9 @@ private void JeniskelasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:even
     }
     
     public void isCek(){
-        // Prioritas #0: cek konteks resep dari Jadwal Operasi.
-        // Kalau no_rawat + tgl match booking_operasi + mapping ruang OK ada,
-        // pakai depo OK — override bahkan DEPOAKTIFOBAT (depo login user).
+        // depo = depo komputer (DEPOAKTIFOBAT) atau depo ruangan; jadwal operasi tidak dipakai lagi
+        // (pasien ruangan yang ada jadwal operasi ikut ke depo OK). Depo OK lewat komputer OK.
         String depoOK = "";
-        try {
-            String noRw = TNoRw.getText().trim();
-            String tglBeri = Valid.SetTgl(DTPTgl.getSelectedItem()+"");
-            // hanya saat pasien sedang/selama di kamar operasi, bukan seharian di tanggal operasi
-            String jamBeri = cmbJam.getSelectedItem()+":"+cmbMnt.getSelectedItem()+":"+cmbDtk.getSelectedItem();
-            if(!noRw.isEmpty() && !tglBeri.isEmpty()){
-                depoOK = Sequel.cariIsi(
-                    "select sok.kd_depo from booking_operasi bo "+
-                    "inner join set_depo_ruang_ok sok on bo.kd_ruang_ok=sok.kd_ruang_ok "+
-                    "where bo.no_rawat='"+noRw+"' and bo.tanggal='"+tglBeri+"' "+
-                    "and ((bo.status='Proses Operasi' and '"+jamBeri+"'>=bo.jam_mulai) "+
-                    "  or (bo.status='Selesai' and '"+jamBeri+"' between bo.jam_mulai and bo.jam_selesai)) limit 1");
-                if(depoOK == null) depoOK = "";
-            }
-        } catch(Exception ignore) {} // tabel set_depo_ruang_ok belum ada di DB lama
 
         if(!depoOK.equals("")){
             kdgudang.setText(depoOK);

@@ -75,6 +75,7 @@ public final class DlgPeresepanDokter extends javax.swing.JDialog {
     private WarnaTable2 warna3=new WarnaTable2();
     private final java.util.HashMap<String,String> mapRestriksi = new java.util.HashMap<>();
     private DlgCariDokter dokter;
+    private String kdRuangOK="",depoTetap="";
     private String pilihiterasi="",noracik="",aktifkanbatch="no",STOKKOSONGRESEP="no",qrystokkosong="",status="",bangsal="",resep="",DEPOAKTIFOBAT="",
             kamar="",norawatibu="",kelas,RESEPRAJALKEPLAN="no",NOTIFMAKSIMALNOMINALRESEPRAJAL="no",VALIDASIRESTRIKSIOBATBPJS="no";
     private File file;
@@ -1271,6 +1272,7 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                 ChkJln.setSelected(false);    
                 Sequel.AutoComitFalse();
                 sukses=true;
+                boolean resepbaru=!ubah;
                 if(ubah==false){
                     if(Sequel.menyimpantf2("resep_obat","?,?,?,?,?,?,?,?,?,?","Nomer Resep",10,new String[]{
                         NoResep.getText(),"0000-00-00","00:00:00",TNoRw.getText(),KdDokter.getText(),Valid.SetTgl(DTPBeri.getSelectedItem()+""),
@@ -1336,6 +1338,9 @@ private void BtnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIR
                     simpandata();
                 }                                                      
                 
+                if(sukses==true&&resepbaru){
+                    catatDepoResep();
+                }
                 if(sukses==true){
                     Sequel.Commit();
                 }else{
@@ -2359,26 +2364,12 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         BtnTambah.setEnabled(akses.getresep_dokter());
         TCari.requestFocus();
 
-        // Prioritas #0: cek konteks resep dari Jadwal Operasi.
-        // Kalau no_rawat + tgl beri match booking_operasi + mapping ruang OK ada,
-        // pakai depo OK. Override bahkan DEPOAKTIFOBAT (depo login) karena user
-        // input di form ini utamanya untuk melayani resep dari OK.
-        String depoOK = "";
-        try {
-            String noRw = TNoRw.getText().trim();
-            String tglBeri = Valid.SetTgl(DTPBeri.getSelectedItem()+"");
-            // hanya saat pasien sedang/selama di kamar operasi, bukan seharian di tanggal operasi
-            String jamBeri = cmbJam.getSelectedItem()+":"+cmbMnt.getSelectedItem()+":"+cmbDtk.getSelectedItem();
-            if(!noRw.isEmpty() && !tglBeri.isEmpty()){
-                depoOK = Sequel.cariIsi(
-                    "select sok.kd_depo from booking_operasi bo "+
-                    "inner join set_depo_ruang_ok sok on bo.kd_ruang_ok=sok.kd_ruang_ok "+
-                    "where bo.no_rawat='"+noRw+"' and bo.tanggal='"+tglBeri+"' "+
-                    "and ((bo.status='Proses Operasi' and '"+jamBeri+"'>=bo.jam_mulai) "+
-                    "  or (bo.status='Selesai' and '"+jamBeri+"' between bo.jam_mulai and bo.jam_selesai)) limit 1");
-                if(depoOK == null) depoOK = "";
-            }
-        } catch(Exception ignore) {} // tabel set_depo_ruang_ok mungkin belum ada di DB lama
+        // Prioritas #0: depo yang sudah tercatat untuk resep ini (validasi farmasi), atau
+        // resep dibuka dari Jadwal Operasi -> Obat/BHP (depo ruang OK). Tidak lagi melihat
+        // tanggal/jam jadwal operasi, supaya resep dari ruangan tidak ikut jadi resep OK.
+        ResepDepo.siapkanTabel();
+        String depoOK = !depoTetap.equals("") ? depoTetap : ResepDepo.depoRuangOK(kdRuangOK);
+        if(depoOK == null) depoOK = "";
 
         if(!depoOK.equals("")){
             bangsal=depoOK;
@@ -2412,6 +2403,26 @@ private void ppBersihkanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
         }
     }
     
+    /** resep dibuat dari Jadwal Operasi -> Obat/BHP: depo ruang OK, dicatat sebagai resep OK */
+    public void setRuangOK(String kdRuangOK){
+        this.kdRuangOK=kdRuangOK==null?"":kdRuangOK.trim();
+    }
+
+    /** resep dari Jadwal Operasi, atau dari komputer yang depo-nya beda dengan depo ruangan pasien */
+    private void catatDepoResep(){
+        ResepDepo.hapus(NoResep.getText());
+        if(!kdRuangOK.equals("")&&!bangsal.equals("")){
+            ResepDepo.catat(NoResep.getText(),bangsal,kdRuangOK);
+        }else if(status.equals("ranap")&&ResepDepo.depoKhususOK(DEPOAKTIFOBAT)&&!DEPOAKTIFOBAT.equals(ResepDepo.depoRuangan(TNoRw.getText()))){
+            ResepDepo.catat(NoResep.getText(),DEPOAKTIFOBAT,"");
+        }
+    }
+
+    /** validasi farmasi: pakai depo yang tercatat saat resep dibuat */
+    public void setDepoTetap(String kdDepo){
+        this.depoTetap=kdDepo==null?"":kdDepo.trim();
+    }
+
     public void setNoRm(String norwt,Date tanggal, String jam,String menit,String detik,String KodeDokter,String NamaDokter,String status) {        
         TNoRw.setText(norwt);
         Sequel.cariIsi("select concat(pasien.no_rkm_medis,' ',pasien.nm_pasien,' (',pasien.umur,')') from reg_periksa inner join pasien on reg_periksa.no_rkm_medis=pasien.no_rkm_medis where no_rawat=? ",TPasien,TNoRw.getText());
