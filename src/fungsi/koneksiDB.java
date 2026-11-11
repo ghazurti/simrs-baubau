@@ -1319,6 +1319,19 @@ public class koneksiDB {
         return var;
     }
     
+    public static String URLRMESATUSEHAT(){
+        try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
+            prop.loadFromXML(fis);
+            var=prop.getProperty("URLRMESATUSEHAT","");
+        }catch(Exception e){
+            var="";
+        }
+        if(var==null||var.trim().equals("")){
+            var="https://api-satusehat.kemkes.go.id/ssrme/v2/ntl";
+        }
+        return var;
+    }
+
     public static String KELURAHANSATUSEHAT(){
         try (FileInputStream fis = new FileInputStream("setting/database.xml")) {
             prop.loadFromXML(fis);
