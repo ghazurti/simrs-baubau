@@ -125,6 +125,19 @@ public final class RMRiwayatPerawatan extends javax.swing.JDialog {
         setSize(885,674);
         WindowPhrase.setSize(320,100);
         WindowURLSertisign.setSize(570,100);
+
+        // Tombol Verifikasi Profil (KYC) SATUSEHAT Mobile di tab RME Satu Sehat
+        javax.swing.JPanel panelKYC = new javax.swing.JPanel(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 5, 3));
+        panelKYC.setBackground(new java.awt.Color(255, 255, 255));
+        javax.swing.JButton BtnKYCSatuSehat = new javax.swing.JButton("Verifikasi KYC Pasien (SATUSEHAT Mobile)");
+        BtnKYCSatuSehat.setToolTipText("Bantu pasien verifikasi profil (centang biru) SATUSEHAT Mobile, oleh petugas yang login");
+        BtnKYCSatuSehat.addActionListener(e -> {
+            bridging.SatuSehatKYC kyc = new bridging.SatuSehatKYC(null, false);
+            kyc.setVisible(true);
+            kyc.mulai();
+        });
+        panelKYC.add(BtnKYCSatuSehat);
+        PanelSatuSehat.add(panelKYC, java.awt.BorderLayout.NORTH);
         
         tabModeRegistrasi=new DefaultTableModel(null,new Object[]{
                 "No.","No.Rawat","Tanggal","Jam","Kd.Dokter","Dokter Dituju/DPJP","Umur","Poliklinik/Kamar","Jenis Bayar"
@@ -37548,7 +37561,7 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
             JOptionPane.showMessageDialog(null, "Gagal : " + e.getMessage());
             if (e.getMessage() != null && e.getMessage().contains("belum dibagikan")) {
                 JOptionPane.showMessageDialog(null, "Pasien belum mengaktifkan berbagi resume medis.\n\nMinta pasien:\n"
-                        + "1. Membuka aplikasi SATUSEHAT Mobile\n2. Melakukan verifikasi identitas (KYC)\n"
+                        + "1. Membuka aplikasi SATUSEHAT Mobile\n2. Melakukan verifikasi identitas (KYC), bisa dibantu petugas lewat tombol\n    'Verifikasi KYC Pasien' di tab RME Satu Sehat\n"
                         + "3. Mengaktifkan 'Bagikan Resume Medis' di pengaturan aplikasi");
             }
         }
