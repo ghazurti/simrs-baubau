@@ -4314,6 +4314,60 @@ private void BtnPasienKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event
         BtnCari1ActionPerformed(null);
     }
     
+    /** Langsung buka tab RME Satu Sehat untuk pasien (tanpa memuat riwayat kunjungan dulu). */
+    public void setNoRmSatuSehat(String norm,String nama) {
+        NoRM.setText(norm);
+        NmPasien.setText(nama);
+        isPasien();
+        TabRawat.setSelectedIndex(6);
+        BtnCari1ActionPerformed(null);
+    }
+
+    /** Tombol cepat dari Registrasi / Rawat Jalan. */
+    public static void bukaRMESatuSehat(java.awt.Component induk,String norm,String nama) {
+        if(norm==null||norm.trim().equals("")){
+            JOptionPane.showMessageDialog(null,"Silahkan pilih pasien terlebih dahulu...!!!");
+            return;
+        }
+        RMRiwayatPerawatan resume=new RMRiwayatPerawatan(null,true);
+        if(induk!=null&&induk.getWidth()>100){
+            resume.setSize(induk.getWidth()-20,induk.getHeight()-20);
+            resume.setLocationRelativeTo(induk);
+        }
+        SwingUtilities.invokeLater(() -> resume.setNoRmSatuSehat(norm.trim(),nama==null?"":nama.trim()));
+        resume.setVisible(true);
+    }
+
+    /** Tombol-tombol cepat RME Satu Sehat & KYC untuk ditempel di panel tombol form lain. */
+    public static void pasangTombolSatuSehat(java.awt.Container panel,java.awt.Component induk,java.util.function.Supplier<String[]> pasien) {
+        widget.Button btnRME=new widget.Button();
+        btnRME.setText("RME Satu Sehat");
+        btnRME.setToolTipText("Buka RME Nasional SATUSEHAT pasien terpilih");
+        btnRME.setPreferredSize(new java.awt.Dimension(140,30));
+        btnRME.addActionListener(e -> {
+            String[] p=pasien.get();
+            bukaRMESatuSehat(induk,p[0],p[1]);
+        });
+        widget.Button btnKYC=new widget.Button();
+        btnKYC.setText("KYC SATUSEHAT");
+        btnKYC.setToolTipText("Verifikasi profil (KYC) SATUSEHAT Mobile pasien oleh petugas yang login");
+        btnKYC.setPreferredSize(new java.awt.Dimension(130,30));
+        btnKYC.addActionListener(e -> {
+            bridging.SatuSehatKYC kyc=new bridging.SatuSehatKYC(null,false);
+            kyc.setVisible(true);
+            kyc.mulai();
+        });
+        int posisi=panel.getComponentCount();
+        for(int i=0;i<panel.getComponentCount();i++){
+            if("BtnKeluar".equals(panel.getComponent(i).getName())){
+                posisi=i;
+                break;
+            }
+        }
+        panel.add(btnKYC,posisi);
+        panel.add(btnRME,posisi);
+    }
+
     public void setNoRawat(String norawat) {
         TabRawat.setSelectedIndex(2);
         NoRawat.setText(norawat);

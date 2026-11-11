@@ -376,6 +376,7 @@ public final class DlgReg extends javax.swing.JDialog {
     public DlgReg(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        RMRiwayatPerawatan.pasangTombolSatuSehat(panelGlass6,internalFrame1,() -> new String[]{TNoRM.getText(),TPasien.getText()});
         initRegistrasi();
         initCheckinJKNButton();
         initBatalJKNButton();
