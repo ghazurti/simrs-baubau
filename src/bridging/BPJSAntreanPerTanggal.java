@@ -147,6 +147,58 @@ public final class BPJSAntreanPerTanggal extends javax.swing.JDialog {
         boolean boleh=fungsi.akses.getbatal_pendaftaran_mobilejkn_bpjs();
         btnBatal.setEnabled(boleh);
         mnBatal.setEnabled(boleh);
+
+        // ---- Kirim Ulang Task ID ----
+        widget.Button btnKirim=new widget.Button();
+        btnKirim.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/category.png")));
+        btnKirim.setText("Kirim Ulang Task ID");
+        btnKirim.setToolTipText("Kirim ulang Task ID 3-7 (atau 99 bila batal) antrean terpilih ke BPJS");
+        btnKirim.setName("BtnKirimUlangTaskID");
+        btnKirim.setPreferredSize(new Dimension(160,30));
+        btnKirim.addActionListener(e->kirimUlangTaskID());
+        panelGlass9.add(btnKirim,panelGlass9.getComponentZOrder(BtnKeluar1));
+
+        javax.swing.JMenuItem mnKirim=new javax.swing.JMenuItem("Kirim Ulang Task ID");
+        mnKirim.setBackground(MnCekKodeBooking.getBackground());
+        mnKirim.setFont(MnCekKodeBooking.getFont());
+        mnKirim.setForeground(MnCekKodeBooking.getForeground());
+        mnKirim.setIcon(MnCekKodeBooking.getIcon());
+        mnKirim.setPreferredSize(MnCekKodeBooking.getPreferredSize());
+        mnKirim.addActionListener(e->kirimUlangTaskID());
+        jPopupMenu1.add(mnKirim);
+    }
+
+    /** Kirim ulang Task ID untuk satu/lebih baris terpilih. */
+    private void kirimUlangTaskID(){
+        int[] baris=tbJnsPerawatan.getSelectedRows();
+        if(baris.length==0){
+            JOptionPane.showMessageDialog(null,"Maaf, silahkan pilih antrean yang mau dikirim ulang Task ID-nya...!!!!");
+            tbJnsPerawatan.requestFocus();
+            return;
+        }
+        final java.util.LinkedHashSet<String> kode=new java.util.LinkedHashSet<>();
+        for(int b:baris){
+            kode.add(tbJnsPerawatan.getValueAt(b,0).toString());
+        }
+        String daftar=kode.size()==1?"\nKode Booking : "+kode.iterator().next()+"\nNo. SEP      : "+tbJnsPerawatan.getValueAt(baris[0],17):"";
+        if(JOptionPane.showConfirmDialog(this,"Kirim ulang Task ID ke BPJS untuk "+kode.size()+" antrean?"+daftar,
+                "Kirim Ulang Task ID",JOptionPane.YES_NO_OPTION)!=JOptionPane.YES_OPTION){
+            return;
+        }
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        new Thread(() -> {
+            StringBuilder hasil=new StringBuilder();
+            for(String kb:kode){
+                hasil.append(MobileJKNKirimUlangTaskID.kirim(kb)).append("\n");
+            }
+            javax.swing.SwingUtilities.invokeLater(() -> {
+                this.setCursor(Cursor.getDefaultCursor());
+                javax.swing.JTextArea ta=new javax.swing.JTextArea(hasil.toString(),18,75);
+                ta.setEditable(false);
+                ta.setFont(new java.awt.Font("Monospaced",0,12));
+                JOptionPane.showMessageDialog(this,new javax.swing.JScrollPane(ta),"Hasil Kirim Ulang Task ID",JOptionPane.INFORMATION_MESSAGE);
+            });
+        }).start();
     }
 
     private void batalAntrean(){
