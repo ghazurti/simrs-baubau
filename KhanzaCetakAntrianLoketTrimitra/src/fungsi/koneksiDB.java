@@ -1122,4 +1122,46 @@ public class koneksiDB {
         }
         return var;
     }
+
+    // ---- SATUSEHAT (KYC) : sama dengan setting/database.xml SIMRS Khanza ----
+    public static String CLIENTIDSATUSEHAT(){
+        try{
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var=EnkripsiAES.decrypt(prop.getProperty("CLIENTIDSATUSEHAT"));
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
+
+    public static String SECRETKEYSATUSEHAT(){
+        try{
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var=EnkripsiAES.decrypt(prop.getProperty("SECRETKEYSATUSEHAT"));
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
+
+    public static String URLAUTHSATUSEHAT(){
+        try{
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var=prop.getProperty("URLAUTHSATUSEHAT","");
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
+
+    /** Kode pegawai (pegawai.nik) petugas KYC default di anjungan; kosong = ditanya tiap kali. */
+    public static String KYCPETUGAS(){
+        try{
+            prop.loadFromXML(new FileInputStream("setting/database.xml"));
+            var=prop.getProperty("KYCPETUGAS","");
+        }catch(Exception e){
+            var="";
+        }
+        return var;
+    }
 }

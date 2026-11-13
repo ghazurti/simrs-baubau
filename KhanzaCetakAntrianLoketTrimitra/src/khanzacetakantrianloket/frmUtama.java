@@ -275,9 +275,102 @@ public class frmUtama extends JFrame {
         });
         btnQR.addActionListener(e -> showQrMobileJKN());
 
-        panel.add(scanPanel);
-        panel.add(btnQR);
+        // --- Tombol Verifikasi KYC SATUSEHAT Mobile ---
+        JButton btnKYC = new JButton("  VERIFIKASI KYC SATUSEHAT  ");
+        btnKYC.setFont(new Font("Tahoma", Font.BOLD, 18));
+        btnKYC.setBackground(new Color(120, 60, 160));
+        btnKYC.setForeground(Color.WHITE);
+        btnKYC.setFocusPainted(false);
+        btnKYC.setOpaque(true);
+        btnKYC.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnKYC.setToolTipText("Verifikasi profil pasien di aplikasi SATUSEHAT Mobile (dibantu petugas)");
+        btnKYC.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(80, 30, 120), 2),
+                BorderFactory.createEmptyBorder(10, 30, 10, 30)));
+        btnKYC.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnKYC.setBackground(new Color(150, 85, 190));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnKYC.setBackground(new Color(120, 60, 160));
+            }
+        });
+        btnKYC.addActionListener(e -> bukaKYC(btnKYC));
+
+        // dua baris: FlowLayout satu baris menyembunyikan tombol yang terlipat bila layar kurang lebar
+        panel.setLayout(new GridLayout(2, 1, 0, 6));
+        panel.setBorder(BorderFactory.createEmptyBorder(8, 10, 10, 10));
+        JPanel baris1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        baris1.setBackground(new Color(220, 235, 245));
+        baris1.add(scanPanel);
+        JPanel baris2 = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        baris2.setBackground(new Color(220, 235, 245));
+        baris2.add(btnQR);
+        baris2.add(btnKYC);
+        panel.add(baris1);
+        panel.add(baris2);
         return panel;
+    }
+
+    /** Verifikasi KYC SATUSEHAT: petugas (agent) dari KYCPETUGAS di database.xml, atau ditanya. */
+    private void bukaKYC(JButton tombol) {
+        String kode = koneksiDB.KYCPETUGAS().trim();
+        if (kode.isEmpty()) {
+            kode = JOptionPane.showInputDialog(this,
+                    "Masukkan Kode/NIP Pegawai petugas yang membantu verifikasi KYC :",
+                    "Petugas KYC SATUSEHAT", JOptionPane.QUESTION_MESSAGE);
+            if (kode == null || kode.trim().isEmpty()) {
+                return;
+            }
+            kode = kode.trim();
+        }
+        final String nama = Sequel.cariIsi("select pegawai.nama from pegawai where pegawai.nik=?", kode).trim();
+        final String nik = Sequel.cariIsi("select pegawai.no_ktp from pegawai where pegawai.nik=?", kode).trim();
+        if (nama.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pegawai dengan kode " + kode + " tidak ditemukan.",
+                    "KYC SATUSEHAT", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (nik.isEmpty() || nik.equals("-") || nik.length() != 16) {
+            JOptionPane.showMessageDialog(this, "No. KTP petugas " + nama + " belum diisi/tidak valid (harus 16 digit) di Data Pegawai.",
+                    "KYC SATUSEHAT", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        tombol.setEnabled(false);
+        setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        new Thread(() -> {
+            try {
+                String url = KYCSatuSehat.ambilUrl(koneksiDB.URLAUTHSATUSEHAT(), koneksiDB.CLIENTIDSATUSEHAT(),
+                        koneksiDB.SECRETKEYSATUSEHAT(), nama, nik);
+                bukaBrowser(url);
+            } catch (Exception ex) {
+                System.out.println("Notifikasi KYC SATUSEHAT : " + ex);
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this,
+                        "Gagal memuat verifikasi KYC SATUSEHAT :\n" + ex.getMessage(),
+                        "KYC SATUSEHAT", JOptionPane.ERROR_MESSAGE));
+            } finally {
+                SwingUtilities.invokeLater(() -> {
+                    tombol.setEnabled(true);
+                    setCursor(Cursor.getDefaultCursor());
+                    txtNoKartu.requestFocus();
+                });
+            }
+        }).start();
+    }
+
+    private void bukaBrowser(String url) throws Exception {
+        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+            Desktop.getDesktop().browse(new java.net.URI(url));
+            return;
+        }
+        String os = System.getProperty("os.name", "").toLowerCase();
+        if (os.contains("win")) {
+            Runtime.getRuntime().exec(new String[]{"rundll32", "url.dll,FileProtocolHandler", url});
+        } else if (os.contains("mac")) {
+            Runtime.getRuntime().exec(new String[]{"open", url});
+        } else {
+            Runtime.getRuntime().exec(new String[]{"xdg-open", url});
+        }
     }
 
     private void showQrMobileJKN() {
@@ -294,12 +387,15 @@ public class frmUtama extends JFrame {
         dialog.add(labelJudul, BorderLayout.NORTH);
 
         JLabel labelQR = new JLabel("", SwingConstants.CENTER);
-        labelQR.setPreferredSize(new Dimension(350, 350));
         File qrFile = new File("setting/qr_mobile_jkn.png");
         if (qrFile.exists()) {
             try {
                 BufferedImage img = ImageIO.read(qrFile);
-                Image scaled = img.getScaledInstance(320, 320, Image.SCALE_SMOOTH);
+                // muat sesuai rasio gambar (poster bisa portrait), maks ~70% tinggi layar & 600px lebar
+                Rectangle layar = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+                double skala = Math.min(1.0, Math.min((layar.height * 0.70) / img.getHeight(), 600.0 / img.getWidth()));
+                int w = (int) Math.round(img.getWidth() * skala), h = (int) Math.round(img.getHeight() * skala);
+                Image scaled = img.getScaledInstance(w, h, Image.SCALE_SMOOTH);
                 labelQR.setIcon(new ImageIcon(scaled));
             } catch (Exception ex) {
                 labelQR.setText("<html><center>Gagal memuat gambar QR.<br/>Periksa file setting/qr_mobile_jkn.png</center></html>");
