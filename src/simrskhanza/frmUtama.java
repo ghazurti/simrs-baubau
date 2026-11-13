@@ -182,6 +182,7 @@ import inventory.DlgCariPenjualan;
 import inventory.DlgDaruratStok;
 import inventory.DlgWarningStokObat;
 import inventory.DlgRencanaKebutuhanObat;
+import rekammedis.RMMonitoringRMEDokter;
 import inventory.DlgSettingRencanaKebutuhanObat;
 import bridging.SatuSehatMapingTarifKamarKPTL;
 import bridging.SatuSehatMapingTindakanLaboratKPTL;
@@ -10976,6 +10977,17 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         aplikasi.setVisible(true);
         this.setCursor(Cursor.getDefaultCursor());
     }//GEN-LAST:event_btnDaruratStokActionPerformed
+
+    private void btnMonitoringRMEDokterActionPerformed(java.awt.event.ActionEvent evt) {
+        isTutup();
+        DlgHome.dispose();
+        this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+        RMMonitoringRMEDokter dlg = new RMMonitoringRMEDokter(this, false);
+        dlg.setSize(PanelUtama.getWidth(), PanelUtama.getHeight());
+        dlg.setLocationRelativeTo(PanelUtama);
+        dlg.setVisible(true);
+        this.setCursor(Cursor.getDefaultCursor());
+    }
 
     private void btnRencanaKebutuhanObatActionPerformed(java.awt.event.ActionEvent evt) {
         isTutup();
@@ -23881,7 +23893,7 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
     private widget.ButtonBig btnDaftarPermintaanResep;
     private widget.ButtonBig btnDaruratStok;
     private widget.ButtonBig btnWarningStokObat;
-    private widget.ButtonBig btnRencanaKebutuhanObat,btnSettingRencanaKebutuhanObat;
+    private widget.ButtonBig btnRencanaKebutuhanObat,btnSettingRencanaKebutuhanObat,btnMonitoringRMEDokter;
     private widget.ButtonBig btnObatFornas;
     private widget.ButtonBig btnDataBatch;
     private widget.ButtonBig btnDataHAIs;
@@ -28357,6 +28369,11 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
                 Panelmenu.add(btnResumePasien);
                 jmlmenu++;
                 Panelmenu.add(btnResumePasienRanap);
+                jmlmenu++;
+            }
+
+            if(akses.getkode().equals("Admin Utama")){
+                Panelmenu.add(btnMonitoringRMEDokter);
                 jmlmenu++;
             }
             
@@ -34410,6 +34427,11 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
             Panelmenu.add(btnResumePasien);
             jmlmenu++;
             Panelmenu.add(btnResumePasienRanap);
+            jmlmenu++;
+        }
+
+        if(akses.getkode().equals("Admin Utama")){
+            Panelmenu.add(btnMonitoringRMEDokter);
             jmlmenu++;
         }
         
@@ -41948,6 +41970,13 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
                 Panelmenu.add(btnResumePasienRanap);
                 jmlmenu++;
             }                
+        }
+
+        if(akses.getkode().equals("Admin Utama")){
+            if(btnMonitoringRMEDokter.getText().toLowerCase().trim().contains(TCari.getText().toLowerCase().trim())){
+                Panelmenu.add(btnMonitoringRMEDokter);
+                jmlmenu++;
+            }
         }
         
         if(akses.getskrining_gizi()==true){
@@ -50869,6 +50898,14 @@ private void MnGantiPasswordBtnLogActionPerformed(java.awt.event.ActionEvent evt
         btnWarningStokObat.setName("btnWarningStokObat");
         btnWarningStokObat.setPreferredSize(new java.awt.Dimension(200, 90));
         btnWarningStokObat.addActionListener(this::btnWarningStokObatActionPerformed);
+
+        btnMonitoringRMEDokter = new widget.ButtonBig();
+        btnMonitoringRMEDokter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/4852556_doctor_files_medical_record_icon.png")));
+        btnMonitoringRMEDokter.setText("Monitoring RME & Kedatangan Dokter");
+        btnMonitoringRMEDokter.setIconTextGap(0);
+        btnMonitoringRMEDokter.setName("btnMonitoringRMEDokter");
+        btnMonitoringRMEDokter.setPreferredSize(new java.awt.Dimension(200, 90));
+        btnMonitoringRMEDokter.addActionListener(this::btnMonitoringRMEDokterActionPerformed);
 
         btnRencanaKebutuhanObat = new widget.ButtonBig();
         btnRencanaKebutuhanObat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/48x48/1360486898_project-plan.png")));
